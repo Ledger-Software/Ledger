@@ -1,2 +1,2 @@
 # Ledger
-[![Build Status](https://travis-ci.org/indigobio/hyperion.svg?branch=master)](https://travis-ci.org/indigobio/hyperion)
+[![Build Status](https://travis-ci.org/Ledger-Software/Ledger.svg?branch=master)](https://travis-ci.org/Ledger-Software/Ledger)
