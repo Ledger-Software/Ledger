@@ -8,7 +8,9 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
