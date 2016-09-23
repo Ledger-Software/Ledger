@@ -1,0 +1,8 @@
+/.settings/
+/.classpath
+/.factorypath
+/.project
+/.idea
+/*.iml
+/build
+/./gradle
