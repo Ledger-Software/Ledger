@@ -1,7 +1,8 @@
 package ledger.database.enity;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Entity that will hold Cached values for Statistics generated from Transactional Data.
  */
 public class Stat implements IEntity {
+
 }

@@ -1,7 +1,7 @@
 package ledger.database.enity;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Base for business objects that can be translated to or from our database.
  */
 public interface IEntity {
 }

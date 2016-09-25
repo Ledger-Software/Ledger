@@ -3,7 +3,7 @@ package ledger.database.manager;
 import ledger.database.enity.IEntity;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Responsible for handling the Input and Output of Business Objects into the Storage Mechanism.
  */
 public interface IManager<E extends IEntity> {
 

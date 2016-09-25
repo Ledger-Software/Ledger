@@ -3,7 +3,7 @@ package ledger.database.manager;
 import ledger.database.enity.Setting;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Manages Setting Entities
  */
 public class SettingManager implements IManager<Setting> {
 
