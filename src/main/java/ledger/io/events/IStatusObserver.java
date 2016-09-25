@@ -5,7 +5,8 @@ import sun.nio.ch.IOStatus;
 import java.util.List;
 
 /**
- * Created by CJ on 9/24/2016.
+ * This observer will receive events created by the IIOEventGenerator. It will update the UI based on the progress of the
+ * backend operations.
  */
 public interface IStatusObserver {
     void IOComplete(List<IOStatus> statusList);

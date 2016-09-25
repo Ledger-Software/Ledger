@@ -1,7 +1,8 @@
 package ledger.io.input;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Adapts all external input data to fit the same internal structure that better fits our business logic.
  */
 public interface IInAdapter {
+
 }

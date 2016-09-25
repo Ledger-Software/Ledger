@@ -1,7 +1,8 @@
 package ledger.io.output;
 
 /**
- * Created by CJ on 9/24/2016.
+ * Adapts our internal data to fit our standard export format.
  */
 public interface IOutAdapter {
+
 }
