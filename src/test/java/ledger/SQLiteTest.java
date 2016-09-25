@@ -5,6 +5,7 @@ package ledger;
  */
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 import java.sql.*;
@@ -13,29 +14,23 @@ public class SQLiteTest {
     static Connection dbConnection;
 
     @BeforeClass
-    public static void SetupSQLiteConnection() {
-        dbConnection = null;
-        try {
-            Class.forName("org.sqlite.JDBC");
-            dbConnection = DriverManager.getConnection("jdbc:sqlite:test.db");
+    public static void SetupSQLiteConnection() throws java.sql.SQLException, java.lang.ClassNotFoundException {
+        Class.forName("org.sqlite.JDBC");
+        dbConnection = DriverManager.getConnection("jdbc:sqlite:test.db");
 
-            Statement stmt = dbConnection.createStatement();
-            String createTableSQL = "CREATE TABLE COMPANY " +
-                    "(ID INT PRIMARY KEY     NOT NULL," +
-                    " NAME           TEXT    NOT NULL, " +
-                    " AGE            INT     NOT NULL, " +
-                    " ADDRESS        CHAR(50), " +
-                    " SALARY         REAL)";
-            stmt.executeUpdate(createTableSQL);
-            stmt.close();
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
+        Statement stmt = dbConnection.createStatement();
+        String createTableSQL = "CREATE TABLE COMPANY " +
+                "(ID INT PRIMARY KEY     NOT NULL," +
+                " NAME           TEXT    NOT NULL, " +
+                " AGE            INT     NOT NULL, " +
+                " ADDRESS        CHAR(50), " +
+                " SALARY         REAL)";
+        stmt.executeUpdate(createTableSQL);
+        stmt.close();
     }
 
     @Test
-    public void TestSQLiteCRUD() throws java.sql.SQLException{
+    public void TestSQLiteCRUD() throws java.sql.SQLException {
         Statement stmt = this.dbConnection.createStatement();
 
         String insertionSQL1 = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY) " +
@@ -56,9 +51,9 @@ public class SQLiteTest {
 
         int resultSetSize = 0;
 
-        ResultSet rs = stmt.executeQuery( "SELECT * FROM COMPANY;" );
+        ResultSet rs = stmt.executeQuery("SELECT * FROM COMPANY;");
 
-        while ( rs.next() ) {
+        while (rs.next()) {
             resultSetSize++;
         }
         assertEquals(4, resultSetSize);
@@ -68,9 +63,9 @@ public class SQLiteTest {
         String deletionSQL = "DELETE from COMPANY where ID=2";
         stmt.executeUpdate(deletionSQL);
 
-        rs = stmt.executeQuery( "SELECT * FROM COMPANY;" );
+        rs = stmt.executeQuery("SELECT * FROM COMPANY;");
 
-        while ( rs.next() ) {
+        while (rs.next()) {
             resultSetSize++;
         }
         assertEquals(3, resultSetSize);
@@ -80,17 +75,12 @@ public class SQLiteTest {
     }
 
     @AfterClass
-    public static void TeardownSQLiteConnection() {
-        try {
-            Statement stmt = dbConnection.createStatement();
-            String dropTableSQL = "DROP TABLE COMPANY";
-            stmt.executeUpdate(dropTableSQL);
-            stmt.close();
+    public static void TeardownSQLiteConnection() throws java.sql.SQLException {
+        Statement stmt = dbConnection.createStatement();
+        String dropTableSQL = "DROP TABLE COMPANY";
+        stmt.executeUpdate(dropTableSQL);
+        stmt.close();
 
-            dbConnection.close();
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
+        dbConnection.close();
     }
 }
