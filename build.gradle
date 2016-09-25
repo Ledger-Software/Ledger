@@ -1,5 +1,5 @@
 group 'ledgersoft'
-version '0.5'
+version '0.0.1'
 
 apply plugin: 'java'
 
@@ -11,6 +11,17 @@ repositories {
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Version': version,
+                'Main-Class': 'ledger.Startup'
+    }
+    baseName = 'Ledger'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
