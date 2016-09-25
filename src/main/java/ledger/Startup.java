@@ -11,6 +11,8 @@ public class Startup extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
+        primaryStage.setAlwaysOnTop(true); // Development Settings
+        primaryStage.setTitle("Ledger");
+        primaryStage.show();
     }
 }
