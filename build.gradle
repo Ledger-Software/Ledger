@@ -13,5 +13,7 @@ task wrapper(type: Wrapper) {
 }
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
 }
