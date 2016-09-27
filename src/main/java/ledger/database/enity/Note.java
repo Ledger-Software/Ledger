@@ -25,9 +25,14 @@ public class Note implements IEntity {
         return transactionId;
     }
 
+    /**
+     * Sets the Transaction id.
+     * @param transactionId
+     */
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
+
     /**
      * Returns the Note Text.
      * @return noteText

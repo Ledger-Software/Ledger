@@ -16,26 +16,50 @@ public class AccountBalance implements IEntity {
         this.amount = amount;
     }
 
+    /**
+     * Gets the AccountBalance ID
+     * @return id
+     */
     public int getAccountId() {
         return accountId;
     }
 
+    /**
+     * Sets the AccountBalance ID
+     * @param accountId
+     */
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
 
+    /**
+     * Gets the AccountBalance date
+     * @return date
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Sets the AccountBalance date
+     * @param date
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     * Gets the AccountBalance amount
+     * @return amount
+     */
     public int getAmount() {
         return amount;
     }
 
+    /**
+     * Sets the AccountBalance amount
+     * @param amount
+     */
     public void setAmount(int amount) {
         this.amount = amount;
     }

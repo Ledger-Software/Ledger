@@ -14,26 +14,50 @@ public class Account implements IEntity {
         this.id = id;
     }
 
+    /**
+     * Gets the Account name
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the Account name
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Gets the Account description
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Sets the Account description
+     * @param description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /**
+     * Gets the Account ID
+     * @return id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Sets the Account ID
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
