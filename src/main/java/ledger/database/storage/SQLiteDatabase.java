@@ -169,33 +169,83 @@ public class SQLiteDatabase implements IDatabase {
                     }
                 }
             }
+
+            /* Transaction Notes are not added on transaction insertion. By principle, notes should always be added
+               after the fact, by the user.
+             */
+
+            stmt.close();
+            generatedIDs.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding transaction", e);
         }
     }
 
-    // TODO: Fix pls
     public void deleteTransaction(Transaction transaction) throws StorageException{
         try {
-            PreparedStatement stmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANSACTION_ID = ?");
-            stmt.setInt(1, transaction.getId());
-            stmt.executeUpdate();
+            PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANS_ID = ?");
+            deleteTransactionStmt.setInt(1, transaction.getId());
+            deleteTransactionStmt.executeUpdate();
+            deleteTransactionStmt.close();
+
+            PreparedStatement deleteNoteStmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            deleteNoteStmt.setInt(1, transaction.getId());
+            deleteNoteStmt.executeUpdate();
+            deleteNoteStmt.close();
+
+            PreparedStatement deleteTagToTransactionStmt = database.prepareStatement("DELETE FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID = ?");
+            deleteTagToTransactionStmt.setInt(1, transaction.getId());
+            deleteTagToTransactionStmt.executeUpdate();
+            deleteTagToTransactionStmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while deleting transaction", e);
         }
     }
 
-    // TODO: Fix pls
     public void editTransaction(Transaction transaction) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACTION SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
             stmt.setBoolean(3, transaction.isPending());
-            stmt.setInt(4, transaction.getAccount().getId());
-            stmt.setInt(5, transaction.getPayee().getId());
+
+            Account existingAccount = getAccountForName(transaction.getAccount().getName());
+            if (existingAccount != null) {
+                stmt.setInt(4, existingAccount.getId());
+            } else {
+                insertAccount(transaction.getAccount());
+                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
+                stmt.setInt(4, insertedAccount.getId());
+            }
+
+            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+            if (existingPayee != null) {
+                stmt.setInt(5, existingPayee.getId());
+            } else {
+                insertPayee(transaction.getPayee());
+                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+                stmt.setInt(5, insertedPayee.getId());
+            }
+
             stmt.setInt(6, transaction.getId());
+
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedTransactionID = generatedIDs.getInt("TRANS_ID");
+
+                for (Tag currentTag : transaction.getTagList()) {
+                    Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                    if (existingTag != null) {
+                        insertTagToTrans(existingTag.getId(), insertedTransactionID);
+                    } else {
+                        insertTag(currentTag);
+                        Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                        insertTagToTrans(insertedTag.getId(), insertedTransactionID);
+                    }
+                }
+            }
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing transaction", e);
         }
@@ -219,8 +269,8 @@ public class SQLiteDatabase implements IDatabase {
 
                 Account account = getAccountFor(accountID);
                 Payee payee = getPayeeForID(payeeID);
-                List<Tag> tags = getTagsForTransactionID();
-                Note note = getNoteForID(noteID);
+                List<Tag> tags = getTagsForTransactionID(transactionID);
+                Note note = getNoteForTransactionID(transactionID);
 
                 Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
             }
@@ -235,6 +285,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Account", e);
         }
@@ -246,11 +297,11 @@ public class SQLiteDatabase implements IDatabase {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
             stmt.setInt(1, account.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while deleting Account", e);
         }
     }
-
 
     public void editAccount(Account account) throws StorageException {
         try {
@@ -259,6 +310,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, account.getDescription());
             stmt.setInt(3, account.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Account", e);
         }
@@ -289,10 +341,9 @@ public class SQLiteDatabase implements IDatabase {
 
 
     public void editPayee(Payee payee) throws StorageException {
-
         try {
             PreparedStatement stmt =
-                    database.prepareStatement("UPDATE PAYEE SET PAYEE_NAME?, PAYEE_DESC? WHERE PAYEE_ID = ?");
+                    database.prepareStatement("UPDATE PAYEE SET PAYEE_NAME = ?, PAYEE_DESC = ? WHERE PAYEE_ID = ?");
 
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
@@ -300,6 +351,46 @@ public class SQLiteDatabase implements IDatabase {
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
+        }
+    }
+    public void insertNote(Note note) {
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("INSERT INTO NOTE (NOTE_TEXT, NOTE_TRANS_ID) VALUES (?, ?)");
+            stmt.setString(1, note.getNoteText());
+            stmt.setInt(2, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteNote(Note note) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            stmt.setInt(1, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void editNote(Note note) {
+
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("UPDATE NOTE SET NOTE_TEXT=? WHERE NOTE_TRANS_ID = ?");
+
+            stmt.setString(1, note.getNoteText());
+            stmt.setInt(2, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -310,6 +401,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Type", e);
         }
@@ -321,6 +413,7 @@ public class SQLiteDatabase implements IDatabase {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
             stmt.setInt(1, type.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while deleting Type", e);
         }
@@ -333,6 +426,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, type.getDescription());
             stmt.setInt(3, type.getId());
             stmt.executeUpdate();
+            stmt.close()
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing type")
         }
@@ -354,7 +448,11 @@ public class SQLiteDatabase implements IDatabase {
                 newName = rs.getString("ACCOUNT_NAME");
                 description = rs.getString("ACCOUNT_DESC");
                 id = rs.getInt("ACCOUNT_ID");
+                count++;
             }
+
+            rs.close();
+            stmt.close();
 
             if (count == 0) return null;
 
@@ -362,6 +460,115 @@ public class SQLiteDatabase implements IDatabase {
 
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting Account by Name", e);
+        }
+    }
+
+    public void insertTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,TAG_DESC) VALUES (?, ?)");
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getDescription());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public Tag getTagForNameAndDescription(String tagName, String tagDescription){
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
+            stmt.setString(1, tagName);
+            stmt.setString(2, tagDescription);
+            ResultSet rs =stmt.executeQuery();
+            int count = 0;
+            String rstagName = "";
+            String rstagDesc = "";
+            int rsid = -1;
+            while (rs.next()) {
+                rstagName = rs.getString("TAG_NAME");
+                rstagDesc = rs.getString("TAG_DESC");
+                rsid = rs.getInt("TAG_ID");
+                count++;
+            }
+            rs.close();
+            stmt.close();
+            if(count ==0){
+                return  null;
+            }
+
+
+            return new Tag(rstagName, rstagDesc, rsid);
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void deleteTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM TAG WHERE TAG_ID = ?");
+            stmt.setInt(1, tag.getId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE TAG SET TAG_NAME=?, TAG_DESC=? WHERE TAG_ID=?");
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getDescription());
+            stmt.setInt(3, tag.getId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC = ?");
+            stmt.setString(1, payeeName);
+            stmt.setString(2, payeeDescription);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("PAYEE_NAME");
+                description = rs.getString("PAYEE_DESC");
+                id = rs.getInt("PAYEE_ID");
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Payee(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void insertTagToTrans(int tagID, int transID) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG_TO_TRANS (TTTS_TAG_ID,TTTS_TRANS_ID) VALUES (?, ?)");
+            stmt.setInt(1, tagID);
+            stmt.setInt(2, transID);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
         }
     }
 }
