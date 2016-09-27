@@ -27,7 +27,7 @@ public class SQLiteDatabase implements IDatabase {
         try {
             database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to JDBC Socket. ")
+            throw new RuntimeException("Unable to connect to JDBC Socket. ");
         }
 
         initalizeDatabase();
