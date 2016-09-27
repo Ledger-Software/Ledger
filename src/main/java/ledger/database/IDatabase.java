@@ -19,7 +19,7 @@ public interface IDatabase {
 
     void insertTransaction(Transaction transaction);
 
-    void deleteTransaciton(Transaction transaction);
+    void deleteTransaction(Transaction transaction);
 
     void editTransaction(Transaction transaction);
 

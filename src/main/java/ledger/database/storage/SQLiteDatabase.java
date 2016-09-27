@@ -83,7 +83,7 @@ public class SQLiteDatabase implements IDatabase {
 
     ;
 
-    public void deleteTransaciton(Transaction transaction) {
+    public void deleteTransaction(Transaction transaction) {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM Transaction WHERE TRANSACTION_ID = ?");
             stmt.setInt(1, Transaction.ID);
@@ -129,7 +129,7 @@ public class SQLiteDatabase implements IDatabase {
 
                 Account account = getAccountForID(accountID);
                 Payee payee = getPayeeForID(payeeID);
-                List<Tag> tags = getTagsForTransactionID()
+                List<Tag> tags = getTagsForTransactionID();
                 Note note = getNoteForID(noteID);
 
                 Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
