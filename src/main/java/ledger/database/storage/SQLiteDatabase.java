@@ -1,6 +1,7 @@
 package ledger.database.storage;
 
 import ledger.database.IDatabase;
+import ledger.database.enity.Payee;
 import ledger.database.enity.Transaction;
 
 import java.io.InputStream;
@@ -214,25 +215,51 @@ public class SQLiteDatabase implements IDatabase {
     ;
 
     public void insertPayee(Payee payee) {
-        return;
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("INSERT INTO PAYEE (PAYEE_NAME, PAYEE_DESC) VALUES (?, ?, ?)");
+            stmt.setString(1, payee.getName());
+            stmt.setString(2, payee.getDescription());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     ;
 
     public void deletePayee(Payee payee) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM PAYEE WHERE PAYEE_ID = ?");
+            stmt.setInt(1, payee.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     ;
 
     public void editPayee(Payee payee) {
-        return;
+
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("UPDATE PAYEE SET PAYEE_NAME?, PAYEE_DESC? WHERE PAYEE_ID = ?");
+
+            stmt.setString(1, payee.getName());
+            stmt.setString(2, payee.getDescription());
+            stmt.setInt(3, payee.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     ;
 
     public void insertType(Type type) {
-        return;
+        
+
     }
 
     ;
