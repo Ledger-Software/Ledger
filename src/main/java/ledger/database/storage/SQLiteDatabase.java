@@ -2,6 +2,8 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
+import ledger.exception.StorageException;
+
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
@@ -14,7 +16,7 @@ public class SQLiteDatabase implements IDatabase {
 
     private Connection database;
 
-    public SQLiteDatabase(InputStream iStream) {
+    public SQLiteDatabase(InputStream iStream) throws StorageException {
         // Initialize SQLite streams.
 
         try {
@@ -26,13 +28,13 @@ public class SQLiteDatabase implements IDatabase {
         try {
             database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to connect to JDBC Socket. ");
+            throw new StorageException("Unable to connect to JDBC Socket. ");
         }
 
         initializeDatabase();
     }
 
-    public void initializeDatabase() {
+    public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<String>();
 
         tableSQL.add(tableTag);
@@ -54,7 +56,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.close();
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to Create Table", e);
+            throw new StorageException("Unable to Create Table", e);
         }
     }
 
@@ -64,9 +66,11 @@ public class SQLiteDatabase implements IDatabase {
             "TRANS_AMOUNT INT           NOT NULL," +
             "TRANS_PENDING BOOLEAN      NOT NULL, " +
             "TRANS_ACCOUNT_ID INT       NOT NULL, " +
-            "TRANS_PAYEE_ID             NOT NULL, " +
+            "TRANS_PAYEE_ID INT         NOT NULL, " +
+            "TRANS_TYPE_ID INT          NOT NULL, " +
             "FOREIGN KEY(TRANS_ACCOUNT_ID) REFERENCES ACCOUNT(ACCOUNT_ID), " +
-            "FOREIGN KEY(TRANS_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)" +
+            "FOREIGN KEY(TRANS_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)," +
+            "FOREIGN KEY(TRANS_TYPE_ID) REFERENCES TYPE(TYPE_ID)" +
             ")";
     private final String tableNote = "CREATE TABLE NOTE" +
             "(NOTE_TRANS_ID INT PRIMARY KEY  NOT NULL, " +
@@ -74,8 +78,8 @@ public class SQLiteDatabase implements IDatabase {
             "FOREIGN KEY(NOTE_TRANS_ID) REFERENCES TRANSACTION(TRANS_ID)" +
             ")";
     private final String tableTagToTrans= "CREATE TABLE IF NOT EXISTS TAG_TO_TRANS " +
-            "(TTTS_TAG_ID INT           NOT NULL," +
-            "TTTS_TRANS_ID" +
+            "(TTTS_TAG_ID INT           NOT NULL, " +
+            "TTTS_TRANS_ID INT          NOT NULL, " +
             "FOREIGN KEY(TTTS_TAG_ID) REFERENCES TAG(TAG_ID), " +
             "FOREIGN KEY(TTTS_TRANS_ID) REFERENCES TRANSACTION(TRANS_ID)" +
             ")";
@@ -115,15 +119,15 @@ public class SQLiteDatabase implements IDatabase {
 
 
 
-    public void shutdown() {
+    public void shutdown() throws StorageException {
         try {
             database.close();
         } catch (SQLException e) {
-            throw new RuntimeException("Exception while shutting down database.", e);
+            throw new StorageException("Exception while shutting down database.", e);
         }
     }
 
-    public void insertTransaction(Transaction transaction) {
+    public void insertTransaction(Transaction transaction) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACTION (TRANS_DATETIME,TRANS_AMOUNT,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
@@ -166,23 +170,23 @@ public class SQLiteDatabase implements IDatabase {
                 }
             }
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while adding transaction", e);
         }
     }
 
     // TODO: Fix pls
-    public void deleteTransaction(Transaction transaction) {
+    public void deleteTransaction(Transaction transaction) throws StorageException{
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANSACTION_ID = ?");
             stmt.setInt(1, transaction.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while deleting transaction", e);
         }
     }
 
     // TODO: Fix pls
-    public void editTransaction(Transaction transaction) {
+    public void editTransaction(Transaction transaction) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACTION SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
             stmt.setLong(1, transaction.getDate().getTime());
@@ -193,12 +197,12 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setInt(6, transaction.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while editing transaction", e);
         }
     }
 
     // TODO: Fix pls
-    public List<Transaction> getAllTransactions() {
+    public List<Transaction> getAllTransactions() throws StorageException {
         try {
             Statement stmt = database.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Transaction;");
@@ -221,34 +225,34 @@ public class SQLiteDatabase implements IDatabase {
                 Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
             }
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while getting all transactions", e);
         }
     }
 
-    public void insertAccount(Account account) {
+    public void insertAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO ACCOUNT (ACCOUNT_NAME,ACCOUNT_DESC) VALUES (?, ?)");
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while adding Account", e);
         }
     }
 
 
-    public void deleteAccount(Account account) {
+    public void deleteAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
             stmt.setInt(1, account.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while deleting Account", e);
         }
     }
 
 
-    public void editAccount(Account account) {
+    public void editAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE ACCOUNT SET ACCOUNT_NAME=?, ACCOUNT_DESC=? WHERE ACCOUNT_ID=?");
             stmt.setString(1, account.getName());
@@ -256,11 +260,11 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setInt(3, account.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while editing Account", e);
         }
     }
 
-    public void insertPayee(Payee payee) {
+    public void insertPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
                     database.prepareStatement("INSERT INTO PAYEE (PAYEE_NAME, PAYEE_DESC) VALUES (?, ?, ?)");
@@ -268,23 +272,23 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, payee.getDescription());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while adding Payee", e);
         }
     }
 
 
-    public void deletePayee(Payee payee) {
+    public void deletePayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM PAYEE WHERE PAYEE_ID = ?");
             stmt.setInt(1, payee.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while deleting Payee", e);
         }
     }
 
 
-    public void editPayee(Payee payee) {
+    public void editPayee(Payee payee) throws StorageException {
 
         try {
             PreparedStatement stmt =
@@ -295,30 +299,30 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setInt(3, payee.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while editing Payee", e);
         }
     }
 
 
-    public void insertType(Type type) {
+    public void insertType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while adding Type", e);
         }
     }
 
 
-    public void deleteType(Type type) {
+    public void deleteType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
             stmt.setInt(1, type.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while deleting Type", e);
         }
     }
 
@@ -330,11 +334,11 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setInt(3, type.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while editing type")
         }
     }
 
-    private Account getAccountForName(String name) {
+    private Account getAccountForName(String name) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_NAME=?");
             stmt.setString(1, name);
@@ -357,8 +361,7 @@ public class SQLiteDatabase implements IDatabase {
             return new Account(newName, description, id);
 
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Error while getting Account by Name", e);
         }
-        return null;
     }
 }
