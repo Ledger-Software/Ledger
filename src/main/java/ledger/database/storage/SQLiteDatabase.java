@@ -444,6 +444,7 @@ public class SQLiteDatabase implements IDatabase {
                 newName = rs.getString("ACCOUNT_NAME");
                 description = rs.getString("ACCOUNT_DESC");
                 id = rs.getInt("ACCOUNT_ID");
+                count++;
             }
 
             rs.close();
@@ -470,7 +471,35 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
+    public Tag getTagForNameAndDescription(String tagName, String tagDescription){
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
+            stmt.setString(1, tagName);
+            stmt.setString(2, tagDescription);
+            ResultSet rs =stmt.executeQuery();
+            int count = 0;
+            String rstagName = "";
+            String rstagDesc = "";
+            int rsid = -1;
+            while (rs.next()) {
+                rstagName = rs.getString("TAG_NAME");
+                rstagDesc = rs.getString("TAG_DESC");
+                rsid = rs.getInt("TAG_ID");
+                count++;
+            }
+            rs.close();
+            stmt.close();
+            if(count ==0){
+                return  null;
+            }
 
+
+            return new Tag(rstagName, rstagDesc, rsid);
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void deleteTag(Tag tag) {
         try {
