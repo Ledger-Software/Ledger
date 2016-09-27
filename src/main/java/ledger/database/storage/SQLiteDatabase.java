@@ -193,6 +193,10 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    private Type getTypeForName(String name) {
+        return null;
+    }
+
     public void deleteTransaction(Transaction transaction) throws StorageException{
         try {
             PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANS_ID = ?");
@@ -225,7 +229,7 @@ public class SQLiteDatabase implements IDatabase {
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
             } else {
-                system.out.println("ERROR: No matching transaction type found.");
+                System.out.println("ERROR: No matching transaction type found.");
             }
 
             stmt.setBoolean(4, transaction.isPending());
@@ -283,6 +287,14 @@ public class SQLiteDatabase implements IDatabase {
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing transaction", e);
         }
+    }
+
+    private void deleteNoteForTransactionID(int id) {
+        // TODO: Need Impl.
+    }
+
+    private void deleteAllTagToTransForTransactionID(int id) {
+        // TODO: Need Impl.
     }
 
     // TODO: Review logic and implement helper methods
