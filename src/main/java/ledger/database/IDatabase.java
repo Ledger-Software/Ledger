@@ -1,13 +1,14 @@
 package ledger.database;
 
 import ledger.database.enity.*;
+import ledger.exception.StorageException;
 
 /**
  * Responsible for Physical Storage Mechanisms
  */
 public interface IDatabase {
 
-    void initializeDatabase();
+    void initializeDatabase() throws StorageException;
 
     void openDatabase();
 
@@ -15,29 +16,29 @@ public interface IDatabase {
 
     void wipeDatabase();
 
-    void shutdown();
+    void shutdown() throws StorageException;
 
-    void insertTransaction(Transaction transaction);
+    void insertTransaction(Transaction transaction) throws StorageException;
 
-    void deleteTransaction(Transaction transaction);
+    void deleteTransaction(Transaction transaction) throws StorageException;
 
-    void editTransaction(Transaction transaction);
+    void editTransaction(Transaction transaction) throws StorageException;
 
-    void insertAccount(Account account);
+    void insertAccount(Account account) throws StorageException;
 
-    void deleteAccount(Account account);
+    void deleteAccount(Account account) throws StorageException;
 
-    void editAccount(Account account);
+    void editAccount(Account account) throws StorageException;
 
-    void insertPayee(Payee payee);
+    void insertPayee(Payee payee) throws StorageException;
 
-    void deletePayee(Payee payee);
+    void deletePayee(Payee payee) throws StorageException;
 
-    void editPayee(Payee payee);
+    void editPayee(Payee payee) throws StorageException;
 
-    void insertType(Type type);
+    void insertType(Type type) throws StorageException;
 
-    void deleteType(Type type);
+    void deleteType(Type type) throws StorageException;
 
     void editType(Type type);
 }
