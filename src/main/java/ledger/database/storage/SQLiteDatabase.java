@@ -281,6 +281,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -292,11 +293,11 @@ public class SQLiteDatabase implements IDatabase {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
             stmt.setInt(1, account.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     public void editAccount(Account account) {
         try {
@@ -305,6 +306,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, account.getDescription());
             stmt.setInt(3, account.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -335,10 +337,9 @@ public class SQLiteDatabase implements IDatabase {
 
 
     public void editPayee(Payee payee) {
-
         try {
             PreparedStatement stmt =
-                    database.prepareStatement("UPDATE PAYEE SET PAYEE_NAME?, PAYEE_DESC? WHERE PAYEE_ID = ?");
+                    database.prepareStatement("UPDATE PAYEE SET PAYEE_NAME = ?, PAYEE_DESC = ? WHERE PAYEE_ID = ?");
 
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
@@ -356,6 +357,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -367,6 +369,7 @@ public class SQLiteDatabase implements IDatabase {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
             stmt.setInt(1, type.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -379,6 +382,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, type.getDescription());
             stmt.setInt(3, type.getId());
             stmt.executeUpdate();
+            stmt.close()
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -402,6 +406,9 @@ public class SQLiteDatabase implements IDatabase {
                 id = rs.getInt("ACCOUNT_ID");
             }
 
+            rs.close();
+            stmt.close();
+
             if (count == 0) return null;
 
             return new Account(newName, description, id);
@@ -410,5 +417,42 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void insertTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,TAG_DESC) VALUES (?, ?)");
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getDescription());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM TAG WHERE TAG_ID = ?");
+            stmt.setInt(1, tag.getId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void editTag(Tag tag) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE TAG SET TAG_NAME=?, TAG_DESC=? WHERE TAG_ID=?");
+            stmt.setString(1, tag.getName());
+            stmt.setString(2, tag.getDescription());
+            stmt.setInt(3, tag.getId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
