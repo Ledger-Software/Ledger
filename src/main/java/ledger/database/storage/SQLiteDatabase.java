@@ -263,6 +263,46 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
+    public void insertNote(Note note) {
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("INSERT INTO NOTE (NOTE_TEXT, NOTE_TRANS_ID) VALUES (?, ?)");
+            stmt.setString(1, note.getNoteText());
+            stmt.setInt(2, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void deleteNote(Note note) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            stmt.setInt(1, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void editNote(Note note) {
+
+        try {
+            PreparedStatement stmt =
+                    database.prepareStatement("UPDATE NOTE SET NOTE_TEXT=? WHERE NOTE_TRANS_ID = ?");
+
+            stmt.setString(1, note.getNoteText());
+            stmt.setInt(2, note.getTransactionId());
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public void insertType(Type type) {
