@@ -10,11 +10,11 @@ public interface IDatabase {
 
     void initializeDatabase() throws StorageException;
 
-    void openDatabase();
+//    void openDatabase();
 
-    void closeDatabase();
+//    void closeDatabase();
 
-    void wipeDatabase();
+//    void wipeDatabase();
 
     void shutdown() throws StorageException;
 
@@ -40,5 +40,5 @@ public interface IDatabase {
 
     void deleteType(Type type) throws StorageException;
 
-    void editType(Type type);
+    void editType(Type type) throws StorageException;
 }

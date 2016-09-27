@@ -26,7 +26,7 @@ public class SQLiteDatabase implements IDatabase {
         }
 
         try {
-            database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
+            database = DriverManager.getConnection("jdbc:sqlite:test.db");
         } catch (SQLException e) {
             throw new StorageException("Unable to connect to JDBC Socket. ");
         }
@@ -35,7 +35,7 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     public void initializeDatabase() throws StorageException {
-        LinkedList<String> tableSQL = new LinkedList<String>();
+        LinkedList<String> tableSQL = new LinkedList<>();
 
         tableSQL.add(tableTag);
         tableSQL.add(tableType);
@@ -209,22 +209,22 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setInt(2, transaction.getAmount());
             stmt.setBoolean(3, transaction.isPending());
 
-            Account existingAccount = getAccountForName(transaction.getAccount().getName());
-            if (existingAccount != null) {
-                stmt.setInt(4, existingAccount.getId());
+            Account account = getAccountForName(transaction.getAccount().getName());
+            if (account != null) {
+                stmt.setInt(4, account.getId());
             } else {
                 insertAccount(transaction.getAccount());
-                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
-                stmt.setInt(4, insertedAccount.getId());
+                account = getAccountForName(transaction.getAccount().getName());
+                stmt.setInt(4, account.getId());
             }
 
-            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-            if (existingPayee != null) {
-                stmt.setInt(5, existingPayee.getId());
+            Payee payee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+            if (payee != null) {
+                stmt.setInt(5, payee.getId());
             } else {
                 insertPayee(transaction.getPayee());
-                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-                stmt.setInt(5, insertedPayee.getId());
+                payee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+                stmt.setInt(5, payee.getId());
             }
 
             stmt.setInt(6, transaction.getId());
@@ -236,14 +236,12 @@ public class SQLiteDatabase implements IDatabase {
                 int insertedTransactionID = generatedIDs.getInt("TRANS_ID");
 
                 for (Tag currentTag : transaction.getTagList()) {
-                    Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                    if (existingTag != null) {
-                        insertTagToTrans(existingTag.getId(), insertedTransactionID);
-                    } else {
+                    Tag tag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                    if (tag == null) {
                         insertTag(currentTag);
-                        Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                        insertTagToTrans(insertedTag.getId(), insertedTransactionID);
+                        tag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
                     }
+                    insertTagToTrans(tag.getId(), insertedTransactionID);
                 }
             }
         } catch (java.sql.SQLException e) {
@@ -262,21 +260,47 @@ public class SQLiteDatabase implements IDatabase {
             while ( rs.next() ) {
                 Date date = new Date(rs.getLong("TRANS_DATETIME"));
                 int transactionID = rs.getInt("TRANS_ID");
+                int typeID = rs.getInt("TRANS_TYPE_ID");
                 int amount = rs.getInt("TRANS_AMOUNT");
                 boolean pending = rs.getBoolean("TRANS_PENDING");
                 int accountID = rs.getInt("TRANS_ACCOUNT_ID");
                 int payeeID = rs.getInt("TRANS_PAYEE_ID");
 
-                Account account = getAccountFor(accountID);
+                Type type = getTypeForID(typeID);
+                Account account = getAccountForID(accountID);
                 Payee payee = getPayeeForID(payeeID);
                 List<Tag> tags = getTagsForTransactionID(transactionID);
                 Note note = getNoteForTransactionID(transactionID);
 
                 Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
+
+                transactionList.add(currentTransaction);
             }
+
+            return transactionList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all transactions", e);
         }
+    }
+
+    private Note getNoteForTransactionID(int transactionID) {
+        return null;
+    }
+
+    private List<Tag> getTagsForTransactionID(int transactionID) {
+        return null;
+    }
+
+    private Payee getPayeeForID(int payeeID) {
+        return null;
+    }
+
+    private Account getAccountForID(int accountID) {
+        return null;
+    }
+
+    private Type getTypeForID(int typeID) {
+        return null;
     }
 
     public void insertAccount(Account account) throws StorageException {
@@ -419,16 +443,16 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    public void editType(Type type) {
+    public void editType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TRANS_ID=?");
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.setInt(3, type.getId());
             stmt.executeUpdate();
-            stmt.close()
+            stmt.close();
         } catch (java.sql.SQLException e) {
-            throw new StorageException("Error while editing type")
+            throw new StorageException("Error while editing type");
         }
     }
 
@@ -465,7 +489,7 @@ public class SQLiteDatabase implements IDatabase {
 
     public void insertTag(Tag tag) {
         try {
-            PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,TAG_DESC) VALUES (?, ?)");
+        PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,AT/) VALUES (?, ?)");
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getDescription());
             stmt.executeUpdate();
