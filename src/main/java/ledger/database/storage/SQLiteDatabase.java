@@ -495,4 +495,48 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
+
+    private Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC = ?");
+            stmt.setString(1, payeeName);
+            stmt.setString(2, payeeDescription);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("PAYEE_NAME");
+                description = rs.getString("PAYEE_DESC");
+                id = rs.getInt("PAYEE_ID");
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Payee(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void insertTagToTrans(int tagID, int transID) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG_TO_TRANS (TTTS_TAG_ID,TTTS_TRANS_ID) VALUES (?, ?)");
+            stmt.setInt(1, tagID);
+            stmt.setInt(2, transID);
+            stmt.executeUpdate();
+            stmt.close();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
