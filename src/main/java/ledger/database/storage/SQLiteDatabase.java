@@ -99,8 +99,8 @@ public class SQLiteDatabase implements IDatabase {
             "(ABAL_ACCOUNT_ID INT       NOT NULL, " +
             "ABAL_DATETIME REAL         NOT NULL, " +
             "ABAL_AMOUNT INT            NOT NULL, " +
-            "FOREIGN KEY(TTPE_TAG_ID) REFERENCES TAG(TAG_ID), " +
-            "FOREIGN KEY(TTPE_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)" +
+            "FOREIGN KEY(ABAL_TAG_ID) REFERENCES TAG(TAG_ID), " +
+            "FOREIGN KEY(ABAL_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)" +
             ")";
     private final String tablePayee= "CREATE TABLE IF NOT EXISTS PAYEE " +
             "(PAYEE_ID INT PRIMARY KEY  NOT NULL, " +
