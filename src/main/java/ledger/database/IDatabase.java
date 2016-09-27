@@ -1,6 +1,6 @@
 package ledger.database;
 
-import ledger.database.enity.Transaction;
+import ledger.database.enity.*;
 
 /**
  * Responsible for Physical Storage Mechanisms
