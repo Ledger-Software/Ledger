@@ -63,7 +63,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    private final String tableTransaction = "CREATE TABLE TRANSACTION " +
+    private final String tableTransaction = "CREATE TABLE IF NOT EXISTS TRANSACT " +
             "(TRANS_ID INT PRIMARY KEY  NOT NULL, " +
             "TRANS_DATETIME REAL        NOT NULL, " +
             "TRANS_AMOUNT INT           NOT NULL," +
@@ -75,17 +75,17 @@ public class SQLiteDatabase implements IDatabase {
             "FOREIGN KEY(TRANS_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)," +
             "FOREIGN KEY(TRANS_TYPE_ID) REFERENCES TYPE(TYPE_ID)" +
             ")";
-    private final String tableNote = "CREATE TABLE NOTE" +
+    private final String tableNote = "CREATE TABLE IF NOT EXISTS NOTE" +
             "(NOTE_TRANS_ID INT PRIMARY KEY  NOT NULL, " +
             "NOTE_TEXT TEXT             NOT NULL, " +
-            "FOREIGN KEY(NOTE_TRANS_ID) REFERENCES TRANSACTION(TRANS_ID)" +
+            "FOREIGN KEY(NOTE_TRANS_ID) REFERENCES TRANSACT(TRANS_ID)" +
             ")";
 
     private final String tableTagToTrans= "CREATE TABLE IF NOT EXISTS TAG_TO_TRANS " +
             "(TTTS_TAG_ID INT           NOT NULL, " +
             "TTTS_TRANS_ID INT          NOT NULL, " +
             "FOREIGN KEY(TTTS_TAG_ID) REFERENCES TAG(TAG_ID), " +
-            "FOREIGN KEY(TTTS_TRANS_ID) REFERENCES TRANSACTION(TRANS_ID)" +
+            "FOREIGN KEY(TTTS_TRANS_ID) REFERENCES TRANSACT(TRANS_ID)" +
             ")";
     private final String tableTag = "CREATE TABLE IF NOT EXISTS TAG " +
             "(TAG_ID INT PRIMARY KEY    NOT NULL, " +
@@ -97,7 +97,7 @@ public class SQLiteDatabase implements IDatabase {
             "TYPE_NAME TEXT              NOT NULL, " +
             "TYPE_DESC TEXT              NOT NULL" +
             ")";
-    private final String tableAccount = "CREATE TABLE IF NOT EXISTS ACCOUNT, " +
+    private final String tableAccount = "CREATE TABLE IF NOT EXISTS ACCOUNT " +
             "(ACCOUNT_ID INT PRIMARY KEY NOT NULL, " +
             "ACCOUNT_NAME TEXT           NOT NULL, " +
             "ACCOUNT_DESC TEXT           NOT NULL" +
@@ -105,9 +105,7 @@ public class SQLiteDatabase implements IDatabase {
     private final String tableAccountBalance = "CREATE TABLE IF NOT EXISTS ACCOUNT_BALANCE " +
             "(ABAL_ACCOUNT_ID INT       NOT NULL, " +
             "ABAL_DATETIME REAL         NOT NULL, " +
-            "ABAL_AMOUNT INT            NOT NULL, " +
-            "FOREIGN KEY(ABAL_TAG_ID) REFERENCES TAG(TAG_ID), " +
-            "FOREIGN KEY(ABAL_PAYEE_ID) REFERENCES PAYEE(PAYEE_ID)" +
+            "ABAL_AMOUNT INT            NOT NULL " +
             ")";
     private final String tablePayee = "CREATE TABLE IF NOT EXISTS PAYEE " +
             "(PAYEE_ID INT PRIMARY KEY  NOT NULL, " +
