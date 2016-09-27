@@ -1,11 +1,12 @@
 package ledger.database.storage;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.Transaction;
+import ledger.database.enity.*;
 
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Database handler for SQLite storage mechanism.
@@ -15,7 +16,7 @@ public class SQLiteDatabase implements IDatabase {
     private Connection database;
 
     public SQLiteDatabase(InputStream iStream) {
-        // Initalize SQLite streams.
+        // Initialize SQLite streams.
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -24,10 +25,10 @@ public class SQLiteDatabase implements IDatabase {
 
         database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
 
-        initalizeDatabase();
+        initializeDatabase();
     }
 
-    public void initalizeDatabase() {
+    public void initializeDatabase() {
         LinkedList<String> tableSQL = new LinkedList<String>();
 
         tableSQL.add(tableTag);
@@ -124,13 +125,46 @@ public class SQLiteDatabase implements IDatabase {
 
     public void insertTransaction(Transaction transaction) {
         try {
-            PreparedStatement stmt = database.prepareStatement("INSERT INTO Transaction (TRANS_DATETIME,TRANS_AMOUNT,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?)");
-            stmt.setDate(1, Transaction.date);
-            stmt.setInt(2, Transaction.amount);
-            stmt.setBoolean(3, Transaction.pending);
-            stmt.setInt(4, Transaction.account.ID);
-            stmt.setInt(5, Transaction.payee.ID);
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACTION (TRANS_DATETIME,TRANS_AMOUNT,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?)");
+            stmt.setLong(1, transaction.getDate().getTime());
+            stmt.setInt(2, transaction.getAmount());
+            stmt.setBoolean(3, transaction.isPending());
+
+            Account existingAccount = getAccountForName(transaction.getAccount().getName());
+            if (existingAccount != null) {
+                stmt.setInt(4, existingAccount.getId());
+            } else {
+                insertAccount(transaction.getAccount());
+                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
+                stmt.setInt(4, insertedAccount.getId());
+            }
+
+            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+            if (existingPayee != null) {
+                stmt.setInt(5, existingPayee.getId());
+            } else {
+                insertPayee(transaction.getPayee());
+                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+                stmt.setInt(5, insertedPayee.getId());
+            }
+
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedTransactionID = generatedIDs.getInt("TRANS_ID");
+
+                for (Tag currentTag : transaction.getTagList()) {
+                    Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                    if (existingTag != null) {
+                        insertTagToTrans(existingTag.getId(), insertedTransactionID);
+                    } else {
+                        insertTag(currentTag);
+                        Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                        insertTagToTrans(insertedTag.getId(), insertedTransactionID);
+                    }
+                }
+            }
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -139,10 +173,11 @@ public class SQLiteDatabase implements IDatabase {
 
     ;
 
+    // TODO: Fix pls
     public void deleteTransaction(Transaction transaction) {
         try {
-            PreparedStatement stmt = database.prepareStatement("DELETE FROM Transaction WHERE TRANSACTION_ID = ?");
-            stmt.setInt(1, Transaction.ID);
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANSACTION_ID = ?");
+            stmt.setInt(1, transaction.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
@@ -151,15 +186,16 @@ public class SQLiteDatabase implements IDatabase {
 
     ;
 
+    // TODO: Fix pls
     public void editTransaction(Transaction transaction) {
         try {
-            PreparedStatement stmt = database.prepareStatement("UPDATE Transaction SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
-            stmt.setDate(1, Transaction.date);
-            stmt.setInt(2, Transaction.amount);
-            stmt.setBoolean(3, Transaction.pending);
-            stmt.setInt(4, Transaction.account.ID);
-            stmt.setInt(5, Transaction.payee.ID);
-            stmt.setInt(6, Transaction.ID);
+            PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACTION SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
+            stmt.setLong(1, transaction.getDate().getTime());
+            stmt.setInt(2, transaction.getAmount());
+            stmt.setBoolean(3, transaction.isPending());
+            stmt.setInt(4, transaction.getAccount().getId());
+            stmt.setInt(5, transaction.getPayee().getId());
+            stmt.setInt(6, transaction.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
@@ -168,6 +204,7 @@ public class SQLiteDatabase implements IDatabase {
 
     ;
 
+    // TODO: Fix pls
     public List<Transaction> getAllTransactions() {
         try {
             Statement stmt = database.createStatement();
@@ -183,7 +220,7 @@ public class SQLiteDatabase implements IDatabase {
                 int accountID = rs.getInt("TRANS_ACCOUNT_ID");
                 int payeeID = rs.getInt("TRANS_PAYEE_ID");
 
-                Account account = getAccountForID(accountID);
+                Account account = getAccountFor(accountID);
                 Payee payee = getPayeeForID(payeeID);
                 List<Tag> tags = getTagsForTransactionID();
                 Note note = getNoteForID(noteID);
