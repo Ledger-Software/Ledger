@@ -191,17 +191,38 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     public void insertAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO ACCOUNT (ACCOUNT_NAME,ACCOUNT_DESC) VALUES (?, ?)");
+            stmt.setString(1, account.getName());
+            stmt.setString(2, account.getDescription());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void deleteAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
+            stmt.setInt(1, account.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void editAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE ACCOUNT SET ACCOUNT_NAME=?, ACCOUNT_DESC=? WHERE ACCOUNT_ID=?");
+            stmt.setString(1, account.getName());
+            stmt.setString(2, account.getDescription());
+            stmt.setInt(3, account.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void insertPayee(Payee payee) {
@@ -221,10 +242,9 @@ public class SQLiteDatabase implements IDatabase {
 
     public void insertType(Type type) {
         try {
-            PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_ID,TYPE_NAME,TYPE_DESC) VALUES (?, ?, ?)");
-            stmt.setInt(1, type.getId());
-            stmt.setString(2, type.getName());
-            stmt.setString(3, type.getDescription());
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
+            stmt.setString(1, type.getName());
+            stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
