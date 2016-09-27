@@ -298,4 +298,32 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
+
+    private Account getAccountForName(String name) {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_NAME=?");
+            stmt.setString(1, name);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("ACCOUNT_NAME");
+                description = rs.getString("ACCOUNT_DESC");
+                id = rs.getInt("ACCOUNT_ID");
+            }
+
+            if (count == 0) return null;
+
+            return new Account(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
