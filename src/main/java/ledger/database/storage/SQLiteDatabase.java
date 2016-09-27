@@ -2,6 +2,7 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.Transaction;
+import org.omg.SendingContext.RunTime;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -22,7 +23,11 @@ public class SQLiteDatabase implements IDatabase {
             throw new RuntimeException("Unable to find SQLite Driver", e);
         }
 
-        database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to JDBC Socket. ")
+        }
 
         initalizeDatabase();
     }
@@ -42,23 +47,15 @@ public class SQLiteDatabase implements IDatabase {
         tableSQL.add(tableTagToTrans);
         tableSQL.add(tableTagToPayee);
 
-        for(String statement: tableSQL) {
-            Statement stmt = database.createStatement();
-            stmt.execute(statement);
-            stmt.close();
+        try {
+            for(String statement: tableSQL) {
+                Statement stmt = database.createStatement();
+                stmt.execute(statement);
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to Create Table", e);
         }
-    }
-
-    private boolean doesTableExist(String tableName) {
-        Statement stmt = database.createStatement();
-        String createTableSQL = "SELECT name FROM sqlite_master WHERE type='table' AND name='{1}'";
-        ResultSet result = stmt.executeQuery(String.format(createTableSQL, tableName));
-        stmt.close();
-
-        while(result.next()) {
-            return true;
-        }
-        return false;
     }
 
     private final String tableTransaction = "CREATE TABLE TRANSACTION " +
@@ -119,7 +116,11 @@ public class SQLiteDatabase implements IDatabase {
 
 
     public void shutdown() {
-        database.close();
+        try {
+            database.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Exception while shutting down database.", e);
+        }
     }
 
     public void insertTransaction(Transaction transaction) {
