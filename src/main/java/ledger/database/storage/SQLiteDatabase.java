@@ -1,11 +1,12 @@
 package ledger.database.storage;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.Transaction;
+import ledger.database.enity.*;
 
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Database handler for SQLite storage mechanism.
@@ -15,7 +16,9 @@ public class SQLiteDatabase implements IDatabase {
     private Connection database;
 
     public SQLiteDatabase(InputStream iStream) {
-        // Initalize SQLite streams.
+        // Initalize SQLite streams
+
+
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
@@ -134,10 +137,7 @@ public class SQLiteDatabase implements IDatabase {
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
-
     }
-
-    ;
 
     public void deleteTransaction(Transaction transaction) {
         try {
@@ -148,8 +148,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
-    ;
 
     public void editTransaction(Transaction transaction) {
         try {
@@ -165,8 +163,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
-    ;
 
     public List<Transaction> getAllTransactions() {
         try {
@@ -199,54 +195,63 @@ public class SQLiteDatabase implements IDatabase {
         return;
     }
 
-    ;
 
     public void deleteAccount(Account account) {
         return;
     }
 
-    ;
 
     public void editAccount(Account account) {
         return;
     }
 
-    ;
-
     public void insertPayee(Payee payee) {
         return;
     }
 
-    ;
 
     public void deletePayee(Payee payee) {
         return;
     }
 
-    ;
 
     public void editPayee(Payee payee) {
         return;
     }
 
-    ;
 
     public void insertType(Type type) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_ID,TYPE_NAME,TYPE_DESC) VALUES (?, ?, ?)");
+            stmt.setInt(1, type.getId());
+            stmt.setString(2, type.getName());
+            stmt.setString(3, type.getDescription());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    ;
 
     public void deleteType(Type type) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
+            stmt.setInt(1, type.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    ;
 
     public void editType(Type type) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TRANS_ID=?");
+            stmt.setString(1, type.getName());
+            stmt.setString(2, type.getDescription());
+            stmt.setInt(3, type.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    ;
-
 }
