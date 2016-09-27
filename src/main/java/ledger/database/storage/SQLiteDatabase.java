@@ -165,33 +165,83 @@ public class SQLiteDatabase implements IDatabase {
                     }
                 }
             }
+
+            /* Transaction Notes are not added on transaction insertion. By principle, notes should always be added
+               after the fact, by the user.
+             */
+
+            stmt.close();
+            generatedIDs.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // TODO: Fix pls
     public void deleteTransaction(Transaction transaction) {
         try {
-            PreparedStatement stmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANSACTION_ID = ?");
-            stmt.setInt(1, transaction.getId());
-            stmt.executeUpdate();
+            PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANS_ID = ?");
+            deleteTransactionStmt.setInt(1, transaction.getId());
+            deleteTransactionStmt.executeUpdate();
+            deleteTransactionStmt.close();
+
+            PreparedStatement deleteNoteStmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            deleteNoteStmt.setInt(1, transaction.getId());
+            deleteNoteStmt.executeUpdate();
+            deleteNoteStmt.close();
+
+            PreparedStatement deleteTagToTransactionStmt = database.prepareStatement("DELETE FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID = ?");
+            deleteTagToTransactionStmt.setInt(1, transaction.getId());
+            deleteTagToTransactionStmt.executeUpdate();
+            deleteTagToTransactionStmt.close();
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
     }
 
-    // TODO: Fix pls
     public void editTransaction(Transaction transaction) {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACTION SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
             stmt.setBoolean(3, transaction.isPending());
-            stmt.setInt(4, transaction.getAccount().getId());
-            stmt.setInt(5, transaction.getPayee().getId());
+
+            Account existingAccount = getAccountForName(transaction.getAccount().getName());
+            if (existingAccount != null) {
+                stmt.setInt(4, existingAccount.getId());
+            } else {
+                insertAccount(transaction.getAccount());
+                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
+                stmt.setInt(4, insertedAccount.getId());
+            }
+
+            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+            if (existingPayee != null) {
+                stmt.setInt(5, existingPayee.getId());
+            } else {
+                insertPayee(transaction.getPayee());
+                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+                stmt.setInt(5, insertedPayee.getId());
+            }
+
             stmt.setInt(6, transaction.getId());
+
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedTransactionID = generatedIDs.getInt("TRANS_ID");
+
+                for (Tag currentTag : transaction.getTagList()) {
+                    Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                    if (existingTag != null) {
+                        insertTagToTrans(existingTag.getId(), insertedTransactionID);
+                    } else {
+                        insertTag(currentTag);
+                        Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+                        insertTagToTrans(insertedTag.getId(), insertedTransactionID);
+                    }
+                }
+            }
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
@@ -215,8 +265,8 @@ public class SQLiteDatabase implements IDatabase {
 
                 Account account = getAccountFor(accountID);
                 Payee payee = getPayeeForID(payeeID);
-                List<Tag> tags = getTagsForTransactionID();
-                Note note = getNoteForID(noteID);
+                List<Tag> tags = getTagsForTransactionID(transactionID);
+                Note note = getNoteForTransactionID(transactionID);
 
                 Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
             }
