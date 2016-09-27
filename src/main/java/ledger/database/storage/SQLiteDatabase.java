@@ -1,12 +1,11 @@
 package ledger.database.storage;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.Payee;
-import ledger.database.enity.Transaction;
-
+import ledger.database.enity.*;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Database handler for SQLite storage mechanism.
@@ -16,14 +15,20 @@ public class SQLiteDatabase implements IDatabase {
     private Connection database;
 
     public SQLiteDatabase(InputStream iStream) {
-        // Initalize SQLite streams.
+        // Initalize SQLite streams
+
+
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to find SQLite Driver", e);
         }
 
-        database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
+        try {
+            database = DriverManager.getConnection("jdbc:sqlite:src/test/resources/test.db");
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to connect to JDBC Socket. ");
+        }
 
         initalizeDatabase();
     }
@@ -43,23 +48,15 @@ public class SQLiteDatabase implements IDatabase {
         tableSQL.add(tableTagToTrans);
         tableSQL.add(tableTagToPayee);
 
-        for(String statement: tableSQL) {
-            Statement stmt = database.createStatement();
-            stmt.execute(statement);
-            stmt.close();
+        try {
+            for(String statement: tableSQL) {
+                Statement stmt = database.createStatement();
+                stmt.execute(statement);
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to Create Table", e);
         }
-    }
-
-    private boolean doesTableExist(String tableName) {
-        Statement stmt = database.createStatement();
-        String createTableSQL = "SELECT name FROM sqlite_master WHERE type='table' AND name='{1}'";
-        ResultSet result = stmt.executeQuery(String.format(createTableSQL, tableName));
-        stmt.close();
-
-        while(result.next()) {
-            return true;
-        }
-        return false;
     }
 
     private final String tableTransaction = "CREATE TABLE TRANSACTION " +
@@ -120,7 +117,11 @@ public class SQLiteDatabase implements IDatabase {
 
 
     public void shutdown() {
-        database.close();
+        try {
+            database.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Exception while shutting down database.", e);
+        }
     }
 
     public void insertTransaction(Transaction transaction) {
@@ -135,10 +136,7 @@ public class SQLiteDatabase implements IDatabase {
         } catch (java.sql.SQLException e) {
             e.printStackTrace();
         }
-
     }
-
-    ;
 
     public void deleteTransaction(Transaction transaction) {
         try {
@@ -149,8 +147,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
-    ;
 
     public void editTransaction(Transaction transaction) {
         try {
@@ -166,8 +162,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
-    ;
 
     public List<Transaction> getAllTransactions() {
         try {
@@ -197,22 +191,39 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     public void insertAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO ACCOUNT (ACCOUNT_NAME,ACCOUNT_DESC) VALUES (?, ?)");
+            stmt.setString(1, account.getName());
+            stmt.setString(2, account.getDescription());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    ;
 
     public void deleteAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
+            stmt.setInt(1, account.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    ;
 
     public void editAccount(Account account) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE ACCOUNT SET ACCOUNT_NAME=?, ACCOUNT_DESC=? WHERE ACCOUNT_ID=?");
+            stmt.setString(1, account.getName());
+            stmt.setString(2, account.getDescription());
+            stmt.setInt(3, account.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    ;
 
     public void insertPayee(Payee payee) {
         try {
@@ -226,7 +237,6 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    ;
 
     public void deletePayee(Payee payee) {
         try {
@@ -238,7 +248,6 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    ;
 
     public void editPayee(Payee payee) {
 
@@ -255,25 +264,38 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    ;
 
     public void insertType(Type type) {
-        
-
+        try {
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
+            stmt.setString(1, type.getName());
+            stmt.setString(2, type.getDescription());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    ;
 
     public void deleteType(Type type) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
+            stmt.setInt(1, type.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    ;
 
     public void editType(Type type) {
-        return;
+        try {
+            PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TRANS_ID=?");
+            stmt.setString(1, type.getName());
+            stmt.setString(2, type.getDescription());
+            stmt.setInt(3, type.getId());
+            stmt.executeUpdate();
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        }
     }
-
-    ;
-
 }
