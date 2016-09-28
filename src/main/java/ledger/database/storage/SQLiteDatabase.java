@@ -85,7 +85,7 @@ public class SQLiteDatabase implements IDatabase {
         }
 
         try {
-            database = DriverManager.getConnection(pathToDb);
+            database = DriverManager.getConnection("jdbc:sqlite:" + pathToDb);
         } catch (SQLException e) {
             throw new StorageException("Unable to connect to JDBC Socket. ");
         }

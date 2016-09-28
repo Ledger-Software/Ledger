@@ -3,6 +3,12 @@ package ledger.database.storage;
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
 import org.junit.*;
+import ledger.database.enity.Transaction;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -10,40 +16,45 @@ import java.util.*;
 
 public class SQLiteDatabaseTest {
 
-    private IDatabase database;
-    private Transaction sampleTransaction1;
-    private Transaction sampleTransaction2;
-    private Transaction sampleTransaction3;
-    private Type sampleType;
-    private Account sampleAccount;
-    private Payee samplePayee;
-    private Tag sampleTag;
-    private Note sampleNote;
+    private static IDatabase database;
+    private static Transaction sampleTransaction1;
+    private static Transaction sampleTransaction2;
+    private static Transaction sampleTransaction3;
+    private static Type sampleType;
+    private static Account sampleAccount;
+    private static Payee samplePayee;
+    private static Tag sampleTag;
+    private static Note sampleNote;
 
     @BeforeClass
-    public void setupSampleObjects() {
-        this.sampleType = new Type("Credit", "Purchased with a credit card");
-        this.sampleAccount = new Account("Chase", "Credit account with Chase Bank");
-        this.samplePayee = new Payee("Meijer", "Grocery store");
-        this.sampleTag = new Tag("Groceries", "Money spent on groceries");
-        this.sampleNote = new Note("This is a note");
+    public static void setupSampleObjects() {
+        sampleType = new Type("Credit", "Purchased with a credit card");
+        sampleAccount = new Account("Chase", "Credit account with Chase Bank");
+        samplePayee = new Payee("Meijer", "Grocery store");
+        sampleTag = new Tag("Groceries", "Money spent on groceries");
+        sampleNote = new Note("This is a note");
 
         ArrayList<Tag> sampleTagList = new ArrayList<>();
-        sampleTagList.add(this.sampleTag);
+        sampleTagList.add(sampleTag);
 
-        this.sampleTransaction1 = new Transaction(new Date(), this.sampleType, 4201, this.sampleAccount, this.samplePayee, true, sampleTagList, this.sampleNote);
-        this.sampleTransaction2 = new Transaction(new Date(), this.sampleType, 103, this.sampleAccount, this.samplePayee, true, sampleTagList, this.sampleNote);
-        this.sampleTransaction3 = new Transaction(new Date(), this.sampleType, 3304, this.sampleAccount, this.samplePayee, true, sampleTagList, this.sampleNote);
+        sampleTransaction1 = new Transaction(new Date(), sampleType, 4201, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
+        sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
+        sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote);
     }
 
     @Before
     public void setupDatabase() throws Exception {
-        database = new SQLiteDatabase(null, "jdbc:sqlite:src/test/resources/test.db");
+        database = new SQLiteDatabase(null, "src/test/resources/test.db");
     }
 
     @Test
     public void insertTransaction() throws Exception {
+        database.insertTransaction(sampleTransaction1);
 
+        List<Transaction> trans = database.getAllTransactions();
+
+        assertEquals(1, trans.size());
+        assertEquals(sampleTransaction1.getId(), trans.get(0).getId());
     }
 
     @Test
@@ -78,7 +89,13 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void getAllTransactions() throws Exception {
+        database.insertTransaction(sampleTransaction1);
+        database.insertTransaction(sampleTransaction2);
+        database.insertTransaction(sampleTransaction3);
 
+        List<Transaction> trans = database.getAllTransactions();
+
+        assertEquals(3, trans.size());
     }
 
     @Test
@@ -159,5 +176,8 @@ public class SQLiteDatabaseTest {
     @After
     public void afterTests() throws Exception {
         database.shutdown();
+
+        Path dbPath = Paths.get("src/test/resources/test.db");
+        Files.delete(dbPath);
     }
 }
