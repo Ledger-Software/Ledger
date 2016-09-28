@@ -18,16 +18,21 @@ public class Transaction implements IEntity {
     private Note note;
 
     public Transaction(Date date, Type type, int amount, Account account,
-                       Payee payee, boolean pending, int id, List<Tag> tagList, Note note) {
+                       Payee payee, boolean pending, List<Tag> tagList, Note note) {
+        this(date, type, amount, account, payee, pending, tagList, note, -1);
+    }
+
+    public Transaction(Date date, Type type, int amount, Account account,
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, int id) {
         this.date = date;
         this.type = type;
         this.amount = amount;
         this.account = account;
         this.payee = payee;
         this.pending = pending;
-        this.id = id;
         this.tagList = tagList;
         this.note = note;
+        this.id = id;
     }
 
     /**

@@ -1,9 +1,5 @@
 package ledger;
 
-/**
- * Created by Tayler How on 9/24/2016.
- */
-
 import org.junit.*;
 
 import static org.junit.Assert.*;
