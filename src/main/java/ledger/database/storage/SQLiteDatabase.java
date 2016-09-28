@@ -93,6 +93,7 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     // DB management functions
+    @Override
     public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<>();
 
@@ -119,6 +120,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void shutdown() throws StorageException {
         try {
             database.close();
@@ -128,6 +130,7 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     // Basic CRUD functionality
+    @Override
     public void insertTransaction(Transaction transaction) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACT (TRANS_DATETIME,TRANS_AMOUNT,TRANS_TYPE_ID,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?, ?)");
@@ -190,6 +193,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deleteTransaction(Transaction transaction) throws StorageException{
         try {
             PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACT WHERE TRANS_ID = ?");
@@ -205,6 +209,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editTransaction(Transaction transaction) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACT SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_TYPE_ID=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
@@ -275,6 +280,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public List<Transaction> getAllTransactions() throws StorageException {
         try {
             Statement stmt = database.createStatement();
@@ -313,6 +319,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void insertAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO ACCOUNT (ACCOUNT_NAME,ACCOUNT_DESC) VALUES (?, ?)");
@@ -325,6 +332,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deleteAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
@@ -336,6 +344,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE ACCOUNT SET ACCOUNT_NAME=?, ACCOUNT_DESC=? WHERE ACCOUNT_ID=?");
@@ -349,6 +358,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void insertPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
@@ -361,6 +371,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deletePayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM PAYEE WHERE PAYEE_ID = ?");
@@ -371,6 +382,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
@@ -385,6 +397,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void insertNote(Note note) {
         try {
             PreparedStatement stmt =
@@ -398,6 +411,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deleteNote(Note note) {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
@@ -409,6 +423,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editNote(Note note) {
 
         try {
@@ -424,6 +439,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void insertType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
@@ -436,6 +452,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deleteType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
@@ -447,6 +464,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TRANS_ID=?");
@@ -460,6 +478,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void insertTag(Tag tag) throws StorageException {
         try {
         PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,AT/) VALUES (?, ?)");
@@ -472,6 +491,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void deleteTag(Tag tag) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM TAG WHERE TAG_ID = ?");
@@ -483,6 +503,7 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
     public void editTag(Tag tag) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("UPDATE TAG SET TAG_NAME=?, TAG_DESC=? WHERE TAG_ID=?");
