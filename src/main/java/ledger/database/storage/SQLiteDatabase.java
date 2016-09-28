@@ -75,7 +75,7 @@ public class SQLiteDatabase implements IDatabase {
     private Connection database;
 
 
-    public SQLiteDatabase(InputStream iStream) throws StorageException {
+    public SQLiteDatabase(InputStream iStream, String pathToDb) throws StorageException {
         // Initialize SQLite streams.
 
         try {
@@ -85,7 +85,7 @@ public class SQLiteDatabase implements IDatabase {
         }
 
         try {
-            database = DriverManager.getConnection("jdbc:sqlite:test.db");
+            database = DriverManager.getConnection(pathToDb);
         } catch (SQLException e) {
             throw new StorageException("Unable to connect to JDBC Socket. ");
         }

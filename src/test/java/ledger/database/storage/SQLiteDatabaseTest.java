@@ -1,11 +1,19 @@
 package ledger.database.storage;
 
+import ledger.database.IDatabase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class SQLiteDatabaseTest {
+
+    private IDatabase database;
+
+    @Before
+    public void setupDatabase() throws Exception{
+        database = new SQLiteDatabase(null, "jdbc:sqlite:src/test/resources/test.db");
+    }
 
     @Test
     public void insertTransaction() throws Exception {
@@ -100,13 +108,6 @@ public class SQLiteDatabaseTest {
     @Test
     public void editTag() throws Exception {
 
-    }
-
-    private SQLiteDatabase database;
-
-    @Before
-    public void testConstruction() throws Exception {
-        database = new SQLiteDatabase(null);
     }
 
     @After
