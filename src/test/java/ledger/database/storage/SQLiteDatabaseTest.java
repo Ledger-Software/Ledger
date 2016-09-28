@@ -174,7 +174,24 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void editPayee() throws Exception {
+        Payee payee = new Payee("Name", "Description");
 
+        List<Payee> payees = database.getAllPayees();
+        assertEquals(0, payees.size());
+
+        database.insertPayee(payee);
+
+        payees = database.getAllPayees();
+        assertEquals(1, payees.size());
+
+        Payee toEdit = payees.get(0);
+
+        toEdit.setName("New Name");
+
+        database.editPayee(toEdit);
+
+        payees = database.getAllPayees();
+        assertEquals("New Name", payees.get(0).getName());
     }
 
     @Test
