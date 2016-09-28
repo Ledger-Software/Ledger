@@ -384,12 +384,68 @@ public class SQLiteDatabase implements IDatabase {
         return null;
     }
 
-    private Account getAccountForID(int accountID) {
-        return null;
+    // TODO: Move
+    private Account getAccountForID(int accountID) throws StorageException {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_ID=?");
+            stmt.setInt(1, accountID);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("ACCOUNT_NAME");
+                description = rs.getString("ACCOUNT_DESC");
+                id = rs.getInt("ACCOUNT_ID");
+                count++;
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Account(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Account by ID", e);
+        }
     }
 
-    private Type getTypeForID(int typeID) {
-        return null;
+    // TODO: Move
+    private Type getTypeForID(int typeID) throws StorageException{
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM TYPE WHERE TYPE_ID=?");
+            stmt.setInt(1, typeID);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("TYPE_NAME");
+                description = rs.getString("TYPE_DESC");
+                id = rs.getInt("TYPE_ID");
+                count++;
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Type(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Type by ID", e);
+        }
     }
 
     public void insertAccount(Account account) throws StorageException {
