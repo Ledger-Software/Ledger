@@ -170,7 +170,6 @@ public class SQLiteDatabase implements IDatabase {
 
             ResultSet generatedIDs = stmt.getGeneratedKeys();
             if (generatedIDs.next()) {
-                System.out.println(generatedIDs.toString());
                 int insertedTransactionID = generatedIDs.getInt(1);
 
                 for (Tag currentTag : transaction.getTagList()) {
