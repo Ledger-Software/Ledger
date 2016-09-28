@@ -35,11 +35,15 @@ public interface IDatabase {
 
     void editPayee(Payee payee) throws StorageException;
 
+    List<Payee> getAllPayees() throws StorageException;
+
     void insertNote(Note note) throws StorageException;
 
     void deleteNote(Note note) throws StorageException;
 
     void editNote(Note note) throws StorageException;
+
+    List<Note> getAllNotes() throws StorageException;
 
     void insertType(Type type) throws StorageException;
 
@@ -53,5 +57,6 @@ public interface IDatabase {
 
     void editTag(Tag tag) throws StorageException;
 
-    List<Payee> getAllPayees() throws StorageException;
+    List<Tag> getAllTags() throws StorageException;
+
 }
