@@ -59,9 +59,9 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteTransaction() throws Exception {
-        database.insertTransaction(this.sampleTransaction1);
-        database.insertTransaction(this.sampleTransaction2);
-        database.insertTransaction(this.sampleTransaction3);
+        database.insertTransaction(sampleTransaction1);
+        database.insertTransaction(sampleTransaction2);
+        database.insertTransaction(sampleTransaction3);
 
         List<Transaction> transactionsBeforeDelete = database.getAllTransactions();
         int countBeforeDelete = transactionsBeforeDelete.size();
@@ -74,10 +74,8 @@ public class SQLiteDatabaseTest {
 
         assertEquals(countBeforeDelete - 1, countAfterDelete);
 
-        ArrayList<Integer> IDsAfterDelete = new ArrayList<>();
-        for (Transaction currentTransaction : transactionsAfterDelete) {
-            IDsAfterDelete.add(currentTransaction.getId());
-        }
+        ArrayList<Integer> IDsAfterDelete = transactionsAfterDelete.stream()
+                .map(Transaction::getId).collect(Collectors.toCollection(ArrayList::new));
 
         assertFalse(IDsAfterDelete.contains(transactionToDelete.getId()));
     }
@@ -85,9 +83,9 @@ public class SQLiteDatabaseTest {
     @Test
     public void editTransaction() throws Exception {
         ArrayList<Tag> sampleTagList = new ArrayList<>();
-        sampleTagList.add(this.sampleTag);
+        sampleTagList.add(sampleTag);
 
-        Transaction originalTransaction = new Transaction(new Date(), this.sampleType, 1202, this.sampleAccount, this.samplePayee, false, sampleTagList, this.sampleNote);
+        Transaction originalTransaction = new Transaction(new Date(), sampleType, 1202, sampleAccount, samplePayee, false, sampleTagList, sampleNote);
 
         database.insertTransaction(originalTransaction);
 
@@ -115,7 +113,7 @@ public class SQLiteDatabaseTest {
         //pull out ids
         assertEquals(3, trans.size());
 
-        List<Integer> ids = trans.stream().map(elm -> elm.getAmount()).collect(Collectors.toList());
+        List<Integer> ids = trans.stream().map(Transaction::getAmount).collect(Collectors.toList());
 
         //using amounts to test, since we don't know the transaction ID's and the amounts happen to be unique
         assertTrue(ids.contains(sampleTransaction1.getAmount()));
@@ -238,7 +236,7 @@ public class SQLiteDatabaseTest {
     public void insertNote() throws Exception {
         List<Note> notesBeforeInsertion = database.getAllNotes();
 
-        database.insertNote(this.sampleNote);
+        database.insertNote(sampleNote);
 
         List<Note> notesAfterInsertion = database.getAllNotes();
 
@@ -247,11 +245,11 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteNote() throws Exception {
-        database.insertNote(this.sampleNote);
+        database.insertNote(sampleNote);
 
         List<Note> notesBeforeDeletion = database.getAllNotes();
 
-        database.deleteNote(this.sampleNote);
+        database.deleteNote(sampleNote);
 
         List<Note> notesAfterDeletion = database.getAllNotes();
 
@@ -335,7 +333,7 @@ public class SQLiteDatabaseTest {
     public void insertTag() throws Exception {
         List<Tag> tagsBeforeInsertion = database.getAllTags();
 
-        database.insertTag(this.sampleTag);
+        database.insertTag(sampleTag);
 
         List<Tag> tagsAfterInsertion = database.getAllTags();
 
@@ -344,7 +342,7 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteTag() throws Exception {
-        database.insertTag(this.sampleTag);
+        database.insertTag(sampleTag);
 
         List<Tag> tagsBeforeDeletion = database.getAllTags();
         Tag tagToDelete = tagsBeforeDeletion.get(0);
