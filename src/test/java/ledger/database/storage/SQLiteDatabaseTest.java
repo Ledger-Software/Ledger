@@ -54,7 +54,6 @@ public class SQLiteDatabaseTest {
         List<Transaction> trans = database.getAllTransactions();
 
         assertEquals(1, trans.size());
-        assertEquals(sampleTransaction1.getId(), trans.get(0).getId());
     }
 
     @Test

@@ -141,7 +141,9 @@ public class SQLiteDatabase implements IDatabase {
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
             } else {
-                System.out.println("ERROR: No matching transaction type found.");
+                insertType(transaction.getType());
+                Type insertedType = getTypeForName(transaction.getType().getName());
+                stmt.setInt(3, insertedType.getId());
             }
 
             stmt.setBoolean(4, transaction.isPending());
@@ -168,7 +170,8 @@ public class SQLiteDatabase implements IDatabase {
 
             ResultSet generatedIDs = stmt.getGeneratedKeys();
             if (generatedIDs.next()) {
-                int insertedTransactionID = generatedIDs.getInt("TRANS_ID");
+                System.out.println(generatedIDs.toString());
+                int insertedTransactionID = generatedIDs.getInt(1);
 
                 for (Tag currentTag : transaction.getTagList()) {
                     Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
@@ -284,7 +287,7 @@ public class SQLiteDatabase implements IDatabase {
     public List<Transaction> getAllTransactions() throws StorageException {
         try {
             Statement stmt = database.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Transaction;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM TRANSACT;");
 
             ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 
@@ -366,6 +369,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Payee", e);
         }
@@ -377,6 +381,7 @@ public class SQLiteDatabase implements IDatabase {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM PAYEE WHERE PAYEE_ID = ?");
             stmt.setInt(1, payee.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while deleting Payee", e);
         }
@@ -392,6 +397,7 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(2, payee.getDescription());
             stmt.setInt(3, payee.getId());
             stmt.executeUpdate();
+            stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
         }
@@ -481,7 +487,7 @@ public class SQLiteDatabase implements IDatabase {
     @Override
     public void insertTag(Tag tag) throws StorageException {
         try {
-        PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME,AT/) VALUES (?, ?)");
+        PreparedStatement stmt = database.prepareStatement("INSERT INTO TAG (TAG_NAME, TAG_DESC) VALUES (?, ?)");
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getDescription());
             stmt.executeUpdate();
@@ -634,7 +640,7 @@ public class SQLiteDatabase implements IDatabase {
 
     private Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
         try {
-            PreparedStatement stmt = database.prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC = ?");
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC=?");
             stmt.setString(1, payeeName);
             stmt.setString(2, payeeDescription);
 
@@ -649,6 +655,7 @@ public class SQLiteDatabase implements IDatabase {
                 newName = rs.getString("PAYEE_NAME");
                 description = rs.getString("PAYEE_DESC");
                 id = rs.getInt("PAYEE_ID");
+                count++;
             }
 
             rs.close();
@@ -723,8 +730,8 @@ public class SQLiteDatabase implements IDatabase {
                 ResultSet tagResults = tagStmt.executeQuery();
 
                 while (tagResults.next()) {
-                    String name = rs.getString("TAG_NAME");
-                    String description = rs.getString("TAG_DESC");
+                    String name = tagResults.getString("TAG_NAME");
+                    String description = tagResults.getString("TAG_DESC");
 
                     Tag currentTag = new Tag(name, description, tagId);
 
