@@ -164,7 +164,18 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void editAccount() throws Exception {
+        database.insertAccount(sampleAccount);
 
+        List<Account> accounts = database.getAllAccounts();
+
+        Account newAccount = new Account(sampleAccount.getName(), "new description", accounts.get(0).getId());
+
+        database.editAccount(newAccount);
+
+        List<Account> newAccounts = database.getAllAccounts();
+
+        assertEquals(accounts.size(), newAccounts.size());
+        assertEquals("new description", newAccounts.get(0).getDescription());
     }
 
     @Test
