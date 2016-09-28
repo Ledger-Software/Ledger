@@ -211,7 +211,16 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertType() throws Exception {
+        List<Type> types = database.getAllTypes();
+        assertEquals(0, types.size());
 
+        database.insertType(sampleType);
+
+        types = database.getAllTypes();
+        assertEquals(1, types.size());
+
+        assertEquals("Name", types.get(0).getName());
+        assertEquals("Description", types.get(0).getDescription());
     }
 
     @Test
@@ -221,7 +230,24 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void editType() throws Exception {
+        List<Type> types = database.getAllTypes();
+        assertEquals(0, types.size());
 
+        database.insertType(sampleType);
+
+        types = database.getAllTypes();
+        Type currentType = types.get(0);
+
+        currentType.setName("ABCD");
+        currentType.setDescription("1234");
+
+        database.editType(currentType);
+
+        types = database.getAllTypes();
+        assertEquals(1, types.size());
+
+        assertEquals("ABCD", types.get(0).getName());
+        assertEquals("1234", types.get(0).getDescription());
     }
 
     @Test

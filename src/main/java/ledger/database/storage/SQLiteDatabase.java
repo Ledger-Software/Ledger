@@ -472,7 +472,7 @@ public class SQLiteDatabase implements IDatabase {
     @Override
     public void editType(Type type) throws StorageException {
         try {
-            PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TRANS_ID=?");
+            PreparedStatement stmt = database.prepareStatement("UPDATE TYPE SET TYPE_NAME=?, TYPE_DESC=? WHERE TYPE_ID=?");
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.setInt(3, type.getId());
@@ -549,6 +549,36 @@ public class SQLiteDatabase implements IDatabase {
             return payeeList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all transactions", e);
+        }
+    }
+
+    @Override
+    public List<Type> getAllTypes() throws StorageException {
+        try {
+            Statement stmt = database.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM TYPE;");
+
+            List<Type> typeList = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int typeID = rs.getInt("TYPE_ID");
+                String typeName = rs.getString("TYPE_NAME");
+                String typeDesc = rs.getString("TYPE_DESC");
+
+                Type currentType = new Type(typeName, typeDesc, typeID);
+
+                typeList.add(currentType);
+            }
+
+            // Close SQLite statements and result sets
+            stmt.close();
+            rs.close();
+
+
+            return typeList;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all Types", e);
         }
     }
 
