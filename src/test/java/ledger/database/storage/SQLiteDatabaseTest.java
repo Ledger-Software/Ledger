@@ -13,6 +13,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SQLiteDatabaseTest {
 
@@ -112,6 +113,14 @@ public class SQLiteDatabaseTest {
         List<Transaction> trans = database.getAllTransactions();
 
         assertEquals(3, trans.size());
+
+        //pull out ids
+        List<Integer> ids = trans.stream().map(elm -> elm.getAmount()).collect(Collectors.toList());
+
+        //using amounts to test, since we don't know the transaction ID's and the amounts happen to be unique
+        assertTrue(ids.contains(sampleTransaction1.getAmount()));
+        assertTrue(ids.contains(sampleTransaction2.getAmount()));
+        assertTrue(ids.contains(sampleTransaction3.getAmount()));
     }
 
     @Test
