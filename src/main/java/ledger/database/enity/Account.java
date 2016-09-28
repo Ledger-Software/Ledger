@@ -8,6 +8,10 @@ public class Account implements IEntity {
     private String description;
     private int id;
 
+    public Account(String name, String description) {
+        this(name, description, -1);
+    }
+
     public Account(String name, String description, int id) {
         this.name = name;
         this.description = description;

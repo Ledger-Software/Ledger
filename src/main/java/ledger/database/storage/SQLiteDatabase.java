@@ -303,7 +303,7 @@ public class SQLiteDatabase implements IDatabase {
                 List<Tag> tags = getTagsForTransactionID(transactionID);
                 Note note = getNoteForTransactionID(transactionID);
 
-                Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, transactionID, tags, note);
+                Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, tags, note, transactionID);
 
                 transactionList.add(currentTransaction);
             }

@@ -8,6 +8,10 @@ public class Tag implements IEntity {
     private String description;
     private int id;
 
+    public Tag(String name, String description) {
+        this(name, description, -1);
+    }
+
     public Tag(String name, String description, int id) {
         this.name = name;
         this.description = description;

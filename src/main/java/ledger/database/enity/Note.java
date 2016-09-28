@@ -9,11 +9,19 @@ public class Note implements IEntity {
 
     /**
      * Constructs a Note.
+     * @param noteText
+     */
+    public Note(String noteText) {
+        this(-1, noteText);
+    }
+
+    /**
+     * Constructs a Note.
      * @param transaction_Id
      * @param noteText
      */
-    public Note(int transaction_Id, String noteText) {
-        this.transactionId = transaction_Id;
+    public Note(int transactionID, String noteText) {
+        this.transactionId = transactionID;
         this.noteText = noteText;
     }
 

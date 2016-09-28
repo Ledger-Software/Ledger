@@ -8,6 +8,10 @@ public class Type implements IEntity {
     private String description;
     private int id;
 
+    public Type(String name, String description) {
+        this(name, description, -1);
+    }
+
     public Type(String name, String description, int id) {
         this.name = name;
         this.description = description;

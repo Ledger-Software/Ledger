@@ -8,6 +8,10 @@ public class Payee implements IEntity {
     private String description;
     private int id;
 
+    public Payee(String name, String description) {
+        this(name, description, -1);
+    }
+
     public Payee(String name, String description, int id) {
         this.name = name;
         this.description = description;
