@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SQLiteDatabase implements IDatabase {
     private static final String tableTransaction = "CREATE TABLE IF NOT EXISTS TRANSACT " +
-            "(TRANS_ID INT PRIMARY KEY  NOT NULL, " +
+            "(TRANS_ID INTEGER PRIMARY KEY  AUTOINCREMENT, " +
             "TRANS_DATETIME REAL        NOT NULL, " +
             "TRANS_AMOUNT INT           NOT NULL," +
             "TRANS_PENDING BOOLEAN      NOT NULL, " +
@@ -29,7 +29,7 @@ public class SQLiteDatabase implements IDatabase {
             "FOREIGN KEY(TRANS_TYPE_ID) REFERENCES TYPE(TYPE_ID)" +
             ")";
     private static final String tableNote = "CREATE TABLE IF NOT EXISTS NOTE" +
-            "(NOTE_TRANS_ID INT PRIMARY KEY  NOT NULL, " +
+            "(NOTE_TRANS_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "NOTE_TEXT TEXT             NOT NULL, " +
             "FOREIGN KEY(NOTE_TRANS_ID) REFERENCES TRANSACT(TRANS_ID)" +
             ")";
@@ -41,27 +41,27 @@ public class SQLiteDatabase implements IDatabase {
             "FOREIGN KEY(TTTS_TRANS_ID) REFERENCES TRANSACT(TRANS_ID)" +
             ")";
     private static final String tableTag = "CREATE TABLE IF NOT EXISTS TAG " +
-            "(TAG_ID INT PRIMARY KEY    NOT NULL, " +
+            "(TAG_ID INTEGER PRIMARY KEY    AUTOINCREMENT, " +
             "TAG_NAME TEXT              NOT NULL, " +
             "TAG_DESC TEXT              NOT NULL" +
             ")";
     private static final String tableType = "CREATE TABLE IF NOT EXISTS TYPE " +
-            "(TYPE_ID INT PRIMARY KEY   NOT NULL, " +
+            "(TYPE_ID INTEGER PRIMARY KEY    AUTOINCREMENT, " +
             "TYPE_NAME TEXT              NOT NULL, " +
             "TYPE_DESC TEXT              NOT NULL" +
             ")";
     private static final String tableAccount = "CREATE TABLE IF NOT EXISTS ACCOUNT " +
-            "(ACCOUNT_ID INT PRIMARY KEY NOT NULL, " +
+            "(ACCOUNT_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "ACCOUNT_NAME TEXT           NOT NULL, " +
             "ACCOUNT_DESC TEXT           NOT NULL" +
             ")";
     private static final String tableAccountBalance = "CREATE TABLE IF NOT EXISTS ACCOUNT_BALANCE " +
-            "(ABAL_ACCOUNT_ID INT       NOT NULL, " +
+            "(ABAL_ACCOUNT_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "ABAL_DATETIME REAL         NOT NULL, " +
             "ABAL_AMOUNT INT            NOT NULL " +
             ")";
     private static final String tablePayee = "CREATE TABLE IF NOT EXISTS PAYEE " +
-            "(PAYEE_ID INT PRIMARY KEY  NOT NULL, " +
+            "(PAYEE_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "PAYEE_NAME TEXT           NOT NULL, " +
             "PAYEE_DESC TEXT           NOT NULL" +
             ")";
@@ -362,7 +362,7 @@ public class SQLiteDatabase implements IDatabase {
     public void insertPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
-                    database.prepareStatement("INSERT INTO PAYEE (PAYEE_NAME, PAYEE_DESC) VALUES (?, ?, ?)");
+                    database.prepareStatement("INSERT INTO PAYEE (PAYEE_NAME, PAYEE_DESC) VALUES (?, ?)");
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.executeUpdate();
