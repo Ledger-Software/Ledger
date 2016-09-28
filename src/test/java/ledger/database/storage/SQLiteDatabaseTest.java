@@ -125,7 +125,16 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertAccount() throws Exception {
+        List<Account> accounts = database.getAllAccounts();
+        assertEquals(0, accounts.size());
 
+        database.insertAccount(sampleAccount);
+
+        accounts = database.getAllAccounts();
+        assertEquals(1, accounts.size());
+
+        assertEquals("Chase", accounts.get(0).getName());
+        assertEquals("Credit account with Chase Bank", accounts.get(0).getDescription());
     }
 
     @Test

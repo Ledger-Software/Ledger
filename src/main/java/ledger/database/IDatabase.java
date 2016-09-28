@@ -29,6 +29,8 @@ public interface IDatabase {
 
     void editAccount(Account account) throws StorageException;
 
+    List<Account> getAllAccounts() throws StorageException;
+
     void insertPayee(Payee payee) throws StorageException;
 
     void deletePayee(Payee payee) throws StorageException;

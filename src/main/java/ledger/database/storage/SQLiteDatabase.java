@@ -361,6 +361,35 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     @Override
+    public List<Account> getAllAccounts() throws StorageException {
+        try {
+            Statement stmt = database.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ACCOUNT;");
+
+            List<Account> accountList = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int accountID = rs.getInt("ACCOUNT_ID");
+                String accountName = rs.getString("ACCOUNT_NAME");
+                String accountDesc = rs.getString("ACCOUNT_DESC");
+
+                Account currentAccount = new Account(accountName, accountDesc, accountID);
+                accountList.add(currentAccount);
+            }
+
+            // Close SQLite statements and result sets
+            stmt.close();
+            rs.close();
+
+
+            return accountList;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all payees", e);
+        }
+    }
+
+    @Override
     public void insertPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
@@ -605,7 +634,7 @@ public class SQLiteDatabase implements IDatabase {
 
             return payeeList;
         } catch (java.sql.SQLException e) {
-            throw new StorageException("Error while getting all transactions", e);
+            throw new StorageException("Error while getting all payees", e);
         }
     }
 
