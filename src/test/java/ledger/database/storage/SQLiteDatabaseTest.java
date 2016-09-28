@@ -140,7 +140,18 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertPayee() throws Exception {
+        Payee payee = new Payee("Name", "Description");
 
+        List<Payee> payees = database.getAllPayees();
+        assertEquals(0, payees.size());
+
+        database.insertPayee(payee);
+
+        payees = database.getAllPayees();
+        assertEquals(1, payees.size());
+
+        assertEquals("Name", payees.get(0).getName());
+        assertEquals("Description", payees.get(0).getDescription());
     }
 
     @Test

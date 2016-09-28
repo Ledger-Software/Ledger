@@ -52,4 +52,6 @@ public interface IDatabase {
     void deleteTag(Tag tag) throws StorageException;
 
     void editTag(Tag tag) throws StorageException;
+
+    List<Payee> getAllPayees() throws StorageException;
 }

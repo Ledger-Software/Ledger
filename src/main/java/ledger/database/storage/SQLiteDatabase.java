@@ -522,6 +522,36 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
+    @Override
+    public List<Payee> getAllPayees() throws StorageException {
+        try {
+            Statement stmt = database.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM PAYEE;");
+
+            ArrayList<Payee> payeeList = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int payeeID = rs.getInt("PAYEE_ID");
+                String payeeName = rs.getString("PAYEE_NAME");
+                String payeeDesc = rs.getString("PAYEE_DESC");
+
+                Payee currentPayee = new Payee(payeeName, payeeDesc, payeeID);
+
+                payeeList.add(currentPayee);
+            }
+
+            // Close SQLite statements and result sets
+            stmt.close();
+            rs.close();
+
+
+            return payeeList;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all transactions", e);
+        }
+    }
+
     // Private helper methods
     private Type getTypeForName(String name) throws StorageException {
         try {
