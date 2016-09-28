@@ -225,7 +225,18 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteType() throws Exception {
+        List<Type> types = database.getAllTypes();
+        assertEquals(0, types.size());
 
+        database.insertType(sampleType);
+
+        types = database.getAllTypes();
+        assertEquals(1, types.size());
+
+        database.deleteType(types.get(0));
+
+        types = database.getAllTypes();
+        assertEquals(0, types.size());
     }
 
     @Test
