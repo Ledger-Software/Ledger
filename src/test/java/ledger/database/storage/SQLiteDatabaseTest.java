@@ -83,7 +83,24 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void editTransaction() throws Exception {
+        ArrayList<Tag> sampleTagList = new ArrayList<>();
+        sampleTagList.add(this.sampleTag);
 
+        Transaction originalTransaction = new Transaction(new Date(), this.sampleType, 1202, this.sampleAccount, this.samplePayee, false, sampleTagList, this.sampleNote);
+
+        database.insertTransaction(originalTransaction);
+
+        List<Transaction> transactions = database.getAllTransactions();
+        Transaction transactionToEdit = transactions.get(0);
+
+        int amountToSet = 99999;
+        transactionToEdit.setAmount(amountToSet);
+        database.editTransaction(transactionToEdit);
+
+        transactions = database.getAllTransactions();
+        Transaction editedTransaction = transactions.get(0);
+
+        assertEquals(amountToSet, editedTransaction.getAmount());
     }
 
     @Test
