@@ -33,7 +33,6 @@ public class SQLiteDatabase implements IDatabase {
         } catch (SQLException e) {
             throw new StorageException("Unable to connect to JDBC Socket. ");
         }
-
         initializeDatabase();
     }
 
@@ -372,16 +371,103 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    private Note getNoteForTransactionID(int transactionID) {
-        return null;
+    //TODO: move
+    private Note getNoteForTransactionID(int transactionID) throws StorageException {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM NOTE WHERE NOTE_TRANS_ID=?");
+            stmt.setInt(1, transactionID);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String noteText = "";
+
+            while (rs.next()) {
+                noteText = rs.getString("NOTE_TEXT");
+                count++;
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Note(transactionID, noteText);
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Note by AccountID", e);
+        }
     }
 
-    private List<Tag> getTagsForTransactionID(int transactionID) {
-        return null;
+    //TODO: move
+    private List<Tag> getTagsForTransactionID(int transactionID) throws StorageException {
+        List<Tag> tags = new ArrayList<>();
+
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID=?");
+            stmt.setInt(1, transactionID);
+
+            ResultSet rs = stmt.executeQuery();
+
+            int tagID = -1;
+
+            while (rs.next()) {
+                int tagId = rs.getInt("TTTS_TAG_ID");
+
+                PreparedStatement tagStmt = database.prepareStatement("SELECT * FROM TAG WHERE TAG_ID = ?");
+                tagStmt.setInt(1, tagId);
+
+                ResultSet tagResults = tagStmt.executeQuery();
+
+                while (tagResults.next()) {
+                    String name = rs.getString("TAG_NAME");
+                    String description = rs.getString("TAG_DESC");
+
+                    Tag currentTag = new Tag(name, description, tagId);
+
+                    tags.add(currentTag);
+                }
+                tagResults.close();
+            }
+
+            rs.close();
+            stmt.close();
+
+            return tags;
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Note by AccountID", e);
+        }
     }
 
-    private Payee getPayeeForID(int payeeID) {
-        return null;
+    //TODO: move
+    private Payee getPayeeForID(int payeeID) throws StorageException {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_ID=?");
+            stmt.setInt(1, payeeID);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String payeeName = "";
+            String payeeDesc = "";
+
+            while (rs.next()) {
+                payeeName = rs.getString("PAYEE_NAME");
+                payeeDesc = rs.getString("PAYEE_DESC");
+                count++;
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Payee(payeeName, payeeDesc, payeeID);
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Note by AccountID", e);
+        }
     }
 
     // TODO: Move
@@ -522,6 +608,7 @@ public class SQLiteDatabase implements IDatabase {
             throw new StorageException("Error while editing Payee", e);
         }
     }
+
     public void insertNote(Note note) {
         try {
             PreparedStatement stmt =
@@ -535,7 +622,6 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-
     public void deleteNote(Note note) {
         try {
             PreparedStatement stmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
@@ -546,7 +632,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
 
     public void editNote(Note note) {
 
@@ -562,7 +647,6 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
-
 
     public void insertType(Type type) throws StorageException {
         try {
@@ -643,6 +727,7 @@ public class SQLiteDatabase implements IDatabase {
             e.printStackTrace();
         }
     }
+
     public Tag getTagForNameAndDescription(String tagName, String tagDescription){
         try {
             PreparedStatement stmt = database.prepareStatement("SELECT * FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
