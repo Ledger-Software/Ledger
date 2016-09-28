@@ -156,7 +156,20 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deletePayee() throws Exception {
+        Payee payee = new Payee("Name", "Description");
 
+        List<Payee> payees = database.getAllPayees();
+        assertEquals(0, payees.size());
+
+        database.insertPayee(payee);
+
+        payees = database.getAllPayees();
+        assertEquals(1, payees.size());
+
+        database.deletePayee(payees.get(0));
+
+        payees = database.getAllPayees();
+        assertEquals(0, payees.size());
     }
 
     @Test
