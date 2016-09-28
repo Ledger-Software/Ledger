@@ -131,7 +131,7 @@ public class SQLiteDatabase implements IDatabase {
     // TODO: Review logic and implement helper methods
     public void insertTransaction(Transaction transaction) throws StorageException {
         try {
-            PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACTION (TRANS_DATETIME,TRANS_AMOUNT,TRANS_TYPE_ID,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACT (TRANS_DATETIME,TRANS_AMOUNT,TRANS_TYPE_ID,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
@@ -225,7 +225,7 @@ public class SQLiteDatabase implements IDatabase {
 
     public void deleteTransaction(Transaction transaction) throws StorageException{
         try {
-            PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACTION WHERE TRANS_ID = ?");
+            PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACT WHERE TRANS_ID = ?");
             deleteTransactionStmt.setInt(1, transaction.getId());
             deleteTransactionStmt.executeUpdate();
             deleteTransactionStmt.close();
@@ -241,7 +241,7 @@ public class SQLiteDatabase implements IDatabase {
     // TODO: Review logic and implement helper methods
     public void editTransaction(Transaction transaction) throws StorageException {
         try {
-            PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACTION SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_TYPE_ID=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
+            PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACT SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_TYPE_ID=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
