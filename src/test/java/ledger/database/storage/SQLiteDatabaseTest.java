@@ -139,6 +139,26 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteAccount() throws Exception {
+        database.insertAccount(sampleAccount);
+        database.insertAccount(new Account("test", "description"));
+
+        List<Account> accountsBeforeDelete = database.getAllAccounts();
+        int countBeforeDelete = accountsBeforeDelete.size();
+
+        Account accountToDelete = accountsBeforeDelete.get(0);
+        database.deleteAccount(accountToDelete);
+
+        List<Account> accountsAfterDelete = database.getAllAccounts();
+        int countAfterDelete = accountsAfterDelete.size();
+
+        assertEquals(countBeforeDelete - 1, countAfterDelete);
+
+        ArrayList<Integer> IDsAfterDelete = new ArrayList<>();
+        for (Account currentAccount : accountsAfterDelete) {
+            IDsAfterDelete.add(currentAccount.getId());
+        }
+
+        assertFalse(IDsAfterDelete.contains(accountToDelete.getId()));
 
     }
 
