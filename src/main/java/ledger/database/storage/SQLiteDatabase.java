@@ -191,8 +191,36 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    private Type getTypeForName(String name) {
-        return null;
+    // TODO: Move
+    private Type getTypeForName(String name) throws StorageException {
+        try {
+            PreparedStatement stmt = database.prepareStatement("SELECT * FROM TYPE WHERE TYPE_NAME=?");
+            stmt.setString(1, name);
+
+            ResultSet rs = stmt.executeQuery();
+            int count = 0;
+
+            String newName = "";
+            String description = "";
+            int id = -1;
+
+            while (rs.next()) {
+                newName = rs.getString("TYPE_NAME");
+                description = rs.getString("TYPE_DESC");
+                id = rs.getInt("TYPE_ID");
+                count++;
+            }
+
+            rs.close();
+            stmt.close();
+
+            if (count == 0) return null;
+
+            return new Type(newName, description, id);
+
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting Type by Name", e);
+        }
     }
 
     public void deleteTransaction(Transaction transaction) throws StorageException{
@@ -202,15 +230,9 @@ public class SQLiteDatabase implements IDatabase {
             deleteTransactionStmt.executeUpdate();
             deleteTransactionStmt.close();
 
-            PreparedStatement deleteNoteStmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
-            deleteNoteStmt.setInt(1, transaction.getId());
-            deleteNoteStmt.executeUpdate();
-            deleteNoteStmt.close();
+            deleteNoteForTransactionID(transaction.getId());
+            deleteAllTagToTransForTransactionID(transaction.getId());
 
-            PreparedStatement deleteTagToTransactionStmt = database.prepareStatement("DELETE FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID = ?");
-            deleteTagToTransactionStmt.setInt(1, transaction.getId());
-            deleteTagToTransactionStmt.executeUpdate();
-            deleteTagToTransactionStmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while deleting transaction", e);
         }
@@ -287,12 +309,28 @@ public class SQLiteDatabase implements IDatabase {
         }
     }
 
-    private void deleteNoteForTransactionID(int id) {
-        // TODO: Need Impl.
+    // TODO: Move
+    private void deleteNoteForTransactionID(int transactionID) throws StorageException {
+        try {
+            PreparedStatement deleteNoteStmt = database.prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            deleteNoteStmt.setInt(1, transactionID);
+            deleteNoteStmt.executeUpdate();
+            deleteNoteStmt.close();
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while deleting note for transaction ID", e);
+        }
     }
 
-    private void deleteAllTagToTransForTransactionID(int id) {
-        // TODO: Need Impl.
+    // TODO: Move
+    private void deleteAllTagToTransForTransactionID(int transactionID) throws StorageException{
+        try {
+            PreparedStatement deleteTagToTransactionStmt = database.prepareStatement("DELETE FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID = ?");
+            deleteTagToTransactionStmt.setInt(1, transactionID);
+            deleteTagToTransactionStmt.executeUpdate();
+            deleteTagToTransactionStmt.close();
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while deleting tag_to_trans for transaction id", e);
+        }
     }
 
     // TODO: Review logic and implement helper methods
