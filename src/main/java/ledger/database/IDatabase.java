@@ -2,27 +2,26 @@ package ledger.database;
 
 import ledger.database.enity.*;
 import ledger.exception.StorageException;
+import java.util.List;
 
 /**
  * Responsible for Physical Storage Mechanisms
  */
 public interface IDatabase {
 
+    // DB management functions
     void initializeDatabase() throws StorageException;
-
-//    void openDatabase();
-
-//    void closeDatabase();
-
-//    void wipeDatabase();
 
     void shutdown() throws StorageException;
 
+    // Basic CRUD functions
     void insertTransaction(Transaction transaction) throws StorageException;
 
     void deleteTransaction(Transaction transaction) throws StorageException;
 
     void editTransaction(Transaction transaction) throws StorageException;
+
+    List<Transaction> getAllTransactions() throws StorageException;
 
     void insertAccount(Account account) throws StorageException;
 
@@ -36,9 +35,21 @@ public interface IDatabase {
 
     void editPayee(Payee payee) throws StorageException;
 
+    void insertNote(Note note) throws StorageException;
+
+    void deleteNote(Note note) throws StorageException;
+
+    void editNote(Note note) throws StorageException;
+
     void insertType(Type type) throws StorageException;
 
     void deleteType(Type type) throws StorageException;
 
     void editType(Type type) throws StorageException;
+
+    void insertTag(Tag tag) throws StorageException;
+
+    void deleteTag(Tag tag) throws StorageException;
+
+    void editTag(Tag tag) throws StorageException;
 }
