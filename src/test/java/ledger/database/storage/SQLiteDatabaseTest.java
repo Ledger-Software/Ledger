@@ -112,9 +112,9 @@ public class SQLiteDatabaseTest {
 
         List<Transaction> trans = database.getAllTransactions();
 
+        //pull out ids
         assertEquals(3, trans.size());
 
-        //pull out ids
         List<Integer> ids = trans.stream().map(elm -> elm.getAmount()).collect(Collectors.toList());
 
         //using amounts to test, since we don't know the transaction ID's and the amounts happen to be unique
@@ -196,16 +196,46 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertNote() throws Exception {
+        List<Note> notesBeforeInsertion = database.getAllNotes();
 
+        database.insertNote(this.sampleNote);
+
+        List<Note> notesAfterInsertion = database.getAllNotes();
+
+        assertEquals(notesBeforeInsertion.size() + 1, notesAfterInsertion.size());
     }
 
     @Test
     public void deleteNote() throws Exception {
+        database.insertNote(this.sampleNote);
 
+        List<Note> notesBeforeDeletion = database.getAllNotes();
+
+        database.deleteNote(this.sampleNote);
+
+        List<Note> notesAfterDeletion = database.getAllNotes();
+
+        assertEquals(notesBeforeDeletion.size() - 1, notesAfterDeletion.size());
     }
 
     @Test
     public void editNote() throws Exception {
+        Note originalNote = new Note("This is a note!");
+
+        database.insertNote(originalNote);
+
+        List<Note> notes = database.getAllNotes();
+        Note noteToEdit = notes.get(0);
+
+        String textToSet = "This is edited text!";
+        noteToEdit.setNoteText(textToSet);
+
+        database.editNote(noteToEdit);
+
+        notes = database.getAllNotes();
+        Note editedNote = notes.get(0);
+
+        assertEquals(textToSet, editedNote.getNoteText());
 
     }
 
@@ -219,8 +249,8 @@ public class SQLiteDatabaseTest {
         types = database.getAllTypes();
         assertEquals(1, types.size());
 
-        assertEquals("Name", types.get(0).getName());
-        assertEquals("Description", types.get(0).getDescription());
+        assertEquals(sampleType.getName(), types.get(0).getName());
+        assertEquals(sampleType.getDescription(), types.get(0).getDescription());
     }
 
     @Test
@@ -263,17 +293,46 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertTag() throws Exception {
+        List<Tag> tagsBeforeInsertion = database.getAllTags();
 
+        database.insertTag(this.sampleTag);
+
+        List<Tag> tagsAfterInsertion = database.getAllTags();
+
+        assertEquals(tagsBeforeInsertion.size() + 1, tagsAfterInsertion.size());
     }
 
     @Test
     public void deleteTag() throws Exception {
+        database.insertTag(this.sampleTag);
 
+        List<Tag> tagsBeforeDeletion = database.getAllTags();
+        Tag tagToDelete = tagsBeforeDeletion.get(0);
+        database.deleteTag(tagToDelete);
+
+        List<Tag> tagsAfterDeletion = database.getAllTags();
+
+        assertEquals(tagsBeforeDeletion.size() - 1, tagsAfterDeletion.size());
     }
 
     @Test
     public void editTag() throws Exception {
+        Tag originalTag = new Tag("Name", "Description");
 
+        database.insertTag(originalTag);
+
+        List<Tag> tags = database.getAllTags();
+        Tag tagToEdit = tags.get(0);
+
+        String textToSet = "This is edited text!";
+        tagToEdit.setDescription(textToSet);
+
+        database.editTag(tagToEdit);
+
+        tags = database.getAllTags();
+        Tag editedTag = tags.get(0);
+
+        assertEquals(textToSet, editedTag.getDescription());
     }
 
     @After

@@ -445,6 +445,34 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     @Override
+    public List<Note> getAllNotes() throws StorageException {
+        try {
+            Statement stmt = database.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM NOTE;");
+
+            ArrayList<Note> notes = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int note_trans_id = rs.getInt("NOTE_TRANS_ID");
+                String note_text = rs.getString("NOTE_TEXT");
+
+                Note currentNote = new Note(note_trans_id, note_text);
+
+                notes.add(currentNote);
+            }
+
+            // Close SQLite statements and result sets
+            stmt.close();
+            rs.close();
+
+            return notes;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all notes", e);
+        }
+    }
+
+    @Override
     public void insertType(Type type) throws StorageException {
         try {
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
@@ -519,6 +547,35 @@ public class SQLiteDatabase implements IDatabase {
             stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Tag", e);
+        }
+    }
+
+    @Override
+    public List<Tag> getAllTags() throws StorageException {
+        try {
+            Statement stmt = database.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM TAG;");
+
+            ArrayList<Tag> tags = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int tagID = rs.getInt("TAG_ID");
+                String tagName = rs.getString("TAG_NAME");
+                String tagDescription = rs.getString("TAG_DESC");
+
+                Tag currentTag = new Tag(tagName, tagDescription, tagID);
+
+                tags.add(currentTag);
+            }
+
+            // Close SQLite statements and result sets
+            stmt.close();
+            rs.close();
+
+            return tags;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all notes", e);
         }
     }
 
