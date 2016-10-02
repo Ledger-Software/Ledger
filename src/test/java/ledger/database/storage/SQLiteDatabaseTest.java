@@ -60,8 +60,8 @@ public class SQLiteDatabaseTest {
         List<Transaction> trans = database.getAllTransactions();
 
         assertEquals(1, trans.size());
-        assertEquals(sampleTransaction1.getId(), trans.get(1).getId());
-        assertEquals(sampleTransaction1.getAmount(), trans.get(1).getAmount());
+        assertEquals(sampleTransaction1.getId(), trans.get(0).getId());
+        assertEquals(sampleTransaction1.getAmount(), trans.get(0).getAmount());
     }
 
     @Test
@@ -320,12 +320,12 @@ public class SQLiteDatabaseTest {
         database.insertType(sampleType2);
 
         types = database.getAllTypes();
-        assertEquals(1, types.size());
+        assertEquals(2, types.size());
 
         database.deleteType(types.get(0));
 
         types = database.getAllTypes();
-        assertEquals(0, types.size());
+        assertEquals(1, types.size());
         assertEquals(sampleType2.getId(), types.get(0).getId());
     }
 

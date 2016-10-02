@@ -178,6 +178,7 @@ public class SQLiteDatabase implements IDatabase {
                         insertTagToTrans(currentTag.getId(), insertedTransactionID);
                     }
                 }
+                transaction.setId(insertedTransactionID);
             }
 
             /* Transaction Notes are not added on transaction insertion. By principle, notes should always be added
