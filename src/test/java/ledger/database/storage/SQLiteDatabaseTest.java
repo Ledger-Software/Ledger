@@ -2,18 +2,19 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
-import org.junit.*;
-import ledger.database.enity.Transaction;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class SQLiteDatabaseTest {
 
@@ -31,7 +32,7 @@ public class SQLiteDatabaseTest {
 
     @Before
     public void setupDatabase() throws Exception {
-        database = new SQLiteDatabase(null, "src/test/resources/test.db");
+        database = new SQLiteDatabase("src/test/resources/test.db");
 
         sampleType = new Type("Credit", "Purchased with a credit card");
         sampleType2 = new Type("Debit", "Purchased with a debit card");

@@ -9,6 +9,7 @@ public class Note implements IEntity {
 
     /**
      * Constructs a Note.
+     *
      * @param noteText
      */
     public Note(String noteText) {
@@ -17,6 +18,7 @@ public class Note implements IEntity {
 
     /**
      * Constructs a Note.
+     *
      * @param transaction_Id
      * @param noteText
      */
@@ -27,6 +29,7 @@ public class Note implements IEntity {
 
     /**
      * Returns the Transaction id.
+     *
      * @return transactionId
      */
     public int getTransactionId() {
@@ -35,6 +38,7 @@ public class Note implements IEntity {
 
     /**
      * Sets the Transaction id.
+     *
      * @param transactionId
      */
     public void setTransactionId(int transactionId) {
@@ -43,6 +47,7 @@ public class Note implements IEntity {
 
     /**
      * Returns the Note Text.
+     *
      * @return noteText
      */
     public String getNoteText() {
@@ -51,6 +56,7 @@ public class Note implements IEntity {
 
     /**
      * Sets the text of the note.
+     *
      * @param noteText
      */
     public void setNoteText(String noteText) {

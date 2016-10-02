@@ -20,6 +20,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account name
+     *
      * @return name
      */
     public String getName() {
@@ -28,6 +29,7 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account name
+     *
      * @param name
      */
     public void setName(String name) {
@@ -36,6 +38,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account description
+     *
      * @return description
      */
     public String getDescription() {
@@ -44,6 +47,7 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account description
+     *
      * @param description
      */
     public void setDescription(String description) {
@@ -52,6 +56,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account ID
+     *
      * @return id
      */
     public int getId() {
@@ -60,6 +65,7 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account ID
+     *
      * @param id
      */
     public void setId(int id) {

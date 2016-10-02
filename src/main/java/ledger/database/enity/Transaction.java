@@ -37,6 +37,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction date.
+     *
      * @return date
      */
     public Date getDate() {
@@ -45,6 +46,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction date.
+     *
      * @param date
      */
     public void setDate(Date date) {
@@ -53,6 +55,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction type.
+     *
      * @return type
      */
     public Type getType() {
@@ -61,6 +64,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction type.
+     *
      * @param type
      */
     public void setType(Type type) {
@@ -69,6 +73,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction amount.
+     *
      * @return amount
      */
     public int getAmount() {
@@ -77,6 +82,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction amount.
+     *
      * @param amount
      */
     public void setAmount(int amount) {
@@ -85,6 +91,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction account.
+     *
      * @return account
      */
     public Account getAccount() {
@@ -93,6 +100,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction account.
+     *
      * @param account
      */
     public void setAccount(Account account) {
@@ -101,6 +109,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction's payee.
+     *
      * @return payee
      */
     public Payee getPayee() {
@@ -109,6 +118,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction's payee.
+     *
      * @param payee
      */
     public void setPayee(Payee payee) {
@@ -117,6 +127,7 @@ public class Transaction implements IEntity {
 
     /**
      * Determine if Transaction is pending or not.
+     *
      * @return pending
      */
     public boolean isPending() {
@@ -125,6 +136,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction's pending status.
+     *
      * @param pending
      */
     public void setPending(boolean pending) {
@@ -133,6 +145,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction ID.
+     *
      * @return id
      */
     public int getId() {
@@ -141,6 +154,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction ID.
+     *
      * @param id
      */
     public void setId(int id) {
@@ -149,6 +163,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the list of Tags associated with the Transaction.
+     *
      * @return tagList
      */
     public List<Tag> getTagList() {
@@ -157,6 +172,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the list of Tags associated with the Transaction.
+     *
      * @param tagList
      */
     public void setTagList(List<Tag> tagList) {
@@ -165,6 +181,7 @@ public class Transaction implements IEntity {
 
     /**
      * Gets the Transaction's Note
+     *
      * @return note
      */
     public Note getNote() {
@@ -173,6 +190,7 @@ public class Transaction implements IEntity {
 
     /**
      * Sets the Transaction's Note
+     *
      * @param note
      */
     public void setNote(Note note) {

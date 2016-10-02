@@ -20,6 +20,7 @@ public class Type implements IEntity {
 
     /**
      * Gets the Type's name
+     *
      * @return name
      */
     public String getName() {
@@ -28,6 +29,7 @@ public class Type implements IEntity {
 
     /**
      * Set's the Type's name
+     *
      * @param name
      */
     public void setName(String name) {
@@ -36,6 +38,7 @@ public class Type implements IEntity {
 
     /**
      * Gets the Type's description
+     *
      * @return description
      */
     public String getDescription() {
@@ -44,6 +47,7 @@ public class Type implements IEntity {
 
     /**
      * Sets the Type's Description
+     *
      * @param description
      */
     public void setDescription(String description) {
@@ -52,6 +56,7 @@ public class Type implements IEntity {
 
     /**
      * Gets the Type's ID
+     *
      * @return id
      */
     public int getId() {
@@ -60,6 +65,7 @@ public class Type implements IEntity {
 
     /**
      * Sets the Type's ID
+     *
      * @param id
      */
     public void setId(int id) {

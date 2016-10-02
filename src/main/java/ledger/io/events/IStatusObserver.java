@@ -10,5 +10,6 @@ import java.util.List;
  */
 public interface IStatusObserver {
     void IOComplete(List<IOStatus> statusList);
+
     void IOUpdate(IOStatus status);
 }
