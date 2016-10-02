@@ -142,8 +142,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.setInt(3, existingType.getId());
             } else {
                 insertType(transaction.getType());
-                Type insertedType = getTypeForName(transaction.getType().getName());
-                stmt.setInt(3, insertedType.getId());
+                stmt.setInt(3, transaction.getType().getId());
             }
 
             stmt.setBoolean(4, transaction.isPending());
@@ -153,8 +152,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.setInt(5, existingAccount.getId());
             } else {
                 insertAccount(transaction.getAccount());
-                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
-                stmt.setInt(5, insertedAccount.getId());
+                stmt.setInt(5, transaction.getAccount().getId());
             }
 
             Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
@@ -162,8 +160,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.setInt(6, existingPayee.getId());
             } else {
                 insertPayee(transaction.getPayee());
-                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-                stmt.setInt(6, insertedPayee.getId());
+                stmt.setInt(6, transaction.getPayee().getId());
             }
 
             stmt.executeUpdate();
@@ -178,8 +175,7 @@ public class SQLiteDatabase implements IDatabase {
                         insertTagToTrans(existingTag.getId(), insertedTransactionID);
                     } else {
                         insertTag(currentTag);
-                        Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                        insertTagToTrans(insertedTag.getId(), insertedTransactionID);
+                        insertTagToTrans(currentTag.getId(), insertedTransactionID);
                     }
                 }
             }
@@ -222,6 +218,7 @@ public class SQLiteDatabase implements IDatabase {
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
             } else {
+                // TODO: Discuss
                 System.out.println("ERROR: No matching transaction type found.");
             }
 
@@ -232,8 +229,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.setInt(5, existingAccount.getId());
             } else {
                 insertAccount(transaction.getAccount());
-                Account insertedAccount = getAccountForName(transaction.getAccount().getName());
-                stmt.setInt(5, insertedAccount.getId());
+                stmt.setInt(5, transaction.getAccount().getId());
             }
 
             Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
@@ -241,8 +237,7 @@ public class SQLiteDatabase implements IDatabase {
                 stmt.setInt(6, existingPayee.getId());
             } else {
                 insertPayee(transaction.getPayee());
-                Payee insertedPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-                stmt.setInt(6, insertedPayee.getId());
+                stmt.setInt(6, transaction.getPayee().getId());
 
             }
 
@@ -258,8 +253,7 @@ public class SQLiteDatabase implements IDatabase {
                     insertTagToTrans(existingTag.getId(), transaction.getId());
                 } else {
                     insertTag(currentTag);
-                    Tag insertedTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                    insertTagToTrans(insertedTag.getId(), transaction.getId());
+                    insertTagToTrans(currentTag.getId(), transaction.getId());
 
                 }
             }
@@ -328,6 +322,13 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedAccountID = generatedIDs.getInt(1);
+                account.setId(insertedAccountID);
+            }
+
             stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Account", e);
@@ -397,6 +398,13 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedPayeeID = generatedIDs.getInt(1);
+                payee.setId(insertedPayeeID);
+            }
+
             stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Payee", e);
@@ -508,6 +516,13 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedTypeID = generatedIDs.getInt(1);
+                type.setId(insertedTypeID);
+            }
+
             stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Type", e);
@@ -547,6 +562,13 @@ public class SQLiteDatabase implements IDatabase {
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getDescription());
             stmt.executeUpdate();
+
+            ResultSet generatedIDs = stmt.getGeneratedKeys();
+            if (generatedIDs.next()) {
+                int insertedTagID = generatedIDs.getInt(1);
+                tag.setId(insertedTagID);
+            }
+
             stmt.close();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while inserting Tag", e);
