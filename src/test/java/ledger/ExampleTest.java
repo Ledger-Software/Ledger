@@ -2,7 +2,7 @@ package ledger;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by CJ on 9/24/2016.
