@@ -71,7 +71,7 @@
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="addAccountBtn1" layoutX="11.0" layoutY="281.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
+            <Button fx:id="trackSpendingBtn" layoutX="11.0" layoutY="281.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
                <font>
                   <Font name="Calibri" size="19.0" />
                </font>
@@ -79,7 +79,7 @@
                   <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
                </padding>
             </Button>
-            <Button fx:id="addAccountBtn11" layoutX="11.0" layoutY="348.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
+            <Button fx:id="importTransactionsBtn" layoutX="11.0" layoutY="348.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
                <font>
                   <Font name="Calibri" size="19.0" />
                </font>
