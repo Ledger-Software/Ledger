@@ -10,7 +10,7 @@ public class Note implements IEntity {
     /**
      * Constructs a Note.
      *
-     * @param noteText
+     * @param noteText The text of the new Note
      */
     public Note(String noteText) {
         this(-1, noteText);
@@ -19,8 +19,8 @@ public class Note implements IEntity {
     /**
      * Constructs a Note.
      *
-     * @param transaction_Id
-     * @param noteText
+     * @param transactionID The Id of the transaction associated with the Note
+     * @param noteText The text of the new note
      */
     public Note(int transactionID, String noteText) {
         this.transactionId = transactionID;
@@ -39,7 +39,7 @@ public class Note implements IEntity {
     /**
      * Sets the Transaction id.
      *
-     * @param transactionId
+     * @param transactionId The Id of the transaction associated with the Note
      */
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
@@ -57,7 +57,7 @@ public class Note implements IEntity {
     /**
      * Sets the text of the note.
      *
-     * @param noteText
+     * @param noteText The text of the new note
      */
     public void setNoteText(String noteText) {
         this.noteText = noteText;

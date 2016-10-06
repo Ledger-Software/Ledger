@@ -47,7 +47,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction date.
      *
-     * @param date
+     * @param date The new date
      */
     public void setDate(Date date) {
         this.date = date;
@@ -65,7 +65,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction type.
      *
-     * @param type
+     * @param type The new Date
      */
     public void setType(Type type) {
         this.type = type;
@@ -83,7 +83,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction amount.
      *
-     * @param amount
+     * @param amount The new amount
      */
     public void setAmount(int amount) {
         this.amount = amount;
@@ -101,7 +101,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction account.
      *
-     * @param account
+     * @param account The new account
      */
     public void setAccount(Account account) {
         this.account = account;
@@ -119,7 +119,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction's payee.
      *
-     * @param payee
+     * @param payee The new Payee
      */
     public void setPayee(Payee payee) {
         this.payee = payee;
@@ -137,7 +137,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction's pending status.
      *
-     * @param pending
+     * @param pending The new pending status
      */
     public void setPending(boolean pending) {
         this.pending = pending;
@@ -155,7 +155,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction ID.
      *
-     * @param id
+     * @param id The new ID
      */
     public void setId(int id) {
         this.id = id;
@@ -173,7 +173,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the list of Tags associated with the Transaction.
      *
-     * @param tagList
+     * @param tagList The new List of tags
      */
     public void setTagList(List<Tag> tagList) {
         this.tagList = tagList;
@@ -191,7 +191,7 @@ public class Transaction implements IEntity {
     /**
      * Sets the Transaction's Note
      *
-     * @param note
+     * @param note The new Note
      */
     public void setNote(Note note) {
         this.note = note;

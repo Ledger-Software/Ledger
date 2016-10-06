@@ -30,7 +30,7 @@ public class Type implements IEntity {
     /**
      * Set's the Type's name
      *
-     * @param name
+     * @param name The new Name
      */
     public void setName(String name) {
         this.name = name;
@@ -48,7 +48,7 @@ public class Type implements IEntity {
     /**
      * Sets the Type's Description
      *
-     * @param description
+     * @param description The new description
      */
     public void setDescription(String description) {
         this.description = description;
@@ -66,7 +66,7 @@ public class Type implements IEntity {
     /**
      * Sets the Type's ID
      *
-     * @param id
+     * @param id the new id
      */
     public void setId(int id) {
         this.id = id;
