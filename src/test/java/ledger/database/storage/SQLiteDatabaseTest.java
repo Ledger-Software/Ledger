@@ -49,6 +49,8 @@ public class SQLiteDatabaseTest {
         sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
         sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote);
 
+        database.insertType(sampleType);
+        database.insertType(sampleType2);
     }
 
     @Test

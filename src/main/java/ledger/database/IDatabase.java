@@ -3,6 +3,7 @@ package ledger.database;
 import ledger.database.enity.*;
 import ledger.exception.StorageException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,11 +17,11 @@ public interface IDatabase {
     void shutdown() throws StorageException;
 
     // Basic CRUD functions
-    void insertTransaction(Transaction transaction) throws StorageException;
+    void insertTransaction(Transaction transaction) throws StorageException, SQLException;
 
-    void deleteTransaction(Transaction transaction) throws StorageException;
+    void deleteTransaction(Transaction transaction) throws StorageException, SQLException;
 
-    void editTransaction(Transaction transaction) throws StorageException;
+    void editTransaction(Transaction transaction) throws StorageException, SQLException;
 
     List<Transaction> getAllTransactions() throws StorageException;
 
