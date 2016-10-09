@@ -163,7 +163,7 @@ public class SQLiteDatabase implements IDatabase {
     }
 
     @Override
-    public void editTransaction(Transaction transaction) throws StorageException, SQLException {
+    public void editTransaction(Transaction transaction) throws StorageException {
         try {
             setDatabaseAutoCommit(false);
 

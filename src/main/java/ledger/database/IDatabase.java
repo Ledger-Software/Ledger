@@ -17,11 +17,11 @@ public interface IDatabase {
     void shutdown() throws StorageException;
 
     // Basic CRUD functions
-    void insertTransaction(Transaction transaction) throws StorageException, SQLException;
+    void insertTransaction(Transaction transaction) throws StorageException;
 
-    void deleteTransaction(Transaction transaction) throws StorageException, SQLException;
+    void deleteTransaction(Transaction transaction) throws StorageException;
 
-    void editTransaction(Transaction transaction) throws StorageException, SQLException;
+    void editTransaction(Transaction transaction) throws StorageException;
 
     List<Transaction> getAllTransactions() throws StorageException;
 
