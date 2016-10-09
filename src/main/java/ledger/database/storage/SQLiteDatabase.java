@@ -220,8 +220,10 @@ public class SQLiteDatabase implements IDatabase {
             Note updatedNote = transaction.getNote();
             if (updatedNote != null) {
                 Note existingNote = getNoteForTransactionID(transaction.getId());
-                existingNote.setNoteText(updatedNote.getNoteText());
-                editNote(existingNote);
+                if (existingNote != null) {
+                    existingNote.setNoteText(updatedNote.getNoteText());
+                    editNote(existingNote);
+                }
             } else {
                 deleteNoteForTransactionID(transaction.getId());
             }

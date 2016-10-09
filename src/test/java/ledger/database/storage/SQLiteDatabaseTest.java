@@ -2,8 +2,9 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.nio.file.Files;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -29,11 +31,15 @@ public class SQLiteDatabaseTest {
     private static Tag sampleTag;
     private static Tag sampleTag2;
     private static Note sampleNote;
+    private static Note sampleNote2;
+
+    @BeforeClass
+    public static void setupDatabase() throws Exception {
+        database = new SQLiteDatabase("src/test/resources/test.db");
+    }
 
     @Before
-    public void setupDatabase() throws Exception {
-        database = new SQLiteDatabase("src/test/resources/test.db");
-
+    public void setupTestData() throws Exception{
         sampleType = new Type("Credit", "Purchased with a credit card");
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
@@ -41,6 +47,7 @@ public class SQLiteDatabaseTest {
         sampleTag = new Tag("Groceries", "Money spent on groceries");
         sampleTag2 = new Tag("Electronics", "Money spent on electronics");
         sampleNote = new Note("This is a note");
+        sampleNote2 = new Note("This is also a note");
 
         ArrayList<Tag> sampleTagList = new ArrayList<>();
         sampleTagList.add(sampleTag);
@@ -55,16 +62,22 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertTransaction() throws Exception {
-        List<Transaction> transactions = database.getAllTransactions();
-        assertEquals(0, transactions.size());
+        int sizeBefore = database.getAllTransactions().size();
 
         database.insertTransaction(sampleTransaction1);
 
         List<Transaction> trans = database.getAllTransactions();
 
-        assertEquals(1, trans.size());
-        assertEquals(sampleTransaction1.getId(), trans.get(0).getId());
-        assertEquals(sampleTransaction1.getAmount(), trans.get(0).getAmount());
+        Transaction insertedTransaction = null;
+        for (Transaction t : trans) {
+            if (t.getId() == sampleTransaction1.getId()) insertedTransaction = t;
+        }
+
+        if (insertedTransaction == null) fail();
+
+        assertEquals(sizeBefore + 1, trans.size());
+        assertEquals(sampleTransaction1.getId(), insertedTransaction.getId());
+        assertEquals(sampleTransaction1.getAmount(), insertedTransaction.getAmount());
     }
 
     @Test
@@ -76,7 +89,7 @@ public class SQLiteDatabaseTest {
         List<Transaction> transactionsBeforeDelete = database.getAllTransactions();
         int countBeforeDelete = transactionsBeforeDelete.size();
 
-        Transaction transactionToDelete = transactionsBeforeDelete.get(0);
+        Transaction transactionToDelete = transactionsBeforeDelete.get(0); //arbitrary
         database.deleteTransaction(transactionToDelete);
 
         List<Transaction> transactionsAfterDelete = database.getAllTransactions();
@@ -101,15 +114,19 @@ public class SQLiteDatabaseTest {
         database.insertTransaction(originalTransaction);
         int idBefore = originalTransaction.getId();
 
-        List<Transaction> transactions = database.getAllTransactions();
-        Transaction transactionToEdit = transactions.get(0);
-
         int amountToSet = 99999;
-        transactionToEdit.setAmount(amountToSet);
-        database.editTransaction(transactionToEdit);
+        originalTransaction.setAmount(amountToSet);
+        database.editTransaction(originalTransaction);
 
-        transactions = database.getAllTransactions();
-        Transaction editedTransaction = transactions.get(0);
+        List<Transaction> transactions = database.getAllTransactions();
+
+        Transaction editedTransaction = null;
+
+        for (Transaction t : transactions)  {
+            if (t.getId() == originalTransaction.getId()) editedTransaction = t;
+        }
+
+        if (editedTransaction == null) fail();
 
         assertEquals(amountToSet, editedTransaction.getAmount());
         assertEquals(idBefore, editedTransaction.getId());
@@ -117,13 +134,15 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void getAllTransactions() throws Exception {
+        int sizeBefore = database.getAllTransactions().size();
+
         database.insertTransaction(sampleTransaction1);
         database.insertTransaction(sampleTransaction2);
         database.insertTransaction(sampleTransaction3);
 
         List<Transaction> trans = database.getAllTransactions();
 
-        assertEquals(3, trans.size());
+        assertEquals(sizeBefore + 3, trans.size());
 
         //pull out ids
         List<Integer> ids = trans.stream().map(Transaction::getId).collect(Collectors.toList());
@@ -135,18 +154,23 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void insertAccount() throws Exception {
-        List<Account> accounts = database.getAllAccounts();
-        assertEquals(0, accounts.size());
+        int sizeBefore = database.getAllAccounts().size();
 
         database.insertAccount(sampleAccount);
 
-        accounts = database.getAllAccounts();
-        assertEquals(1, accounts.size());
+        List<Account> accounts = database.getAllAccounts();
+        assertEquals(sizeBefore + 1, accounts.size());
 
+        Account insertedAccount = null;
+        for (Account a : accounts) {
+            if (a.getId() == sampleAccount.getId()) insertedAccount = a;
+        }
 
-        assertEquals(sampleAccount.getId(), accounts.get(0).getId());
-        assertEquals("Chase", accounts.get(0).getName());
-        assertEquals("Credit account with Chase Bank", accounts.get(0).getDescription());
+        if (insertedAccount == null) fail(); //wasn't in db for whatever reason
+
+        assertEquals(sampleAccount.getId(), insertedAccount.getId());
+        assertEquals("Chase", insertedAccount.getName());
+        assertEquals("Credit account with Chase Bank", insertedAccount.getDescription());
     }
 
     @Test
@@ -158,7 +182,7 @@ public class SQLiteDatabaseTest {
         List<Account> accountsBeforeDelete = database.getAllAccounts();
         int countBeforeDelete = accountsBeforeDelete.size();
 
-        Account accountToDelete = accountsBeforeDelete.get(0);
+        Account accountToDelete = accountsBeforeDelete.get(0); //arbitrary
         int deletedId = accountToDelete.getId();
         database.deleteAccount(accountToDelete);
 
@@ -173,8 +197,6 @@ public class SQLiteDatabaseTest {
         }
 
         assertFalse(IDsAfterDelete.contains(deletedId));
-        assertTrue(IDsAfterDelete.contains(randomAcc.getId()));
-
     }
 
     @Test
@@ -183,176 +205,222 @@ public class SQLiteDatabaseTest {
 
         List<Account> accounts = database.getAllAccounts();
 
-        Account newAccount = new Account(sampleAccount.getName(), "new description", accounts.get(0).getId());
+        sampleAccount.setDescription("New Description");
 
-        database.editAccount(newAccount);
+        database.editAccount(sampleAccount);
 
         List<Account> newAccounts = database.getAllAccounts();
 
-        assertEquals(sampleAccount.getId(), newAccounts.get(0).getId());
+        Account editedAccount = null;
+
+        for (Account a : newAccounts) {
+            if (a.getId() == sampleAccount.getId()) editedAccount = a;
+        }
+
+        if (editedAccount == null) fail(); // ID was no longer in DB
+
+        assertEquals(sampleAccount.getId(), editedAccount.getId());
         assertEquals(accounts.size(), newAccounts.size());
-        assertEquals("new description", newAccounts.get(0).getDescription());
+        assertEquals("New Description", editedAccount.getDescription());
     }
 
     @Test
     public void insertPayee() throws Exception {
-        Payee payee = new Payee("Name", "Description");
+        int sizeBefore = database.getAllPayees().size();
+
+        database.insertPayee(samplePayee);
 
         List<Payee> payees = database.getAllPayees();
-        assertEquals(0, payees.size());
+        assertEquals(sizeBefore + 1, payees.size());
 
-        database.insertPayee(payee);
+        Payee insertedPayee = null;
 
-        payees = database.getAllPayees();
-        assertEquals(1, payees.size());
+        for (Payee p : payees) {
+            if (p.getId() == samplePayee.getId()) insertedPayee = p;
+        }
 
-        assertEquals(payee.getId(), payees.get(0).getId());
-        assertEquals("Name", payees.get(0).getName());
-        assertEquals("Description", payees.get(0).getDescription());
+        if (insertedPayee == null) fail();
+
+        assertEquals(samplePayee.getId(), insertedPayee.getId());
+        assertEquals(samplePayee.getName(), insertedPayee.getName());
+        assertEquals(samplePayee.getDescription(), insertedPayee.getDescription());
     }
 
     @Test
     public void deletePayee() throws Exception {
-        Payee payee = new Payee("Name", "Description");
+        int sizeBefore = database.getAllPayees().size();
+
+        database.insertPayee(samplePayee);
 
         List<Payee> payees = database.getAllPayees();
-        assertEquals(0, payees.size());
+        assertEquals(sizeBefore + 1, payees.size());
 
-        database.insertPayee(payee);
-
-        payees = database.getAllPayees();
-        assertEquals(1, payees.size());
-
-        database.deletePayee(payees.get(0));
+        database.deletePayee(samplePayee);
 
         payees = database.getAllPayees();
-        assertEquals(0, payees.size());
+        assertEquals(sizeBefore, payees.size());
+
+        List<Integer> ids = payees.stream().map(Payee::getId).collect(Collectors.toList());
+
+        assertFalse(ids.contains(samplePayee.getId()));
     }
 
     @Test
     public void editPayee() throws Exception {
-        Payee payee = new Payee("Name", "Description");
+        database.insertPayee(samplePayee);
 
         List<Payee> payees = database.getAllPayees();
-        assertEquals(0, payees.size());
-
-        database.insertPayee(payee);
-        int originalId = payee.getId();
-
-        payees = database.getAllPayees();
-        assertEquals(1, payees.size());
-
         Payee toEdit = payees.get(0);
+        int originalId = toEdit.getId();
 
         toEdit.setName("New Name");
-
         database.editPayee(toEdit);
 
         payees = database.getAllPayees();
-        assertEquals("New Name", payees.get(0).getName());
-        assertEquals(originalId, payees.get(0).getId());
+
+        Payee editedPayee = null;
+
+        for (Payee p : payees) {
+            if (p.getId() == originalId) editedPayee = p;
+        }
+        if (editedPayee == null) fail();
+
+        assertEquals("New Name", editedPayee.getName());
+        assertEquals(originalId, editedPayee.getId());
     }
 
     @Test
     public void insertNote() throws Exception {
-        List<Note> notesBeforeInsertion = database.getAllNotes();
+        int sizeBefore = database.getAllNotes().size();
 
         database.insertNote(sampleNote);
-
         List<Note> notesAfterInsertion = database.getAllNotes();
 
-        //Notes dont have ID's to verify
-        assertEquals(notesBeforeInsertion.size() + 1, notesAfterInsertion.size());
+        assertEquals(sizeBefore + 1, notesAfterInsertion.size());
+
+        assertEquals(sizeBefore + 1, notesAfterInsertion.size());
+
+        Note insertedNote = null;
+
+        for (Note n : notesAfterInsertion) {
+            if (n.getNoteText().equals(sampleNote.getNoteText()) && n.getTransactionId() == sampleNote.getTransactionId())
+                insertedNote = n;
+        }
+
+        assertNotNull(insertedNote); //Already tested all fields as part of the search...
     }
 
     @Test
     public void deleteNote() throws Exception {
-        database.insertNote(sampleNote);
+        Note testNote = new Note(5678, "This is a test note");
+        database.insertNote(testNote);
 
         List<Note> notesBeforeDeletion = database.getAllNotes();
 
-        database.deleteNote(sampleNote);
+        database.deleteNote(testNote);
 
         List<Note> notesAfterDeletion = database.getAllNotes();
 
         assertEquals(notesBeforeDeletion.size() - 1, notesAfterDeletion.size());
+
+        List<Integer> transIds = notesAfterDeletion.stream().map(Note::getTransactionId).collect(Collectors.toList());
+
+        assertFalse(transIds.contains(testNote.getTransactionId()));
     }
 
     @Test
     public void editNote() throws Exception {
-        Note originalNote = new Note("This is a note!");
-
-        database.insertNote(originalNote);
+        Note testNote = new Note(1234, "A note to test");
+        database.insertNote(testNote); //make sure there is at least one
 
         List<Note> notes = database.getAllNotes();
-        Note noteToEdit = notes.get(0);
+        Note noteToEdit = notes.get(0); //arbitrary
 
+        int originalTransactionId = noteToEdit.getTransactionId();
         String textToSet = "This is edited text!";
         noteToEdit.setNoteText(textToSet);
 
         database.editNote(noteToEdit);
 
         notes = database.getAllNotes();
-        Note editedNote = notes.get(0);
 
-        assertEquals(textToSet, editedNote.getNoteText());
+        Note editedNote = null;
+        for(Note n : notes) {
+            if (n.getNoteText().equals(noteToEdit.getNoteText()) && n.getTransactionId() == originalTransactionId) {
+                editedNote = n;
+            }
+        }
 
+        assertNotNull(editedNote); //already tested all fields in the loop above
     }
 
     @Test
     public void insertType() throws Exception {
-        List<Type> types = database.getAllTypes();
-        assertEquals(0, types.size());
+        int sizeBeforeInsert = database.getAllTypes().size();
 
         database.insertType(sampleType);
 
-        types = database.getAllTypes();
-        assertEquals(1, types.size());
+        List<Type> typesAfterInsert = database.getAllTypes();
+        assertEquals(sizeBeforeInsert + 1, typesAfterInsert.size());
 
-        assertEquals(sampleType.getId(), types.get(0).getId());
-        assertEquals(sampleType.getName(), types.get(0).getName());
-        assertEquals(sampleType.getDescription(), types.get(0).getDescription());
+        Type insertedType = null;
+        for(Type t : typesAfterInsert) {
+            if (t.getId() == sampleType.getId()) insertedType = t;
+        }
+        if (insertedType == null) fail();
+
+        assertEquals(sampleType.getId(), insertedType.getId());
+        assertEquals(sampleType.getName(), insertedType.getName());
+        assertEquals(sampleType.getDescription(), insertedType.getDescription());
     }
 
     @Test
     public void deleteType() throws Exception {
-        List<Type> types = database.getAllTypes();
-        assertEquals(0, types.size());
-
         database.insertType(sampleType);
         database.insertType(sampleType2);
 
-        types = database.getAllTypes();
-        assertEquals(2, types.size());
+        List<Type> typesBeforeDelete = database.getAllTypes();
+        int sizeBeforeDelete = typesBeforeDelete.size();
 
-        database.deleteType(types.get(0));
 
-        types = database.getAllTypes();
-        assertEquals(1, types.size());
-        assertEquals(sampleType2.getId(), types.get(0).getId());
+        int deletedId = typesBeforeDelete.get(0).getId();
+        database.deleteType(typesBeforeDelete.get(0)); //arbitrary
+
+        List<Type> typesAfterDelete = database.getAllTypes();
+        assertEquals(sizeBeforeDelete - 1, typesAfterDelete.size());
+
+        List<Integer> idsAfterDelete = typesAfterDelete.stream().map(Type::getId).collect(Collectors.toList());
+
+        assertFalse(idsAfterDelete.contains(deletedId));
     }
 
     @Test
     public void editType() throws Exception {
-        List<Type> types = database.getAllTypes();
-        assertEquals(0, types.size());
-
         database.insertType(sampleType);
 
+        List<Type> types = database.getAllTypes();
+        int sizeBeforeEdit = types.size();
+
+        Type typeToEdit = types.get(0);
+        int idBeforeEdit = typeToEdit.getId();
+
+        typeToEdit.setName("ABCD");
+        typeToEdit.setDescription("1234");
+
+        database.editType(typeToEdit);
+
         types = database.getAllTypes();
-        Type currentType = types.get(0);
+        assertEquals(sizeBeforeEdit, types.size());
 
-        currentType.setName("ABCD");
-        currentType.setDescription("1234");
+        Type editedType = null;
+        for (Type t : types) {
+            if (t.getId() == idBeforeEdit) editedType = t;
+        }
+        if (editedType == null) fail();
 
-        database.editType(currentType);
-
-        types = database.getAllTypes();
-        assertEquals(1, types.size());
-
-        assertEquals(sampleType.getId(), types.get(0).getId());
-        assertEquals("ABCD", types.get(0).getName());
-        assertEquals("1234", types.get(0).getDescription());
+        assertEquals(idBeforeEdit, editedType.getId());
+        assertEquals("ABCD", editedType.getName());
+        assertEquals("1234", editedType.getDescription());
     }
 
     @Test
@@ -363,14 +431,21 @@ public class SQLiteDatabaseTest {
 
         List<Tag> tagsAfterInsertion = database.getAllTags();
 
+        Tag insertedTag = null;
+        for(Tag t : tagsAfterInsertion) {
+            if (t.getId() == sampleTag.getId()) insertedTag = t;
+        }
+        if (insertedTag == null) fail();
+
         assertEquals(tagsBeforeInsertion.size() + 1, tagsAfterInsertion.size());
-        assertEquals(sampleTag.getId(), tagsAfterInsertion.get(0).getId());
+        assertEquals(sampleTag.getId(), insertedTag.getId());
+        assertEquals(sampleTag.getName(), insertedTag.getName());
     }
 
     @Test
     public void deleteTag() throws Exception {
         database.insertTag(sampleTag);
-        database.insertTag(sampleTag2);
+        database.insertTag(sampleTag2); //make sure there are some tags in the db
 
         List<Tag> tagsBeforeDeletion = database.getAllTags();
         Tag tagToDelete = tagsBeforeDeletion.get(0);
@@ -382,14 +457,12 @@ public class SQLiteDatabaseTest {
         List<Integer> ids = tagsAfterDeletion.stream().map(Tag::getId).collect(Collectors.toList());
 
         assertEquals(tagsBeforeDeletion.size() - 1, tagsAfterDeletion.size());
-        assertFalse(ids.contains(tagToDelete));
+        assertFalse(ids.contains(tagToDelete.getId()));
     }
 
     @Test
     public void editTag() throws Exception {
-        Tag originalTag = new Tag("Name", "Description");
-
-        database.insertTag(originalTag);
+        database.insertTag(sampleTag2);
 
         List<Tag> tags = database.getAllTags();
         Tag tagToEdit = tags.get(0);
@@ -400,14 +473,18 @@ public class SQLiteDatabaseTest {
         database.editTag(tagToEdit);
 
         tags = database.getAllTags();
-        Tag editedTag = tags.get(0);
+        Tag editedTag = null;
+        for(Tag t : tags) {
+            if (t.getId() == tagToEdit.getId()) editedTag = t;
+        }
+        if (editedTag == null) fail();
 
         assertEquals(textToSet, editedTag.getDescription());
         assertEquals(tagToEdit.getId(), editedTag.getId());
     }
 
-    @After
-    public void afterTests() throws Exception {
+    @AfterClass
+    public static void afterTests() throws Exception {
         database.shutdown();
 
         Path dbPath = Paths.get("src/test/resources/test.db");
