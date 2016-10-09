@@ -73,9 +73,9 @@ public class SQLiteDatabase implements IDatabase {
 
     // Basic CRUD functionality
     @Override
-    public void insertTransaction(Transaction transaction) throws StorageException, SQLException {
+    public void insertTransaction(Transaction transaction) throws StorageException {
         try {
-            database.setAutoCommit(false);
+            setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = database.prepareStatement("INSERT INTO TRANSACT (TRANS_DATETIME,TRANS_AMOUNT,TRANS_TYPE_ID,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
@@ -85,7 +85,6 @@ public class SQLiteDatabase implements IDatabase {
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
             } else {
-                database.rollback();
                 throw new StorageException("Error while adding transaction: no such Type defined");
             }
 
@@ -133,17 +132,17 @@ public class SQLiteDatabase implements IDatabase {
             database.commit();
 
         } catch (java.sql.SQLException e) {
-            database.rollback();
+            rollbackDatabase();
             throw new StorageException("Error while adding transaction", e);
         } finally {
-            database.setAutoCommit(true);
+            setDatabaseAutoCommit(true);
         }
     }
 
     @Override
-    public void deleteTransaction(Transaction transaction) throws StorageException, SQLException {
+    public void deleteTransaction(Transaction transaction) throws StorageException {
         try {
-            database.setAutoCommit(false);
+            setDatabaseAutoCommit(false);
 
             PreparedStatement deleteTransactionStmt = database.prepareStatement("DELETE FROM TRANSACT WHERE TRANS_ID = ?");
             deleteTransactionStmt.setInt(1, transaction.getId());
@@ -156,17 +155,17 @@ public class SQLiteDatabase implements IDatabase {
             database.commit();
 
         } catch (java.sql.SQLException e) {
-            database.rollback();
+            rollbackDatabase();
             throw new StorageException("Error while deleting transaction", e);
         } finally {
-            database.setAutoCommit(true);
+            setDatabaseAutoCommit(true);
         }
     }
 
     @Override
     public void editTransaction(Transaction transaction) throws StorageException, SQLException {
         try {
-            database.setAutoCommit(false);
+            setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = database.prepareStatement("UPDATE TRANSACT SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_TYPE_ID=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
             stmt.setLong(1, transaction.getDate().getTime());
@@ -176,7 +175,6 @@ public class SQLiteDatabase implements IDatabase {
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
             } else {
-                database.rollback();
                 throw new StorageException("Error while adding transaction: no such Type defined");
             }
 
@@ -232,10 +230,10 @@ public class SQLiteDatabase implements IDatabase {
             database.commit();
 
         } catch (java.sql.SQLException e) {
-            database.rollback();
+            rollbackDatabase();
             throw new StorageException("Error while editing transaction", e);
         } finally {
-            database.setAutoCommit(true);
+            setDatabaseAutoCommit(true);
         }
     }
 
@@ -827,6 +825,22 @@ public class SQLiteDatabase implements IDatabase {
             return new Account(newName, description, id);
         } else {
             return null;
+        }
+    }
+
+    private void rollbackDatabase() throws StorageException {
+        try {
+            database.rollback();
+        } catch (SQLException e) {
+            throw new StorageException("Error while performing database rollback", e);
+        }
+    }
+
+    private void setDatabaseAutoCommit(boolean autoCommit) throws StorageException {
+        try {
+            database.setAutoCommit(autoCommit);
+        } catch (SQLException e) {
+            throw new StorageException("Error while setting database autocommit to " + autoCommit, e);
         }
     }
 }
