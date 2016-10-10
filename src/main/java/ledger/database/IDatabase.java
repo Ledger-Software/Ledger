@@ -3,6 +3,7 @@ package ledger.database;
 import ledger.database.enity.*;
 import ledger.exception.StorageException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
