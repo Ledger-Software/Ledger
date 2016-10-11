@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
@@ -26,7 +28,7 @@
     <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="141.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Rectangle fx:id="blueHeader" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="1280.0">
+      <Rectangle fx:id="blueHeaderRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="1280.0">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
@@ -47,17 +49,23 @@
             <Insets right="10.0" />
          </GridPane.margin>
       </Button>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Rectangle fx:id="columnHeaderColorRect" arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
          <children>
-            <Text fx:id="userName" layoutX="35.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name Here" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.814453125" AnchorPane.topAnchor="14.0">
+            <Text fx:id="userName" layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="John Smith" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="36.0" AnchorPane.rightAnchor="34.814453125" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="Calibri" size="28.0" />
                </font>
             </Text>
-            <Button fx:id="logoutBtn" layoutX="73.0" layoutY="51.0" mnemonicParsing="false" text="Logout" AnchorPane.bottomAnchor="684.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="51.0" />
-            <ChoiceBox fx:id="chooseAccount" layoutX="25.0" layoutY="127.0" prefWidth="150.0" AnchorPane.bottomAnchor="608.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="127.0" />
-            <Text fx:id="chooseActText" layoutX="25.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Account:" AnchorPane.bottomAnchor="640.5" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="52.005859375" AnchorPane.topAnchor="101.5">
+            <Button fx:id="logoutBtn" layoutX="72.0" layoutY="56.0" mnemonicParsing="false" text="Logout" AnchorPane.bottomAnchor="679.0" AnchorPane.leftAnchor="72.0" AnchorPane.rightAnchor="74.0" AnchorPane.topAnchor="56.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <ChoiceBox fx:id="chooseAccount" layoutX="25.0" layoutY="127.0" prefWidth="150.0" AnchorPane.bottomAnchor="608.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="127.0">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ChoiceBox>
+            <Text fx:id="chooseActText" layoutX="37.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Account:" AnchorPane.bottomAnchor="644.5" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="40.005859375" AnchorPane.topAnchor="101.5">
                <font>
                   <Font name="Calibri" size="18.0" />
                </font>
@@ -77,6 +85,9 @@
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
                   <Button fx:id="trackSpendingBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
                      <font>
@@ -88,6 +99,9 @@
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
                   <Button fx:id="importTransactionsBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
                      <font>
@@ -99,6 +113,9 @@
                      <VBox.margin>
                         <Insets bottom="20.0" />
                      </VBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Button>
                </children>
             </VBox>
@@ -157,6 +174,9 @@
          </children>
       </HBox>
       <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
-      <HBox fx:id="trxnRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+      <HBox fx:id="trxnRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></HBox>
    </children>
 </GridPane>
