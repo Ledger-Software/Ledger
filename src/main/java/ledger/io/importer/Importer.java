@@ -1,6 +1,5 @@
 package ledger.io.importer;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.Import;
 import ledger.database.IDatabase;
 import ledger.database.enity.Transaction;
 import ledger.exception.StorageException;
