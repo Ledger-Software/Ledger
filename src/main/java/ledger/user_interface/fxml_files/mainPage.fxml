@@ -51,74 +51,113 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
          <children>
-            <Text fx:id="userName" layoutX="7.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name Here" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="6.185546875" AnchorPane.rightAnchor="63.814453125" AnchorPane.topAnchor="14.0">
+            <Text fx:id="userName" layoutX="35.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name Here" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="35.0" AnchorPane.rightAnchor="35.814453125" AnchorPane.topAnchor="14.0">
                <font>
                   <Font name="Calibri" size="28.0" />
                </font>
             </Text>
-            <Button fx:id="logoutBtn" layoutX="136.0" layoutY="16.0" mnemonicParsing="false" text="Logout" AnchorPane.bottomAnchor="719.0" AnchorPane.leftAnchor="136.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="16.0" />
+            <Button fx:id="logoutBtn" layoutX="73.0" layoutY="51.0" mnemonicParsing="false" text="Logout" AnchorPane.bottomAnchor="684.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.0" AnchorPane.topAnchor="51.0" />
             <ChoiceBox fx:id="chooseAccount" layoutX="25.0" layoutY="127.0" prefWidth="150.0" AnchorPane.bottomAnchor="608.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="127.0" />
             <Text fx:id="chooseActText" layoutX="25.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose Account:" AnchorPane.bottomAnchor="640.5" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="52.005859375" AnchorPane.topAnchor="101.5">
                <font>
                   <Font name="Calibri" size="18.0" />
                </font>
             </Text>
-            <Button fx:id="addAccountBtn" layoutX="9.0" layoutY="213.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER" AnchorPane.bottomAnchor="515.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="213.0">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-               <padding>
-                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </padding>
-            </Button>
-            <Button fx:id="trackSpendingBtn" layoutX="11.0" layoutY="281.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-               <padding>
-                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </padding>
-            </Button>
-            <Button fx:id="importTransactionsBtn" layoutX="11.0" layoutY="348.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
-               <font>
-                  <Font name="Calibri" size="19.0" />
-               </font>
-               <padding>
-                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
-               </padding>
-            </Button>
+            <VBox fx:id="buttonsVBox" layoutX="11.0" layoutY="176.0" prefHeight="574.0" prefWidth="179.0">
+               <children>
+                  <Button fx:id="addAccountBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER">
+                     <font>
+                        <Font name="Calibri" size="19.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                     </padding>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="trackSpendingBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
+                     <font>
+                        <Font name="Calibri" size="19.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="importTransactionsBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
+                     <font>
+                        <Font name="Calibri" size="19.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
          </children>
       </AnchorPane>
-      <Text fx:id="nameColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="typeColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="categoryColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="ClearedColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Cleared" textAlignment="CENTER" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="DateColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <Text fx:id="AmountColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2">
-         <font>
-            <Font name="Calibri" size="24.0" />
-         </font>
-      </Text>
-      <ListView prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+      <HBox fx:id="headerHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
+         <children>
+            <Text fx:id="amountColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" textAlignment="CENTER" wrappingWidth="175.97265625">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="dateColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" textAlignment="CENTER" wrappingWidth="179.2421875">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="nameColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="CENTER" wrappingWidth="192.1015625">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="typeColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" textAlignment="CENTER" wrappingWidth="164.109375">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="categoryColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" textAlignment="CENTER" wrappingWidth="185.45703125">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+            <Text fx:id="clearedColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Cleared" textAlignment="CENTER" wrappingWidth="178.66015625">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font>
+               <HBox.margin>
+                  <Insets top="8.0" />
+               </HBox.margin>
+            </Text>
+         </children>
+      </HBox>
+      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+      <HBox fx:id="trxnRowHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
    </children>
 </GridPane>
