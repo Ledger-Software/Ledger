@@ -20,6 +20,7 @@ public class Tag implements IEntity {
 
     /**
      * Gets the Tag name
+     *
      * @return name
      */
     public String getName() {
@@ -28,7 +29,8 @@ public class Tag implements IEntity {
 
     /**
      * Sets the Tag name.
-     * @param name
+     *
+     * @param name The new name
      */
     public void setName(String name) {
         this.name = name;
@@ -36,6 +38,7 @@ public class Tag implements IEntity {
 
     /**
      * Gets the Tag description.
+     *
      * @return description
      */
     public String getDescription() {
@@ -44,7 +47,8 @@ public class Tag implements IEntity {
 
     /**
      * Sets the Tag description.
-     * @param description
+     *
+     * @param description the new description
      */
     public void setDescription(String description) {
         this.description = description;
@@ -52,6 +56,7 @@ public class Tag implements IEntity {
 
     /**
      * Gets the Tag id.
+     *
      * @return id
      */
     public int getId() {
@@ -60,7 +65,8 @@ public class Tag implements IEntity {
 
     /**
      * Sets the Tag id.
-     * @param id
+     *
+     * @param id the new id
      */
     public void setId(int id) {
         this.id = id;
