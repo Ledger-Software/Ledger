@@ -20,11 +20,11 @@ public class Importer {
     private List<Transaction> failedImports;
     private List<String> failedImportExceptionMessages;
 
-    public Importer() {
+    private Importer() {
         this.failedImports = new ArrayList<>();
         this.failedImportExceptionMessages = new ArrayList<>();
     }
-    
+
     public static Importer getInstance() {
         if (instance != null) {
             return instance;
