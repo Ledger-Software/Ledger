@@ -30,7 +30,7 @@ public class Account implements IEntity {
     /**
      * Sets the Account name
      *
-     * @param name
+     * @param name new name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -48,7 +48,7 @@ public class Account implements IEntity {
     /**
      * Sets the Account description
      *
-     * @param description
+     * @param description new account description
      */
     public void setDescription(String description) {
         this.description = description;
@@ -66,7 +66,7 @@ public class Account implements IEntity {
     /**
      * Sets the Account ID
      *
-     * @param id
+     * @param id new id
      */
     public void setId(int id) {
         this.id = id;
