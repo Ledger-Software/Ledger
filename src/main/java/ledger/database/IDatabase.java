@@ -3,6 +3,7 @@ package ledger.database;
 import ledger.database.enity.*;
 import ledger.exception.StorageException;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -64,4 +65,10 @@ public interface IDatabase {
     List<Type> getAllTypes() throws StorageException;
 
     List<Tag> getAllTags() throws StorageException;
+
+    void rollbackDatabase() throws StorageException;
+
+    void setDatabaseAutoCommit(boolean autoCommit) throws StorageException;
+
+    Connection getDatabase();
 }
