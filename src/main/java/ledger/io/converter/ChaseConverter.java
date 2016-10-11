@@ -1,7 +1,7 @@
 package ledger.io.converter;
 
 import au.com.bytecode.opencsv.CSVReader;
-import ledger.database.enity.Transaction;
+import ledger.database.enity.*;
 
 import java.io.*;
 import java.text.DateFormat;
@@ -17,9 +17,11 @@ import java.util.List;
 public class ChaseConverter implements IConverter {
 
     private File file;
+    private Account account;
 
-    public ChaseConverter(File file) {
+    public ChaseConverter(File file, Account account) {
         this.file = file;
+        this.account = account;
     }
 
     @Override
@@ -44,7 +46,21 @@ public class ChaseConverter implements IConverter {
                 //Date date, Type type, int amount, Account account, Payee payee, boolean pending, List<Tag> tagList, Note note
 
                 Date date = df.parse(dateString);
-                int amount = Integer.parseInt(amountString);
+                boolean pending = isPending(amountString);
+                int amount = 0;
+                if(!pending)
+                    amount = Integer.parseInt(amountString);
+
+                Type type = TypeConversion.convert(typeString);
+
+                // TODO: Find Payee
+                Payee payee = null;
+                List<Tag> tags = null;
+                Note note = null;
+
+                Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
+
+                transactions.add(transaction);
             }
 
         } catch (IOException e) {
@@ -55,5 +71,9 @@ public class ChaseConverter implements IConverter {
             e.printStackTrace();
         }
         return transactions;
+    }
+
+    private boolean isPending(String amount) {
+        return amount == null || amount.isEmpty();
     }
 }
