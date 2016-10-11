@@ -56,19 +56,13 @@ public interface IDatabase {
 
     void editType(Type type) throws StorageException;
 
+    List<Type> getAllTypes() throws StorageException;
+
     void insertTag(Tag tag) throws StorageException;
 
     void deleteTag(Tag tag) throws StorageException;
 
     void editTag(Tag tag) throws StorageException;
 
-    List<Type> getAllTypes() throws StorageException;
-
     List<Tag> getAllTags() throws StorageException;
-
-    void rollbackDatabase() throws StorageException;
-
-    void setDatabaseAutoCommit(boolean autoCommit) throws StorageException;
-
-    Connection getDatabase();
 }
