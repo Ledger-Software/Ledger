@@ -18,6 +18,7 @@ public class AccountBalance implements IEntity {
 
     /**
      * Gets the AccountBalance ID
+     *
      * @return id
      */
     public int getAccountId() {
@@ -26,7 +27,8 @@ public class AccountBalance implements IEntity {
 
     /**
      * Sets the AccountBalance ID
-     * @param accountId
+     *
+     * @param accountId The new id
      */
     public void setAccountId(int accountId) {
         this.accountId = accountId;
@@ -34,6 +36,7 @@ public class AccountBalance implements IEntity {
 
     /**
      * Gets the AccountBalance date
+     *
      * @return date
      */
     public Date getDate() {
@@ -42,7 +45,8 @@ public class AccountBalance implements IEntity {
 
     /**
      * Sets the AccountBalance date
-     * @param date
+     *
+     * @param date the new date
      */
     public void setDate(Date date) {
         this.date = date;
@@ -50,6 +54,7 @@ public class AccountBalance implements IEntity {
 
     /**
      * Gets the AccountBalance amount
+     *
      * @return amount
      */
     public int getAmount() {
@@ -58,7 +63,8 @@ public class AccountBalance implements IEntity {
 
     /**
      * Sets the AccountBalance amount
-     * @param amount
+     *
+     * @param amount the new amount
      */
     public void setAmount(int amount) {
         this.amount = amount;

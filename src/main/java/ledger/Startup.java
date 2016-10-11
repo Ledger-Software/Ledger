@@ -10,6 +10,7 @@ public class Startup extends Application {
 
     /**
      * Main entry point into the GUI for Ledger Software.
+     * @param args the args for the main
      */
     public static void main(String[] args) {
         launch(args);

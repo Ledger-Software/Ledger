@@ -20,6 +20,7 @@ public class Payee implements IEntity {
 
     /**
      * Returns the Payee name.
+     *
      * @return name
      */
     public String getName() {
@@ -28,7 +29,8 @@ public class Payee implements IEntity {
 
     /**
      * Sets the Payee name.
-     * @param name
+     *
+     * @param name The new name
      */
     public void setName(String name) {
         this.name = name;
@@ -36,6 +38,7 @@ public class Payee implements IEntity {
 
     /**
      * Gets the Payee description.
+     *
      * @return description
      */
     public String getDescription() {
@@ -44,7 +47,8 @@ public class Payee implements IEntity {
 
     /**
      * Returns the Payee description.
-     * @param description
+     *
+     * @param description The new description
      */
     public void setDescription(String description) {
         this.description = description;
@@ -52,6 +56,7 @@ public class Payee implements IEntity {
 
     /**
      * Gets the Payee ID.
+     *
      * @return id
      */
     public int getId() {
@@ -60,7 +65,8 @@ public class Payee implements IEntity {
 
     /**
      * Sets the Payee ID.
-     * @param id
+     *
+     * @param id the new id
      */
     public void setId(int id) {
         this.id = id;
