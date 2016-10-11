@@ -2,6 +2,7 @@ package ledger.io.converter;
 
 import ledger.database.enity.Transaction;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -9,5 +10,5 @@ import java.util.List;
  */
 public interface IConverter {
 
-    List<Transaction> convert();
+    List<Transaction> convert() throws FileNotFoundException;
 }
