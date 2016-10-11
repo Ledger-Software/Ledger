@@ -3,7 +3,7 @@ package ledger.io.converter;
 import ledger.database.enity.Type;
 
 /**
- * Created by CJ on 10/11/2016.
+ * Utility Class to Convert Strings back to their set Types.
  */
 public class TypeConversion {
 
