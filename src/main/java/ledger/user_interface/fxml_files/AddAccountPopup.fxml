@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<GridPane fx:id="addAcctGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.0" minWidth="10.0" prefWidth="233.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="233.0" />
@@ -31,21 +31,11 @@
             <Insets left="15.0" top="5.0" />
          </GridPane.margin>
       </Text>
-      <TextArea fx:id="accountNameInput" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="15.0" />
-         </GridPane.margin>
-      </TextArea>
       <ChoiceBox fx:id="accountTypeChooser" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="15.0" />
          </GridPane.margin>
       </ChoiceBox>
-      <TextArea fx:id="startingAmountInput" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets left="15.0" />
-         </GridPane.margin>
-      </TextArea>
       <Button fx:id="submitAccountInfo" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #ffa81f;" text="Submit as Complete" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="15.0" />
@@ -69,5 +59,15 @@
             <Font name="Calibri Light" size="22.0" />
          </font>
       </Text>
+      <TextField fx:id="accountNameText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets left="15.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField fx:id="accountTypeText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="15.0" />
+         </GridPane.margin>
+      </TextField>
    </children>
 </GridPane>
