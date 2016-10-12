@@ -54,10 +54,12 @@ public class ChaseConverter implements IConverter {
 
                 Type type = TypeConversion.convert(typeString);
 
-                // TODO: Find Payee
-                Payee payee = null;
+                // TODO: Should Payee be instantiated each time?
+                details = details.substring(0, details.length() - 5);
+                Payee payee = new Payee(details,details);
                 List<Tag> tags = null;
                 Note note = null;
+
 
                 Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
 
