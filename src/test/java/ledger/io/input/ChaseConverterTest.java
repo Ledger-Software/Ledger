@@ -32,7 +32,7 @@ public class ChaseConverterTest {
         assertEquals(14, transactionList.size());
         transactionList.parallelStream().allMatch(t -> t.getAccount().equals(testAccount));
 
-        int countOfPending = transactionList.parallelStream().mapToInt(t -> t.isPending() ? 1:0).sum();
+        int countOfPending = transactionList.parallelStream().mapToInt(t -> t.isPending() ? 1 : 0).sum();
 
         assertEquals(1, countOfPending);
     }
