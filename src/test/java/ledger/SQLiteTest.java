@@ -1,15 +1,18 @@
 package ledger;
 
-/**
- * Created by Tayler How on 9/24/2016.
- */
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import org.junit.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
-import static org.junit.Assert.*;
-
-import java.nio.file.*;
-import java.sql.*;
+import static org.junit.Assert.assertEquals;
 
 public class SQLiteTest {
     static Connection dbConnection;

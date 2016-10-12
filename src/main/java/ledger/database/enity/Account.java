@@ -8,6 +8,10 @@ public class Account implements IEntity {
     private String description;
     private int id;
 
+    public Account(String name, String description) {
+        this(name, description, -1);
+    }
+
     public Account(String name, String description, int id) {
         this.name = name;
         this.description = description;
@@ -16,6 +20,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account name
+     *
      * @return name
      */
     public String getName() {
@@ -24,7 +29,8 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account name
-     * @param name
+     *
+     * @param name new name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -32,6 +38,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account description
+     *
      * @return description
      */
     public String getDescription() {
@@ -40,7 +47,8 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account description
-     * @param description
+     *
+     * @param description new account description
      */
     public void setDescription(String description) {
         this.description = description;
@@ -48,6 +56,7 @@ public class Account implements IEntity {
 
     /**
      * Gets the Account ID
+     *
      * @return id
      */
     public int getId() {
@@ -56,7 +65,8 @@ public class Account implements IEntity {
 
     /**
      * Sets the Account ID
-     * @param id
+     *
+     * @param id new id
      */
     public void setId(int id) {
         this.id = id;

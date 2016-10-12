@@ -7,8 +7,7 @@ public class TransactionStatus {
     private IOStatusResult result;
     private String message;
 
-    public TransactionStatus(IOStatusResult result, String message)
-    {
+    public TransactionStatus(IOStatusResult result, String message) {
         this.result = result;
         this.message = message;
     }
