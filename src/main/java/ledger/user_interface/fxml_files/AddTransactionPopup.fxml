@@ -79,12 +79,45 @@
             <Insets left="10.0" />
          </GridPane.margin>
       </Text>
-      <CheckBox fx:id="clearedCheckBox" maxHeight="25.0" maxWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <CheckBox fx:id="clearedCheckBox" maxHeight="37.0" maxWidth="25.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="25.0" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets left="100.0" />
          </GridPane.margin>
       </CheckBox>
-      <Button maxHeight="30.0" maxWidth="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #ffa81f;" text="Enter" GridPane.columnIndex="4" GridPane.rowIndex="1">
+      <Button fx:id="addTrnxnSubmitButton" maxHeight="30.0" maxWidth="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #ffa81f;" text="Enter" GridPane.columnIndex="4" GridPane.rowIndex="1">
+         <font>
+            <Font name="Calibri" size="16.0" />
+         </font>
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </Button>
+      <TextField fx:id="payeeText" maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField fx:id="accountText" maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField fx:id="categoryText" maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <Text fx:id="amountLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount:" textAlignment="RIGHT" wrappingWidth="116.6640625" GridPane.columnIndex="3" GridPane.rowIndex="2">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </Text>
+      <TextField fx:id="amountText" maxHeight="30.0" maxWidth="100.0" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="4" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <Button fx:id="addTrnxnCancelBtn" maxHeight="30.0" maxWidth="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #ffa81f;" text="Cancel" GridPane.columnIndex="4" GridPane.rowIndex="4">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
