@@ -30,7 +30,7 @@ public class ChaseConverter<T extends Transaction> implements IInAdapter {
         List<Transaction> transactions = new LinkedList<>();
 
         try {
-            String [] nextLine;
+            String[] nextLine;
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
@@ -49,17 +49,16 @@ public class ChaseConverter<T extends Transaction> implements IInAdapter {
                 boolean pending = isPending(balanceString);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
                 int balance = 0;
-                if(!pending)
+                if (!pending)
                     balance = (int) Math.round(Double.parseDouble(balanceString) * 100);
 
                 Type type = TypeConversion.convert(typeString);
 
                 // TODO: Should Payee be instantiated each time?
                 details = details.substring(0, details.length() - 5).trim();
-                Payee payee = new Payee(details,details);
+                Payee payee = new Payee(details, details);
                 List<Tag> tags = null;
                 Note note = null;
-
 
                 Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
 

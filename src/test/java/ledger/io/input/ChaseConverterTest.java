@@ -1,4 +1,4 @@
-package ledger.io.converter;
+package ledger.io.input;
 
 import ledger.database.enity.Account;
 import ledger.database.enity.Transaction;
@@ -28,7 +28,6 @@ public class ChaseConverterTest {
         ChaseConverter converter = new ChaseConverter(new File("./src/test/resources/ChaseSmallTest.csv"), testAccount);
 
         List<Transaction> transactionList = converter.convert();
-
 
         assertEquals(14, transactionList.size());
         transactionList.parallelStream().allMatch(t -> t.getAccount().equals(testAccount));
