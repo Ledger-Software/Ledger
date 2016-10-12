@@ -50,7 +50,7 @@
          </GridPane.margin>
       </Button>
       <Rectangle fx:id="columnHeaderColorRect" arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
+      <AnchorPane fx:id="leftAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
          <children>
             <Text fx:id="userName" layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="John Smith" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="36.0" AnchorPane.rightAnchor="34.814453125" AnchorPane.topAnchor="14.0">
                <font>
