@@ -34,6 +34,8 @@ task prod(dependsOn: [clean, build, test, fatJar, myJavadocs]) {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+    testCompile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
 
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
+    compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
 }
