@@ -13,7 +13,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -39,7 +38,7 @@ public class SQLiteDatabaseTest {
     }
 
     @Before
-    public void setupTestData() throws Exception{
+    public void setupTestData() throws Exception {
         sampleType = new Type("Credit", "Purchased with a credit card");
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
@@ -122,7 +121,7 @@ public class SQLiteDatabaseTest {
 
         Transaction editedTransaction = null;
 
-        for (Transaction t : transactions)  {
+        for (Transaction t : transactions) {
             if (t.getId() == originalTransaction.getId()) editedTransaction = t;
         }
 
@@ -345,7 +344,7 @@ public class SQLiteDatabaseTest {
         notes = database.getAllNotes();
 
         Note editedNote = null;
-        for(Note n : notes) {
+        for (Note n : notes) {
             if (n.getNoteText().equals(noteToEdit.getNoteText()) && n.getTransactionId() == originalTransactionId) {
                 editedNote = n;
             }
@@ -364,7 +363,7 @@ public class SQLiteDatabaseTest {
         assertEquals(sizeBeforeInsert + 1, typesAfterInsert.size());
 
         Type insertedType = null;
-        for(Type t : typesAfterInsert) {
+        for (Type t : typesAfterInsert) {
             if (t.getId() == sampleType.getId()) insertedType = t;
         }
         if (insertedType == null) fail();
@@ -432,7 +431,7 @@ public class SQLiteDatabaseTest {
         List<Tag> tagsAfterInsertion = database.getAllTags();
 
         Tag insertedTag = null;
-        for(Tag t : tagsAfterInsertion) {
+        for (Tag t : tagsAfterInsertion) {
             if (t.getId() == sampleTag.getId()) insertedTag = t;
         }
         if (insertedTag == null) fail();
@@ -474,7 +473,7 @@ public class SQLiteDatabaseTest {
 
         tags = database.getAllTags();
         Tag editedTag = null;
-        for(Tag t : tags) {
+        for (Tag t : tags) {
             if (t.getId() == tagToEdit.getId()) editedTag = t;
         }
         if (editedTag == null) fail();

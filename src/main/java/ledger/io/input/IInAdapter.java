@@ -1,8 +1,9 @@
 package ledger.io.input;
 
+
 import ledger.database.enity.IEntity;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -10,5 +11,5 @@ import java.util.List;
  */
 public interface IInAdapter<T extends IEntity> {
 
-    List<T> convert() throws FileNotFoundException;
+    List<T> convert() throws IOException;
 }
