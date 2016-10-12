@@ -6,5 +6,6 @@ package ledger.io.events;
  */
 public interface IIOEventGenerator {
     void registerIOComplete(IStatusObserver observer);
+
     void registerIOUpdate(IStatusObserver observer);
 }

@@ -21,6 +21,15 @@ task fatJar(type: Jar) {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+task myJavadocs(type: Javadoc) {
+    source = sourceSets.main.allJava
+}
+task prod(dependsOn: [clean, build, test, fatJar, myJavadocs]) {
+    build.mustRunAfter clean
+    fatJar.mustRunAfter test
+    myJavadocs.mustRunAfter test
+
+}
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
