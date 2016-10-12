@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.*?>
-<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
@@ -49,5 +48,21 @@
                 <Insets right="10.0" />
             </GridPane.margin>
         </Button>
+      <PieChart fx:id="expenditurePieChart" prefHeight="277.0" prefWidth="271.0" title="Expenditure Categories (last 6 mos.)" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="5">
+         <GridPane.margin>
+            <Insets bottom="20.0" left="20.0" />
+         </GridPane.margin>
+      </PieChart>
+      <StackedBarChart fx:id="expenditureBarChart" title="Expenditures per Month" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+         <GridPane.margin>
+            <Insets bottom="20.0" left="20.0" right="20.0" />
+         </GridPane.margin>
+      </StackedBarChart>
     </children>
 </GridPane>
