@@ -1,4 +1,4 @@
-package ledger.io.converter;
+package ledger.io.input;
 
 import ledger.database.enity.Type;
 
