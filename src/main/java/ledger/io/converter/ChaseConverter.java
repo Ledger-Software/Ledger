@@ -55,7 +55,7 @@ public class ChaseConverter implements IConverter {
                 Type type = TypeConversion.convert(typeString);
 
                 // TODO: Should Payee be instantiated each time?
-                details = details.substring(0, details.length() - 5);
+                details = details.substring(0, details.length() - 5).trim();
                 Payee payee = new Payee(details,details);
                 List<Tag> tags = null;
                 Note note = null;
