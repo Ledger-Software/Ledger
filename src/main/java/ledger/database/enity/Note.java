@@ -20,7 +20,7 @@ public class Note implements IEntity {
      * Constructs a Note.
      *
      * @param transactionID The Id of the transaction associated with the Note
-     * @param noteText The text of the new note
+     * @param noteText      The text of the new note
      */
     public Note(int transactionID, String noteText) {
         this.transactionId = transactionID;
