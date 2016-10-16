@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="addTrnxnGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<fx:root fx:id="addTrnxnGridPane" maxHeight="400.0" maxWidth="700.0" minHeight="400.0" minWidth="700.0" prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="222.0" minWidth="10.0" prefWidth="161.0" />
@@ -125,5 +125,15 @@
             <Insets left="10.0" />
          </GridPane.margin>
       </Button>
+      <TextField fx:id="typeText" maxHeight="30.0" maxWidth="100.0" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="4" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <Text fx:id="typeLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Type:" textAlignment="RIGHT" wrappingWidth="116.6640625" GridPane.columnIndex="3" GridPane.rowIndex="3">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </Text>
    </children>
-</GridPane>
+</fx:root>
