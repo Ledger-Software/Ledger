@@ -68,6 +68,32 @@ public class Task<A, R> {
             }
         });
     }
+    public Task(final CallableReturnMethodNoArgs<R> task)  {
+
+        t = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    result = task.call();
+
+                    for (CallableMethod method:
+                            SuccessEvents){
+                        method.call(1);
+                    }
+
+                } catch (Exception e){
+                    for (CallableMethod method:
+                            FailureEvents){
+                        try {
+                            method.call(e);
+                        } catch (Exception e2){
+                            //TODO: Log this
+                        }
+                    }
+                }
+
+            }
+        });
+    }
     public void RegisterSuccessEvent(CallableMethod func) {
         SuccessEvents.add(func);
 
