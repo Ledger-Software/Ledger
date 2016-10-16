@@ -31,7 +31,7 @@ public class DuplicateDetectorTest {
     private static Tag sampleTag;
     private static Tag sampleTag2;
     private static Note sampleNote;
-    
+
     @Before
     public void setupTestData() throws Exception {
         database = new SQLiteDatabase("src/test/resources/test.db");
@@ -77,6 +77,29 @@ public class DuplicateDetectorTest {
     }
 
     @Test
+    public void detectionWithNoDuplicatesNotEmptyTest() throws StorageException {
+        List<Transaction> transactions = new ArrayList<>();
+
+        transactions.add(sampleTransaction1);
+        transactions.add(sampleTransaction2);
+
+        database.insertTransaction(sampleTransaction3);
+
+        DuplicateDetector dupeDetector = new DuplicateDetector(transactions);
+        DetectionResult result = null;
+
+        try {
+            result = dupeDetector.detectDuplicates(database);
+        } catch (StorageException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        assertEquals(0, result.getPossibleDuplicates().size());
+        assertEquals(2, result.getVerifiedTransactions().size());
+    }
+
+    @Test
     public void detectionWithDuplicatesTest() throws StorageException {
         List<Transaction> transactions = new ArrayList<>();
 
@@ -95,7 +118,6 @@ public class DuplicateDetectorTest {
             e.printStackTrace();
             fail();
         }
-
         assertEquals(1, result.getPossibleDuplicates().size());
         assertEquals(2, result.getVerifiedTransactions().size());
     }

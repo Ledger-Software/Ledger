@@ -71,4 +71,22 @@ public class Account implements IEntity {
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Determines equality between this Account and another object
+     *
+     * @param o The object to compare to this Account
+     * @return True of this Account is equal to the provided object. False otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Account)) return false;
+
+        Account acc = (Account) o;
+
+        if (!this.getName().equals(acc.getName())) return false;
+        if (!this.getDescription().equals(acc.getDescription())) return false;
+
+        return true;
+    }
 }
