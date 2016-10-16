@@ -58,7 +58,7 @@ public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
     default List<Note> getAllNotes() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM NOTE;");
+            ResultSet rs = stmt.executeQuery("SELECT NOTE_TRANS_ID, NOTE_TEXT FROM NOTE;");
 
             ArrayList<Note> notes = new ArrayList<>();
 

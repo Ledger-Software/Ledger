@@ -187,7 +187,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
     default List<Transaction> getAllTransactions() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TRANSACT;");
+            ResultSet rs = stmt.executeQuery("SELECT TRANS_DATETIME, TRANS_ID, TRANS_TYPE_ID, TRANS_AMOUNT, TRANS_PENDING, TRANS_ACCOUNT_ID, TRANS_PAYEE_ID FROM TRANSACT;");
 
             ArrayList<Transaction> transactionList = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         ResultSet rs;
 
         try {
-            stmt = getDatabase().prepareStatement("SELECT * FROM TYPE WHERE TYPE_NAME=?");
+            stmt = getDatabase().prepareStatement("SELECT TYPE_ID, TYPE_NAME, TYPE_DESC FROM TYPE WHERE TYPE_NAME=?");
             stmt.setString(1, name);
 
             rs = stmt.executeQuery();
@@ -256,7 +256,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Account getAccountForName(String name) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_NAME=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT ACCOUNT_ID, ACCOUNT_NAME, ACCOUNT_DESC FROM ACCOUNT WHERE ACCOUNT_NAME=?");
             stmt.setString(1, name);
 
             ResultSet rs = stmt.executeQuery();
@@ -269,14 +269,14 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Tag getTagForNameAndDescription(String tagName, String tagDescription) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT TAG_ID FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
             stmt.setString(1, tagName);
             stmt.setString(2, tagDescription);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String resultTagName = rs.getString("TAG_NAME");
-                String resultTagDesc = rs.getString("TAG_DESC");
+                String resultTagName = tagName;
+                String resultTagDesc = tagDescription;
                 int id = rs.getInt("TAG_ID");
                 return new Tag(resultTagName, resultTagDesc, id);
             } else {
@@ -290,15 +290,15 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT PAYEE_ID FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC=?");
             stmt.setString(1, payeeName);
             stmt.setString(2, payeeDescription);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String newName = rs.getString("PAYEE_NAME");
-                String description = rs.getString("PAYEE_DESC");
+                String newName = payeeName;
+                String description = payeeDescription;
                 int id = rs.getInt("PAYEE_ID");
 
                 return new Payee(newName, description, id);
@@ -324,7 +324,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Note getNoteForTransactionID(int transactionID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM NOTE WHERE NOTE_TRANS_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT NOTE_TEXT FROM NOTE WHERE NOTE_TRANS_ID=?");
             stmt.setInt(1, transactionID);
 
             ResultSet rs = stmt.executeQuery();
@@ -345,7 +345,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         List<Tag> tags = new ArrayList<>();
 
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT TTTS_TAG_ID FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID=?");
             stmt.setInt(1, transactionID);
 
             ResultSet rs = stmt.executeQuery();
@@ -353,7 +353,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             while (rs.next()) {
                 int tagId = rs.getInt("TTTS_TAG_ID");
 
-                PreparedStatement tagStmt = getDatabase().prepareStatement("SELECT * FROM TAG WHERE TAG_ID = ?");
+                PreparedStatement tagStmt = getDatabase().prepareStatement("SELECT TAG_NAME, TAG_DESC FROM TAG WHERE TAG_ID = ?");
                 tagStmt.setInt(1, tagId);
 
                 ResultSet tagResults = tagStmt.executeQuery();
@@ -376,7 +376,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Payee getPayeeForID(int payeeID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT PAYEE_NAME, PAYEE_DESC FROM PAYEE WHERE PAYEE_ID=?");
             stmt.setInt(1, payeeID);
 
             ResultSet rs = stmt.executeQuery();
@@ -395,7 +395,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Account getAccountForID(int accountID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT ACCOUNT_ID, ACCOUNT_NAME, ACCOUNT_DESC FROM ACCOUNT WHERE ACCOUNT_ID=?");
             stmt.setInt(1, accountID);
 
             ResultSet rs = stmt.executeQuery();
@@ -408,7 +408,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Type getTypeForID(int typeID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TYPE WHERE TYPE_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT TYPE_ID, TYPE_NAME, TYPE_DESC FROM TYPE WHERE TYPE_ID=?");
             stmt.setInt(1, typeID);
 
             ResultSet rs = stmt.executeQuery();

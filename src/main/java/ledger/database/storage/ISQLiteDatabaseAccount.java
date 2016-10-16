@@ -62,7 +62,7 @@ public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
     default List<Account> getAllAccounts() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ACCOUNT;");
+            ResultSet rs = stmt.executeQuery("SELECT ACCOUNT_ID, ACCOUNT_NAME, ACCOUNT_DESC FROM ACCOUNT;");
 
             List<Account> accountList = new ArrayList<>();
 
