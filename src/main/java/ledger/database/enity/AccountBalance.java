@@ -6,12 +6,12 @@ import java.util.Date;
  * Entity that holds a single Account Balance
  */
 public class AccountBalance implements IEntity {
-    private int accountId;
+    private Account account;
     private Date date;
     private int amount;
 
-    public AccountBalance(int accountId, Date date, int amount) {
-        this.accountId = accountId;
+    public AccountBalance(Account account, Date date, int amount) {
+        this.account = account;
         this.date = date;
         this.amount = amount;
     }
@@ -21,17 +21,8 @@ public class AccountBalance implements IEntity {
      *
      * @return id
      */
-    public int getAccountId() {
-        return accountId;
-    }
-
-    /**
-     * Sets the AccountBalance ID
-     *
-     * @param accountId The new id
-     */
-    public void setAccountId(int accountId) {
-        this.accountId = accountId;
+    public Account getAccount() {
+        return account;
     }
 
     /**

@@ -24,7 +24,9 @@ public class Startup extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-        createTransactionPopup(primaryStage);
+        //createTransactionPopup(primaryStage);
+        // createAccountPopup(primaryStage);
+        createLoginPage(primaryStage);
     }
 
     public void createTransactionPopup(Stage primaryStage) {
@@ -35,5 +37,20 @@ public class Startup extends Application {
         primaryStage.show();
     }
 
+    public void createAccountPopup(Stage primaryStage) {
+        AccountPopupController accountController = new AccountPopupController();
+        Scene scene = new Scene(accountController);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Ledger");
+        primaryStage.show();
+    }
+
+    public void createLoginPage(Stage primaryStage) {
+        LoginPageController loginController = new LoginPageController();
+        Scene scene = new Scene(loginController);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Ledger");
+        primaryStage.show();
+    }
 
 }
