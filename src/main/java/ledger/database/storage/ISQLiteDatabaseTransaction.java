@@ -16,7 +16,7 @@ import java.util.List;
  * Created by CJ on 10/11/2016.
  */
 public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
-    // Basic CRUD functionality
+
     // Basic CRUD functionality
     @Override
     default void insertTransaction(Transaction transaction) throws StorageException {
@@ -30,15 +30,21 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             Type existingType = getTypeForName(transaction.getType().getName());
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
+
+                // Write existing type ID to java object
+                transaction.getType().setId(existingType.getId());
             } else {
                 throw new StorageException("Error while adding transaction: no such Type defined");
             }
 
             stmt.setBoolean(4, transaction.isPending());
 
-            Account existingAccount = getAccountForName(transaction.getAccount().getName());
+            Account existingAccount = getAccountForNameAndDescription(transaction.getAccount().getName(), transaction.getAccount().getDescription());
             if (existingAccount != null) {
                 stmt.setInt(5, existingAccount.getId());
+
+                // Write existing account ID to java object
+                transaction.getAccount().setId(existingAccount.getId());
             } else {
                 insertAccount(transaction.getAccount());
                 stmt.setInt(5, transaction.getAccount().getId());
@@ -47,6 +53,9 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
             if (existingPayee != null) {
                 stmt.setInt(6, existingPayee.getId());
+
+                // Write existing payee ID to java object
+                transaction.getPayee().setId(existingPayee.getId());
             } else {
                 insertPayee(transaction.getPayee());
                 stmt.setInt(6, transaction.getPayee().getId());
@@ -58,21 +67,32 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             if (generatedIDs.next()) {
                 int insertedTransactionID = generatedIDs.getInt(1);
 
+                // insert tags and tag-to-trans linkings
                 for (Tag currentTag : transaction.getTagList()) {
                     Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
                     if (existingTag != null) {
                         insertTagToTrans(existingTag.getId(), insertedTransactionID);
+
+                        // Write existing tag ID to java object
+                        currentTag.setId(existingTag.getId());
                     } else {
                         insertTag(currentTag);
                         insertTagToTrans(currentTag.getId(), insertedTransactionID);
                     }
                 }
+
+                // insert note, if applicable
+                if (transaction.getNote() != null) {
+                    if (!transaction.getNote().getNoteText().equals("")) {
+                        // Write inserted transaction ID to note object
+                        transaction.getNote().setTransactionId(insertedTransactionID);
+
+                        insertNote(transaction.getNote());
+                    }
+                }
+
                 transaction.setId(insertedTransactionID);
             }
-
-            /* Transaction Notes are not added on transaction insertion. By principle, notes should always be added
-               after the fact, by the user.
-             */
 
             // Commit to DB
             getDatabase().commit();
@@ -120,23 +140,33 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             Type existingType = getTypeForName(transaction.getType().getName());
             if (existingType != null) {
                 stmt.setInt(3, existingType.getId());
+
+                // Write existing type ID to java object
+                transaction.getType().setId(existingType.getId());
             } else {
                 throw new StorageException("Error while adding transaction: no such Type defined");
             }
 
             stmt.setBoolean(4, transaction.isPending());
 
-            Account existingAccount = getAccountForName(transaction.getAccount().getName());
+            Account existingAccount = getAccountForNameAndDescription(transaction.getAccount().getName(), transaction.getAccount().getDescription());
             if (existingAccount != null) {
                 stmt.setInt(5, existingAccount.getId());
+
+                // Write existing account ID to java object
+                transaction.getAccount().setId(existingAccount.getId());
             } else {
                 insertAccount(transaction.getAccount());
                 stmt.setInt(5, transaction.getAccount().getId());
             }
 
+
             Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
             if (existingPayee != null) {
                 stmt.setInt(6, existingPayee.getId());
+
+                // Write existing payee ID to java object
+                transaction.getPayee().setId(existingPayee.getId());
             } else {
                 insertPayee(transaction.getPayee());
                 stmt.setInt(6, transaction.getPayee().getId());
@@ -153,10 +183,12 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
                 Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
                 if (existingTag != null) {
                     insertTagToTrans(existingTag.getId(), transaction.getId());
+
+                    // Write existing tag ID to java object
+                    currentTag.setId(existingTag.getId());
                 } else {
                     insertTag(currentTag);
                     insertTagToTrans(currentTag.getId(), transaction.getId());
-
                 }
             }
 
@@ -254,10 +286,11 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
-    default Account getAccountForName(String name) throws StorageException {
+    default Account getAccountForNameAndDescription(String name, String description) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT ACCOUNT_ID, ACCOUNT_NAME, ACCOUNT_DESC FROM ACCOUNT WHERE ACCOUNT_NAME=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT ACCOUNT_ID, ACCOUNT_NAME, ACCOUNT_DESC FROM ACCOUNT WHERE ACCOUNT_NAME=? AND ACCOUNT_DESC=?");
             stmt.setString(1, name);
+            stmt.setString(2, description);
 
             ResultSet rs = stmt.executeQuery();
 
