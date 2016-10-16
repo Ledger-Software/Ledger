@@ -27,39 +27,13 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
-            Type existingType = getTypeForName(transaction.getType().getName());
-            if (existingType != null) {
-                stmt.setInt(3, existingType.getId());
-
-                // Write existing type ID to java object
-                transaction.getType().setId(existingType.getId());
-            } else {
-                throw new StorageException("Error while adding transaction: no such Type defined");
-            }
+            lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
             stmt.setBoolean(4, transaction.isPending());
 
-            Account existingAccount = getAccountForNameAndDescription(transaction.getAccount().getName(), transaction.getAccount().getDescription());
-            if (existingAccount != null) {
-                stmt.setInt(5, existingAccount.getId());
+            lookupAndSetAccountForSQLStatement(transaction, stmt, 5);
 
-                // Write existing account ID to java object
-                transaction.getAccount().setId(existingAccount.getId());
-            } else {
-                insertAccount(transaction.getAccount());
-                stmt.setInt(5, transaction.getAccount().getId());
-            }
-
-            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-            if (existingPayee != null) {
-                stmt.setInt(6, existingPayee.getId());
-
-                // Write existing payee ID to java object
-                transaction.getPayee().setId(existingPayee.getId());
-            } else {
-                insertPayee(transaction.getPayee());
-                stmt.setInt(6, transaction.getPayee().getId());
-            }
+            lookupAndSetPayeeForSQLStatement(transaction, stmt, 6);
 
             stmt.executeUpdate();
 
@@ -69,16 +43,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
                 // insert tags and tag-to-trans linkings
                 for (Tag currentTag : transaction.getTagList()) {
-                    Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                    if (existingTag != null) {
-                        insertTagToTrans(existingTag.getId(), insertedTransactionID);
-
-                        // Write existing tag ID to java object
-                        currentTag.setId(existingTag.getId());
-                    } else {
-                        insertTag(currentTag);
-                        insertTagToTrans(currentTag.getId(), insertedTransactionID);
-                    }
+                    lookupAndInsertTag(currentTag, insertedTransactionID);
                 }
 
                 // insert note, if applicable
@@ -137,41 +102,13 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
-            Type existingType = getTypeForName(transaction.getType().getName());
-            if (existingType != null) {
-                stmt.setInt(3, existingType.getId());
-
-                // Write existing type ID to java object
-                transaction.getType().setId(existingType.getId());
-            } else {
-                throw new StorageException("Error while adding transaction: no such Type defined");
-            }
+            lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
             stmt.setBoolean(4, transaction.isPending());
 
-            Account existingAccount = getAccountForNameAndDescription(transaction.getAccount().getName(), transaction.getAccount().getDescription());
-            if (existingAccount != null) {
-                stmt.setInt(5, existingAccount.getId());
+            lookupAndSetAccountForSQLStatement(transaction, stmt, 5);
 
-                // Write existing account ID to java object
-                transaction.getAccount().setId(existingAccount.getId());
-            } else {
-                insertAccount(transaction.getAccount());
-                stmt.setInt(5, transaction.getAccount().getId());
-            }
-
-
-            Payee existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
-            if (existingPayee != null) {
-                stmt.setInt(6, existingPayee.getId());
-
-                // Write existing payee ID to java object
-                transaction.getPayee().setId(existingPayee.getId());
-            } else {
-                insertPayee(transaction.getPayee());
-                stmt.setInt(6, transaction.getPayee().getId());
-
-            }
+            lookupAndSetPayeeForSQLStatement(transaction, stmt, 6);
 
             stmt.setInt(7, transaction.getId());
 
@@ -180,16 +117,7 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             // Update tag associations
             deleteAllTagToTransForTransactionID(transaction.getId());
             for (Tag currentTag : transaction.getTagList()) {
-                Tag existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
-                if (existingTag != null) {
-                    insertTagToTrans(existingTag.getId(), transaction.getId());
-
-                    // Write existing tag ID to java object
-                    currentTag.setId(existingTag.getId());
-                } else {
-                    insertTag(currentTag);
-                    insertTagToTrans(currentTag.getId(), transaction.getId());
-                }
+                lookupAndInsertTag(currentTag, transaction.getId());
             }
 
             // Update transaction note
@@ -475,4 +403,86 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
+    default void lookupAndSetTypeForSQLStatement(Transaction transaction, PreparedStatement stmt, int statementInputIndex) throws StorageException{
+        try {
+            Type existingType;
+            if (transaction.getType().getId() != -1) {
+                existingType = transaction.getType();
+            } else {
+                existingType = getTypeForName(transaction.getType().getName());
+            }
+            if (existingType != null) {
+                stmt.setInt(statementInputIndex, existingType.getId());
+
+                // Write existing type ID to java object
+                transaction.setType(existingType);
+            } else {
+                throw new StorageException("Error while adding transaction: no such Type defined");
+            }
+        } catch (SQLException e) {
+            throw new StorageException("Error while looking up type for SQL statement", e);
+        }
+    }
+
+    default void lookupAndSetAccountForSQLStatement(Transaction transaction, PreparedStatement stmt, int statementInputIndex) throws StorageException {
+        try {
+            Account existingAccount;
+            if (transaction.getAccount().getId() != -1) {
+                existingAccount = transaction.getAccount();
+            } else {
+                existingAccount = getAccountForNameAndDescription(transaction.getAccount().getName(), transaction.getAccount().getDescription());
+            }
+            if (existingAccount != null) {
+                stmt.setInt(statementInputIndex, existingAccount.getId());
+
+                // Write existing account ID to java object
+                transaction.setAccount(existingAccount);
+            } else {
+                insertAccount(transaction.getAccount());
+                stmt.setInt(statementInputIndex, transaction.getAccount().getId());
+            }
+        } catch (SQLException e) {
+            throw new StorageException("Error while looking up account for SQL statement", e);
+        }
+    }
+
+    default void lookupAndSetPayeeForSQLStatement(Transaction transaction, PreparedStatement stmt, int statementInputIndex) throws StorageException {
+        try {
+            Payee existingPayee;
+            if (transaction.getPayee().getId() != -1) {
+                existingPayee = transaction.getPayee();
+            } else {
+                existingPayee = getPayeeForNameAndDescription(transaction.getPayee().getName(), transaction.getPayee().getDescription());
+            }
+            if (existingPayee != null) {
+                stmt.setInt(statementInputIndex, existingPayee.getId());
+
+                // Write existing payee ID to java object
+                transaction.setPayee(existingPayee);
+            } else {
+                insertPayee(transaction.getPayee());
+                stmt.setInt(statementInputIndex, transaction.getPayee().getId());
+            }
+        } catch (SQLException e) {
+            throw new StorageException("Error while looking up payee for SQL statement", e);
+        }
+    }
+
+    default void lookupAndInsertTag(Tag currentTag, int insertedTransactionID) throws StorageException {
+        Tag existingTag;
+        if (currentTag.getId() != -1) {
+            existingTag = currentTag;
+        } else {
+            existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+        }
+        if (existingTag != null) {
+            insertTagToTrans(existingTag.getId(), insertedTransactionID);
+
+            // Write existing tag ID to java object
+            currentTag.setId(existingTag.getId());
+        } else {
+            insertTag(currentTag);
+            insertTagToTrans(currentTag.getId(), insertedTransactionID);
+        }
+    }
 }
