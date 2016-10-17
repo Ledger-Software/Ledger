@@ -65,7 +65,7 @@ public class LoginPageController extends GridPane implements Initializable {
     }
 
     /**
-     * Opens a file selector window so the user can choose what file they wish to import.
+     * Opens a file selector window so the user can choose what file they wish to use.
      *
      * @return void
      */

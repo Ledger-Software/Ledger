@@ -22,6 +22,8 @@ public class MainPageController extends GridPane implements Initializable {
     private Button importTransactionsBtn;
     @FXML
     private Button trackSpendingBtn;
+    @FXML
+    private Button addTransactionBtn;
 
 
     MainPageController() {
@@ -57,7 +59,7 @@ public class MainPageController extends GridPane implements Initializable {
             }
         });
 
-        this.importTransactionsBtn.setOnAction((event) -> {
+        this.addTransactionBtn.setOnAction((event) -> {
             try {
                 TransactionPopupController trxnController = new TransactionPopupController();
                 Scene scene = new Scene(trxnController);
@@ -82,6 +84,20 @@ public class MainPageController extends GridPane implements Initializable {
                 newStage.show();
             } catch (Exception e) {
                 System.out.println("Error on triggering expenditure charts screen: " + e);
+            }
+        });
+
+        this.importTransactionsBtn.setOnAction((event) -> {
+            try {
+                ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
+                Scene scene = new Scene(importTrxnController);
+                Stage newStage = new Stage();
+                newStage.setScene(scene);
+                newStage.setTitle("Ledger");
+                newStage.initModality(Modality.APPLICATION_MODAL);
+                newStage.show();
+            } catch (Exception e) {
+                System.out.println("Error on triggering import transactions screen: " + e);
             }
         });
     }
