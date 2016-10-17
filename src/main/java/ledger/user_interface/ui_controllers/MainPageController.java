@@ -35,6 +35,12 @@ public class MainPageController extends GridPane implements Initializable {
         }
     }
 
+    /**
+     * Sets up action listeners for the page, allowing for navigation
+     *
+     * @param fxmlFileLocation
+     * @param resources
+     */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addAccountBtn.setOnAction((event) -> {

@@ -27,7 +27,7 @@ public class AccountPopupController extends GridPane implements Initializable {
     @FXML
     private TextField accountNameText;
 
-    Account act = null;
+    private Account act = null;
 
 
     AccountPopupController() {
@@ -41,7 +41,12 @@ public class AccountPopupController extends GridPane implements Initializable {
         }
     }
 
-
+    /**
+     * Sets up action listener for the button on the page
+     *
+     * @param fxmlFileLocation
+     * @param resources
+     */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
@@ -54,6 +59,11 @@ public class AccountPopupController extends GridPane implements Initializable {
         });
     }
 
+    /**
+     * Takes the user input and creates a new Account object
+     *
+     * @return a new Account object
+     */
     public Account getAccountSubmission() {
         if (act == null) {
             this.act = new Account(accountNameText.getText(), accountDescription.getText());
@@ -61,6 +71,11 @@ public class AccountPopupController extends GridPane implements Initializable {
         return this.act;
     }
 
+    /**
+     * Takes the user input and creates a new AccountBalance object
+     *
+     * @return a new AccountBalance object
+     */
     public AccountBalance getAccountBalance() {
         return new AccountBalance(this.act, new Date(), Integer.parseInt(accountAmtText.getText()));
     }

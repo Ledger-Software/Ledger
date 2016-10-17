@@ -3,7 +3,6 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import ledger.database.enity.*;
@@ -58,6 +57,12 @@ public class TransactionPopupController extends GridPane implements Initializabl
         }
     }
 
+    /**
+     * Sets up action listener for the button on the page
+     *
+     * @param fxmlFileLocation
+     * @param resources
+     */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addTrnxnSubmitButton.setOnAction((event) -> {
@@ -69,6 +74,11 @@ public class TransactionPopupController extends GridPane implements Initializabl
         });
     }
 
+    /**
+     * Get the user input from the add Transaction popup and returns a new Transaction object.
+     *
+     * @return a new Transaction object consisting of user input
+     */
     public Transaction getTransactionSubmission () {
         LocalDate localDate = this.datePicker.getValue();
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));

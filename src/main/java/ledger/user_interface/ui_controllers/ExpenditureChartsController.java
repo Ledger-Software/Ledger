@@ -31,6 +31,12 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
     }
 
+    /**
+     * Will be used to set up the charts on this page
+     *
+     * @param fxmlFileLocation
+     * @param resources
+     */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
     }

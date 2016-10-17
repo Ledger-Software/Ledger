@@ -21,39 +21,22 @@ public class Startup extends Application {
         launch(args);
     }
 
+    /**
+     * Kicks off the application flow
+     *
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-        // createTransactionPopup(primaryStage);
-        // createAccountPopup(primaryStage);
         createLoginPage(primaryStage);
-        // createMainPage(primaryStage);
     }
 
-    public void createMainPage(Stage primaryStage) {
-        MainPageController mainPageController = new MainPageController();
-        Scene scene = new Scene(mainPageController);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Ledger");
-        primaryStage.show();
-    }
-
-    public void createTransactionPopup(Stage primaryStage) {
-        TransactionPopupController trxnController = new TransactionPopupController();
-        Scene scene = new Scene(trxnController);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Ledger");
-        primaryStage.show();
-    }
-
-    public void createAccountPopup(Stage primaryStage) {
-        AccountPopupController accountController = new AccountPopupController();
-        Scene scene = new Scene(accountController);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Ledger");
-        primaryStage.show();
-    }
-
+    /**
+     * Creates the login page to be the first thing seen in the application
+     *
+     * @param primaryStage
+     */
     public void createLoginPage(Stage primaryStage) {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
