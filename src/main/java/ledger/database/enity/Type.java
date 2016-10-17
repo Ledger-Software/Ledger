@@ -71,5 +71,23 @@ public class Type implements IEntity {
     public void setId(int id) {
         this.id = id;
     }
-}
 
+    /**
+     * Determines equality between this Type and another object. Returns true if this and the other object are equal.
+     * Returns false if they are not.
+     *
+     * @param o The object to compare this Type to.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Type)) return false;
+
+        Type type2 = (Type) o;
+
+        if (!(this.id == type2.getId())) return false;
+        if (!this.name.equals(type2.getName())) return false;
+        if (!this.description.equals(type2.getDescription())) return false;
+
+        return true;
+    }
+}
