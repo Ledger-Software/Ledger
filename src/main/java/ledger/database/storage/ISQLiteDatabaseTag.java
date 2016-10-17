@@ -61,7 +61,7 @@ public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
     default List<Tag> getAllTags() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TAG;");
+            ResultSet rs = stmt.executeQuery("SELECT TAG_ID, TAG_NAME, TAG_DESC FROM TAG;");
 
             ArrayList<Tag> tags = new ArrayList<>();
 
