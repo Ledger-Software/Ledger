@@ -25,26 +25,26 @@ public class TransactionTable {
     public static final String TRANS_PENDING = "TRANS_PENDING";
     public static final String TRANS_ACCOUNT_ID = "TRANS_ACCOUNT_ID";
     public static final String TRANS_PAYEE_ID = "TRANS_PAYEE_ID";
-    public static final String TRANS_TYPE_ID= "TRANS_TYPE_ID";
+    public static final String TRANS_TYPE_ID = "TRANS_TYPE_ID";
 
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
-                "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "%s REAL NOT NULL, " +
-                "%s INT NOT NULL, " +
-                "%s BOOLEAN NOT NULL, " +
-                "%s INT NOT NULL, " +
-                "%s INT NOT NULL, " +
-                "%s INT NOT NULL, " +
-                "FOREIGN KEY(%s) REFERENCES %s(%s), " +
-                "FOREIGN KEY(%s) REFERENCES %s(%s)," +
-                "FOREIGN KEY(%s) REFERENCES %s(%s)" +
-                ")", TABLE_NAME,
+                        "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "%s REAL NOT NULL, " +
+                        "%s INT NOT NULL, " +
+                        "%s BOOLEAN NOT NULL, " +
+                        "%s INT NOT NULL, " +
+                        "%s INT NOT NULL, " +
+                        "%s INT NOT NULL, " +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s), " +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s)," +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s)" +
+                        ")", TABLE_NAME,
                 TRANS_ID, TRANS_DATETIME, TRANS_AMOUNT, TRANS_PENDING, TRANS_ACCOUNT_ID, TRANS_PAYEE_ID, TRANS_TYPE_ID,
-                TRANS_ACCOUNT_ID, AccountTable.TABLE_NAME ,AccountTable.ACCOUNT_ID,
+                TRANS_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
                 TRANS_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID,
                 TRANS_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID
-                );
+        );
     }
 
 }

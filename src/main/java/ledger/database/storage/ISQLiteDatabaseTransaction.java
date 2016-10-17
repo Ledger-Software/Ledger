@@ -1,6 +1,5 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
@@ -25,13 +24,13 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TransactionTable.TABLE_NAME +
-                " (" + TransactionTable.TRANS_DATETIME +
-                "," + TransactionTable.TRANS_AMOUNT +
-                "," + TransactionTable.TRANS_TYPE_ID +
-                "," + TransactionTable.TRANS_PENDING +
-                "," + TransactionTable.TRANS_ACCOUNT_ID +
-                "," + TransactionTable.TRANS_PAYEE_ID +
-                ") VALUES (?, ?, ?, ?, ?, ?)");
+                    " (" + TransactionTable.TRANS_DATETIME +
+                    "," + TransactionTable.TRANS_AMOUNT +
+                    "," + TransactionTable.TRANS_TYPE_ID +
+                    "," + TransactionTable.TRANS_PENDING +
+                    "," + TransactionTable.TRANS_ACCOUNT_ID +
+                    "," + TransactionTable.TRANS_PAYEE_ID +
+                    ") VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
@@ -123,13 +122,13 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
             setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + TransactionTable.TABLE_NAME + " SET " +
-                TransactionTable.TRANS_DATETIME +"=?," +
-                TransactionTable.TRANS_AMOUNT + "=?," +
-                TransactionTable.TRANS_TYPE_ID + "=?," +
-                TransactionTable.TRANS_PENDING + "=?," +
-                TransactionTable.TRANS_ACCOUNT_ID + "=?," +
-                TransactionTable.TRANS_PAYEE_ID + "=? WHERE " +
-                TransactionTable.TRANS_ID + "=?");
+                    TransactionTable.TRANS_DATETIME + "=?," +
+                    TransactionTable.TRANS_AMOUNT + "=?," +
+                    TransactionTable.TRANS_TYPE_ID + "=?," +
+                    TransactionTable.TRANS_PENDING + "=?," +
+                    TransactionTable.TRANS_ACCOUNT_ID + "=?," +
+                    TransactionTable.TRANS_PAYEE_ID + "=? WHERE " +
+                    TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 

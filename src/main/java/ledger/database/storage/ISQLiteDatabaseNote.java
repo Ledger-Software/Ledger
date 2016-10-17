@@ -1,6 +1,5 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Note;
 import ledger.database.storage.table.NoteTable;
 import ledger.exception.StorageException;

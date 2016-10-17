@@ -18,13 +18,13 @@ public class TagToPayeeTable {
 
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
-                "(%s INT NOT NULL, " +
-                "%s INT NOT NULL, " +
-                "FOREIGN KEY(%s) REFERENCES %s(%s), " +
-                "FOREIGN KEY(%s) REFERENCES %s(%s)" +
-                ")", TABLE_NAME, TTPE_TAG_ID, TTPE_PAYEE_ID,
+                        "(%s INT NOT NULL, " +
+                        "%s INT NOT NULL, " +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s), " +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s)" +
+                        ")", TABLE_NAME, TTPE_TAG_ID, TTPE_PAYEE_ID,
                 TTPE_TAG_ID, TagTable.TABLE_NAME, TagTable.TAG_ID,
                 TTPE_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID
-                );
+        );
     }
 }
