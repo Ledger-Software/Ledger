@@ -56,7 +56,7 @@ public class DuplicateDetector {
             if (o1.getAmount() != o2.getAmount()) return (o1.getAmount() < o2.getAmount()) ? -1 : 1;
             if (!o1.getDate().equals(o2.getDate())) return (o1.getDate().compareTo(o2.getDate()));
             if (!o1.getPayee().getName().equals(o2.getPayee().getName()))
-                return (o1.getPayee().getName().compareTo(o1.getPayee().getName()));
+                return (o1.getPayee().getName().compareTo(o2.getPayee().getName()));
 
             if (!o1.getAccount().equals(o2.getAccount())) {
                 if (!o1.getAccount().getName().equals(o2.getAccount().getName()))
