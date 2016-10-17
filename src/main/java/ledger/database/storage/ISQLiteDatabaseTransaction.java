@@ -2,6 +2,7 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
+import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -23,7 +24,14 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         try {
             setDatabaseAutoCommit(false);
 
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO TRANSACT (TRANS_DATETIME,TRANS_AMOUNT,TRANS_TYPE_ID,TRANS_PENDING,TRANS_ACCOUNT_ID,TRANS_PAYEE_ID) VALUES (?, ?, ?, ?, ?, ?)");
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TransactionTable.TABLE_NAME +
+                " (" + TransactionTable.TRANS_DATETIME +
+                "," + TransactionTable.TRANS_AMOUNT +
+                "," + TransactionTable.TRANS_TYPE_ID +
+                "," + TransactionTable.TRANS_PENDING +
+                "," + TransactionTable.TRANS_ACCOUNT_ID +
+                "," + TransactionTable.TRANS_PAYEE_ID +
+                ") VALUES (?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
@@ -90,7 +98,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         try {
             setDatabaseAutoCommit(false);
 
-            PreparedStatement deleteTransactionStmt = getDatabase().prepareStatement("DELETE FROM TRANSACT WHERE TRANS_ID = ?");
+            PreparedStatement deleteTransactionStmt = getDatabase().prepareStatement("DELETE FROM " + TransactionTable.TABLE_NAME +
+                    " WHERE " + TransactionTable.TRANS_ID + " = ?");
             deleteTransactionStmt.setInt(1, transaction.getId());
             deleteTransactionStmt.executeUpdate();
 
@@ -113,7 +122,14 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         try {
             setDatabaseAutoCommit(false);
 
-            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE TRANSACT SET TRANS_DATETIME=?,TRANS_AMOUNT=?,TRANS_TYPE_ID=?,TRANS_PENDING=?,TRANS_ACCOUNT_ID=?,TRANS_PAYEE_ID=? WHERE TRANS_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + TransactionTable.TABLE_NAME + " SET " +
+                TransactionTable.TRANS_DATETIME +"=?," +
+                TransactionTable.TRANS_AMOUNT + "=?," +
+                TransactionTable.TRANS_TYPE_ID + "=?," +
+                TransactionTable.TRANS_PENDING + "=?," +
+                TransactionTable.TRANS_ACCOUNT_ID + "=?," +
+                TransactionTable.TRANS_PAYEE_ID + "=? WHERE " +
+                TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
@@ -187,18 +203,18 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
     default List<Transaction> getAllTransactions() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TRANSACT;");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM " + TransactionTable.TABLE_NAME + ";");
 
             ArrayList<Transaction> transactionList = new ArrayList<>();
 
             while (rs.next()) {
-                Date date = new Date(rs.getLong("TRANS_DATETIME"));
-                int transactionID = rs.getInt("TRANS_ID");
-                int typeID = rs.getInt("TRANS_TYPE_ID");
-                int amount = rs.getInt("TRANS_AMOUNT");
-                boolean pending = rs.getBoolean("TRANS_PENDING");
-                int accountID = rs.getInt("TRANS_ACCOUNT_ID");
-                int payeeID = rs.getInt("TRANS_PAYEE_ID");
+                Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
+                int transactionID = rs.getInt(TransactionTable.TRANS_ID);
+                int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
+                int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
+                boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
+                int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
+                int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
 
                 Type type = getTypeForID(typeID);
                 Account account = getAccountForID(accountID);
@@ -223,7 +239,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         ResultSet rs;
 
         try {
-            stmt = getDatabase().prepareStatement("SELECT * FROM TYPE WHERE TYPE_NAME=?");
+            stmt = getDatabase().prepareStatement("SELECT * FROM " + TypeTable.TABLE_NAME +
+                    " WHERE " + TypeTable.TYPE_NAME + "=?");
             stmt.setString(1, name);
 
             rs = stmt.executeQuery();
@@ -236,7 +253,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default void deleteNoteForTransactionID(int transactionID) throws StorageException {
         try {
-            PreparedStatement deleteNoteStmt = getDatabase().prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            PreparedStatement deleteNoteStmt = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME +
+                    " WHERE " + NoteTable.NOTE_TRANS_ID + " = ?");
             deleteNoteStmt.setInt(1, transactionID);
             deleteNoteStmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -246,7 +264,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default void deleteAllTagToTransForTransactionID(int transactionID) throws StorageException {
         try {
-            PreparedStatement deleteTagToTransactionStmt = getDatabase().prepareStatement("DELETE FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID = ?");
+            PreparedStatement deleteTagToTransactionStmt = getDatabase().prepareStatement("DELETE FROM " + TagToTransTable.TABLE_NAME +
+                    " WHERE " + TagToTransTable.TTTS_TRANS_ID + " = ?");
             deleteTagToTransactionStmt.setInt(1, transactionID);
             deleteTagToTransactionStmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -256,7 +275,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Account getAccountForName(String name) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_NAME=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + AccountTable.TABLE_NAME +
+                    " WHERE " + AccountTable.ACCOUNT_NAME + "=?");
             stmt.setString(1, name);
 
             ResultSet rs = stmt.executeQuery();
@@ -269,15 +289,16 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Tag getTagForNameAndDescription(String tagName, String tagDescription) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TAG WHERE TAG_NAME=? AND TAG_DESC=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + TagTable.TABLE_NAME +
+                    " WHERE " + TagTable.TAG_NAME + "=? AND " + TagTable.TAG_DESC + "=?");
             stmt.setString(1, tagName);
             stmt.setString(2, tagDescription);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String resultTagName = rs.getString("TAG_NAME");
-                String resultTagDesc = rs.getString("TAG_DESC");
-                int id = rs.getInt("TAG_ID");
+                String resultTagName = rs.getString(TagTable.TAG_NAME);
+                String resultTagDesc = rs.getString(TagTable.TAG_DESC);
+                int id = rs.getInt(TagTable.TAG_ID);
                 return new Tag(resultTagName, resultTagDesc, id);
             } else {
                 return null;
@@ -290,16 +311,17 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_NAME=? AND PAYEE_DESC=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + PayeeTable.TABLE_NAME +
+                    " WHERE " + PayeeTable.PAYEE_NAME + "=? AND " + PayeeTable.PAYEE_DESC + "=?");
             stmt.setString(1, payeeName);
             stmt.setString(2, payeeDescription);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String newName = rs.getString("PAYEE_NAME");
-                String description = rs.getString("PAYEE_DESC");
-                int id = rs.getInt("PAYEE_ID");
+                String newName = rs.getString(PayeeTable.PAYEE_NAME);
+                String description = rs.getString(PayeeTable.PAYEE_DESC);
+                int id = rs.getInt(PayeeTable.PAYEE_ID);
 
                 return new Payee(newName, description, id);
             } else {
@@ -313,7 +335,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default void insertTagToTrans(int tagID, int transID) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO TAG_TO_TRANS (TTTS_TAG_ID,TTTS_TRANS_ID) VALUES (?, ?)");
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TagToTransTable.TABLE_NAME +
+                    " (" + TagToTransTable.TTTS_TAG_ID + "," + TagToTransTable.TTTS_TRANS_ID + ") VALUES (?, ?)");
             stmt.setInt(1, tagID);
             stmt.setInt(2, transID);
             stmt.executeUpdate();
@@ -324,13 +347,14 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Note getNoteForTransactionID(int transactionID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM NOTE WHERE NOTE_TRANS_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + NoteTable.TABLE_NAME +
+                    " WHERE " + NoteTable.NOTE_TRANS_ID + "=?");
             stmt.setInt(1, transactionID);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String noteText = rs.getString("NOTE_TEXT");
+                String noteText = rs.getString(NoteTable.NOTE_TEXT);
                 return new Note(transactionID, noteText);
             } else {
                 return null;
@@ -345,22 +369,24 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
         List<Tag> tags = new ArrayList<>();
 
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TAG_TO_TRANS WHERE TTTS_TRANS_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + TagToTransTable.TABLE_NAME +
+                    " WHERE " + TagToTransTable.TTTS_TRANS_ID + "=?");
             stmt.setInt(1, transactionID);
 
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                int tagId = rs.getInt("TTTS_TAG_ID");
+                int tagId = rs.getInt(TagToTransTable.TTTS_TAG_ID);
 
-                PreparedStatement tagStmt = getDatabase().prepareStatement("SELECT * FROM TAG WHERE TAG_ID = ?");
+                PreparedStatement tagStmt = getDatabase().prepareStatement("SELECT * FROM " + TagTable.TABLE_NAME +
+                        " WHERE " + TagTable.TAG_ID + " = ?");
                 tagStmt.setInt(1, tagId);
 
                 ResultSet tagResults = tagStmt.executeQuery();
 
                 while (tagResults.next()) {
-                    String name = tagResults.getString("TAG_NAME");
-                    String description = tagResults.getString("TAG_DESC");
+                    String name = tagResults.getString(TagTable.TAG_NAME);
+                    String description = tagResults.getString(TagTable.TAG_DESC);
 
                     Tag currentTag = new Tag(name, description, tagId);
 
@@ -376,14 +402,15 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Payee getPayeeForID(int payeeID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM PAYEE WHERE PAYEE_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + PayeeTable.TABLE_NAME +
+                    " WHERE " + PayeeTable.PAYEE_ID + "=?");
             stmt.setInt(1, payeeID);
 
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                String payeeName = rs.getString("PAYEE_NAME");
-                String payeeDesc = rs.getString("PAYEE_DESC");
+                String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
+                String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
                 return new Payee(payeeName, payeeDesc, payeeID);
             } else {
                 return null;
@@ -395,7 +422,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Account getAccountForID(int accountID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNT_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + AccountTable.TABLE_NAME +
+                    " WHERE " + AccountTable.ACCOUNT_ID + "=?");
             stmt.setInt(1, accountID);
 
             ResultSet rs = stmt.executeQuery();
@@ -408,7 +436,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Type getTypeForID(int typeID) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM TYPE WHERE TYPE_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT * FROM " + TypeTable.TABLE_NAME +
+                    " WHERE " + TypeTable.TYPE_ID + "=?");
             stmt.setInt(1, typeID);
 
             ResultSet rs = stmt.executeQuery();
@@ -421,9 +450,9 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Type extractType(ResultSet resultSet) throws SQLException {
         if (resultSet.next()) {
-            String newName = resultSet.getString("TYPE_NAME");
-            String description = resultSet.getString("TYPE_DESC");
-            int id = resultSet.getInt("TYPE_ID");
+            String newName = resultSet.getString(TypeTable.TYPE_NAME);
+            String description = resultSet.getString(TypeTable.TYPE_DESC);
+            int id = resultSet.getInt(TypeTable.TYPE_ID);
 
             return new Type(newName, description, id);
         } else {
@@ -433,9 +462,9 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     default Account extractAccount(ResultSet rs) throws SQLException {
         if (rs.next()) {
-            String newName = rs.getString("ACCOUNT_NAME");
-            String description = rs.getString("ACCOUNT_DESC");
-            int id = rs.getInt("ACCOUNT_ID");
+            String newName = rs.getString(AccountTable.ACCOUNT_NAME);
+            String description = rs.getString(AccountTable.ACCOUNT_DESC);
+            int id = rs.getInt(AccountTable.ACCOUNT_ID);
             return new Account(newName, description, id);
         } else {
             return null;
