@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
@@ -7,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
@@ -40,14 +41,6 @@
             <Insets left="15.0" top="5.0" />
          </GridPane.margin>
       </Text>
-      <Button fx:id="exitBtn" alignment="CENTER_RIGHT" mnemonicParsing="false" text="X" textAlignment="CENTER" GridPane.columnIndex="6" GridPane.halignment="RIGHT">
-         <font>
-            <Font name="Calibri Bold" size="14.0" />
-         </font>
-         <GridPane.margin>
-            <Insets right="10.0" />
-         </GridPane.margin>
-      </Button>
       <Rectangle fx:id="columnHeaderColorRect" arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <AnchorPane fx:id="leftAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
          <children>
@@ -178,4 +171,4 @@
             <Insets />
          </opaqueInsets></HBox>
    </children>
-</GridPane>
+</fx:root>

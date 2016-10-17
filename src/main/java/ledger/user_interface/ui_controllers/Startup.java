@@ -24,9 +24,18 @@ public class Startup extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setOnCloseRequest(e -> Platform.exit());
-        //createTransactionPopup(primaryStage);
+        // createTransactionPopup(primaryStage);
         // createAccountPopup(primaryStage);
         createLoginPage(primaryStage);
+        // createMainPage(primaryStage);
+    }
+
+    public void createMainPage(Stage primaryStage) {
+        MainPageController mainPageController = new MainPageController();
+        Scene scene = new Scene(mainPageController);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Ledger");
+        primaryStage.show();
     }
 
     public void createTransactionPopup(Stage primaryStage) {
