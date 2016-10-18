@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.shape.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="addAcctGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="addAcctGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="282.0" minWidth="10.0" prefWidth="233.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="233.0" />
@@ -31,11 +31,11 @@
             <Insets left="15.0" top="5.0" />
          </GridPane.margin>
       </Text>
-      <ChoiceBox fx:id="accountTypeChooser" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+      <TextField fx:id="accountDescription" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="15.0" />
          </GridPane.margin>
-      </ChoiceBox>
+      </TextField>
       <Button fx:id="submitAccountInfo" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #ffa81f;" text="Submit as Complete" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="15.0" />
@@ -43,13 +43,16 @@
          <font>
             <Font name="Calibri Light" size="16.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </Button>
       <Text fx:id="accountNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Name:" textAlignment="RIGHT" wrappingWidth="232.0927734375" GridPane.rowIndex="1">
          <font>
             <Font name="Calibri Light" size="22.0" />
          </font>
       </Text>
-      <Text fx:id="accountTypeLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Type:" textAlignment="RIGHT" wrappingWidth="232.0927734375" GridPane.rowIndex="2">
+      <Text fx:id="accountDescLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" textAlignment="RIGHT" wrappingWidth="232.0927734375" GridPane.rowIndex="2">
          <font>
             <Font name="Calibri Light" size="22.0" />
          </font>
@@ -64,10 +67,10 @@
             <Insets left="15.0" />
          </GridPane.margin>
       </TextField>
-      <TextField fx:id="accountTypeText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <TextField fx:id="accountAmtText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets left="15.0" />
          </GridPane.margin>
       </TextField>
    </children>
-</GridPane>
+</fx:root>
