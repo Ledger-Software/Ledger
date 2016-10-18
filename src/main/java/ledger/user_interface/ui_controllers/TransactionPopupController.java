@@ -14,7 +14,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 /**
- * Created by richarel on 10/16/2016.
+ * Controls and manipulates the input given by the user when manually adding a transaction
  */
 public class TransactionPopupController extends GridPane implements Initializable {
 
@@ -46,9 +46,11 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Note notes;
     private Type type;
 
+    private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
+
     TransactionPopupController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml_files/AddTransactionPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
@@ -60,8 +62,16 @@ public class TransactionPopupController extends GridPane implements Initializabl
     /**
      * Sets up action listener for the button on the page
      *
-     * @param fxmlFileLocation
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     *
      * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {

@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by richarel on 10/16/2016.
+ * Controls application startup - handles passwords and lets user select a file for the database
  */
 public class LoginPageController extends GridPane implements Initializable {
 
@@ -29,10 +29,11 @@ public class LoginPageController extends GridPane implements Initializable {
 
     private String pwd;
     private File file;
+    private static String pageLoc = "/fxml_files/LoginPage.fxml";
 
     LoginPageController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml_files/LoginPage.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
@@ -44,8 +45,16 @@ public class LoginPageController extends GridPane implements Initializable {
     /**
      * Sets up action listeners for the buttons on the page.
      *
-     * @param fxmlFileLocation
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     *
      * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {

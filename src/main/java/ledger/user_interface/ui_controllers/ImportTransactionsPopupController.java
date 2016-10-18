@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by richarel on 10/17/2016.
+ * Controls the input gathered from the Import Transaction UI (gets the file to import and type)
  */
 public class ImportTransactionsPopupController extends GridPane implements Initializable {
 
@@ -23,10 +23,11 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     private ChoiceBox fileExtChooser;
 
     private File file;
+    private static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml_files/ImportTransactionsPopup.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
@@ -38,8 +39,16 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     /**
      * Sets up action listener for the button on the page
      *
-     * @param fxmlFileLocation
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * <tt>null</tt> if the location is not known.
+     *
      * @param resources
+     * The resources used to localize the root object, or <tt>null</tt> if
+     * the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
