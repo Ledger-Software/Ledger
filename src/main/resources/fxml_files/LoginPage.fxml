@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -32,7 +33,7 @@
                   <Font name="Calibri" size="64.0" />
                </font>
             </Text>
-            <TextField fx:id="password" layoutX="290.0" layoutY="237.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
+            <TextField fx:id="password" layoutX="291.0" layoutY="241.0" maxHeight="40.0" maxWidth="200.0" minHeight="40.0" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
@@ -40,7 +41,7 @@
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </TextField>
-            <Button fx:id="loginBtn" layoutX="337.0" layoutY="340.0" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Login" textAlignment="CENTER">
+            <Button fx:id="loginBtn" layoutX="338.0" layoutY="337.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" style="-fx-background-color: #ffa81f;" text="Login" textAlignment="CENTER">
                <font>
                   <Font name="Calibri" size="22.0" />
                </font>
@@ -51,7 +52,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="chooseFileBtn" layoutX="309.0" layoutY="152.0" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Choose File" textAlignment="CENTER">
+            <Button fx:id="chooseFileBtn" layoutX="304.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Choose File" textAlignment="CENTER">
                <font>
                   <Font name="Calibri" size="22.0" />
                </font>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.*?>
@@ -11,6 +12,7 @@
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="349.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="369.0" minWidth="10.0" prefWidth="351.0" />
+      <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="40.0" minHeight="3.0" prefHeight="40.0" vgrow="SOMETIMES" />
@@ -30,7 +32,7 @@
                 <Insets left="15.0" top="5.0" />
             </GridPane.margin>
         </Text>
-        <Button fx:id="chooseTrxnFileBtn" layoutX="309.0" layoutY="152.0" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Choose File" textAlignment="CENTER" GridPane.rowIndex="2">
+        <Button fx:id="chooseTrxnFileBtn" layoutX="309.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Choose File" textAlignment="CENTER" GridPane.rowIndex="2">
             <font>
                 <Font name="Calibri" size="22.0" />
             </font>
@@ -44,7 +46,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
         </Button>
-      <ChoiceBox fx:id="fileExtChooser" prefHeight="35.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <ChoiceBox fx:id="fileExtChooser" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" prefHeight="35.0" prefWidth="175.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="70.0" />
          </GridPane.margin>
