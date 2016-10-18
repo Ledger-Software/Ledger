@@ -10,9 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
 
     @Override

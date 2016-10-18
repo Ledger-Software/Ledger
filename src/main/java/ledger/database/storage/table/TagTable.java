@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class TagTable {
 
     static final String tableTag = "CREATE TABLE IF NOT EXISTS TAG " +
@@ -16,6 +13,10 @@ public class TagTable {
     public static String TAG_NAME = "TAG_NAME";
     public static String TAG_DESC = "TAG_DESC";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +

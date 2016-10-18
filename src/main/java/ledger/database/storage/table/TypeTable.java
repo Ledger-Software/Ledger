@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class TypeTable {
 
     private static final String tableType = "CREATE TABLE IF NOT EXISTS TYPE " +
@@ -16,6 +13,10 @@ public class TypeTable {
     public static String TYPE_NAME = "TYPE_NAME";
     public static String TYPE_DESC = "TYPE_DESC";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +

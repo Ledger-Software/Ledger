@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
     // Basic CRUD functionality

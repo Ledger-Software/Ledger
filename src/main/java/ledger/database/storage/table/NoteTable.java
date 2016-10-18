@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class NoteTable {
 
     private static final String tableNote = "CREATE TABLE IF NOT EXISTS NOTE" +
@@ -15,6 +12,10 @@ public class NoteTable {
     public static final String NOTE_TRANS_ID = "NOTE_TRANS_ID";
     public static final String NOTE_TEXT = "NOTE_TEXT";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +

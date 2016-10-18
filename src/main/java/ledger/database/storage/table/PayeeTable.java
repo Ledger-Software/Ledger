@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class PayeeTable {
 
     private static final String tablePayee = "CREATE TABLE IF NOT EXISTS PAYEE " +
@@ -16,6 +13,10 @@ public class PayeeTable {
     public static String PAYEE_NAME = "PAYEE_NAME";
     public static String PAYEE_DESC = "PAYEE_DESC";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +

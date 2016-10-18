@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class TransactionTable {
 
     private static final String tableTransaction = "CREATE TABLE IF NOT EXISTS TRANSACT " +
@@ -27,6 +24,10 @@ public class TransactionTable {
     public static final String TRANS_PAYEE_ID = "TRANS_PAYEE_ID";
     public static final String TRANS_TYPE_ID = "TRANS_TYPE_ID";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                         "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +

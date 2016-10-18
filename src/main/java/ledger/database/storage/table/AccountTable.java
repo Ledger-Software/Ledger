@@ -1,8 +1,5 @@
 package ledger.database.storage.table;
 
-/**
- * Created by CJ on 10/16/2016.
- */
 public class AccountTable {
     private static final String tableAccount = "CREATE TABLE IF NOT EXISTS ACCOUNT " +
             "(ACCOUNT_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -16,6 +13,10 @@ public class AccountTable {
     public static final String ACCOUNT_NAME = "ACCOUNT_NAME";
     public static final String ACCOUNT_DESC = "ACCOUNT_DESC";
 
+    /**
+     * Creates the String command to create the table for this object.
+     * @return String for creating the SQLite Table corresponding to this object
+     */
     public static String CreateStatement() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
