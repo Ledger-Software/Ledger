@@ -62,7 +62,7 @@ public interface ISQLiteDatabaseType extends ISQLiteDatabase {
     default List<Type> getAllTypes() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TYPE;");
+            ResultSet rs = stmt.executeQuery("SELECT TYPE_ID, TYPE_NAME, TYPE_DESC FROM TYPE;");
 
             List<Type> typeList = new ArrayList<>();
 

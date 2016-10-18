@@ -72,7 +72,10 @@ public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
     default List<Payee> getAllPayees() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM " + PayeeTable.TABLE_NAME + ";");
+            ResultSet rs = stmt.executeQuery("SELECT " + PayeeTable.PAYEE_ID +
+                    ", " + PayeeTable.PAYEE_NAME +
+                    ", " + PayeeTable.PAYEE_DESC +
+                    " FROM " + PayeeTable.TABLE_NAME + ";");
 
             ArrayList<Payee> payeeList = new ArrayList<>();
 

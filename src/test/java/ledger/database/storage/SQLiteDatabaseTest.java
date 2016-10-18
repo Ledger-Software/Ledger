@@ -75,8 +75,17 @@ public class SQLiteDatabaseTest {
         if (insertedTransaction == null) fail();
 
         assertEquals(sizeBefore + 1, trans.size());
-        assertEquals(sampleTransaction1.getId(), insertedTransaction.getId());
         assertEquals(sampleTransaction1.getAmount(), insertedTransaction.getAmount());
+        assertEquals(sampleTransaction1.isPending(), insertedTransaction.isPending());
+        assertEquals(sampleTransaction1.getNote().getNoteText(), insertedTransaction.getNote().getNoteText());
+
+        // Check that IDs are written back to java objects
+        assertEquals(insertedTransaction.getAccount().getId(), sampleTransaction1.getAccount().getId());
+        assertEquals(insertedTransaction.getPayee().getId(), sampleTransaction1.getPayee().getId());
+        assertEquals(insertedTransaction.getType().getId(), sampleTransaction1.getType().getId());
+        for (int i = 0; i < insertedTransaction.getTagList().size(); i++) {
+            assertEquals(insertedTransaction.getTagList().get(i).getId(), sampleTransaction1.getTagList().get(i).getId());
+        }
     }
 
     @Test
