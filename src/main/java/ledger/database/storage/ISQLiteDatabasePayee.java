@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Payee;
+import ledger.database.storage.table.PayeeTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -10,16 +10,16 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
 
     @Override
     default void insertPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
-                    getDatabase().prepareStatement("INSERT INTO PAYEE (PAYEE_NAME, PAYEE_DESC) VALUES (?, ?)");
+                    getDatabase().prepareStatement("INSERT INTO " + PayeeTable.TABLE_NAME +
+                            " (" + PayeeTable.PAYEE_NAME +
+                            ", " + PayeeTable.PAYEE_DESC +
+                            ") VALUES (?, ?)");
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.executeUpdate();
@@ -38,7 +38,8 @@ public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
     @Override
     default void deletePayee(Payee payee) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM PAYEE WHERE PAYEE_ID = ?");
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + PayeeTable.TABLE_NAME +
+                    " WHERE " + PayeeTable.PAYEE_ID + " = ?");
             stmt.setInt(1, payee.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -50,7 +51,10 @@ public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
     default void editPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt =
-                    getDatabase().prepareStatement("UPDATE PAYEE SET PAYEE_NAME = ?, PAYEE_DESC = ? WHERE PAYEE_ID = ?");
+                    getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME +
+                            " SET " + PayeeTable.PAYEE_NAME +
+                            " = ?, " + PayeeTable.PAYEE_DESC +
+                            " = ? WHERE " + PayeeTable.PAYEE_ID + " = ?");
 
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
@@ -65,15 +69,18 @@ public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
     default List<Payee> getAllPayees() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT PAYEE_ID, PAYEE_NAME, PAYEE_DESC FROM PAYEE;");
+            ResultSet rs = stmt.executeQuery("SELECT " + PayeeTable.PAYEE_ID +
+                    ", " + PayeeTable.PAYEE_NAME +
+                    ", " + PayeeTable.PAYEE_DESC +
+                    " FROM " + PayeeTable.TABLE_NAME + ";");
 
             ArrayList<Payee> payeeList = new ArrayList<>();
 
             while (rs.next()) {
 
-                int payeeID = rs.getInt("PAYEE_ID");
-                String payeeName = rs.getString("PAYEE_NAME");
-                String payeeDesc = rs.getString("PAYEE_DESC");
+                int payeeID = rs.getInt(PayeeTable.PAYEE_ID);
+                String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
+                String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
 
                 Payee currentPayee = new Payee(payeeName, payeeDesc, payeeID);
 
