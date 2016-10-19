@@ -10,7 +10,7 @@ import java.util.List;
 
 
 /**
- * Class for the Database conThe one to inserttroller
+ * Class for the Database controller
  */
 public class DbController {
 
