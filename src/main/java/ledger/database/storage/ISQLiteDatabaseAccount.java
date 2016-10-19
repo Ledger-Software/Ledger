@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Account;
+import ledger.database.storage.table.AccountTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -10,15 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
 
     @Override
     default void insertAccount(Account account) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO ACCOUNT (ACCOUNT_NAME,ACCOUNT_DESC) VALUES (?, ?)");
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + AccountTable.TABLE_NAME +
+                    " (" + AccountTable.ACCOUNT_NAME + "," + AccountTable.ACCOUNT_DESC + ") VALUES (?, ?)");
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.executeUpdate();
@@ -37,7 +35,8 @@ public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
     @Override
     default void deleteAccount(Account account) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM ACCOUNT WHERE ACCOUNT_ID = ?");
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + AccountTable.TABLE_NAME +
+                    " WHERE " + AccountTable.ACCOUNT_ID + " = ?");
             stmt.setInt(1, account.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -48,7 +47,9 @@ public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
     @Override
     default void editAccount(Account account) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE ACCOUNT SET ACCOUNT_NAME=?, ACCOUNT_DESC=? WHERE ACCOUNT_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + AccountTable.TABLE_NAME +
+                    " SET " + AccountTable.ACCOUNT_NAME + "=?, " + AccountTable.ACCOUNT_DESC +
+                    "=? WHERE " + AccountTable.ACCOUNT_ID + "=?");
             stmt.setString(1, account.getName());
             stmt.setString(2, account.getDescription());
             stmt.setInt(3, account.getId());
@@ -62,15 +63,18 @@ public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
     default List<Account> getAllAccounts() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ACCOUNT;");
+            ResultSet rs = stmt.executeQuery("SELECT " + AccountTable.ACCOUNT_ID +
+                    ", " + AccountTable.ACCOUNT_NAME +
+                    ", " + AccountTable.ACCOUNT_DESC +
+                    " FROM " + AccountTable.TABLE_NAME + ";");
 
             List<Account> accountList = new ArrayList<>();
 
             while (rs.next()) {
 
-                int accountID = rs.getInt("ACCOUNT_ID");
-                String accountName = rs.getString("ACCOUNT_NAME");
-                String accountDesc = rs.getString("ACCOUNT_DESC");
+                int accountID = rs.getInt(AccountTable.ACCOUNT_ID);
+                String accountName = rs.getString(AccountTable.ACCOUNT_NAME);
+                String accountDesc = rs.getString(AccountTable.ACCOUNT_DESC);
 
                 Account currentAccount = new Account(accountName, accountDesc, accountID);
                 accountList.add(currentAccount);

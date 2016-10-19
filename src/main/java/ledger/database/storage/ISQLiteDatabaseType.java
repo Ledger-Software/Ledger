@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Type;
+import ledger.database.storage.table.TypeTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -10,14 +10,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseType extends ISQLiteDatabase {
     @Override
     default void insertType(Type type) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO TYPE (TYPE_NAME,TYPE_DESC) VALUES (?, ?)");
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TypeTable.TABLE_NAME +
+                    " (" + TypeTable.TYPE_NAME + ", " + TypeTable.TYPE_DESC + ") VALUES (?, ?)");
             stmt.setString(1, type.getName());
             stmt.setString(2, type.getDescription());
             stmt.executeUpdate();
@@ -61,15 +59,15 @@ public interface ISQLiteDatabaseType extends ISQLiteDatabase {
     default List<Type> getAllTypes() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TYPE;");
+            ResultSet rs = stmt.executeQuery("SELECT TYPE_ID, TYPE_NAME, TYPE_DESC FROM TYPE;");
 
             List<Type> typeList = new ArrayList<>();
 
             while (rs.next()) {
 
-                int typeID = rs.getInt("TYPE_ID");
-                String typeName = rs.getString("TYPE_NAME");
-                String typeDesc = rs.getString("TYPE_DESC");
+                int typeID = rs.getInt(TypeTable.TYPE_ID);
+                String typeName = rs.getString(TypeTable.TYPE_NAME);
+                String typeDesc = rs.getString(TypeTable.TYPE_DESC);
 
                 Type currentType = new Type(typeName, typeDesc, typeID);
 

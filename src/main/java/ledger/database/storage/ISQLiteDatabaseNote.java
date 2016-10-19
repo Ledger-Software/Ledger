@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Note;
+import ledger.database.storage.table.NoteTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -10,16 +10,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
 
     @Override
     default void insertNote(Note note) {
         try {
             PreparedStatement stmt =
-                    getDatabase().prepareStatement("INSERT INTO NOTE (NOTE_TEXT, NOTE_TRANS_ID) VALUES (?, ?)");
+                    getDatabase().prepareStatement("INSERT INTO " + NoteTable.TABLE_NAME +
+                            " (" + NoteTable.NOTE_TEXT +
+                            ", " + NoteTable.NOTE_TRANS_ID + ") VALUES (?, ?)");
             stmt.setString(1, note.getNoteText());
             stmt.setInt(2, note.getTransactionId());
             stmt.executeUpdate();
@@ -31,7 +30,8 @@ public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
     @Override
     default void deleteNote(Note note) {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM NOTE WHERE NOTE_TRANS_ID = ?");
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME +
+                    " WHERE " + NoteTable.NOTE_TRANS_ID + " = ?");
             stmt.setInt(1, note.getTransactionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -44,7 +44,8 @@ public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
 
         try {
             PreparedStatement stmt =
-                    getDatabase().prepareStatement("UPDATE NOTE SET NOTE_TEXT=? WHERE NOTE_TRANS_ID = ?");
+                    getDatabase().prepareStatement("UPDATE " + NoteTable.TABLE_NAME +
+                            " SET " + NoteTable.NOTE_TEXT + "=? WHERE " + NoteTable.NOTE_TRANS_ID + " = ?");
 
             stmt.setString(1, note.getNoteText());
             stmt.setInt(2, note.getTransactionId());
@@ -58,14 +59,16 @@ public interface ISQLiteDatabaseNote extends ISQLiteDatabase {
     default List<Note> getAllNotes() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM NOTE;");
+            ResultSet rs = stmt.executeQuery("SELECT " + NoteTable.NOTE_TRANS_ID +
+                    ", " + NoteTable.NOTE_TEXT +
+                    " FROM " + NoteTable.TABLE_NAME + ";");
 
             ArrayList<Note> notes = new ArrayList<>();
 
             while (rs.next()) {
 
-                int note_trans_id = rs.getInt("NOTE_TRANS_ID");
-                String note_text = rs.getString("NOTE_TEXT");
+                int note_trans_id = rs.getInt(NoteTable.NOTE_TRANS_ID);
+                String note_text = rs.getString(NoteTable.NOTE_TEXT);
 
                 Note currentNote = new Note(note_trans_id, note_text);
 

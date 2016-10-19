@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Created by Jesse Shellabarger on 10/11/2016.
+ * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
  */
 public class QfxConverter implements IInAdapter<Transaction> {
 
@@ -28,6 +28,12 @@ public class QfxConverter implements IInAdapter<Transaction> {
         this.account = account;
     }
 
+    /**
+     * Parses the given file into the application's internal transaction objects.
+     *
+     * @return  A list of Transaction objects created from the transactions in the provided file.
+     * @throws IOException  When unable to read the given file
+     */
     @Override
     public List<Transaction> convert() throws IOException {
         List<Transaction> transactions = new ArrayList();
@@ -42,6 +48,31 @@ public class QfxConverter implements IInAdapter<Transaction> {
         int lastIndexOfTrans = sgml.indexOf("</BANKTRANLIST>");
         sgml = sgml.substring(0, lastIndexOfTrans);
 
+        StringBuilder correctedXml = correctXml(sgml);
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = null;
+        try {
+            builder = factory.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            //TODO: Handle this
+            e.printStackTrace();
+        }
+        InputSource is = new InputSource(new StringReader(correctedXml.toString()));
+        Document xml = null;
+        try {
+            xml = builder.parse(is);
+        } catch (SAXException e) {
+            //TODO: Handle This
+            e.printStackTrace();
+        }
+        parseXml(transactions, xml);
+
+        // return list
+        return transactions;
+    }
+
+    private StringBuilder correctXml(String sgml) {
         // add tags to the all rows that are not STMTTRN
         String[] splitPieces = sgml.split("<");
         LinkedList<String> modifiedPieces = new LinkedList();
@@ -63,25 +94,10 @@ public class QfxConverter implements IInAdapter<Transaction> {
             correctedXml.append(piece);
         }
         correctedXml.append("\n" + "</QFX>");
+        return correctedXml;
+    }
 
-        // XML Parse
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            //TODO: Handle this
-            e.printStackTrace();
-        }
-        InputSource is = new InputSource(new StringReader(correctedXml.toString()));
-        Document xml = null;
-        try {
-            xml = builder.parse(is);
-        } catch (SAXException e) {
-            //TODO: Handle This
-            e.printStackTrace();
-        }
-
+    private void parseXml(List<Transaction> transactions, Document xml) {
         //parse xml
         NodeList transactionTypes = xml.getElementsByTagName("TRNTYPE");
         NodeList transactionDates = xml.getElementsByTagName("DTPOSTED");
@@ -97,7 +113,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
             int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
             Payee payee = new Payee(names.item(i).getTextContent(), "");
             //TODO: Discuss what to do about tags
-            List<Tag> tags = new LinkedList<>();
+            List<Tag> tags = new LinkedList<Tag>();
             Note note = new Note(memos.item(i).getTextContent());
 
             //TODO: Discuss what to do about pending
@@ -105,8 +121,5 @@ public class QfxConverter implements IInAdapter<Transaction> {
             Transaction transaction = new Transaction(date, type, amount, this.account, payee, true, tags, note);
             transactions.add(transaction);
         }
-
-        // return list
-        return transactions;
     }
 }

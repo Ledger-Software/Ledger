@@ -2,6 +2,7 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
+import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
 import java.sql.*;
@@ -40,17 +41,17 @@ public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDataba
     public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<>();
 
-        tableSQL.add(SQLiteTableConstants.tableTag);
-        tableSQL.add(SQLiteTableConstants.tableType);
-        tableSQL.add(SQLiteTableConstants.tableAccount);
-        tableSQL.add(SQLiteTableConstants.tableAccountBalance);
-        tableSQL.add(SQLiteTableConstants.tablePayee);
+        tableSQL.add(TagTable.CreateStatement());
+        tableSQL.add(TypeTable.CreateStatement());
+        tableSQL.add(AccountTable.CreateStatement());
+        tableSQL.add(AccountBalanceTable.CreateStatement());
+        tableSQL.add(PayeeTable.CreateStatement());
 
-        tableSQL.add(SQLiteTableConstants.tableTransaction);
-        tableSQL.add(SQLiteTableConstants.tableNote);
+        tableSQL.add(TransactionTable.CreateStatement());
+        tableSQL.add(NoteTable.CreateStatement());
 
-        tableSQL.add(SQLiteTableConstants.tableTagToTrans);
-        tableSQL.add(SQLiteTableConstants.tableTagToPayee);
+        tableSQL.add(TagToTransTable.CreateStatement());
+        tableSQL.add(TagToPayeeTable.CreateStatement());
 
         try {
             for (String statement : tableSQL) {

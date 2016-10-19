@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
 import ledger.database.enity.Tag;
+import ledger.database.storage.table.TagTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -10,15 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CJ on 10/11/2016.
- */
 public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
 
     @Override
     default void insertTag(Tag tag) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO TAG (TAG_NAME, TAG_DESC) VALUES (?, ?)");
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TagTable.TABLE_NAME +
+                    " (" + TagTable.TAG_NAME + ", " + TagTable.TAG_DESC + ") VALUES (?, ?)");
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getDescription());
             stmt.executeUpdate();
@@ -36,7 +34,8 @@ public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
     @Override
     default void deleteTag(Tag tag) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM TAG WHERE TAG_ID = ?");
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagTable.TABLE_NAME +
+                    " WHERE " + TagTable.TAG_ID + " = ?");
             stmt.setInt(1, tag.getId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -47,7 +46,8 @@ public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
     @Override
     default void editTag(Tag tag) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE TAG SET TAG_NAME=?, TAG_DESC=? WHERE TAG_ID=?");
+            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + TagTable.TABLE_NAME +
+                    " SET " + TagTable.TAG_NAME + "=?, " + TagTable.TAG_DESC + "=? WHERE " + TagTable.TAG_ID + "=?");
             stmt.setString(1, tag.getName());
             stmt.setString(2, tag.getDescription());
             stmt.setInt(3, tag.getId());
@@ -61,15 +61,18 @@ public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
     default List<Tag> getAllTags() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM TAG;");
+            ResultSet rs = stmt.executeQuery("SELECT " + TagTable.TAG_ID +
+                    ", " + TagTable.TAG_NAME +
+                    ", " + TagTable.TAG_DESC +
+                    " FROM " + TagTable.TABLE_NAME + ";");
 
             ArrayList<Tag> tags = new ArrayList<>();
 
             while (rs.next()) {
 
-                int tagID = rs.getInt("TAG_ID");
-                String tagName = rs.getString("TAG_NAME");
-                String tagDescription = rs.getString("TAG_DESC");
+                int tagID = rs.getInt(TagTable.TAG_ID);
+                String tagName = rs.getString(TagTable.TAG_NAME);
+                String tagDescription = rs.getString(TagTable.TAG_DESC);
 
                 Tag currentTag = new Tag(tagName, tagDescription, tagID);
 
