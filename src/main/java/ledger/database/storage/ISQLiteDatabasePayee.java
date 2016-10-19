@@ -1,6 +1,6 @@
 package ledger.database.storage;
 
-import ledger.database.enity.Payee;
+import ledger.database.entity.Payee;
 import ledger.database.storage.table.PayeeTable;
 import ledger.exception.StorageException;
 

@@ -1,6 +1,6 @@
 package ledger.database.manager;
 
-import ledger.database.enity.Stat;
+import ledger.database.entity.Stat;
 
 /**
  * Manages Stat Entities

@@ -1,4 +1,4 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 import java.util.Date;
 

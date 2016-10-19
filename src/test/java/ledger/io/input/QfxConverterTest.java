@@ -1,7 +1,7 @@
 package ledger.io.input;
 
-import ledger.database.enity.Account;
-import ledger.database.enity.Transaction;
+import ledger.database.entity.Account;
+import ledger.database.entity.Transaction;
 import org.junit.Test;
 
 import java.io.File;

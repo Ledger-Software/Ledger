@@ -1,6 +1,6 @@
 package ledger.io.input;
 
-import ledger.database.enity.Transaction;
+import ledger.database.entity.Transaction;
 
 import java.util.List;
 

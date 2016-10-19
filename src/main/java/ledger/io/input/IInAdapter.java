@@ -1,7 +1,7 @@
 package ledger.io.input;
 
 
-import ledger.database.enity.IEntity;
+import ledger.database.entity.IEntity;
 
 import java.io.IOException;
 import java.util.List;

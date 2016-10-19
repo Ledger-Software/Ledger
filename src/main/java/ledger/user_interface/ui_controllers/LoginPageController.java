@@ -5,11 +5,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.exception.StorageException;
 
 import java.io.File;
 import java.net.URL;
@@ -48,7 +51,7 @@ public class LoginPageController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -70,7 +73,8 @@ public class LoginPageController extends GridPane implements Initializable {
                 System.out.println("Error on login submission: " + e);
             }
         });
-    this.chooseFileBtn.setOnAction((event -> selectFile()));
+        this.chooseFileBtn.setOnAction((event -> selectFile()));
+        this.loginBtn.setOnAction((event -> login()));
     }
 
     /**
@@ -85,5 +89,19 @@ public class LoginPageController extends GridPane implements Initializable {
             this.file = selectedFile;
             chooseFileBtn.setText(selectedFile.getName());
         }
+    }
+
+    private void login() {
+        if(this.file == null)
+            return;
+
+        try {
+            DbController.INSTANCE.initialize(this.file.getAbsolutePath());
+
+            Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
+        } catch (StorageException e) {
+            // TODO: Pop explain what is wrong with file.
+        }
+
     }
 }

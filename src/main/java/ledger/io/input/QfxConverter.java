@@ -1,6 +1,6 @@
 package ledger.io.input;
 
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;

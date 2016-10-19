@@ -1,7 +1,7 @@
 package ledger.io.input;
 
 import au.com.bytecode.opencsv.CSVReader;
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;

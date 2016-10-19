@@ -1,4 +1,4 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 /**
  * Entity that holds a single Type of account

@@ -1,7 +1,7 @@
 package ledger.io.input;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import ledger.database.storage.SQLiteDatabase;
 import ledger.exception.StorageException;
 import org.junit.*;

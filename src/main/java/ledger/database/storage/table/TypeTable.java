@@ -1,5 +1,10 @@
 package ledger.database.storage.table;
 
+import ledger.database.entity.Type;
+
+import java.util.LinkedList;
+import java.util.List;
+
 public class TypeTable {
 
     private static final String tableType = "CREATE TABLE IF NOT EXISTS TYPE " +
@@ -24,4 +29,15 @@ public class TypeTable {
                 "%s TEXT NOT NULL" +
                 ")", TABLE_NAME, TYPE_ID, TYPE_NAME, TYPE_DESC);
     }
+
+    public static List<Type> defaultTypes() {
+        List<Type> types = new LinkedList<Type>();
+
+        types.add(new Type("Debit Card","Purchased with a Debit Card"));
+        types.add(new Type("Credit Card","Purchased with a Credit Card"));
+
+        return types;
+    }
+
+
 }

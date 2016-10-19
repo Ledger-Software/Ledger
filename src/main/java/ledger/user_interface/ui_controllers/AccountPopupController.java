@@ -1,13 +1,17 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import ledger.database.enity.Account;
-import ledger.database.enity.AccountBalance;
+import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.Account;
+import ledger.database.entity.AccountBalance;
 
 import java.net.URL;
 import java.util.Date;
@@ -48,7 +52,7 @@ public class AccountPopupController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -60,13 +64,30 @@ public class AccountPopupController extends GridPane implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
             try {
-                getAccountSubmission();
-                getAccountBalance();
+                Account account = getAccountSubmission();
+                AccountBalance balance = getAccountBalance();
+
+                TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
+                task.RegisterSuccessEvent(this::insertDone);
+                task.RegisterFailureEvent(this::insertFail);
+                task.startTask();
             } catch (Exception e) {
                 System.out.println("Error on account submission: " + e);
             }
         });
+
     }
+
+    private void insertDone() {
+        Startup.INSTANCE.runLater(() -> {
+            ((Stage) this.getScene().getWindow()).close();
+        });
+    }
+
+    private void insertFail(Exception e) {
+        e.printStackTrace();
+    }
+
 
     /**
      * Takes the user input and creates a new Account object

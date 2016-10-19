@@ -1,11 +1,15 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import ledger.database.enity.*;
+import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.*;
 
 import java.net.URL;
 import java.time.Instant;
@@ -65,7 +69,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -77,11 +81,25 @@ public class TransactionPopupController extends GridPane implements Initializabl
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             try {
-                getTransactionSubmission();
+                Transaction transaction = getTransactionSubmission();
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
+                task.RegisterSuccessEvent(() -> closeWindow());
+                task.RegisterFailureEvent((e) -> printStackTrace(e));
+
+                task.startTask();
             } catch (Exception e) {
                 System.out.println("Error on transaction submission: " + e);
             }
         });
+    }
+
+    private void closeWindow() {
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
+    }
+
+    private void printStackTrace(Exception e) {
+        e.printStackTrace();
     }
 
     /**
@@ -106,7 +124,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             add(new Tag(categoryText.getText(), ""));
         }};
 
-        this.amount = Integer.parseInt(this.amountText.getText());
+        this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
 
         this.notes = new Note(this.notesText.getText());
 

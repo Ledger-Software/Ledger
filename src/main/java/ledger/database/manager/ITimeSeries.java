@@ -1,6 +1,6 @@
 package ledger.database.manager;
 
-import ledger.database.enity.IEntity;
+import ledger.database.entity.IEntity;
 
 /**
  * A Manager that handles data that has a relation to Time.

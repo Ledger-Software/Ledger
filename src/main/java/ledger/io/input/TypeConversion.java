@@ -1,6 +1,6 @@
 package ledger.io.input;
 
-import ledger.database.enity.Type;
+import ledger.database.entity.Type;
 
 /**
  * Utility Class to Convert Strings back to their set Types.

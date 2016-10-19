@@ -3,7 +3,8 @@ package ledger.controller;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.entity.*;
+import ledger.database.storage.SQLiteDatabase;
 import ledger.exception.StorageException;
 
 import java.util.List;
@@ -15,14 +16,21 @@ import java.util.List;
 public class DbController {
 
     public static DbController INSTANCE;
-    //Todo: Who creates this Idatabase?
     private IDatabase db;
 
+    static {
+        new DbController();
+    }
+
     /**
-     * Construtior for the DBcontroller
+     * Constructor for the DBcontroller
      */
     public DbController() {
         INSTANCE = this;
+    }
+
+    public void initialize(String fileName) throws StorageException {
+        this.db = new SQLiteDatabase(fileName);
     }
 
     /**
@@ -258,7 +266,16 @@ public class DbController {
      */
     public TaskWithReturn<List<Type>> getAllTypes() throws StorageException {
         return new TaskWithReturn<List<Type>>(db::getAllTypes);
-
     }
+
+    /**
+     * Closes the DB safely.
+     * @throws StorageException
+     */
+    public void shutdown() throws StorageException {
+        db.shutdown();
+    }
+
+
 
 }

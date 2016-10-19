@@ -1,8 +1,7 @@
 package ledger.io.input;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.Payee;
-import ledger.database.enity.Transaction;
+import ledger.database.entity.Transaction;
 import ledger.exception.StorageException;
 
 import java.util.ArrayList;

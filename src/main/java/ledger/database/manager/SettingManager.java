@@ -1,6 +1,6 @@
 package ledger.database.manager;
 
-import ledger.database.enity.Setting;
+import ledger.database.entity.Setting;
 
 /**
  * Manages Setting Entities

@@ -1,6 +1,6 @@
 package ledger.database;
 
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import ledger.exception.StorageException;
 
 import java.util.List;

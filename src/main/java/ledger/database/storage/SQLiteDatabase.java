@@ -1,15 +1,11 @@
 package ledger.database.storage;
 
-import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.entity.Type;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Database handler for SQLite storage mechanism.
@@ -61,6 +57,11 @@ public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDataba
         } catch (SQLException e) {
             throw new StorageException("Unable to Create Table", e);
         }
+
+        if(this.getAllTypes().size() == 0)
+            for(Type type: TypeTable.defaultTypes()) {
+                this.insertType(type);
+            }
     }
 
     @Override
