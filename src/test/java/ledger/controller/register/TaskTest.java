@@ -32,9 +32,7 @@ public class TaskTest {
         }
         assertTrue(bar.getTest1());
         assertFalse(bar.getTest2());
-        bar.setBlockingBool
-
-(true);
+        bar.setBlockingBool(true);
         //bar.setTrue();
         assertFalse(t.waitForResult());
         assertTrue(bar.getTest2());
