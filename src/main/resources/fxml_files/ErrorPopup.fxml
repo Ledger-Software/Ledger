@@ -32,7 +32,7 @@
                 <Insets left="15.0" top="5.0" />
             </GridPane.margin>
         </Text>
-        <Label fx:id="errorText" alignment="CENTER" prefHeight="111.0" prefWidth="718.0" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
+        <Label fx:id="errorText" alignment="CENTER" prefHeight="111.0" prefWidth="718.0" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
             <padding>
                 <Insets left="20.0" right="20.0" />
             </padding>
