@@ -18,6 +18,8 @@ import java.util.ResourceBundle;
 public class ImportTransactionsPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
+    private Button submitTrxnFileBtn;
+    @FXML
     private Button chooseTrxnFileBtn;
     @FXML
     private ChoiceBox fileExtChooser;
