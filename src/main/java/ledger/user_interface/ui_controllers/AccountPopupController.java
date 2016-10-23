@@ -45,7 +45,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFilelocation The location used to resolve relative paths for the root object, or
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
      *                         <tt>null</tt> if the location is not known.
      * @param resources        The resources used to localize the root object, or <tt>null</tt> if
      *                         the root object was not localized.
@@ -59,6 +59,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
             } catch (Exception e) {
                 this.setupErrorPopup("Error on account submission: " + e);
             }
+            this.getScene().getWindow().hide();
         });
     }
 

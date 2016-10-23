@@ -37,7 +37,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -52,6 +52,14 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
                 selectTransactionsFile();
             } catch (Exception e) {
                 this.setupErrorPopup("Error on transaction submission: " + e);
+            }
+        });
+
+        this.submitTrxnFileBtn.setOnAction((event) -> {
+            try {
+                this.getScene().getWindow().hide();
+            } catch (Exception e) {
+                this.setupErrorPopup("Error on closing import transactions popup: " + e);
             }
         });
     }

@@ -33,7 +33,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFilelocation
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *

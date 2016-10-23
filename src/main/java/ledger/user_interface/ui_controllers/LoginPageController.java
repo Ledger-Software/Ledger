@@ -41,7 +41,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *

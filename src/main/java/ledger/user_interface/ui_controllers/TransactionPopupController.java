@@ -58,7 +58,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -74,6 +74,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             } catch (Exception e) {
                 this.setupErrorPopup("Error on transaction submission: " + e);
             }
+            this.getScene().getWindow().hide();
         });
     }
 

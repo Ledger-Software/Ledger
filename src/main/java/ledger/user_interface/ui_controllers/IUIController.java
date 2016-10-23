@@ -47,4 +47,12 @@ public interface IUIController {
         }
 
     }
+
+    default void createModal(Scene s){
+            Stage newStage = new Stage();
+            newStage.setScene(s);
+            newStage.setTitle("Ledger");
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.show();
+    }
 }

@@ -37,7 +37,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -51,11 +51,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             try {
                 AccountPopupController accountController = new AccountPopupController();
                 Scene scene = new Scene(accountController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
+                this.createModal(scene);
             } catch (Exception e) {
                 this.setupErrorPopup("Error on triggering add account screen: " + e);
             }
@@ -65,11 +61,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             try {
                 TransactionPopupController trxnController = new TransactionPopupController();
                 Scene scene = new Scene(trxnController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
+                this.createModal(scene);
             } catch (Exception e) {
                 this.setupErrorPopup("Error on triggering add transaction screen: " + e);
             }
@@ -79,11 +71,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             try {
                 ExpenditureChartsController chartController = new ExpenditureChartsController();
                 Scene scene = new Scene(chartController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
+                this.createModal(scene);
             } catch (Exception e) {
                 this.setupErrorPopup("Error on triggering expenditure charts screen: " + e);
             }
@@ -93,11 +81,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             try {
                 ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
                 Scene scene = new Scene(importTrxnController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
+                this.createModal(scene);
             } catch (Exception e) {
                 this.setupErrorPopup("Error on triggering import transactions screen: " + e);
             }
