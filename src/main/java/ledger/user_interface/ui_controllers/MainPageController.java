@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,6 +17,8 @@ import java.util.ResourceBundle;
  * Controls all input and interaction with the Main Page of the application
  */
 public class MainPageController extends GridPane implements Initializable {
+    @FXML
+    private ListView listView;
     @FXML
     private Button addAccountBtn;
     @FXML
