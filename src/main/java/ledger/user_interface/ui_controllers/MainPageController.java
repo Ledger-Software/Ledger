@@ -20,6 +20,8 @@ public class MainPageController extends GridPane implements Initializable {
     @FXML
     private ListView listView;
     @FXML
+    private Button addAccountBtn;
+    @FXML
     private Button importTransactionsBtn;
     @FXML
     private Button trackSpendingBtn;
