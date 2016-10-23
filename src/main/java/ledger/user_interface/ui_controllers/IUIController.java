@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -26,5 +27,24 @@ public interface IUIController {
         } catch (Exception e) {
             System.out.println("Error on triggering add error screen: " + e);
         }
+    }
+
+    /**
+     * Initializes the controllers - to be used inside constructor
+     *
+     * @param pageLoc location of the fxml file
+     * @param c the controller being initialized
+     * @param errMsg error message in for case of that specific controller
+     */
+    default void initController(String pageLoc, IUIController c, String errMsg) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
+            loader.setController(c);
+            loader.setRoot(c);
+            loader.load();
+        } catch (Exception e) {
+            this.setupErrorPopup(errMsg +  e);
+        }
+
     }
 }

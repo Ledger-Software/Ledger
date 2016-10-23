@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,15 +23,8 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
 
     ErrorPopupController(String errMsg) {
         this.errMsg = errMsg;
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-            this.errorText.setText(this.errMsg);
-        } catch (Exception e) {
-            System.out.println("Error on error popup startup: " + e);
-        }
+        this.initController(pageLoc, this, "Error on error popup startup: ");
+        this.errorText.setText(this.errMsg);
     }
 
     /**
@@ -55,7 +47,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
             try {
                 close();
             } catch (Exception e) {
-                System.out.println("Error on account submission: " + e);
+                System.out.println("Error on closing error window: " + e);
             }
         });
     }

@@ -23,14 +23,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     ExpenditureChartsController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on expenditure chart page startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
     }
 
     /**

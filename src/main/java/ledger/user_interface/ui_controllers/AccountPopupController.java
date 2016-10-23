@@ -36,14 +36,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
 
 
     AccountPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on account popup startup: " + e);
-        }
+        this.initController(pageLoc, this, "Error on account popup startup: ");
     }
 
     /**

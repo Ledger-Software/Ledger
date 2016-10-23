@@ -49,14 +49,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
 
     TransactionPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on transaction popup startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 
     /**

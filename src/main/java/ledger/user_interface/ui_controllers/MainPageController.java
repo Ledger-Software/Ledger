@@ -28,14 +28,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on main page startup: " + e);
-        }
+        this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
     /**
