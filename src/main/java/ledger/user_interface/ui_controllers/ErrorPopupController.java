@@ -24,7 +24,6 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
     ErrorPopupController(String errMsg) {
         this.errMsg = errMsg;
         this.initController(pageLoc, this, "Error on error popup startup: ");
-        this.errorText.setText(this.errMsg);
     }
 
     /**
@@ -43,6 +42,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        this.errorText.setText(this.errMsg);
         this.okayBtn.setOnAction((event) -> {
             try {
                 close();
