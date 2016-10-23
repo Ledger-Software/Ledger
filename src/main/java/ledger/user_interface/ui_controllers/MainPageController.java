@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,8 +11,12 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.database.entity.Transaction;
+import ledger.exception.StorageException;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -47,7 +53,7 @@ public class MainPageController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -112,5 +118,14 @@ public class MainPageController extends GridPane implements Initializable {
                 System.out.println("Error on triggering import transactions screen: " + e);
             }
         });
+
+        // Populate listView w/ transactions from DB
+        try {
+            List<Transaction> allTransactions = DbController.INSTANCE.getAllTransactions().waitForResult();
+            ObservableList<Transaction> observableTransactions = FXCollections.observableList(allTransactions);
+            this.listView.setItems(observableTransactions);
+        } catch (StorageException e) {
+            System.out.println("Error of loading all transactions into list view: " + e.getMessage());
+        }
     }
 }
