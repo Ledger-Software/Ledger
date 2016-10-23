@@ -48,6 +48,11 @@ public interface IUIController {
 
     }
 
+    /**
+     * Sets the stage and the scene for the new modal
+     *
+     * @param s the previously initialized Scene that is set on the new Stage
+     */
     default void createModal(Scene s){
             Stage newStage = new Stage();
             newStage.setScene(s);
