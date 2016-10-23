@@ -3,9 +3,13 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ledger.database.enity.Account;
 import ledger.database.enity.AccountBalance;
 
@@ -16,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * Controls what happens with the data taken from the Add Account UI.
  */
-public class AccountPopupController extends GridPane implements Initializable {
+public class AccountPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button submitAccountInfo;
@@ -38,23 +42,20 @@ public class AccountPopupController extends GridPane implements Initializable {
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on account popup startup: " + e);
+            this.setupErrorPopup("Error on account popup startup: " + e);
         }
     }
 
     /**
      * Sets up action listener for the button on the page
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFilelocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -63,7 +64,7 @@ public class AccountPopupController extends GridPane implements Initializable {
                 getAccountSubmission();
                 getAccountBalance();
             } catch (Exception e) {
-                System.out.println("Error on account submission: " + e);
+                this.setupErrorPopup("Error on account submission: " + e);
             }
         });
     }

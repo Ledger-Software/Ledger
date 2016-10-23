@@ -16,7 +16,7 @@ import java.util.*;
 /**
  * Controls and manipulates the input given by the user when manually adding a transaction
  */
-public class TransactionPopupController extends GridPane implements Initializable {
+public class TransactionPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private DatePicker datePicker;
@@ -55,7 +55,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
+            this.setupErrorPopup("Error on transaction popup startup: " +  e);
         }
     }
 
@@ -79,7 +79,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             try {
                 getTransactionSubmission();
             } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
+                this.setupErrorPopup("Error on transaction submission: " + e);
             }
         });
     }

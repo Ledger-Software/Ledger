@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 /**
  * Controls the input gathered from the Import Transaction UI (gets the file to import and type)
  */
-public class ImportTransactionsPopupController extends GridPane implements Initializable {
+public class ImportTransactionsPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button chooseTrxnFileBtn;
@@ -32,7 +32,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
+            this.setupErrorPopup("Error on transaction popup startup: " +  e);
         }
     }
 
@@ -56,7 +56,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             try {
                 selectTransactionsFile();
             } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
+                this.setupErrorPopup("Error on transaction submission: " + e);
             }
         });
     }

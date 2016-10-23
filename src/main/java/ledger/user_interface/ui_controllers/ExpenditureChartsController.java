@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Controls how the charts render with user given information.
  */
-public class ExpenditureChartsController extends GridPane implements Initializable {
+public class ExpenditureChartsController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private PieChart expenditurePieChart;
@@ -29,7 +29,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on expenditure chart page startup: " +  e);
+            this.setupErrorPopup("Error on expenditure chart page startup: " +  e);
         }
     }
 

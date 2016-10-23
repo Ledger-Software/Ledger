@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 /**
  * Controls all input and interaction with the Main Page of the application
  */
-public class MainPageController extends GridPane implements Initializable {
+public class MainPageController extends GridPane implements Initializable, IUIController {
     @FXML
     private Button addAccountBtn;
     @FXML
@@ -34,7 +34,7 @@ public class MainPageController extends GridPane implements Initializable {
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on main page startup: " + e);
+            this.setupErrorPopup("Error on main page startup: " + e);
         }
     }
 
@@ -64,7 +64,7 @@ public class MainPageController extends GridPane implements Initializable {
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.show();
             } catch (Exception e) {
-                System.out.println("Error on triggering add account screen: " + e);
+                this.setupErrorPopup("Error on triggering add account screen: " + e);
             }
         });
 
@@ -78,7 +78,7 @@ public class MainPageController extends GridPane implements Initializable {
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.show();
             } catch (Exception e) {
-                System.out.println("Error on triggering add transaction screen: " + e);
+                this.setupErrorPopup("Error on triggering add transaction screen: " + e);
             }
         });
 
@@ -92,7 +92,7 @@ public class MainPageController extends GridPane implements Initializable {
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.show();
             } catch (Exception e) {
-                System.out.println("Error on triggering expenditure charts screen: " + e);
+                this.setupErrorPopup("Error on triggering expenditure charts screen: " + e);
             }
         });
 
@@ -106,7 +106,7 @@ public class MainPageController extends GridPane implements Initializable {
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.show();
             } catch (Exception e) {
-                System.out.println("Error on triggering import transactions screen: " + e);
+                this.setupErrorPopup("Error on triggering import transactions screen: " + e);
             }
         });
     }

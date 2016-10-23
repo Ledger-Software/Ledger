@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * Controls the popup that occurs upon an error so the user can see what's going on
  */
-public class ErrorPopupController extends GridPane implements Initializable {
+public class ErrorPopupController extends GridPane implements Initializable, IUIController {
     @FXML
     private Label errorText;
     @FXML
@@ -29,6 +29,7 @@ public class ErrorPopupController extends GridPane implements Initializable {
             loader.setController(this);
             loader.setRoot(this);
             loader.load();
+            this.errorText.setText(this.errMsg);
         } catch (Exception e) {
             System.out.println("Error on error popup startup: " + e);
         }
@@ -40,7 +41,7 @@ public class ErrorPopupController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFilelocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -52,7 +53,7 @@ public class ErrorPopupController extends GridPane implements Initializable {
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.okayBtn.setOnAction((event) -> {
             try {
-                setErrorText();
+                close();
             } catch (Exception e) {
                 System.out.println("Error on account submission: " + e);
             }
@@ -60,9 +61,9 @@ public class ErrorPopupController extends GridPane implements Initializable {
     }
 
     /**
-     * Sets the label text on the popup to display the occurring error to the user
+     * Closes the popup
      */
-    private void setErrorText() {
-        this.errorText.setText("Error! - " + this.errMsg);
+    private void close() {
+        this.getScene().getWindow().hide();
     }
 }

@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * Controls application startup - handles passwords and lets user select a file for the database
  */
-public class LoginPageController extends GridPane implements Initializable {
+public class LoginPageController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button chooseFileBtn;
@@ -38,7 +38,7 @@ public class LoginPageController extends GridPane implements Initializable {
             loader.setRoot(this);
             loader.load();
         } catch (Exception e) {
-            System.out.println("Error on login startup: " +  e);
+            this.setupErrorPopup("Error on login startup: " +  e);
         }
     }
 
@@ -67,7 +67,7 @@ public class LoginPageController extends GridPane implements Initializable {
                 newStage.setTitle("Ledger");
                 newStage.show();
             } catch (Exception e) {
-                System.out.println("Error on login submission: " + e);
+                this.setupErrorPopup("Error on login submission: " + e);
             }
         });
     this.chooseFileBtn.setOnAction((event -> selectFile()));
