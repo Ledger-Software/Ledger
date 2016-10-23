@@ -272,8 +272,8 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
 
             if (rs.next()) {
 
-                String resultTagName = rs.getString(tagName);
-                String resultTagDesc = rs.getString(tagDescription);
+                String resultTagName = tagName;
+                String resultTagDesc = tagDescription;
                 int id = rs.getInt(TagTable.TAG_ID);
 
                 return new Tag(resultTagName, resultTagDesc, id);
