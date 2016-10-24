@@ -53,12 +53,8 @@ public class AccountPopupController extends GridPane implements Initializable, I
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
-            try {
-                getAccountSubmission();
-                getAccountBalance();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on account submission: " + e);
-            }
+            getAccountSubmission();
+            getAccountBalance();
             Stage thisStage = (Stage) this.getScene().getWindow();
             thisStage.close();
         });

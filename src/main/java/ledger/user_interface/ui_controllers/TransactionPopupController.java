@@ -70,11 +70,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addTrnxnSubmitButton.setOnAction((event) -> {
-            try {
-                getTransactionSubmission();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on transaction submission: " + e);
-            }
+            getTransactionSubmission();
             Stage thisStage = (Stage) this.getScene().getWindow();
             thisStage.close();
         });

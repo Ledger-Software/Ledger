@@ -52,16 +52,12 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.loginBtn.setOnAction((event) -> {
-            try {
                 MainPageController mainPageController = new MainPageController();
                 Scene scene = new Scene(mainPageController);
                 Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 newStage.setScene(scene);
                 newStage.setTitle("Ledger: Transaction View");
                 newStage.show();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on login submission: " + e);
-            }
         });
     this.chooseFileBtn.setOnAction((event -> selectFile()));
     }

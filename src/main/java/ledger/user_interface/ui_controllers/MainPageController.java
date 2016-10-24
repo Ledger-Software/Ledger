@@ -68,51 +68,35 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      * Creates the Import Transaction modal
      */
     private void createImportTransPopup() {
-        try {
-            ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
-            Scene scene = new Scene(importTrxnController);
-            this.createModal(scene, "Import Transactions");
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on triggering import transactions screen: " + e);
-        }
+        ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
+        Scene scene = new Scene(importTrxnController);
+        this.createModal(scene, "Import Transactions");
     }
 
     /**
      * Creates the expenditure chart page
      */
     private void createExpenditureChartsPage() {
-        try {
-            ExpenditureChartsController chartController = new ExpenditureChartsController();
-            Scene scene = new Scene(chartController);
-            this.createModal(scene, "Expenditure Charts");
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on triggering expenditure charts screen: " + e);
-        }
+        ExpenditureChartsController chartController = new ExpenditureChartsController();
+        Scene scene = new Scene(chartController);
+        this.createModal(scene, "Expenditure Charts");
     }
 
     /**
      * Creates the Add Transaction modal
      */
     private void createAddTransPopup() {
-        try {
-            TransactionPopupController trxnController = new TransactionPopupController();
-            Scene scene = new Scene(trxnController);
-            this.createModal(scene, "Add Transaction");
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on triggering add transaction screen: " + e);
-        }
+        TransactionPopupController trxnController = new TransactionPopupController();
+        Scene scene = new Scene(trxnController);
+        this.createModal(scene, "Add Transaction");
     }
 
     /**
      * Creates the Add Account modal
      */
     private void createAccountPopup() {
-        try {
-            AccountPopupController accountController = new AccountPopupController();
-            Scene scene = new Scene(accountController);
-            this.createModal(scene, "Add Account");
-        } catch (Exception e) {
-            this.setupErrorPopup("Error on triggering add account screen: " + e);
-        }
+        AccountPopupController accountController = new AccountPopupController();
+        Scene scene = new Scene(accountController);
+        this.createModal(scene, "Add Account");
     }
 }

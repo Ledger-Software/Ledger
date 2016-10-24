@@ -49,20 +49,12 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.chooseTrxnFileBtn.setOnAction((event) -> {
-            try {
-                selectTransactionsFile();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on transaction submission: " + e);
-            }
+            selectTransactionsFile();
         });
 
         this.submitTrxnFileBtn.setOnAction((event) -> {
-            try {
-                Stage thisStage = (Stage) this.getScene().getWindow();
-                thisStage.close();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on closing import transactions popup: " + e);
-            }
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

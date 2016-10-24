@@ -44,13 +44,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.errorText.setText(this.errMsg);
-        this.okayBtn.setOnAction((event) -> {
-            try {
-                close();
-            } catch (Exception e) {
-                System.out.println("Error on closing error window: " + e);
-            }
-        });
+        this.okayBtn.setOnAction((event) -> close());
     }
 
     /**
