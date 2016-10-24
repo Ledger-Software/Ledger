@@ -119,9 +119,12 @@ public class MainPageController extends GridPane implements Initializable {
             }
         });
 
+        System.out.println("Hello");
+
         // Populate listView w/ transactions from DB
         try {
             List<Transaction> allTransactions = DbController.INSTANCE.getAllTransactions().waitForResult();
+            System.out.println(allTransactions.size());
             ObservableList<Transaction> observableTransactions = FXCollections.observableList(allTransactions);
             this.listView.setItems(observableTransactions);
         } catch (StorageException e) {
