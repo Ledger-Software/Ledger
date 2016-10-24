@@ -1,5 +1,10 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -7,9 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import ledger.controller.ImportController;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 /**
@@ -42,7 +49,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -59,6 +66,8 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
                 System.out.println("Error on transaction submission: " + e);
             }
         });
+        ImportController.Converter[] items = ImportController.INSTANCE.getAvaliableConverters();
+        this.fileExtChooser.setItems(FXCollections.observableArrayList(items));
     }
 
     /**

@@ -276,6 +276,8 @@ public class DbController {
         db.shutdown();
     }
 
-
+    protected IDatabase getDb() {
+        return db;
+    }
 
 }

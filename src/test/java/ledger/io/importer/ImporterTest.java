@@ -43,7 +43,7 @@ public class ImporterTest {
     @BeforeClass
     public static void setupDatabaseAndImporter() throws Exception {
         database = new SQLiteDatabase("src/test/resources/test.db");
-        importer = Importer.getInstance();
+        importer = new Importer();
     }
 
     @Before
