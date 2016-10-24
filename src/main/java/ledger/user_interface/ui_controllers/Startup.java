@@ -41,7 +41,7 @@ public class Startup extends Application {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Ledger");
+        primaryStage.setTitle("Ledger Login");
         primaryStage.show();
     }
 

@@ -13,24 +13,17 @@ import java.util.ResourceBundle;
 /**
  * Controls how the charts render with user given information.
  */
-public class ExpenditureChartsController extends GridPane implements Initializable {
+public class ExpenditureChartsController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private PieChart expenditurePieChart;
     @FXML
     private StackedBarChart expenditureBarChart;
 
-    private static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
+    private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     ExpenditureChartsController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on expenditure chart page startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
     }
 
     /**
@@ -39,7 +32,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *

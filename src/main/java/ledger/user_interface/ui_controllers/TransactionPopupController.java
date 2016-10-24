@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.database.enity.*;
 
 import java.net.URL;
@@ -16,7 +17,7 @@ import java.util.*;
 /**
  * Controls and manipulates the input given by the user when manually adding a transaction
  */
-public class TransactionPopupController extends GridPane implements Initializable {
+public class TransactionPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private DatePicker datePicker;
@@ -46,17 +47,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Note notes;
     private Type type;
 
-    private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
+    private final static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
 
     TransactionPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 
     /**
@@ -65,7 +59,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -76,11 +70,9 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addTrnxnSubmitButton.setOnAction((event) -> {
-            try {
-                getTransactionSubmission();
-            } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
-            }
+            getTransactionSubmission();
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

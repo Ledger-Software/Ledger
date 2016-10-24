@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * Controls application startup - handles passwords and lets user select a file for the database
  */
-public class LoginPageController extends GridPane implements Initializable {
+public class LoginPageController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button chooseFileBtn;
@@ -29,17 +29,10 @@ public class LoginPageController extends GridPane implements Initializable {
 
     private String pwd;
     private File file;
-    private static String pageLoc = "/fxml_files/LoginPage.fxml";
+    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
 
     LoginPageController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on login startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on login startup: ");
     }
 
     /**
@@ -48,7 +41,7 @@ public class LoginPageController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -59,16 +52,12 @@ public class LoginPageController extends GridPane implements Initializable {
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.loginBtn.setOnAction((event) -> {
-            try {
                 MainPageController mainPageController = new MainPageController();
                 Scene scene = new Scene(mainPageController);
                 Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 newStage.setScene(scene);
-                newStage.setTitle("Ledger");
+                newStage.setTitle("Ledger: Transaction View");
                 newStage.show();
-            } catch (Exception e) {
-                System.out.println("Error on login submission: " + e);
-            }
         });
     this.chooseFileBtn.setOnAction((event -> selectFile()));
     }

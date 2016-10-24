@@ -65,5 +65,19 @@
             <Insets left="70.0" top="50.0" />
          </GridPane.margin>
       </Label>
+      <Button fx:id="submitTrxnFileBtn" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Submit" textAlignment="CENTER" GridPane.rowIndex="4">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="Calibri" size="22.0" />
+         </font>
+         <padding>
+            <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+         </padding>
+         <GridPane.margin>
+            <Insets left="260.0" />
+         </GridPane.margin>
+      </Button>
     </children>
 </fx:root>

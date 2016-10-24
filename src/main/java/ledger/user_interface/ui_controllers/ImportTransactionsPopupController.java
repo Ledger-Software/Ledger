@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -15,25 +16,20 @@ import java.util.ResourceBundle;
 /**
  * Controls the input gathered from the Import Transaction UI (gets the file to import and type)
  */
-public class ImportTransactionsPopupController extends GridPane implements Initializable {
+public class ImportTransactionsPopupController extends GridPane implements Initializable, IUIController {
 
+    @FXML
+    private Button submitTrxnFileBtn;
     @FXML
     private Button chooseTrxnFileBtn;
     @FXML
     private ChoiceBox fileExtChooser;
 
     private File file;
-    private static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
+    private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 
     /**
@@ -42,7 +38,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -53,11 +49,12 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.chooseTrxnFileBtn.setOnAction((event) -> {
-            try {
-                selectTransactionsFile();
-            } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
-            }
+            selectTransactionsFile();
+        });
+
+        this.submitTrxnFileBtn.setOnAction((event) -> {
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

@@ -3,9 +3,13 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ledger.database.enity.Account;
 import ledger.database.enity.AccountBalance;
 
@@ -16,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * Controls what happens with the data taken from the Add Account UI.
  */
-public class AccountPopupController extends GridPane implements Initializable {
+public class AccountPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button submitAccountInfo;
@@ -28,43 +32,31 @@ public class AccountPopupController extends GridPane implements Initializable {
     private TextField accountNameText;
 
     private Account act = null;
-    private static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
+    private final static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
 
 
     AccountPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on account popup startup: " + e);
-        }
+        this.initController(pageLoc, this, "Error on account popup startup: ");
     }
 
     /**
      * Sets up action listener for the button on the page
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
-            try {
-                getAccountSubmission();
-                getAccountBalance();
-            } catch (Exception e) {
-                System.out.println("Error on account submission: " + e);
-            }
+            getAccountSubmission();
+            getAccountBalance();
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

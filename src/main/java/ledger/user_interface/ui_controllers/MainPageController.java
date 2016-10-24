@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Controls all input and interaction with the Main Page of the application
  */
-public class MainPageController extends GridPane implements Initializable {
+public class MainPageController extends GridPane implements Initializable, IUIController {
     @FXML
     private ListView listView;
     @FXML
@@ -28,17 +28,10 @@ public class MainPageController extends GridPane implements Initializable {
     @FXML
     private Button addTransactionBtn;
 
-    private static String pageLoc = "/fxml_files/MainPage.fxml";
+    private final static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on main page startup: " + e);
-        }
+        this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
     /**
@@ -47,7 +40,7 @@ public class MainPageController extends GridPane implements Initializable {
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -58,59 +51,55 @@ public class MainPageController extends GridPane implements Initializable {
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addAccountBtn.setOnAction((event) -> {
-            try {
-                AccountPopupController accountController = new AccountPopupController();
-                Scene scene = new Scene(accountController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
-            } catch (Exception e) {
-                System.out.println("Error on triggering add account screen: " + e);
-            }
+            createAccountPopup();
         });
 
         this.addTransactionBtn.setOnAction((event) -> {
-            try {
-                TransactionPopupController trxnController = new TransactionPopupController();
-                Scene scene = new Scene(trxnController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
-            } catch (Exception e) {
-                System.out.println("Error on triggering add transaction screen: " + e);
-            }
+            createAddTransPopup();
         });
 
         this.trackSpendingBtn.setOnAction((event) -> {
-            try {
-                ExpenditureChartsController chartController = new ExpenditureChartsController();
-                Scene scene = new Scene(chartController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
-            } catch (Exception e) {
-                System.out.println("Error on triggering expenditure charts screen: " + e);
-            }
+            createExpenditureChartsPage();
         });
 
         this.importTransactionsBtn.setOnAction((event) -> {
-            try {
-                ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
-                Scene scene = new Scene(importTrxnController);
-                Stage newStage = new Stage();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger");
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
-            } catch (Exception e) {
-                System.out.println("Error on triggering import transactions screen: " + e);
-            }
+            createImportTransPopup();
         });
+    }
+
+    /**
+     * Creates the Import Transaction modal
+     */
+    private void createImportTransPopup() {
+        ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
+        Scene scene = new Scene(importTrxnController);
+        this.createModal(scene, "Import Transactions");
+    }
+
+    /**
+     * Creates the expenditure chart page
+     */
+    private void createExpenditureChartsPage() {
+        ExpenditureChartsController chartController = new ExpenditureChartsController();
+        Scene scene = new Scene(chartController);
+        this.createModal(scene, "Expenditure Charts");
+    }
+
+    /**
+     * Creates the Add Transaction modal
+     */
+    private void createAddTransPopup() {
+        TransactionPopupController trxnController = new TransactionPopupController();
+        Scene scene = new Scene(trxnController);
+        this.createModal(scene, "Add Transaction");
+    }
+
+    /**
+     * Creates the Add Account modal
+     */
+    private void createAccountPopup() {
+        AccountPopupController accountController = new AccountPopupController();
+        Scene scene = new Scene(accountController);
+        this.createModal(scene, "Add Account");
     }
 }
