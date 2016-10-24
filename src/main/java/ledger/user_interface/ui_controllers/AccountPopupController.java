@@ -36,7 +36,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
 
 
     AccountPopupController() {
-        this.initController(pageLoc, this, "Error on account popup startup: ");
+        this.initController(pageLoc, this, "Add account popup startup error: ");
     }
 
     /**

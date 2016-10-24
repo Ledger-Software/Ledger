@@ -11,20 +11,25 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controls the popup that occurs upon an error so the user can see what's going on
+ * Controls a popup that has a title and content text area that can be easily modified to
+ * fit whatever purpose we need
  */
-public class ErrorPopupController extends GridPane implements Initializable, IUIController {
+public class GenericPopupController extends GridPane implements Initializable, IUIController {
     @FXML
     private Label errorText;
     @FXML
     private Button okayBtn;
+    @FXML
+    private Label popupTitle;
 
-    private final static String pageLoc = "/fxml_files/ErrorPopup.fxml";
-    private String errMsg;
+    private final static String pageLoc = "/fxml_files/GenericPopup.fxml";
+    private String msg;
+    private String windowTitle;
 
-    ErrorPopupController(String errMsg) {
-        this.errMsg = errMsg;
-        this.initController(pageLoc, this, "Error on error popup startup: ");
+    GenericPopupController(String msg, String windowTitle) {
+        this.msg = msg;
+        this.windowTitle = windowTitle;
+        this.initController(pageLoc, this, "Popup startup error: ");
     }
 
     /**
@@ -43,7 +48,8 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.errorText.setText(this.errMsg);
+        this.errorText.setText(this.msg);
+        this.popupTitle.setText(this.windowTitle);
         this.okayBtn.setOnAction((event) -> close());
     }
 
