@@ -20,7 +20,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private StackedBarChart expenditureBarChart;
 
-    private static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
+    private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");

@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
@@ -25,7 +26,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     private ChoiceBox fileExtChooser;
 
     private File file;
-    private static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
+    private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
         this.initController(pageLoc, this, "Error on transaction popup startup: ");
@@ -57,7 +58,8 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
         this.submitTrxnFileBtn.setOnAction((event) -> {
             try {
-                this.getScene().getWindow().hide();
+                Stage thisStage = (Stage) this.getScene().getWindow();
+                thisStage.close();
             } catch (Exception e) {
                 this.setupErrorPopup("Error on closing import transactions popup: " + e);
             }

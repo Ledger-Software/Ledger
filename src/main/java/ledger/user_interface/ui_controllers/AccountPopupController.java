@@ -32,7 +32,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     private TextField accountNameText;
 
     private Account act = null;
-    private static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
+    private final static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
 
 
     AccountPopupController() {
@@ -59,7 +59,8 @@ public class AccountPopupController extends GridPane implements Initializable, I
             } catch (Exception e) {
                 this.setupErrorPopup("Error on account submission: " + e);
             }
-            this.getScene().getWindow().hide();
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

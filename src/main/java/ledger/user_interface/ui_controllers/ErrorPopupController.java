@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,7 +19,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
     @FXML
     private Button okayBtn;
 
-    private static String pageLoc = "/fxml_files/ErrorPopup.fxml";
+    private final static String pageLoc = "/fxml_files/ErrorPopup.fxml";
     private String errMsg;
 
     ErrorPopupController(String errMsg) {
@@ -56,6 +57,7 @@ public class ErrorPopupController extends GridPane implements Initializable, IUI
      * Closes the popup
      */
     private void close() {
-        this.getScene().getWindow().hide();
+        Stage thisStage = (Stage) this.getScene().getWindow();
+        thisStage.close();
     }
 }

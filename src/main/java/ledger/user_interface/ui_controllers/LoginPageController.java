@@ -29,7 +29,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private String pwd;
     private File file;
-    private static String pageLoc = "/fxml_files/LoginPage.fxml";
+    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
 
     LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -57,7 +57,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 Scene scene = new Scene(mainPageController);
                 Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 newStage.setScene(scene);
-                newStage.setTitle("Ledger");
+                newStage.setTitle("Ledger: Transaction View");
                 newStage.show();
             } catch (Exception e) {
                 this.setupErrorPopup("Error on login submission: " + e);

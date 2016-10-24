@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.database.enity.*;
 
 import java.net.URL;
@@ -46,7 +47,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Note notes;
     private Type type;
 
-    private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
+    private final static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
 
     TransactionPopupController() {
         this.initController(pageLoc, this, "Error on transaction popup startup: ");
@@ -74,7 +75,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
             } catch (Exception e) {
                 this.setupErrorPopup("Error on transaction submission: " + e);
             }
-            this.getScene().getWindow().hide();
+            Stage thisStage = (Stage) this.getScene().getWindow();
+            thisStage.close();
         });
     }
 

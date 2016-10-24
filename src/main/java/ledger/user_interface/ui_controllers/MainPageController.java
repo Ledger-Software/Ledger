@@ -25,7 +25,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
 
-    private static String pageLoc = "/fxml_files/MainPage.fxml";
+    private final static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -48,43 +48,59 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addAccountBtn.setOnAction((event) -> {
-            try {
-                AccountPopupController accountController = new AccountPopupController();
-                Scene scene = new Scene(accountController);
-                this.createModal(scene);
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on triggering add account screen: " + e);
-            }
+            createAccountPopup();
         });
 
         this.addTransactionBtn.setOnAction((event) -> {
-            try {
-                TransactionPopupController trxnController = new TransactionPopupController();
-                Scene scene = new Scene(trxnController);
-                this.createModal(scene);
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on triggering add transaction screen: " + e);
-            }
+            createAddTransPopup();
         });
 
         this.trackSpendingBtn.setOnAction((event) -> {
-            try {
-                ExpenditureChartsController chartController = new ExpenditureChartsController();
-                Scene scene = new Scene(chartController);
-                this.createModal(scene);
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on triggering expenditure charts screen: " + e);
-            }
+            createExpenditureChartsPage();
         });
 
         this.importTransactionsBtn.setOnAction((event) -> {
-            try {
-                ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
-                Scene scene = new Scene(importTrxnController);
-                this.createModal(scene);
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on triggering import transactions screen: " + e);
-            }
+            createImportTransPopup();
         });
+    }
+
+    private void createImportTransPopup() {
+        try {
+            ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
+            Scene scene = new Scene(importTrxnController);
+            this.createModal(scene, "Import Transactions");
+        } catch (Exception e) {
+            this.setupErrorPopup("Error on triggering import transactions screen: " + e);
+        }
+    }
+
+    private void createExpenditureChartsPage() {
+        try {
+            ExpenditureChartsController chartController = new ExpenditureChartsController();
+            Scene scene = new Scene(chartController);
+            this.createModal(scene, "Expenditure Charts");
+        } catch (Exception e) {
+            this.setupErrorPopup("Error on triggering expenditure charts screen: " + e);
+        }
+    }
+
+    private void createAddTransPopup() {
+        try {
+            TransactionPopupController trxnController = new TransactionPopupController();
+            Scene scene = new Scene(trxnController);
+            this.createModal(scene, "Add Transaction");
+        } catch (Exception e) {
+            this.setupErrorPopup("Error on triggering add transaction screen: " + e);
+        }
+    }
+
+    private void createAccountPopup() {
+        try {
+            AccountPopupController accountController = new AccountPopupController();
+            Scene scene = new Scene(accountController);
+            this.createModal(scene, "Add Account");
+        } catch (Exception e) {
+            this.setupErrorPopup("Error on triggering add account screen: " + e);
+        }
     }
 }

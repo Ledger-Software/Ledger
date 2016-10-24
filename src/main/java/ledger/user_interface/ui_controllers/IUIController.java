@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 /**
  * To assist in unifying all UI controllers common code
  */
@@ -42,7 +44,7 @@ public interface IUIController {
             loader.setController(c);
             loader.setRoot(c);
             loader.load();
-        } catch (Exception e) {
+        } catch (IOException e) {
             this.setupErrorPopup(errMsg +  e);
         }
 
@@ -53,10 +55,10 @@ public interface IUIController {
      *
      * @param s the previously initialized Scene that is set on the new Stage
      */
-    default void createModal(Scene s){
+    default void createModal(Scene s, String windowName){
             Stage newStage = new Stage();
             newStage.setScene(s);
-            newStage.setTitle("Ledger");
+            newStage.setTitle(windowName);
             newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.show();
     }
