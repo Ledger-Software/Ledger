@@ -64,6 +64,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         });
     }
 
+    /**
+     * Creates the Import Transaction modal
+     */
     private void createImportTransPopup() {
         try {
             ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
@@ -74,6 +77,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
+    /**
+     * Creates the expenditure chart page
+     */
     private void createExpenditureChartsPage() {
         try {
             ExpenditureChartsController chartController = new ExpenditureChartsController();
@@ -84,6 +90,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
+    /**
+     * Creates the Add Transaction modal
+     */
     private void createAddTransPopup() {
         try {
             TransactionPopupController trxnController = new TransactionPopupController();
@@ -94,6 +103,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
+    /**
+     * Creates the Add Account modal
+     */
     private void createAccountPopup() {
         try {
             AccountPopupController accountController = new AccountPopupController();
