@@ -18,11 +18,11 @@ public interface IUIController {
      * @param s a string containing the error message
      */
     default void setupErrorPopup(String s){
-        ErrorPopupController errCon = new ErrorPopupController(s);
+        GenericPopupController errCon = new GenericPopupController(s, "Error!");
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
         newStage.setScene(scene);
-        newStage.setTitle("Ledger");
+        newStage.setTitle("Error!");
         newStage.initModality(Modality.APPLICATION_MODAL);
         newStage.show();
     }

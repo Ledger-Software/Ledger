@@ -24,7 +24,7 @@
     </rowConstraints>
     <children>
         <Rectangle fx:id="orangeHeaderBar" arcHeight="5.0" arcWidth="5.0" fill="#ffa81f" height="40.0" stroke="#ffa81f" strokeType="OUTSIDE" width="700.0" GridPane.columnSpan="3" />
-        <Text fx:id="addAccountHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Error!">
+        <Text fx:id="popupTitle" strokeType="OUTSIDE" strokeWidth="0.0">
             <font>
                 <Font name="Calibri" size="28.0" />
             </font>
