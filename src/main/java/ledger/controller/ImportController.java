@@ -1,6 +1,7 @@
 package ledger.controller;
 
 import ledger.controller.register.TaskWithArgs;
+import ledger.database.IDatabase;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.io.importer.Importer;
@@ -70,7 +71,9 @@ public class ImportController {
 
             Importer importer = new Importer();
 
-            if(!importer.importTransactions(DbController.INSTANCE.getDb(),result.getVerifiedTransactions())) {
+            IDatabase db = DbController.INSTANCE.getDb();
+            List<Transaction> verifiedTrans = result.getVerifiedTransactions();
+            if(!importer.importTransactions(db ,verifiedTrans)) {
                 // TODO How to show user
                 // Throw Some Exception
                 return;

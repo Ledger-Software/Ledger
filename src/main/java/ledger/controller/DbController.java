@@ -273,7 +273,8 @@ public class DbController {
      * @throws StorageException
      */
     public void shutdown() throws StorageException {
-        db.shutdown();
+        if(db != null)
+            db.shutdown();
     }
 
     protected IDatabase getDb() {
