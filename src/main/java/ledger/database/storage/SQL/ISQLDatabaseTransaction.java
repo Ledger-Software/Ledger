@@ -1,6 +1,7 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL;
 
 import ledger.database.enity.*;
+import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
+public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
     // Basic CRUD functionality
     @Override

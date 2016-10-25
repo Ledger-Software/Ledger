@@ -1,21 +1,17 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL.SQLite;
 
-import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Database handler for SQLite storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDatabaseNote, ISQLiteDatabasePayee, ISQLiteDatabaseAccount, ISQLiteDatabaseTag, ISQLiteDatabaseType {
+public class SQLiteDatabase implements ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType {
 
     private Connection databaseObject;
 
