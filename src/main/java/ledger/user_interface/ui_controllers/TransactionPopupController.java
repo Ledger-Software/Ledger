@@ -118,7 +118,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
                 this.typeText.setItems(FXCollections.observableArrayList(toStringListType(list)));
             });
             typeTask.startTask();
-            this.existingAccounts = type.waitForResult();
+            this.existingTypes = typeTask.waitForResult();
         } catch(StorageException e){
             System.out.println("Error on type retrieval  submission: " + e);
         }
@@ -196,7 +196,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
                 return type;
 
         }
-        return new Payee(name,"Auto Generated from Add Transaction");
+        return new Type(name,"Auto Generated from Add Transaction");
 
     }
     private List<String> toStringListPayee(List<Payee> payees){
