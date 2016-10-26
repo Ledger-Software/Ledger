@@ -1,12 +1,15 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import ledger.controller.ImportController;
+import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.Account;
 
 import java.io.File;
 import java.net.URL;
@@ -18,11 +21,17 @@ import java.util.ResourceBundle;
 public class ImportTransactionsPopupController extends GridPane implements Initializable {
 
     @FXML
-    private Button chooseTrxnFileBtn;
-    @FXML
-    private ChoiceBox fileExtChooser;
+    private AccountDropdown accountDropdown;
 
-    private File file;
+    @FXML
+    private Button importButton;
+
+    @FXML
+    private FileSelectorButton fileSelector;
+
+    @FXML
+    private ConverterDropdown converterSelector;
+
     private static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
@@ -42,7 +51,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param location
+     * @param fxmlFileLocation
      * The location used to resolve relative paths for the root object, or
      * <tt>null</tt> if the location is not known.
      *
@@ -52,28 +61,34 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.chooseTrxnFileBtn.setOnAction((event) -> {
-            try {
-                selectTransactionsFile();
-            } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
-            }
-        });
+        importButton.setOnAction(this::importFile);
+        // TODO Hook up insert
     }
 
-    /**
-     * Opens a file selector window so the user can choose what file they wish to import.
-     *
-     * @return void
-     */
-    private void selectTransactionsFile() {
-        FileChooser chooser = new FileChooser();
-        File selectedFile = chooser.showOpenDialog(chooseTrxnFileBtn.getScene().getWindow());
-        if(selectedFile != null){
-            this.file = selectedFile;
-            chooseTrxnFileBtn.setText(selectedFile.getName());
-        }
+    private void importFile(ActionEvent actionEvent) {
+        File file = fileSelector.getFile();
+        if(file == null)
+            return;
+
+        Account account = accountDropdown.getSelectedAccount();
+        if(account == null)
+            return;
+
+        ImportController.Converter converter = converterSelector.getFileConverter();
+        if(converter == null)
+            return;
+
+        TaskWithArgs<Account> task = ImportController.INSTANCE.importTransactions(converter,file,account);
+        task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> importButton.setDisable(false)));
+        task.RegisterSuccessEvent(this::closeWindow);
+        importButton.setDisable(true);
+
+
+        task.startTask();
     }
 
-    // TODO: add file extension selection functionality
+    private void closeWindow() {
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
+    }
+
 }
