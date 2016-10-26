@@ -1,5 +1,6 @@
 package ledger.database.storage.SQL;
 
+import ledger.database.enity.Transaction;
 import ledger.database.enity.Type;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.TypeTable;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface ISQLDatabaseType extends ISQLiteDatabase {
     @Override
@@ -34,6 +36,11 @@ public interface ISQLDatabaseType extends ISQLiteDatabase {
     @Override
     default void deleteType(Type type) throws StorageException {
         try {
+            List<Transaction> trans = getAllTransactions();
+            List<Type> types = trans.stream().map(Transaction::getType).collect(Collectors.toList());
+            List<Integer> ids = types.stream().map(Type::getId).collect(Collectors.toList());
+            if (ids.contains(type.getId())) throw new StorageException("Cannot delete a Type while used by Transaction");
+
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
             stmt.setInt(1, type.getId());
             stmt.executeUpdate();

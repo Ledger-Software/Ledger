@@ -80,6 +80,18 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         try {
             setDatabaseAutoCommit(false);
 
+            //First delete the corresponding Note
+            PreparedStatement noteStatement = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME + " WHERE "
+                    + NoteTable.NOTE_TRANS_ID + " = ?");
+            noteStatement.setInt(1, transaction.getId());
+            noteStatement.executeUpdate();
+
+            //Delete Any Entries in TAG_TO_TRANS
+            PreparedStatement tttsStatement = getDatabase().prepareStatement("DELETE FROM " + TagToTransTable.TABLE_NAME + " WHERE "
+                    + TagToTransTable.TTTS_TRANS_ID + " = ?");
+            tttsStatement.setInt(1, transaction.getId());
+            tttsStatement.executeUpdate();
+
             PreparedStatement deleteTransactionStmt = getDatabase().prepareStatement("DELETE FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ID + " = ?");
             deleteTransactionStmt.setInt(1, transaction.getId());
