@@ -69,6 +69,190 @@ public class MainPageController extends GridPane implements Initializable {
     @FXML
     private TableColumn closedColumn;
 
+    // Transaction table edit event handlers
+    private EventHandler<CellEditEvent<TransactionModel, String>> amountEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String amountToSetString = t.getNewValue();
+                int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
+                int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
+                int amountToSet = (dollarsToSet * 100) + centsToSet;
+
+                Transaction transaction = model.getTransaction();
+                transaction.setAmount(amountToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction amount: " + e.getMessage());
+            }
+        }
+    };
+
+    private EventHandler<CellEditEvent<TransactionModel, String>> dateEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String dateToSetString = t.getNewValue();
+
+                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
+                Date dateToSet = formatter.parse(dateToSetString);
+
+                Transaction transaction = model.getTransaction();
+                transaction.setDate(dateToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction date: " + e.getMessage());
+            } catch (ParseException e) {
+                System.out.println("Error parsing date string: " + e.getMessage());
+            }
+        }
+    };
+
+    private EventHandler<CellEditEvent<TransactionModel, String>> payeeEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String payeeNameToSet = t.getNewValue();
+
+                TaskWithReturn<List<Payee>> payeeQuery = DbController.INSTANCE.getAllPayees();
+                payeeQuery.startTask();
+                List<Payee> allPayees = payeeQuery.waitForResult();
+
+                Payee payeeToSet = new Payee(payeeNameToSet, "");
+                for (Payee currentPayee : allPayees) {
+                    if (currentPayee.getName().equals(payeeNameToSet)) {
+                        payeeToSet = currentPayee;
+                    }
+                }
+
+                Transaction transaction = model.getTransaction();
+                transaction.setPayee(payeeToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction payee: " + e.getMessage());
+            }
+        }
+    };
+
+    private EventHandler<CellEditEvent<TransactionModel, String>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String typeNameToSet = t.getNewValue();
+
+                TaskWithReturn<List<Type>> typeQuery = DbController.INSTANCE.getAllTypes();
+                typeQuery.startTask();
+                List<Type> allTypes = typeQuery.waitForResult();
+
+                Type typeToSet = new Type(typeNameToSet, "");
+                for (Type currentType : allTypes) {
+                    if (currentType.getName().equals(typeNameToSet)) {
+                        typeToSet = currentType;
+                    }
+                }
+
+                Transaction transaction = model.getTransaction();
+                transaction.setType(typeToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction payee: " + e.getMessage());
+            }
+        }
+    };
+
+    private EventHandler<CellEditEvent<TransactionModel, String>> categoryEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String tagsNamesToSet = t.getNewValue();
+                String[] tagNames = tagsNamesToSet.split(", ");
+
+
+                TaskWithReturn<List<Tag>> tagQuery = DbController.INSTANCE.getAllTags();
+                tagQuery.startTask();
+                List<Tag> allTags = tagQuery.waitForResult();
+
+                ArrayList<Tag> tagsToSet = new ArrayList<>();
+                for (int i = 0; i < tagNames.length; i++) {
+                    String currentTagName = tagNames[i];
+                    Tag currentTagToSet = new Tag(currentTagName, "");
+                    for (Tag currentTag : allTags) {
+                        if (currentTag.getName().equals(currentTagName)) {
+                            currentTagToSet = currentTag;
+                        }
+                    }
+                    tagsToSet.add(currentTagToSet);
+                }
+
+                Transaction transaction = model.getTransaction();
+                transaction.setTagList(tagsToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction payee: " + e.getMessage());
+            }
+        }
+    };
+
+    private EventHandler<CellEditEvent<TransactionModel, String>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+        @Override
+        public void handle(CellEditEvent<TransactionModel, String> t) {
+            try {
+                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+                String pendingToSetString = t.getNewValue();
+
+                boolean pendingToSet = model.getTransaction().isPending();
+                if (pendingToSetString.equals("Cleared")) {
+                    pendingToSet = false;
+                } else if (pendingToSetString.equals("Pending")) {
+                    pendingToSet = true;
+                } else {
+                    System.out.print("Transaction pending status not updated. Invalid input.");
+                }
+
+                Transaction transaction = model.getTransaction();
+                transaction.setPending(pendingToSet);
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.startTask();
+                task.waitForComplete();
+
+                updateTransactionTableView();
+            } catch (StorageException e) {
+                System.out.println("Error editing transaction amount: " + e.getMessage());
+            }
+        }
+    };
+
     private static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
@@ -165,208 +349,22 @@ public class MainPageController extends GridPane implements Initializable {
         this.closedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("pending"));
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.amountColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String amountToSetString = t.getNewValue();
-                            int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
-                            int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
-                            int amountToSet = (dollarsToSet * 100) + centsToSet;
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setAmount(amountToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction amount: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.amountColumn.setOnEditCommit(this.amountEditHandler);
 
         this.dateColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.dateColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String dateToSetString = t.getNewValue();
-
-//                            LocalDateTime ldt = LocalDateTime.parse(dateToSetString);
-//                            Date dateToSet = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
-
-                            DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-                            Date dateToSet = formatter.parse(dateToSetString);
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setDate(dateToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction date: " + e.getMessage());
-                        } catch (ParseException e) {
-                            System.out.println("Error parsing date string: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.dateColumn.setOnEditCommit(this.dateEditHandler);
 
         this.payeeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.payeeColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String payeeNameToSet = t.getNewValue();
-
-                            TaskWithReturn<List<Payee>> payeeQuery = DbController.INSTANCE.getAllPayees();
-                            payeeQuery.startTask();
-                            List<Payee> allPayees = payeeQuery.waitForResult();
-
-                            Payee payeeToSet = new Payee(payeeNameToSet, "");
-                            for (Payee currentPayee : allPayees) {
-                                if (currentPayee.getName().equals(payeeNameToSet)) {
-                                    payeeToSet = currentPayee;
-                                }
-                            }
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setPayee(payeeToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction payee: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
 
         this.typeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.typeColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String typeNameToSet = t.getNewValue();
-
-                            TaskWithReturn<List<Type>> typeQuery = DbController.INSTANCE.getAllTypes();
-                            typeQuery.startTask();
-                            List<Type> allTypes = typeQuery.waitForResult();
-
-                            Type typeToSet = new Type(typeNameToSet, "");
-                            for (Type currentType : allTypes) {
-                                if (currentType.getName().equals(typeNameToSet)) {
-                                    typeToSet = currentType;
-                                }
-                            }
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setType(typeToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction payee: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.typeColumn.setOnEditCommit(this.typeEditHandler);
 
         this.categoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.categoryColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String tagsNamesToSet = t.getNewValue();
-                            String[] tagNames = tagsNamesToSet.split(", ");
-
-
-                            TaskWithReturn<List<Tag>> tagQuery = DbController.INSTANCE.getAllTags();
-                            tagQuery.startTask();
-                            List<Tag> allTags = tagQuery.waitForResult();
-
-                            ArrayList<Tag> tagsToSet = new ArrayList<>();
-                            for (int i = 0; i < tagNames.length; i++) {
-                                String currentTagName = tagNames[i];
-                                Tag currentTagToSet = new Tag(currentTagName, "");
-                                for (Tag currentTag : allTags) {
-                                    if (currentTag.getName().equals(currentTagName)) {
-                                        currentTagToSet = currentTag;
-                                    }
-                                }
-                                tagsToSet.add(currentTagToSet);
-                            }
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setTagList(tagsToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction payee: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
 
         this.closedColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.closedColumn.setOnEditCommit(
-                new EventHandler<CellEditEvent<TransactionModel, String>>() {
-                    @Override
-                    public void handle(CellEditEvent<TransactionModel, String> t) {
-                        try {
-                            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                            String pendingToSetString = t.getNewValue();
-
-                            boolean pendingToSet = model.getTransaction().isPending();
-                            if (pendingToSetString.equals("Cleared")) {
-                                pendingToSet = false;
-                            } else if (pendingToSetString.equals("Pending")) {
-                                pendingToSet = true;
-                            } else {
-                                System.out.print("Transaction pending status not updated. Invalid input.");
-                            }
-
-                            Transaction transaction = model.getTransaction();
-                            transaction.setPending(pendingToSet);
-
-                            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                            task.startTask();
-                            task.waitForComplete();
-
-                            updateTransactionTableView();
-                        } catch (StorageException e) {
-                            System.out.println("Error editing transaction amount: " + e.getMessage());
-                        }
-                    }
-                }
-        );
+        this.closedColumn.setOnEditCommit(this.closedEditHandler);
 
         // Add ability to delete transactions form tableView
         this.transactionTableView.setOnKeyPressed(new EventHandler<KeyEvent>() {
