@@ -1,5 +1,6 @@
 package ledger.database.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,13 +25,16 @@ public class Transaction implements IEntity {
 
     public Transaction(Date date, Type type, int amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int id) {
+        this.tagList = new ArrayList<Tag>();
+
         this.date = date;
         this.type = type;
         this.amount = amount;
         this.account = account;
         this.payee = payee;
         this.pending = pending;
-        this.tagList = tagList;
+        if(tagList != null)
+            this.tagList.addAll(tagList);
         this.note = note;
         this.id = id;
     }
