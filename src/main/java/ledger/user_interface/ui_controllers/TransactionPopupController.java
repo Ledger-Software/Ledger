@@ -162,7 +162,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
         this.payee = fromBoxPayee(this.payeeText.getValue());
 
 
-        // this.account = this.accountText.getValue();
+        this.account = this.accountText.getValue();
         this.category = new ArrayList<Tag>() {{
             add(new Tag(categoryText.getText(), ""));
         }};
