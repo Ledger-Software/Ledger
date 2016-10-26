@@ -61,7 +61,7 @@ public class Startup extends Application {
     public void createLoginPage() {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
-        switchScene(scene, "Ledger");
+        switchScene(scene, "Ledger Login");
     }
 
     public void switchScene(Scene scene, String title) {

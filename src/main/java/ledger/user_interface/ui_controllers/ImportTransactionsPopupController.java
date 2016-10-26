@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * Controls the input gathered from the Import Transaction UI (gets the file to import and type)
  */
-public class ImportTransactionsPopupController extends GridPane implements Initializable {
+public class ImportTransactionsPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private AccountDropdown accountDropdown;
@@ -32,17 +32,10 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     @FXML
     private ConverterDropdown converterSelector;
 
-    private static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
+    private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 
     /**

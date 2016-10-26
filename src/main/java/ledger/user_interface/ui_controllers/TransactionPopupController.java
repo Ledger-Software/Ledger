@@ -12,6 +12,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.exception.StorageException;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.Instant;
@@ -22,7 +23,7 @@ import java.util.*;
 /**
  * Controls and manipulates the input given by the user when manually adding a transaction
  */
-public class TransactionPopupController extends GridPane implements Initializable {
+public class TransactionPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private DatePicker datePicker;
@@ -55,17 +56,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private List<Type> existingTypes;
     private Type type;
 
-    private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
+    private final static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
 
     TransactionPopupController() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(pageLoc));
-            loader.setController(this);
-            loader.setRoot(this);
-            loader.load();
-        } catch (Exception e) {
-            System.out.println("Error on transaction popup startup: " +  e);
-        }
+        this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 
     /**
@@ -172,7 +166,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         this.notes = new Note(this.notesText.getText());
 
-        
+
         this.type = fromBoxType(this.typeText.getValue());
 
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
