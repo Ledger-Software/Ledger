@@ -23,6 +23,13 @@ public class Importer {
         this.failedImportExceptionMessages = new ArrayList<>();
     }
 
+    /**
+     * For each transaction in transactionList attempts to put into database. Records failed imports
+     * and put it into a list that can be retrieved via getFailedImports()
+     * @param database IDatabase for putting the objects into
+     * @param transactionList the list of transactions to import
+     * @return
+     */
     public boolean importTransactions(IDatabase database, List<Transaction> transactionList) {
         this.failedImports.clear();
         this.failedImportExceptionMessages.clear();

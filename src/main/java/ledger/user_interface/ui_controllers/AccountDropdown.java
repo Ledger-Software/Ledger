@@ -10,7 +10,7 @@ import ledger.exception.StorageException;
 import java.util.List;
 
 /**
- * Created by CJ on 10/24/2016.
+ * JavaFx Dropdown that is linked to Account
  */
 public class AccountDropdown extends ChoiceBox<Account> {
 

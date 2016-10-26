@@ -3,11 +3,9 @@ package ledger.user_interface.ui_controllers;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ChoiceBox;
 import ledger.controller.ImportController;
-import ledger.database.entity.Transaction;
-import ledger.io.input.IInAdapter;
 
 /**
- * Created by CJ on 10/25/2016.
+ * JavaFx Dropdown that is linked to IInAdapters for Transactions
  */
 public class ConverterDropdown extends ChoiceBox<ImportController.Converter> {
 
