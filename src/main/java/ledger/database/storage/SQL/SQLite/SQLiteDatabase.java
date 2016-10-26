@@ -4,7 +4,10 @@ import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 /**

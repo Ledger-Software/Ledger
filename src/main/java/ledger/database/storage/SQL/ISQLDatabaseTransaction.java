@@ -220,7 +220,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TypeTable.TYPE_NAME +
                     ", " + TypeTable.TYPE_DESC +
                     " FROM " + TypeTable.TABLE_NAME +
-                            " WHERE " + TypeTable.TYPE_NAME + "=?");
+                    " WHERE " + TypeTable.TYPE_NAME + "=?");
 
             stmt.setString(1, name);
 
@@ -259,7 +259,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + AccountTable.ACCOUNT_ID +
                     ", " + AccountTable.ACCOUNT_NAME +
                     ", " + AccountTable.ACCOUNT_DESC +
-                    " FROM " +  AccountTable.TABLE_NAME +
+                    " FROM " + AccountTable.TABLE_NAME +
                     " WHERE " + AccountTable.ACCOUNT_NAME + "=? AND " + AccountTable.ACCOUNT_DESC + "=?");
 
             stmt.setString(1, name);
@@ -276,7 +276,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
     default Tag getTagForNameAndDescription(String tagName, String tagDescription) {
         try {
 
-            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID  +
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID +
                     " FROM " + TagTable.TABLE_NAME +
                     " WHERE " + TagTable.TAG_NAME + "=? AND " + TagTable.TAG_DESC + "=?");
             stmt.setString(1, tagName);
@@ -479,7 +479,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
-    default void lookupAndSetTypeForSQLStatement(Transaction transaction, PreparedStatement stmt, int statementInputIndex) throws StorageException{
+    default void lookupAndSetTypeForSQLStatement(Transaction transaction, PreparedStatement stmt, int statementInputIndex) throws StorageException {
         try {
             Type existingType;
             if (transaction.getType().getId() != -1) {

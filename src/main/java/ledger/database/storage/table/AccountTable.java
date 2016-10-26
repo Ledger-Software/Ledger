@@ -10,6 +10,7 @@ public class AccountTable {
 
     /**
      * Creates the String command to create the table for this object.
+     *
      * @return String for creating the SQLite Table corresponding to this object
      */
     public static String CreateStatementSQLite() {
@@ -22,6 +23,7 @@ public class AccountTable {
 
     /**
      * Creates the String command to create the table for this object.
+     *
      * @return String for creating the H2 Table corresponding to this object
      */
     public static String CreateStatementH2() {

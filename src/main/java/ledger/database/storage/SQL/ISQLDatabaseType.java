@@ -39,7 +39,8 @@ public interface ISQLDatabaseType extends ISQLiteDatabase {
             List<Transaction> trans = getAllTransactions();
             List<Type> types = trans.stream().map(Transaction::getType).collect(Collectors.toList());
             List<Integer> ids = types.stream().map(Type::getId).collect(Collectors.toList());
-            if (ids.contains(type.getId())) throw new StorageException("Cannot delete a Type while used by Transaction");
+            if (ids.contains(type.getId()))
+                throw new StorageException("Cannot delete a Type while used by Transaction");
 
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM TYPE WHERE TYPE_ID = ?");
             stmt.setInt(1, type.getId());
