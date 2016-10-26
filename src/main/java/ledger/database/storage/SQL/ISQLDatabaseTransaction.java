@@ -1,6 +1,7 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL;
 
 import ledger.database.entity.*;
+import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
+public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
     // Basic CRUD functionality
     @Override
@@ -78,6 +79,18 @@ public interface ISQLiteDatabaseTransaction extends ISQLiteDatabase {
     default void deleteTransaction(Transaction transaction) throws StorageException {
         try {
             setDatabaseAutoCommit(false);
+
+            //First delete the corresponding Note
+            PreparedStatement noteStatement = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME + " WHERE "
+                    + NoteTable.NOTE_TRANS_ID + " = ?");
+            noteStatement.setInt(1, transaction.getId());
+            noteStatement.executeUpdate();
+
+            //Delete Any Entries in TAG_TO_TRANS
+            PreparedStatement tttsStatement = getDatabase().prepareStatement("DELETE FROM " + TagToTransTable.TABLE_NAME + " WHERE "
+                    + TagToTransTable.TTTS_TRANS_ID + " = ?");
+            tttsStatement.setInt(1, transaction.getId());
+            tttsStatement.executeUpdate();
 
             PreparedStatement deleteTransactionStmt = getDatabase().prepareStatement("DELETE FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ID + " = ?");

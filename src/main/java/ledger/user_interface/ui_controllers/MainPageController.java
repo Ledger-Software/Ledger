@@ -37,6 +37,7 @@ import java.util.ResourceBundle;
 /**
  * Controls all input and interaction with the Main Page of the application
  */
+
 public class MainPageController extends GridPane implements Initializable, IUIController {
     @FXML
     private Button addAccountBtn;

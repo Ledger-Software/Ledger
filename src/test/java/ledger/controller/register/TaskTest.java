@@ -2,10 +2,11 @@ package ledger.controller.register;
 
 
 import org.junit.Before;
-
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by gert on 10/18/16.
  */
@@ -14,20 +15,22 @@ public class TaskTest {
     //private boolean blockingBool;
     private Bar bar;
     private Foo foo;
+
     @Before
-    public void setAllFalse(){
+    public void setAllFalse() {
         bar = new Bar();
         foo = new Foo();
     }
+
     @Test(timeout = 3000)
-    public void testNoArgsReturn(){
+    public void testNoArgsReturn() {
         TaskWithReturn<Boolean> t = new TaskWithReturn<Boolean>(bar::call);
 
 
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         assertTrue(bar.getTest1());
@@ -37,14 +40,15 @@ public class TaskTest {
         assertFalse(t.waitForResult());
         assertTrue(bar.getTest2());
     }
+
     @Test(timeout = 3000)
-    public void testNoArgsReturnSuccessCall(){
+    public void testNoArgsReturnSuccessCall() {
         TaskWithReturn<Boolean> t = new TaskWithReturn<Boolean>(bar::call);
         t.RegisterSuccessEvent(bar::setBlockingBool);
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         //bar.setBlockingBool(true);
@@ -52,26 +56,28 @@ public class TaskTest {
         assertFalse(t.waitForResult());
         assertFalse(bar.getBlock());
     }
+
     @Test(timeout = 3000)
-    public void testNoArgsReturnFailureCall(){
+    public void testNoArgsReturnFailureCall() {
         TaskWithReturn<Boolean> t = new TaskWithReturn<>(bar::fail);
         t.RegisterFailureEvent(bar::handleFail);
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         t.waitForComplete();
         assertTrue(bar.getBlock());
     }
+
     @Test(timeout = 3000)
-    public void testArgsNoReturn(){
+    public void testArgsNoReturn() {
         TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::call, true);
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         assertTrue(foo.isStartBool());
@@ -80,14 +86,15 @@ public class TaskTest {
         t.waitForComplete();
         assertTrue(foo.isFinishBool());
     }
+
     @Test(timeout = 3000)
-    public void testArgsNoReturnSuccessCall(){
+    public void testArgsNoReturnSuccessCall() {
         TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::call, true);
         t.RegisterSuccessEvent(foo::successCall);
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         foo.setBlockingBool(true);
@@ -95,14 +102,15 @@ public class TaskTest {
         assertTrue(foo.isFinishBool());
         assertTrue(foo.isSuccess());
     }
+
     @Test(timeout = 3000)
-    public void atestArgsNoReturnFailureCall(){
+    public void atestArgsNoReturnFailureCall() {
         TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::fail, true);
         t.RegisterFailureEvent(foo::handleFail);
         t.startTask();
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println(e.getStackTrace());
         }
         t.waitForComplete();
@@ -113,42 +121,54 @@ public class TaskTest {
         private boolean testBool1;
         private boolean testBool2;
         private boolean blockingBool;
-        public Bar (){
+
+        public Bar() {
             blockingBool = false;
             testBool1 = false;
             testBool2 = false;
         }
-        public boolean call(){
+
+        public boolean call() {
             testBool1 = true;
-            while(!getBlock()){
+            while (!getBlock()) {
 
             }
             testBool2 = true;
             return false;
         }
-        public  synchronized boolean setTrue(){
+
+        public synchronized boolean setTrue() {
             blockingBool = true;
             return blockingBool;
         }
-        public synchronized void setBlockingBool(boolean bool){
+
+        public synchronized void setBlockingBool(boolean bool) {
             blockingBool = bool;
         }
-        public boolean fail() throws Exception{
+
+        public boolean fail() throws Exception {
             throw new Exception();
 
         }
-        public void handleFail(Exception e){
+
+        public void handleFail(Exception e) {
             setBlockingBool(true);
         }
-        public boolean getTest1(){
+
+        public boolean getTest1() {
             return testBool1;
         }
-        public boolean getTest2(){
+
+        public boolean getTest2() {
             return testBool2;
         }
-        public synchronized boolean getBlock() {return blockingBool;}
+
+        public synchronized boolean getBlock() {
+            return blockingBool;
+        }
 
     }
+
     public class Foo {
         private boolean finishBool;
         private boolean startBool;
@@ -163,20 +183,24 @@ public class TaskTest {
         }
 
         private boolean success;
-        public Foo(){
+
+        public Foo() {
             finishBool = false;
             startBool = false;
-            blockingBool =false;
+            blockingBool = false;
             success = false;
         }
-        public void call(boolean bool){
+
+        public void call(boolean bool) {
             setStartBool(true);
-            while(!isBlockingBool());
+            while (!isBlockingBool()) ;
             setFinishBool(true);
         }
+
         public void successCall() {
             success = true;
         }
+
         public boolean isFinishBool() {
             return finishBool;
         }
@@ -200,10 +224,12 @@ public class TaskTest {
         public synchronized void setBlockingBool(boolean blockingBool) {
             this.blockingBool = blockingBool;
         }
-        public void fail(boolean t) throws Exception{
-            throw  new Exception();
+
+        public void fail(boolean t) throws Exception {
+            throw new Exception();
         }
-        public void handleFail(Exception e){
+
+        public void handleFail(Exception e) {
             successCall();
         }
 

@@ -4,7 +4,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
-import ledger.database.storage.SQLiteDatabase;
+import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
 import ledger.exception.StorageException;
 
 import java.util.List;
