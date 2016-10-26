@@ -1,6 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,7 +9,9 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
+import ledger.exception.StorageException;
 
 import java.net.URL;
 import java.time.Instant;
@@ -27,9 +29,9 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @FXML
     private CheckBox clearedCheckBox;
     @FXML
-    private TextField payeeText;
+    private ComboBox<String> payeeText;
     @FXML
-    private TextField accountText;
+    private ComboBox<Account> accountText;
     @FXML
     private TextField categoryText;
     @FXML
@@ -37,17 +39,20 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @FXML
     private TextArea notesText;
     @FXML
-    private TextField typeText;
+    private ComboBox<String> typeText;
     @FXML
     private Button addTrnxnSubmitButton;
 
     private Date date;
     private boolean cleared;
+    private List<Payee> existingPayees;
     private Payee payee;
+    private List<Account> existingAccounts;
     private Account account;
     private List<Tag> category;
     private int amount;
     private Note notes;
+    private List<Type> existingTypes;
     private Type type;
 
     private static String pageLoc = "/fxml_files/AddTransactionPopup.fxml";
@@ -79,6 +84,45 @@ public class TransactionPopupController extends GridPane implements Initializabl
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        try{
+            TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
+            payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
+            payeesTask.RegisterSuccessEvent((list)-> {
+                this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
+                this.payeeText.setEditable(true);
+
+            });
+            payeesTask.startTask();
+            this.existingPayees = payeesTask.waitForResult();
+
+        } catch(StorageException e){
+            System.out.println("Error on payee retrieval  submission: " + e);
+        }
+        try{
+            TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
+            accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
+
+            accountsTask.RegisterSuccessEvent((list) -> {
+                this.accountText.setItems((FXCollections.observableArrayList(list)));
+            });
+            accountsTask.startTask();
+            this.existingAccounts = accountsTask.waitForResult();
+        } catch(StorageException e){
+            System.out.println("Error on account retrieval  submission: " + e);
+        }
+        try{
+            TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
+            typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
+
+            typeTask.RegisterSuccessEvent((list) -> {
+                this.typeText.setItems(FXCollections.observableArrayList(toStringListType(list)));
+            });
+            typeTask.startTask();
+            this.existingTypes = typeTask.waitForResult();
+        } catch(StorageException e){
+            System.out.println("Error on type retrieval  submission: " + e);
+        }
+        this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             try {
                 Transaction transaction = getTransactionSubmission();
@@ -89,7 +133,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
                 task.startTask();
             } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
+                System.out.println("Error on transaction submission: ");
+                e.printStackTrace();
             }
         });
     }
@@ -114,12 +159,11 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         this.cleared = this.clearedCheckBox.isSelected();
 
-        // TODO: make this a dropdown
-        this.payee = new Payee(this.payeeText.getText(), "");
 
-        // TODO: make this a dropdown
-        this.account = new Account(this.accountText.getText(), "");
+        this.payee = fromBoxPayee(this.payeeText.getValue());
 
+
+        this.account = this.accountText.getValue();
         this.category = new ArrayList<Tag>() {{
             add(new Tag(categoryText.getText(), ""));
         }};
@@ -128,12 +172,48 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         this.notes = new Note(this.notesText.getText());
 
-        // TODO: make this a dropdown
-        this.type = new Type(this.typeText.getText(), "");
+        
+        this.type = fromBoxType(this.typeText.getValue());
 
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
                 this.payee, this.cleared, this.category, this.notes);
 
         return t;
+    }
+    private Payee fromBoxPayee(String name){
+
+        for (Payee pay: this.existingPayees){
+            if(payee.getName().equals(name))
+                return payee;
+
+        }
+        return new Payee(name,"Auto Generated from Add Transaction");
+
+    }
+    private Type fromBoxType(String name){
+
+        for (Type type: this.existingTypes){
+            if(type.getName().equals(name))
+                return type;
+
+        }
+        return new Type(name,"Auto Generated from Add Transaction");
+
+    }
+    private List<String> toStringListPayee(List<Payee> payees){
+        List<String> listy = new ArrayList<>();
+        for (Payee payee:payees
+             ) {
+            listy.add(payee.getName());
+        }
+        return listy;
+    }
+    private List<String> toStringListType(List<Type> types){
+        List<String> listy = new ArrayList<>();
+        for (Type type:types
+                ) {
+            listy.add(type.getName());
+        }
+        return listy;
     }
 }
