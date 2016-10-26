@@ -36,7 +36,7 @@ public class H2DatabaseTest {
 
     @BeforeClass
     public static void setupDatabase() throws Exception {
-        database = new H2Database("./src/test/resources/testH2");
+        database = new H2Database("./src/test/resources/testH2", "password");
     }
 
     @Before

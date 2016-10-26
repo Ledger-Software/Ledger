@@ -18,7 +18,7 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
 
     private Connection databaseObject;
 
-    public H2Database(String pathToDb) throws StorageException {
+    public H2Database(String pathToDb, String password) throws StorageException {
         // Initialize H2 streams.
 
         try {
@@ -28,7 +28,10 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         }
 
         try {
-            databaseObject = DriverManager.getConnection("jdbc:h2:" + pathToDb);
+            String url = "jdbc:h2:" + pathToDb + ";CIPHER=AES";
+            String user = "TransACT";
+            String pwds = "Ledger " + password;
+            databaseObject = DriverManager.getConnection(url, user, pwds);
         } catch (SQLException e) {
             throw new StorageException("Unable to connect to JDBC Socket. ");
         }

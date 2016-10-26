@@ -385,15 +385,17 @@ public class SQLiteDatabaseTest {
 
     @Test
     public void deleteType() throws Exception {
-        database.insertType(sampleType);
-        database.insertType(sampleType2);
+        Type testType3 = new Type("Testing Delete", "Used to test delete");
+        Type testType4 = new Type("Testing Delete2", "Also being used to test delete");
+
+        database.insertType(testType3);
+        database.insertType(testType4);
 
         List<Type> typesBeforeDelete = database.getAllTypes();
         int sizeBeforeDelete = typesBeforeDelete.size();
 
-
-        int deletedId = typesBeforeDelete.get(0).getId();
-        database.deleteType(typesBeforeDelete.get(0)); //arbitrary
+        int deletedId = testType3.getId();
+        database.deleteType(testType3);
 
         List<Type> typesAfterDelete = database.getAllTypes();
         assertEquals(sizeBeforeDelete - 1, typesAfterDelete.size());
