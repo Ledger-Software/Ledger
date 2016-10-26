@@ -61,6 +61,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 task.startTask();
             } catch (Exception e) {
                 System.out.println("Error on account submission: " + e);
+                this.setupErrorPopup("Error on account submission - please check that all fields have valid values.");
             }
         });
     }
@@ -72,6 +73,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     }
 
     private void insertFail(Exception e) {
+        this.setupErrorPopup("Account insertion error.");
         e.printStackTrace();
     }
 
