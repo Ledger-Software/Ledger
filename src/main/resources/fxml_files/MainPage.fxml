@@ -124,58 +124,15 @@
             </VBox>
          </children>
       </AnchorPane>
-      <HBox fx:id="headerHBox" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2">
-         <children>
-            <Text fx:id="amountColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" textAlignment="CENTER" wrappingWidth="175.97265625">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="dateColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Date" textAlignment="CENTER" wrappingWidth="179.2421875">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="nameColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Name" textAlignment="CENTER" wrappingWidth="192.1015625">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="typeColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Type" textAlignment="CENTER" wrappingWidth="164.109375">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="categoryColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" textAlignment="CENTER" wrappingWidth="185.45703125">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-            <Text fx:id="clearedColHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Cleared" textAlignment="CENTER" wrappingWidth="178.66015625">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-               <HBox.margin>
-                  <Insets top="8.0" />
-               </HBox.margin>
-            </Text>
-         </children>
-      </HBox>
-      <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+      <TableView fx:id="transactionTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5">
+        <columns>
+          <TableColumn fx:id="amountColumn" prefWidth="180.0" text="Amount" />
+          <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="180.0" text="Date" />
+            <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="180.0" text="Payee" />
+            <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="180.0" text="Type" />
+            <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="180.0" text="Category" />
+            <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="179.0" text="Cleared" />
+        </columns>
+      </TableView>
    </children>
 </fx:root>
