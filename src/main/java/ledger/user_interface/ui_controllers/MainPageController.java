@@ -85,7 +85,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction amount: " + e.getMessage());
+                setupErrorPopup("Error editing transaction amount.");
             }
         }
     };
@@ -109,9 +109,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction date: " + e.getMessage());
+                setupErrorPopup("Error editing transaction date.");
             } catch (ParseException e) {
-                System.out.println("Error parsing date string: " + e.getMessage());
+                setupErrorPopup("Error parsing date string.");
             }
         }
     };
@@ -143,7 +143,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction payee: " + e.getMessage());
+                setupErrorPopup("Error editing transaction payee.");
             }
         }
     };
@@ -175,7 +175,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction payee: " + e.getMessage());
+                setupErrorPopup("Error editing transaction payee.");
             }
         }
     };
@@ -214,7 +214,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction payee: " + e.getMessage());
+                setupErrorPopup("Error editing transaction payee");
             }
         }
     };
@@ -232,7 +232,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 } else if (pendingToSetString.equals("Pending")) {
                     pendingToSet = true;
                 } else {
-                    System.out.print("Transaction pending status not updated. Invalid input.");
+                    setupErrorPopup("Transaction pending status not updated. Invalid input.");
                 }
 
                 Transaction transaction = model.getTransaction();
@@ -244,7 +244,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                System.out.println("Error editing transaction amount: " + e.getMessage());
+                setupErrorPopup("Error editing transaction amount.");
             }
         }
     };
@@ -342,7 +342,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             this.transactionTableView.setItems(observableTransactionModels);
 
         } catch (StorageException e) {
-            System.out.println("Error of loading all transactions into list view: " + e.getMessage());
+            setupErrorPopup("Error loading all transactions into list view.");
         }
     }
 
@@ -357,10 +357,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 task.startTask();
                 task.waitForComplete();
             } else {
-                System.out.println("No transactions deleted. Selected index: " + selectedIndex);
+                setupErrorPopup("No transactions deleted. Selected index.");
             }
         } catch (StorageException e) {
-            System.out.println("Error deleting transaction: " + e.getMessage());
+            setupErrorPopup("Error deleting transaction.");
         }
     }
 
