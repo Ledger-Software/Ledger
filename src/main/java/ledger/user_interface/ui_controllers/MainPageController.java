@@ -1,20 +1,20 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -29,9 +29,6 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,10 +38,6 @@ import java.util.ResourceBundle;
  * Controls all input and interaction with the Main Page of the application
  */
 public class MainPageController extends GridPane implements Initializable, IUIController {
-    @FXML
-    private ListView listView;
-public class MainPageController extends GridPane implements Initializable {
-
     @FXML
     private Button addAccountBtn;
     @FXML
@@ -255,7 +248,6 @@ public class MainPageController extends GridPane implements Initializable {
         }
     };
 
-    private static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");

@@ -270,10 +270,11 @@ public class DbController {
 
     /**
      * Closes the DB safely.
+     *
      * @throws StorageException
      */
     public void shutdown() throws StorageException {
-        if(db != null)
+        if (db != null)
             db.shutdown();
     }
 

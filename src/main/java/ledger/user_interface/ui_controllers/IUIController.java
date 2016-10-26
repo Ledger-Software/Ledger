@@ -17,7 +17,7 @@ public interface IUIController {
      *
      * @param s a string containing the error message
      */
-    default void setupErrorPopup(String s){
+    default void setupErrorPopup(String s) {
         GenericPopupController errCon = new GenericPopupController(s, "Error!");
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
@@ -31,8 +31,8 @@ public interface IUIController {
      * Initializes the controllers - to be used inside constructor
      *
      * @param pageLoc location of the fxml file
-     * @param c the controller being initialized
-     * @param errMsg error message in for case of that specific controller
+     * @param c       the controller being initialized
+     * @param errMsg  error message in for case of that specific controller
      */
     default void initController(String pageLoc, IUIController c, String errMsg) {
         try {
@@ -41,7 +41,7 @@ public interface IUIController {
             loader.setRoot(c);
             loader.load();
         } catch (IOException e) {
-            this.setupErrorPopup(errMsg +  e);
+            this.setupErrorPopup(errMsg + e);
         }
 
     }
@@ -51,11 +51,11 @@ public interface IUIController {
      *
      * @param s the previously initialized Scene that is set on the new Stage
      */
-    default void createModal(Scene s, String windowName){
-            Stage newStage = new Stage();
-            newStage.setScene(s);
-            newStage.setTitle(windowName);
-            newStage.initModality(Modality.APPLICATION_MODAL);
-            newStage.show();
+    default void createModal(Scene s, String windowName) {
+        Stage newStage = new Stage();
+        newStage.setScene(s);
+        newStage.setTitle(windowName);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.show();
     }
 }

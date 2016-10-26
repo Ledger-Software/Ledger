@@ -31,8 +31,8 @@ public class QfxConverter implements IInAdapter<Transaction> {
     /**
      * Parses the given file into the application's internal transaction objects.
      *
-     * @return  A list of Transaction objects created from the transactions in the provided file.
-     * @throws IOException  When unable to read the given file
+     * @return A list of Transaction objects created from the transactions in the provided file.
+     * @throws IOException When unable to read the given file
      */
     @Override
     public List<Transaction> convert() throws IOException {

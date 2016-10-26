@@ -33,7 +33,7 @@ public class Transaction implements IEntity {
         this.account = account;
         this.payee = payee;
         this.pending = pending;
-        if(tagList != null)
+        if (tagList != null)
             this.tagList.addAll(tagList);
         this.note = note;
         this.id = id;

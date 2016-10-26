@@ -34,17 +34,14 @@ public class GenericPopupController extends GridPane implements Initializable, I
 
     /**
      * Sets up action listener for the button on the page
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFileLocation
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {

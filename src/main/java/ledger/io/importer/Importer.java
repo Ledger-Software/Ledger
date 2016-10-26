@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Created by Tayler How on 10/11/2016.
- *
+ * <p>
  * This class is responsible for taking lists of Java Transaction objects
  * and importing them into the backend DB.
  */
@@ -26,7 +26,8 @@ public class Importer {
     /**
      * For each transaction in transactionList attempts to put into database. Records failed imports
      * and put it into a list that can be retrieved via getFailedImports()
-     * @param database IDatabase for putting the objects into
+     *
+     * @param database        IDatabase for putting the objects into
      * @param transactionList the list of transactions to import
      * @return
      */

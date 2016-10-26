@@ -4,7 +4,10 @@ import ledger.database.entity.Type;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 
 /**
@@ -58,8 +61,8 @@ public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDataba
             throw new StorageException("Unable to Create Table", e);
         }
 
-        if(this.getAllTypes().size() == 0)
-            for(Type type: TypeTable.defaultTypes()) {
+        if (this.getAllTypes().size() == 0)
+            for (Type type : TypeTable.defaultTypes()) {
                 this.insertType(type);
             }
     }

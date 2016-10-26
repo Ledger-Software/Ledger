@@ -2,16 +2,11 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
-
-import java.io.File;
-import java.util.concurrent.Callable;
 
 /**
  * Handles any tasks relevant for init of the Program.
@@ -49,7 +44,8 @@ public class Startup extends Application {
     private void shutdown() {
         try {
             DbController.INSTANCE.shutdown();
-        } catch(StorageException e) {}
+        } catch (StorageException e) {
+        }
 
 
         Platform.exit();

@@ -2,7 +2,6 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -12,13 +11,15 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.exception.StorageException;
-import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Controls and manipulates the input given by the user when manually adding a transaction
@@ -64,24 +65,21 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
     /**
      * Sets up action listener for the button on the page
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFileLocation
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        try{
+        try {
             TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
             payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
-            payeesTask.RegisterSuccessEvent((list)-> {
+            payeesTask.RegisterSuccessEvent((list) -> {
                 this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
                 this.payeeText.setEditable(true);
 
@@ -89,10 +87,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
             payeesTask.startTask();
             this.existingPayees = payeesTask.waitForResult();
 
-        } catch(StorageException e){
+        } catch (StorageException e) {
             System.out.println("Error on payee retrieval  submission: " + e);
         }
-        try{
+        try {
             TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
             accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
@@ -101,10 +99,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
             });
             accountsTask.startTask();
             this.existingAccounts = accountsTask.waitForResult();
-        } catch(StorageException e){
+        } catch (StorageException e) {
             System.out.println("Error on account retrieval  submission: " + e);
         }
-        try{
+        try {
             TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
             typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
@@ -113,7 +111,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             });
             typeTask.startTask();
             this.existingTypes = typeTask.waitForResult();
-        } catch(StorageException e){
+        } catch (StorageException e) {
             System.out.println("Error on type retrieval  submission: " + e);
         }
         this.typeText.setEditable(true);
@@ -146,7 +144,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
      *
      * @return a new Transaction object consisting of user input
      */
-    public Transaction getTransactionSubmission () {
+    public Transaction getTransactionSubmission() {
         LocalDate localDate = this.datePicker.getValue();
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
         this.date = Date.from(instant);
@@ -174,37 +172,41 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         return t;
     }
-    private Payee fromBoxPayee(String name){
 
-        for (Payee pay: this.existingPayees){
-            if(payee.getName().equals(name))
+    private Payee fromBoxPayee(String name) {
+
+        for (Payee pay : this.existingPayees) {
+            if (payee.getName().equals(name))
                 return payee;
 
         }
-        return new Payee(name,"Auto Generated from Add Transaction");
+        return new Payee(name, "Auto Generated from Add Transaction");
 
     }
-    private Type fromBoxType(String name){
 
-        for (Type type: this.existingTypes){
-            if(type.getName().equals(name))
+    private Type fromBoxType(String name) {
+
+        for (Type type : this.existingTypes) {
+            if (type.getName().equals(name))
                 return type;
 
         }
-        return new Type(name,"Auto Generated from Add Transaction");
+        return new Type(name, "Auto Generated from Add Transaction");
 
     }
-    private List<String> toStringListPayee(List<Payee> payees){
+
+    private List<String> toStringListPayee(List<Payee> payees) {
         List<String> listy = new ArrayList<>();
-        for (Payee payee:payees
-             ) {
+        for (Payee payee : payees
+                ) {
             listy.add(payee.getName());
         }
         return listy;
     }
-    private List<String> toStringListType(List<Type> types){
+
+    private List<String> toStringListType(List<Type> types) {
         List<String> listy = new ArrayList<>();
-        for (Type type:types
+        for (Type type : types
                 ) {
             listy.add(type.getName());
         }

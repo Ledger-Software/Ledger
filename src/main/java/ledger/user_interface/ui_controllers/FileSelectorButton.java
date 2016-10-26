@@ -24,7 +24,7 @@ public class FileSelectorButton extends Button {
     private void OnAction(ActionEvent actionEvent) {
         FileChooser chooser = new FileChooser();
         File selectedFile = chooser.showOpenDialog(this.getScene().getWindow());
-        if(selectedFile != null){
+        if (selectedFile != null) {
             this.file = selectedFile;
             this.setText(selectedFile.getName());
         }

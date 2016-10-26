@@ -14,6 +14,7 @@ public class NoteTable {
 
     /**
      * Creates the String command to create the table for this object.
+     *
      * @return String for creating the SQLite Table corresponding to this object
      */
     public static String CreateStatement() {

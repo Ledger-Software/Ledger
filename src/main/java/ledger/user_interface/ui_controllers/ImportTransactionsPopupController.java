@@ -2,7 +2,6 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -40,17 +39,14 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
     /**
      * Sets up action listener for the button on the page
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFileLocation
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
@@ -60,18 +56,18 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
     private void importFile(ActionEvent actionEvent) {
         File file = fileSelector.getFile();
-        if(file == null)
+        if (file == null)
             return;
 
         Account account = accountDropdown.getSelectedAccount();
-        if(account == null)
+        if (account == null)
             return;
 
         ImportController.Converter converter = converterSelector.getFileConverter();
-        if(converter == null)
+        if (converter == null)
             return;
 
-        TaskWithArgs<Account> task = ImportController.INSTANCE.importTransactions(converter,file,account);
+        TaskWithArgs<Account> task = ImportController.INSTANCE.importTransactions(converter, file, account);
         task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> importButton.setDisable(false)));
         task.RegisterSuccessEvent(this::closeWindow);
         importButton.setDisable(true);

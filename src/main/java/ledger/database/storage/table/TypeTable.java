@@ -3,7 +3,6 @@ package ledger.database.storage.table;
 import ledger.database.entity.Type;
 import ledger.io.input.TypeConversion;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class TypeTable {
@@ -21,6 +20,7 @@ public class TypeTable {
 
     /**
      * Creates the String command to create the table for this object.
+     *
      * @return String for creating the SQLite Table corresponding to this object
      */
     public static String CreateStatement() {
