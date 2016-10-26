@@ -1,6 +1,7 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL;
 
 import ledger.database.enity.Account;
+import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.AccountTable;
 import ledger.exception.StorageException;
 
@@ -10,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ISQLiteDatabaseAccount extends ISQLiteDatabase {
+public interface ISQLDatabaseAccount extends ISQLiteDatabase {
 
     @Override
     default void insertAccount(Account account) throws StorageException {

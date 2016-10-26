@@ -1,6 +1,7 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL;
 
 import ledger.database.enity.Tag;
+import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.TagTable;
 import ledger.exception.StorageException;
 
@@ -10,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ISQLiteDatabaseTag extends ISQLiteDatabase {
+public interface ISQLDatabaseTag extends ISQLiteDatabase {
 
     @Override
     default void insertTag(Tag tag) throws StorageException {

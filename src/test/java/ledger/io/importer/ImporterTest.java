@@ -2,7 +2,7 @@ package ledger.io.importer;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
-import ledger.database.storage.SQLiteDatabase;
+import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

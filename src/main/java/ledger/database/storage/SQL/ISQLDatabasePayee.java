@@ -1,6 +1,7 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL;
 
 import ledger.database.enity.Payee;
+import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.PayeeTable;
 import ledger.exception.StorageException;
 
@@ -10,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface ISQLiteDatabasePayee extends ISQLiteDatabase {
+public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
     @Override
     default void insertPayee(Payee payee) throws StorageException {

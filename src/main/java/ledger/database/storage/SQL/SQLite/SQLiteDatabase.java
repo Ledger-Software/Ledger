@@ -1,21 +1,20 @@
-package ledger.database.storage;
+package ledger.database.storage.SQL.SQLite;
 
-import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Database handler for SQLite storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDatabaseNote, ISQLiteDatabasePayee, ISQLiteDatabaseAccount, ISQLiteDatabaseTag, ISQLiteDatabaseType {
+public class SQLiteDatabase implements ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType {
 
     private Connection databaseObject;
 
@@ -41,17 +40,17 @@ public class SQLiteDatabase implements ISQLiteDatabaseTransaction, ISQLiteDataba
     public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<>();
 
-        tableSQL.add(TagTable.CreateStatement());
-        tableSQL.add(TypeTable.CreateStatement());
-        tableSQL.add(AccountTable.CreateStatement());
-        tableSQL.add(AccountBalanceTable.CreateStatement());
-        tableSQL.add(PayeeTable.CreateStatement());
+        tableSQL.add(TagTable.CreateStatementSQLite());
+        tableSQL.add(TypeTable.CreateStatementSQLite());
+        tableSQL.add(AccountTable.CreateStatementSQLite());
+        tableSQL.add(AccountBalanceTable.CreateStatementSQLite());
+        tableSQL.add(PayeeTable.CreateStatementSQLite());
 
-        tableSQL.add(TransactionTable.CreateStatement());
-        tableSQL.add(NoteTable.CreateStatement());
+        tableSQL.add(TransactionTable.CreateStatementSQLite());
+        tableSQL.add(NoteTable.CreateStatementSQLite());
 
-        tableSQL.add(TagToTransTable.CreateStatement());
-        tableSQL.add(TagToPayeeTable.CreateStatement());
+        tableSQL.add(TagToTransTable.CreateStatementSQLite());
+        tableSQL.add(TagToPayeeTable.CreateStatementSQLite());
 
         try {
             for (String statement : tableSQL) {

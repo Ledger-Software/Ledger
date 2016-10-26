@@ -2,7 +2,7 @@ package ledger.database.storage;
 
 import ledger.database.IDatabase;
 import ledger.database.enity.*;
-import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
+import ledger.database.storage.SQL.H2.H2Database;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-public class SQLiteDatabaseTest {
+public class H2DatabaseTest {
 
     private static IDatabase database;
     private static Transaction sampleTransaction1;
@@ -32,10 +32,11 @@ public class SQLiteDatabaseTest {
     private static Tag sampleTag2;
     private static Note sampleNote;
     private static Note sampleNote2;
+    private static Note sampleNote3;
 
     @BeforeClass
     public static void setupDatabase() throws Exception {
-        database = new SQLiteDatabase("src/test/resources/test.db");
+        database = new H2Database("./src/test/resources/testH2", "password");
     }
 
     @Before
@@ -48,13 +49,14 @@ public class SQLiteDatabaseTest {
         sampleTag2 = new Tag("Electronics", "Money spent on electronics");
         sampleNote = new Note("This is a note");
         sampleNote2 = new Note("This is also a note");
+        sampleNote3 = new Note("This is also a note, ditto");
 
         ArrayList<Tag> sampleTagList = new ArrayList<>();
         sampleTagList.add(sampleTag);
 
         sampleTransaction1 = new Transaction(new Date(), sampleType, 4201, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
-        sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
-        sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote);
+        sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote2);
+        sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote3);
 
         database.insertType(sampleType);
         database.insertType(sampleType2);
@@ -95,10 +97,15 @@ public class SQLiteDatabaseTest {
         database.insertTransaction(sampleTransaction2);
         database.insertTransaction(sampleTransaction3);
 
+        ArrayList<Tag> sampleTagList = new ArrayList<>();
+        sampleTagList.add(sampleTag);
+        Transaction randomTrans = new Transaction(new Date(), sampleType2, 214, sampleAccount, samplePayee, false, sampleTagList, sampleNote3);
+        database.insertTransaction(randomTrans);
+
         List<Transaction> transactionsBeforeDelete = database.getAllTransactions();
         int countBeforeDelete = transactionsBeforeDelete.size();
 
-        Transaction transactionToDelete = transactionsBeforeDelete.get(0); //arbitrary
+        Transaction transactionToDelete = randomTrans;
         database.deleteTransaction(transactionToDelete);
 
         List<Transaction> transactionsAfterDelete = database.getAllTransactions();
@@ -191,9 +198,8 @@ public class SQLiteDatabaseTest {
         List<Account> accountsBeforeDelete = database.getAllAccounts();
         int countBeforeDelete = accountsBeforeDelete.size();
 
-        Account accountToDelete = accountsBeforeDelete.get(0); //arbitrary
-        int deletedId = accountToDelete.getId();
-        database.deleteAccount(accountToDelete);
+        int deletedId = randomAcc.getId();
+        database.deleteAccount(randomAcc);
 
         List<Account> accountsAfterDelete = database.getAllAccounts();
         int countAfterDelete = accountsAfterDelete.size();
@@ -302,17 +308,15 @@ public class SQLiteDatabaseTest {
     public void insertNote() throws Exception {
         int sizeBefore = database.getAllNotes().size();
 
-        database.insertNote(sampleNote);
+        database.insertTransaction(sampleTransaction3);
+        sampleNote3.setTransactionId(sampleTransaction3.getId());
         List<Note> notesAfterInsertion = database.getAllNotes();
 
         assertEquals(sizeBefore + 1, notesAfterInsertion.size());
-
-        assertEquals(sizeBefore + 1, notesAfterInsertion.size());
-
         Note insertedNote = null;
 
         for (Note n : notesAfterInsertion) {
-            if (n.getNoteText().equals(sampleNote.getNoteText()) && n.getTransactionId() == sampleNote.getTransactionId())
+            if (n.getNoteText().equals(sampleNote3.getNoteText()) && n.getTransactionId() == sampleNote3.getTransactionId())
                 insertedNote = n;
         }
 
@@ -322,7 +326,8 @@ public class SQLiteDatabaseTest {
     @Test
     public void deleteNote() throws Exception {
         Note testNote = new Note(5678, "This is a test note");
-        database.insertNote(testNote);
+        this.sampleTransaction3.setNote(testNote);
+        database.insertTransaction(this.sampleTransaction3);
 
         List<Note> notesBeforeDeletion = database.getAllNotes();
 
@@ -340,10 +345,11 @@ public class SQLiteDatabaseTest {
     @Test
     public void editNote() throws Exception {
         Note testNote = new Note(1234, "A note to test");
-        database.insertNote(testNote); //make sure there is at least one
+        this.sampleTransaction2.setNote(testNote);
+        database.insertTransaction(sampleTransaction2);
 
         List<Note> notes = database.getAllNotes();
-        Note noteToEdit = notes.get(0); //arbitrary
+        Note noteToEdit = testNote;
 
         int originalTransactionId = noteToEdit.getTransactionId();
         String textToSet = "This is edited text!";
@@ -459,8 +465,7 @@ public class SQLiteDatabaseTest {
         database.insertTag(sampleTag2); //make sure there are some tags in the db
 
         List<Tag> tagsBeforeDeletion = database.getAllTags();
-        Tag tagToDelete = tagsBeforeDeletion.get(0);
-        database.deleteTag(tagToDelete);
+        database.deleteTag(sampleTag);
 
         List<Tag> tagsAfterDeletion = database.getAllTags();
 
@@ -468,7 +473,7 @@ public class SQLiteDatabaseTest {
         List<Integer> ids = tagsAfterDeletion.stream().map(Tag::getId).collect(Collectors.toList());
 
         assertEquals(tagsBeforeDeletion.size() - 1, tagsAfterDeletion.size());
-        assertFalse(ids.contains(tagToDelete.getId()));
+        assertFalse(ids.contains(sampleTag.getId()));
     }
 
     @Test
@@ -498,7 +503,7 @@ public class SQLiteDatabaseTest {
     public static void afterTests() throws Exception {
         database.shutdown();
 
-        Path dbPath = Paths.get("src/test/resources/test.db");
+        Path dbPath = Paths.get("src/test/resources/testH2.mv.db");
         Files.delete(dbPath);
     }
 }
