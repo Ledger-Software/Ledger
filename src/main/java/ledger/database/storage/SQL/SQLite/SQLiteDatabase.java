@@ -37,17 +37,17 @@ public class SQLiteDatabase implements ISQLDatabaseTransaction, ISQLDatabaseNote
     public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<>();
 
-        tableSQL.add(TagTable.CreateStatement());
-        tableSQL.add(TypeTable.CreateStatement());
-        tableSQL.add(AccountTable.CreateStatement());
-        tableSQL.add(AccountBalanceTable.CreateStatement());
-        tableSQL.add(PayeeTable.CreateStatement());
+        tableSQL.add(TagTable.CreateStatementSQLite());
+        tableSQL.add(TypeTable.CreateStatementSQLite());
+        tableSQL.add(AccountTable.CreateStatementSQLite());
+        tableSQL.add(AccountBalanceTable.CreateStatementSQLite());
+        tableSQL.add(PayeeTable.CreateStatementSQLite());
 
-        tableSQL.add(TransactionTable.CreateStatement());
-        tableSQL.add(NoteTable.CreateStatement());
+        tableSQL.add(TransactionTable.CreateStatementSQLite());
+        tableSQL.add(NoteTable.CreateStatementSQLite());
 
-        tableSQL.add(TagToTransTable.CreateStatement());
-        tableSQL.add(TagToPayeeTable.CreateStatement());
+        tableSQL.add(TagToTransTable.CreateStatementSQLite());
+        tableSQL.add(TagToPayeeTable.CreateStatementSQLite());
 
         try {
             for (String statement : tableSQL) {

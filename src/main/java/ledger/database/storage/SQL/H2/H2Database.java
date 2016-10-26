@@ -19,12 +19,12 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
     private Connection databaseObject;
 
     public H2Database(String pathToDb) throws StorageException {
-        // Initialize SQLite streams.
+        // Initialize H2 streams.
 
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to find SQLite Driver", e);
+            throw new RuntimeException("Unable to find h2 Driver", e);
         }
 
         try {
@@ -40,17 +40,17 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
     public void initializeDatabase() throws StorageException {
         LinkedList<String> tableSQL = new LinkedList<>();
 
-        tableSQL.add(TagTable.CreateStatement());
-        tableSQL.add(TypeTable.CreateStatement());
-        tableSQL.add(AccountTable.CreateStatement());
-        tableSQL.add(AccountBalanceTable.CreateStatement());
-        tableSQL.add(PayeeTable.CreateStatement());
+        tableSQL.add(TagTable.CreateStatementH2());
+        tableSQL.add(TypeTable.CreateStatementH2());
+        tableSQL.add(AccountTable.CreateStatementH2());
+        tableSQL.add(AccountBalanceTable.CreateStatementH2());
+        tableSQL.add(PayeeTable.CreateStatementH2());
 
-        tableSQL.add(TransactionTable.CreateStatement());
-        tableSQL.add(NoteTable.CreateStatement());
+        tableSQL.add(TransactionTable.CreateStatementH2());
+        tableSQL.add(NoteTable.CreateStatementH2());
 
-        tableSQL.add(TagToTransTable.CreateStatement());
-        tableSQL.add(TagToPayeeTable.CreateStatement());
+        tableSQL.add(TagToTransTable.CreateStatementH2());
+        tableSQL.add(TagToPayeeTable.CreateStatementH2());
 
         try {
             for (String statement : tableSQL) {
