@@ -131,7 +131,7 @@
             <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="180.0" text="Payee" />
             <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="180.0" text="Type" />
             <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="180.0" text="Category" />
-            <TableColumn fx:id="closedColumn" minWidth="0.0" prefWidth="179.0" text="Closed" />
+            <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="179.0" text="Cleared" />
         </columns>
       </TableView>
    </children>
