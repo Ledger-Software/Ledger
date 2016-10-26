@@ -133,7 +133,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
                 task.startTask();
             } catch (Exception e) {
-                System.out.println("Error on transaction submission: " + e);
+                System.out.println("Error on transaction submission: ");
+                e.printStackTrace();
             }
         });
     }
