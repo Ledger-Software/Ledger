@@ -1,6 +1,7 @@
 package ledger.database.storage.table;
 
 import ledger.database.entity.Type;
+import ledger.io.input.TypeConversion;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,12 +32,7 @@ public class TypeTable {
     }
 
     public static List<Type> defaultTypes() {
-        List<Type> types = new LinkedList<Type>();
-
-        types.add(new Type("Debit Card","Purchased with a Debit Card"));
-        types.add(new Type("Credit Card","Purchased with a Credit Card"));
-
-        return types;
+        return TypeConversion.getAllTypes();
     }
 
 
