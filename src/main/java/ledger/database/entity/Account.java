@@ -89,4 +89,8 @@ public class Account implements IEntity {
 
         return true;
     }
+    @Override
+    public String toString(){
+        return this.getName();
+    }
 }

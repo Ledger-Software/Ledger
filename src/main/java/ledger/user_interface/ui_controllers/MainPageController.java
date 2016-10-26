@@ -25,7 +25,7 @@ public class MainPageController extends GridPane implements Initializable {
     @FXML
     private Button addTransactionBtn;
 
-    private static String pageLoc = "/fxml_files/MainPage.fxml";
+    private static String pageLoc = "/fxml_files/mainPage.fxml";
 
     MainPageController() {
         try {
