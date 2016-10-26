@@ -249,7 +249,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     };
 
-
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
     }
@@ -285,6 +284,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         // Populate listView w/ transactions from DB
         configureTransactionTableView();
         updateTransactionTableView();
+
+        DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
+    }
+
+    private void asyncTableUpdate() {
+        Startup.INSTANCE.runLater(this::updateTransactionTableView);
     }
 
     private void configureTransactionTableView() {
