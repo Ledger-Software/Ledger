@@ -103,7 +103,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     /**
      * Sets the internal file path variable.
      *
-     * @param path  Path to use
+     * @param path Path to use
      */
     public void setFilePath(String path) {
         this.filePath = path;
@@ -112,7 +112,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     /**
      * Sets the file button's text.
      *
-     * @param name  String to set the text to
+     * @param name String to set the text to
      */
     public void setFileBtnText(String name) {
         this.chooseFileBtn.setText(name);
