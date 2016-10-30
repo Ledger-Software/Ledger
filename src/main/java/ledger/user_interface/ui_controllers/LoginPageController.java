@@ -71,6 +71,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     private void selectFile() {
         FileChooser chooser = new FileChooser();
+        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
             this.filePath = selectedFile.getAbsolutePath();
