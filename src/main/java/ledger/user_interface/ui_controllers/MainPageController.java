@@ -2,9 +2,11 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -15,6 +17,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -64,6 +67,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TableColumn categoryColumn;
     @FXML
     private TableColumn clearedColumn;
+    @FXML
+    private Button logoutBtn;
 
     // Transaction table edit event handlers
     private EventHandler<CellEditEvent<TransactionModel, String>> amountEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
@@ -281,11 +286,34 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.importTransactionsBtn.setOnAction((event) -> {
             createImportTransPopup();
         });
+
+        this.logoutBtn.setOnAction((event) -> {
+            logout(event);
+        });
         // Populate listView w/ transactions from DB
         configureTransactionTableView();
         updateTransactionTableView();
 
         DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
+    }
+
+    /**
+     * Redirects to login screen and properly closes the database file
+     *
+     * @param event action event used to reset the stage
+     */
+    private void logout(ActionEvent event) {
+        LoginPageController login = new LoginPageController();
+        Scene scene = new Scene(login);
+        Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        newStage.setScene(scene);
+        newStage.setTitle("Ledger Login");
+        newStage.show();
+        try {
+            DbController.INSTANCE.shutdown();
+        } catch (StorageException e) {
+            this.setupErrorPopup("Database file did not close properly.", e);
+        }
     }
 
     private void asyncTableUpdate() {
