@@ -18,7 +18,7 @@ public interface IUIController {
      * @param s a string containing the error message
      */
     default void setupErrorPopup(String s, Exception e) {
-        GenericPopupController errCon = new GenericPopupController(s, "Error!");
+        GenericPopupController errCon = new GenericPopupController(s + "\n" + e.getMessage(), "Error!");
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
         newStage.setScene(scene);
