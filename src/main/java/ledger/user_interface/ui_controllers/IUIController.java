@@ -17,7 +17,7 @@ public interface IUIController {
      *
      * @param s a string containing the error message
      */
-    default void setupErrorPopup(String s) {
+    default void setupErrorPopup(String s, Exception e) {
         GenericPopupController errCon = new GenericPopupController(s, "Error!");
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
@@ -41,7 +41,7 @@ public interface IUIController {
             loader.setRoot(c);
             loader.load();
         } catch (IOException e) {
-            this.setupErrorPopup(errMsg + e);
+            System.out.println(errMsg + " : " + e);
         }
 
     }

@@ -22,7 +22,7 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
 
             this.setItems(FXCollections.observableArrayList(accounts));
         } catch (StorageException e) {
-            this.setupErrorPopup("Error with Account Dropdown");
+            this.setupErrorPopup("Error with Account Dropdown.", e);
             e.printStackTrace();
         }
     }

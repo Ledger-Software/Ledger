@@ -85,7 +85,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction amount.");
+                setupErrorPopup("Error editing transaction amount.", e);
             }
         }
     };
@@ -109,9 +109,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction date.");
+                setupErrorPopup("Error editing transaction date.", e);
             } catch (ParseException e) {
-                setupErrorPopup("Error parsing date string.");
+                setupErrorPopup("Error parsing date string.", e);
             }
         }
     };
@@ -143,7 +143,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction payee.");
+                setupErrorPopup("Error editing transaction payee.", e);
             }
         }
     };
@@ -175,7 +175,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction payee.");
+                setupErrorPopup("Error editing transaction payee.", e);
             }
         }
     };
@@ -214,7 +214,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction payee");
+                setupErrorPopup("Error editing transaction payee", e);
             }
         }
     };
@@ -232,7 +232,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 } else if (pendingToSetString.equals("Pending")) {
                     pendingToSet = true;
                 } else {
-                    setupErrorPopup("Transaction pending status not updated. Invalid input.");
+                    setupErrorPopup("Transaction pending status not updated. Invalid input - must be 'Cleared' or 'Pending'.", new NullPointerException("Invalid Input"));
                 }
 
                 Transaction transaction = model.getTransaction();
@@ -244,7 +244,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
                 updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction amount.");
+                setupErrorPopup("Error editing transaction amount.", e);
             }
         }
     };
@@ -342,7 +342,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             this.transactionTableView.setItems(observableTransactionModels);
 
         } catch (StorageException e) {
-            setupErrorPopup("Error loading all transactions into list view.");
+            setupErrorPopup("Error loading all transactions into list view.", e);
         }
     }
 
@@ -357,10 +357,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 task.startTask();
                 task.waitForComplete();
             } else {
-                setupErrorPopup("No transactions deleted. Selected index.");
+                setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
             }
         } catch (StorageException e) {
-            setupErrorPopup("Error deleting transaction.");
+            setupErrorPopup("Error deleting transaction.", e);
         }
     }
 
