@@ -88,7 +88,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.existingPayees = payeesTask.waitForResult();
 
         } catch (StorageException e) {
-            this.setupErrorPopup("Error on payee submission.");
+            this.setupErrorPopup("Error on payee submission.", e);
         }
         try {
             TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
@@ -100,7 +100,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             accountsTask.startTask();
             this.existingAccounts = accountsTask.waitForResult();
         } catch (StorageException e) {
-            this.setupErrorPopup("Error on account submission.");
+            this.setupErrorPopup("Error on account submission.", e);
         }
         try {
             TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
@@ -112,7 +112,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             typeTask.startTask();
             this.existingTypes = typeTask.waitForResult();
         } catch (StorageException e) {
-            this.setupErrorPopup("Error on type submission.");
+            this.setupErrorPopup("Error on type submission.", e);
         }
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
@@ -124,8 +124,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
                 task.RegisterFailureEvent((e) -> printStackTrace(e));
 
                 task.startTask();
-            } catch (Exception e) {
-                this.setupErrorPopup("Error on transaction submission.");
+            } catch (StorageException e) {
+                this.setupErrorPopup("Error on transaction submission.", e);
             }
         });
     }

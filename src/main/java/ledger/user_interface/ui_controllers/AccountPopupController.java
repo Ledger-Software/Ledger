@@ -10,6 +10,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
+import ledger.exception.StorageException;
 
 import java.net.URL;
 import java.util.Date;
@@ -59,9 +60,10 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 task.RegisterSuccessEvent(this::insertDone);
                 task.RegisterFailureEvent(this::insertFail);
                 task.startTask();
-            } catch (Exception e) {
-                System.out.println("Error on account submission: " + e);
-                this.setupErrorPopup("Error on account submission - please check that all fields have valid values.");
+            } catch (StorageException e) {
+//                System.out.println("Error on account submission: " + e);
+//                this.setupErrorPopup("Error on account submission - please check that all fields have valid values.");
+                this.setupErrorPopup("Error on inserting Account.", e);
             }
         });
     }
@@ -73,7 +75,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     }
 
     private void insertFail(Exception e) {
-        this.setupErrorPopup("Account insertion error.");
+        this.setupErrorPopup("Account insertion error.", e);
         e.printStackTrace();
     }
 
@@ -85,7 +87,11 @@ public class AccountPopupController extends GridPane implements Initializable, I
      */
     public Account getAccountSubmission() {
         if (act == null) {
-            this.act = new Account(accountNameText.getText(), accountDescription.getText());
+            try {
+                this.act = new Account(accountNameText.getText(), accountDescription.getText());
+            } catch (NullPointerException e) {
+                this.setupErrorPopup("Error submitting account information. Make sure all fields are populated.", e);
+            }
         }
         return this.act;
     }
@@ -96,6 +102,16 @@ public class AccountPopupController extends GridPane implements Initializable, I
      * @return a new AccountBalance object
      */
     public AccountBalance getAccountBalance() {
-        return new AccountBalance(this.act, new Date(), Integer.parseInt(accountAmtText.getText()));
+        AccountBalance ab;
+        int amount = 0;
+        try {
+            amount = Integer.parseInt(accountAmtText.getText());
+        } catch (NullPointerException e) {
+            this.setupErrorPopup("Error setting account balance. Make sure all fields are populated.", e);
+        } catch (NumberFormatException e2) {
+            this.setupErrorPopup("Account starting amount must be an integer.", e2);
+        }
+        ab = new AccountBalance(this.act, new Date(), amount);
+        return ab;
     }
 }
