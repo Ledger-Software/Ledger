@@ -76,11 +76,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     }
 
     private void login() {
-        if (this.file == null)
+        if (this.file == null || this.password.getText().equals(""))
             return;
 
         try {
-            DbController.INSTANCE.initialize(this.file.getAbsolutePath());
+            DbController.INSTANCE.initialize(this.file.getAbsolutePath(), this.password.getText());
 
             Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
         } catch (StorageException e) {

@@ -6,6 +6,7 @@ import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
+import ledger.database.storage.SQL.H2.H2Database;
 import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
 import ledger.exception.StorageException;
 
@@ -34,8 +35,8 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
     }
 
-    public void initialize(String fileName) throws StorageException {
-        this.db = new SQLiteDatabase(fileName);
+    public void initialize(String fileName, String password) throws StorageException {
+        this.db = new H2Database(fileName, password);
     }
 
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;

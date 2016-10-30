@@ -1,5 +1,6 @@
 package ledger.database.storage.SQL.H2;
 
+import ledger.database.entity.Type;
 import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
@@ -63,6 +64,11 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         } catch (SQLException e) {
             throw new StorageException("Unable to Create Table", e);
         }
+
+        if (this.getAllTypes().size() == 0)
+            for (Type type : TypeTable.defaultTypes()) {
+                this.insertType(type);
+            }
     }
 
     @Override
