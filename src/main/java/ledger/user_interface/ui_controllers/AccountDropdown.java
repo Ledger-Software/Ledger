@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * JavaFx Dropdown that is linked to Account
  */
-public class AccountDropdown extends ChoiceBox<Account> {
+public class AccountDropdown extends ChoiceBox<Account> implements IUIController {
 
     public AccountDropdown() {
         try {
@@ -22,6 +22,7 @@ public class AccountDropdown extends ChoiceBox<Account> {
 
             this.setItems(FXCollections.observableArrayList(accounts));
         } catch (StorageException e) {
+            this.setupErrorPopup("Error with Account Dropdown.", e);
             e.printStackTrace();
         }
     }
