@@ -84,7 +84,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
             Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
         } catch (StorageException e) {
-            // TODO: Pop explain what is wrong with file.
+            this.setupErrorPopup("Unable to connect to database", e);
         }
 
     }
