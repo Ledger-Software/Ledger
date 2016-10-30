@@ -1,7 +1,7 @@
 package ledger.io.importer;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -43,11 +43,11 @@ public class ImporterTest {
     @BeforeClass
     public static void setupDatabaseAndImporter() throws Exception {
         database = new SQLiteDatabase("src/test/resources/test.db");
-        importer = Importer.getInstance();
+        importer = new Importer();
     }
 
     @Before
-    public void setupTestData() throws Exception{
+    public void setupTestData() throws Exception {
         sampleType = new Type("Credit", "Purchased with a credit card");
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");

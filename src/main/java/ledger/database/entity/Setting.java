@@ -1,4 +1,4 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 /**
  * An Entity that holds a single Key-Value Pair

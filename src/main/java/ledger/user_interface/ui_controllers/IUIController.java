@@ -17,8 +17,12 @@ public interface IUIController {
      *
      * @param s a string containing the error message
      */
-    default void setupErrorPopup(String s){
-        GenericPopupController errCon = new GenericPopupController(s, "Error!");
+    default void setupErrorPopup(String s, Exception e) {
+        String errMsg = " ";
+        if(e.getMessage() != null) {
+            errMsg = e.getMessage();
+        }
+        GenericPopupController errCon = new GenericPopupController(s + "\n" + errMsg, "Error!");
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
         newStage.setScene(scene);
@@ -31,8 +35,8 @@ public interface IUIController {
      * Initializes the controllers - to be used inside constructor
      *
      * @param pageLoc location of the fxml file
-     * @param c the controller being initialized
-     * @param errMsg error message in for case of that specific controller
+     * @param c       the controller being initialized
+     * @param errMsg  error message in for case of that specific controller
      */
     default void initController(String pageLoc, IUIController c, String errMsg) {
         try {
@@ -41,7 +45,7 @@ public interface IUIController {
             loader.setRoot(c);
             loader.load();
         } catch (IOException e) {
-            this.setupErrorPopup(errMsg +  e);
+            System.out.println(errMsg + " : " + e);
         }
 
     }
@@ -51,11 +55,11 @@ public interface IUIController {
      *
      * @param s the previously initialized Scene that is set on the new Stage
      */
-    default void createModal(Scene s, String windowName){
-            Stage newStage = new Stage();
-            newStage.setScene(s);
-            newStage.setTitle(windowName);
-            newStage.initModality(Modality.APPLICATION_MODAL);
-            newStage.show();
+    default void createModal(Scene s, String windowName) {
+        Stage newStage = new Stage();
+        newStage.setScene(s);
+        newStage.setTitle(windowName);
+        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.show();
     }
 }

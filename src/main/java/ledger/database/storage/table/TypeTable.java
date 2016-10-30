@@ -1,5 +1,10 @@
 package ledger.database.storage.table;
 
+import ledger.database.entity.Type;
+import ledger.io.input.TypeConversion;
+
+import java.util.List;
+
 public class TypeTable {
 
     public static String TABLE_NAME = "TYPE";
@@ -31,5 +36,10 @@ public class TypeTable {
                 "%s TEXT NOT NULL, " +
                 "%s TEXT NOT NULL" +
                 ")", TABLE_NAME, TYPE_ID, TYPE_NAME, TYPE_DESC);
+    }
+
+
+    public static List<Type> defaultTypes() {
+        return TypeConversion.getAllTypes();
     }
 }

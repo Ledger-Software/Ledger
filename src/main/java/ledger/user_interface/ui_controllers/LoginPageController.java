@@ -1,15 +1,16 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.Node;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.exception.StorageException;
 
 import java.io.File;
 import java.net.URL;
@@ -37,29 +38,27 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     /**
      * Sets up action listeners for the buttons on the page.
-     *
+     * <p>
      * Called to initialize a controller after its root element has been
      * completely processed.
      *
-     * @param fxmlFileLocation
-     * The location used to resolve relative paths for the root object, or
-     * <tt>null</tt> if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or <tt>null</tt> if
-     * the root object was not localized.
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.loginBtn.setOnAction((event) -> {
-                MainPageController mainPageController = new MainPageController();
-                Scene scene = new Scene(mainPageController);
-                Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                newStage.setScene(scene);
-                newStage.setTitle("Ledger: Transaction View");
-                newStage.show();
+            MainPageController mainPageController = new MainPageController();
+            Scene scene = new Scene(mainPageController);
+            Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            newStage.setScene(scene);
+            newStage.setTitle("Ledger: Transaction View");
+            newStage.show();
         });
-    this.chooseFileBtn.setOnAction((event -> selectFile()));
+        this.chooseFileBtn.setOnAction((event -> selectFile()));
+        this.loginBtn.setOnAction((event -> login()));
     }
 
     /**
@@ -70,9 +69,23 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private void selectFile() {
         FileChooser chooser = new FileChooser();
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
-        if(selectedFile != null){
+        if (selectedFile != null) {
             this.file = selectedFile;
             chooseFileBtn.setText(selectedFile.getName());
         }
+    }
+
+    private void login() {
+        if (this.file == null)
+            return;
+
+        try {
+            DbController.INSTANCE.initialize(this.file.getAbsolutePath());
+
+            Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
+        } catch (StorageException e) {
+            // TODO: Pop explain what is wrong with file.
+        }
+
     }
 }

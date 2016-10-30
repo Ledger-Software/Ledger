@@ -1,4 +1,4 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 /**
  * Entity that will hold Cached values for Statistics generated from Transactional Data.

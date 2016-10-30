@@ -1,4 +1,4 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 /**
  * Entity that holds a single Account
@@ -88,5 +88,10 @@ public class Account implements IEntity {
         if (!this.getDescription().equals(acc.getDescription())) return false;
 
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s", this.name, this.description);
     }
 }

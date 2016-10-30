@@ -1,6 +1,6 @@
 package ledger.io.input;
 
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -31,8 +31,8 @@ public class QfxConverter implements IInAdapter<Transaction> {
     /**
      * Parses the given file into the application's internal transaction objects.
      *
-     * @return  A list of Transaction objects created from the transactions in the provided file.
-     * @throws IOException  When unable to read the given file
+     * @return A list of Transaction objects created from the transactions in the provided file.
+     * @throws IOException When unable to read the given file
      */
     @Override
     public List<Transaction> convert() throws IOException {
@@ -109,7 +109,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
         for (int i = 0; i < transactionTypes.getLength(); i++) {
             Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
             //TODO: Discuss what to do about type
-            Type type = new Type("Error", "No type exists");
+            Type type = TypeConversion.convert("ACH_CREDIT");
             int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
             Payee payee = new Payee(names.item(i).getTextContent(), "");
             //TODO: Discuss what to do about tags
@@ -118,7 +118,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
 
             //TODO: Discuss what to do about pending
 
-            Transaction transaction = new Transaction(date, type, amount, this.account, payee, true, tags, note);
+            Transaction transaction = new Transaction(date, type, amount, this.account, payee, false, tags, note);
             transactions.add(transaction);
         }
     }

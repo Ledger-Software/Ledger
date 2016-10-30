@@ -1,6 +1,6 @@
 package ledger.database.manager;
 
-import ledger.database.enity.Transaction;
+import ledger.database.entity.Transaction;
 
 /**
  * Manages Transaction Entities

@@ -1,6 +1,6 @@
 package ledger.database.storage.SQL;
 
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
@@ -70,7 +70,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction", e);
-        } finally {
+        } catch (NullPointerException e) {
+            rollbackDatabase();
+            throw new StorageException("Error while adding transaction. Not all necessary fields were given.", e);
+        }finally {
             setDatabaseAutoCommit(true);
         }
     }

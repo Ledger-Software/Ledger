@@ -1,6 +1,7 @@
 package ledger.io.events;
 
-import sun.nio.ch.IOStatus;
+
+import ledger.io.events.status.IOStatus;
 
 import java.util.List;
 

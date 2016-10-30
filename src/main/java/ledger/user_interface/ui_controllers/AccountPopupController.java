@@ -1,17 +1,16 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ledger.database.enity.Account;
-import ledger.database.enity.AccountBalance;
+import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.Account;
+import ledger.database.entity.AccountBalance;
+import ledger.exception.StorageException;
 
 import java.net.URL;
 import java.util.Date;
@@ -53,19 +52,47 @@ public class AccountPopupController extends GridPane implements Initializable, I
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
-            getAccountSubmission();
-            getAccountBalance();
-            Stage thisStage = (Stage) this.getScene().getWindow();
-            thisStage.close();
+            try {
+                Account account = getAccountSubmission();
+                AccountBalance balance = getAccountBalance();
+
+                TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
+                task.RegisterSuccessEvent(this::insertDone);
+                task.RegisterFailureEvent(this::insertFail);
+                task.startTask();
+            } catch (StorageException e) {
+                this.setupErrorPopup("Error on inserting Account.", e);
+            } catch (NullPointerException e2) {
+                this.setupErrorPopup("Required field is null.", e2);
+            } catch (NumberFormatException e3) {
+                this.setupErrorPopup("Account starting amount must be an integer.", e3);
+            }
         });
     }
+
+    private void insertDone() {
+        Startup.INSTANCE.runLater(() -> {
+            ((Stage) this.getScene().getWindow()).close();
+        });
+    }
+
+    private void insertFail(Exception e) {
+        this.setupErrorPopup("Account insertion error.", e);
+        e.printStackTrace();
+    }
+
 
     /**
      * Takes the user input and creates a new Account object
      *
      * @return a new Account object
      */
-    public Account getAccountSubmission() {
+    public Account getAccountSubmission() throws NullPointerException {
+        if (accountNameText.getText() == null) {
+            return null;
+        } else if (accountDescription.getText() == null) {
+            return null;
+        }
         if (act == null) {
             this.act = new Account(accountNameText.getText(), accountDescription.getText());
         }
@@ -77,7 +104,11 @@ public class AccountPopupController extends GridPane implements Initializable, I
      *
      * @return a new AccountBalance object
      */
-    public AccountBalance getAccountBalance() {
-        return new AccountBalance(this.act, new Date(), Integer.parseInt(accountAmtText.getText()));
+    public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
+        AccountBalance ab;
+        int amount = 0;
+        amount = Integer.parseInt(accountAmtText.getText());
+        ab = new AccountBalance(this.act, new Date(), amount);
+        return ab;
     }
 }

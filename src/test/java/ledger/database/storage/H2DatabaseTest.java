@@ -1,7 +1,7 @@
 package ledger.database.storage;
 
 import ledger.database.IDatabase;
-import ledger.database.enity.*;
+import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
 import org.junit.AfterClass;
 import org.junit.Before;

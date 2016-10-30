@@ -1,7 +1,7 @@
 package ledger.database.storage.SQL;
 
-import ledger.database.enity.Transaction;
-import ledger.database.enity.Type;
+import ledger.database.entity.Transaction;
+import ledger.database.entity.Type;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.TypeTable;
 import ledger.exception.StorageException;

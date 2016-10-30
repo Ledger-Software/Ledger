@@ -1,25 +1,25 @@
-package ledger.database.enity;
+package ledger.database.entity;
 
 /**
- * Entity that holds a single transaction Tag
+ * Entity that holds a single payee
  */
-public class Tag implements IEntity {
+public class Payee implements IEntity {
     private String name;
     private String description;
     private int id;
 
-    public Tag(String name, String description) {
+    public Payee(String name, String description) {
         this(name, description, -1);
     }
 
-    public Tag(String name, String description, int id) {
+    public Payee(String name, String description, int id) {
         this.name = name;
         this.description = description;
         this.id = id;
     }
 
     /**
-     * Gets the Tag name
+     * Returns the Payee name.
      *
      * @return name
      */
@@ -28,7 +28,7 @@ public class Tag implements IEntity {
     }
 
     /**
-     * Sets the Tag name.
+     * Sets the Payee name.
      *
      * @param name The new name
      */
@@ -37,7 +37,7 @@ public class Tag implements IEntity {
     }
 
     /**
-     * Gets the Tag description.
+     * Gets the Payee description.
      *
      * @return description
      */
@@ -46,16 +46,16 @@ public class Tag implements IEntity {
     }
 
     /**
-     * Sets the Tag description.
+     * Returns the Payee description.
      *
-     * @param description the new description
+     * @param description The new description
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     * Gets the Tag id.
+     * Gets the Payee ID.
      *
      * @return id
      */
@@ -64,11 +64,13 @@ public class Tag implements IEntity {
     }
 
     /**
-     * Sets the Tag id.
+     * Sets the Payee ID.
      *
      * @param id the new id
      */
     public void setId(int id) {
         this.id = id;
     }
+
 }
+
