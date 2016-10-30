@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -20,7 +21,7 @@ public class GenericPopupController extends GridPane implements Initializable, I
     @FXML
     private Button okayBtn;
     @FXML
-    private Label popupTitle;
+    private Text popupTitle;
 
     private final static String pageLoc = "/fxml_files/GenericPopup.fxml";
     private String msg;
