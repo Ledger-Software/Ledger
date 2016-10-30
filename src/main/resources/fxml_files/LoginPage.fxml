@@ -38,10 +38,10 @@
                     </font>
                 </Text>
                 <TextField fx:id="password" layoutX="291.0" layoutY="241.0" maxHeight="40.0" maxWidth="200.0"
-                           minHeight="40.0" minWidth="200.0" prefHeight="40.0" prefWidth="200.0" promptText="Password"
+                           minHeight="45.0" minWidth="200.0" prefHeight="45.0" prefWidth="200.0" promptText="Password"
                            style="-fx-background-color: #abcafc;">
                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0"/>
                     </padding>
                     <font>
                         <Font name="Calibri Bold" size="24.0"/>
