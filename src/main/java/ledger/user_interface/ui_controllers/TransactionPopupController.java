@@ -144,28 +144,31 @@ public class TransactionPopupController extends GridPane implements Initializabl
      * @return a new Transaction object consisting of user input
      */
     public Transaction getTransactionSubmission() {
-        LocalDate localDate = this.datePicker.getValue();
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        this.date = Date.from(instant);
+        try {
+            LocalDate localDate = this.datePicker.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            this.date = Date.from(instant);
 
-        this.cleared = this.clearedCheckBox.isSelected();
-
-
-        this.payee = fromBoxPayee(this.payeeText.getValue());
+            this.cleared = this.clearedCheckBox.isSelected();
 
 
-        this.account = this.accountText.getValue();
-        this.category = new ArrayList<Tag>() {{
-            add(new Tag(categoryText.getText(), ""));
-        }};
-
-        this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
-
-        this.notes = new Note(this.notesText.getText());
+            this.payee = fromBoxPayee(this.payeeText.getValue());
 
 
-        this.type = fromBoxType(this.typeText.getValue());
+            this.account = this.accountText.getValue();
+            this.category = new ArrayList<Tag>() {{
+                add(new Tag(categoryText.getText(), ""));
+            }};
 
+            this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
+
+            this.notes = new Note(this.notesText.getText());
+
+
+            this.type = fromBoxType(this.typeText.getValue());
+        } catch (NullPointerException e) {
+            this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
+        }
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
                 this.payee, this.cleared, this.category, this.notes);
 
