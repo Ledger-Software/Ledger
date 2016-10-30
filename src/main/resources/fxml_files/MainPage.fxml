@@ -1,157 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
-<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane"
-         xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="149.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="516.0" minHeight="10.0" prefHeight="152.0" vgrow="SOMETIMES"/>
-        <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="141.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="50.0" minHeight="0.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="130.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="149.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="516.0" minHeight="10.0" prefHeight="152.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="141.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Rectangle fx:id="blueHeaderRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0"
-                   stroke="BLACK" strokeType="INSIDE" width="1280.0">
+        <Rectangle fx:id="blueHeaderRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="40.0" stroke="BLACK" strokeType="INSIDE" width="1280.0">
             <GridPane.margin>
-                <Insets/>
+                <Insets />
             </GridPane.margin>
         </Rectangle>
         <Text fx:id="title" fill="#ffa81f" strokeType="OUTSIDE" strokeWidth="0.0" text="TransACT">
             <font>
-                <Font name="Calibri Bold" size="34.0"/>
+                <Font name="Calibri Bold" size="34.0" />
             </font>
             <GridPane.margin>
-                <Insets left="15.0" top="5.0"/>
+                <Insets left="15.0" top="5.0" />
             </GridPane.margin>
         </Text>
-        <Rectangle fx:id="columnHeaderColorRect" arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0"
-                   stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-        <AnchorPane fx:id="leftAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1"
-                    GridPane.rowSpan="6">
+        <Rectangle fx:id="columnHeaderColorRect" arcHeight="5.0" arcWidth="5.0" fill="#abcafc" height="40.0" stroke="#abcafc" strokeType="INSIDE" width="1080.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <AnchorPane fx:id="leftAnchorPane" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" GridPane.rowSpan="6">
             <children>
-                <Text fx:id="userName" layoutX="36.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="John Smith" AnchorPane.bottomAnchor="718.0" AnchorPane.leftAnchor="36.0"
-                      AnchorPane.rightAnchor="34.814453125" AnchorPane.topAnchor="14.0">
-                    <font>
-                        <Font name="Calibri" size="28.0"/>
-                    </font>
-                </Text>
-                <Button fx:id="logoutBtn" layoutX="72.0" layoutY="56.0" mnemonicParsing="false" text="Logout"
-                        AnchorPane.bottomAnchor="679.0" AnchorPane.leftAnchor="72.0" AnchorPane.rightAnchor="74.0"
-                        AnchorPane.topAnchor="56.0">
+                <ChoiceBox fx:id="chooseAccount" layoutX="25.0" layoutY="127.0" prefWidth="150.0" AnchorPane.bottomAnchor="608.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="127.0">
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
-                    </cursor>
-                </Button>
-                <ChoiceBox fx:id="chooseAccount" layoutX="25.0" layoutY="127.0" prefWidth="150.0"
-                           AnchorPane.bottomAnchor="608.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0"
-                           AnchorPane.topAnchor="127.0">
-                    <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="HAND" />
                     </cursor>
                 </ChoiceBox>
-                <Text fx:id="chooseActText" layoutX="37.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0"
-                      text="Choose Account:" AnchorPane.bottomAnchor="644.5" AnchorPane.leftAnchor="37.0"
-                      AnchorPane.rightAnchor="40.005859375" AnchorPane.topAnchor="101.5">
+                <Text fx:id="chooseActText" layoutX="37.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter by Account:" AnchorPane.bottomAnchor="644.5" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="40.005859375" AnchorPane.topAnchor="101.5">
                     <font>
-                        <Font name="Calibri" size="18.0"/>
+                        <Font name="Calibri" size="18.0" />
                     </font>
                 </Text>
                 <VBox fx:id="buttonsVBox" layoutX="11.0" layoutY="176.0" prefHeight="574.0" prefWidth="179.0">
                     <children>
-                        <Button fx:id="addAccountBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0"
-                                style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER">
+                        <Button fx:id="addAccountBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER">
                             <font>
-                                <Font name="Calibri" size="19.0"/>
+                                <Font name="Calibri" size="17.0" />
                             </font>
                             <padding>
-                                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0"/>
+                                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                             </padding>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <VBox.margin>
-                                <Insets bottom="20.0"/>
+                                <Insets bottom="20.0" />
                             </VBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Button fx:id="trackSpendingBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0"
-                                style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
+                        <Button fx:id="trackSpendingBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
                             <font>
-                                <Font name="Calibri" size="19.0"/>
+                                <Font name="Calibri" size="17.0" />
                             </font>
                             <padding>
-                                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0"/>
+                                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                             </padding>
                             <VBox.margin>
-                                <Insets bottom="20.0"/>
+                                <Insets bottom="20.0" />
                             </VBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Button fx:id="importTransactionsBtn" mnemonicParsing="false" prefHeight="32.0"
-                                prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions"
-                                textAlignment="CENTER">
+                        <Button fx:id="importTransactionsBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
                             <font>
-                                <Font name="Calibri" size="19.0"/>
+                                <Font name="Calibri" size="17.0" />
                             </font>
                             <padding>
-                                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0"/>
+                                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                             </padding>
                             <VBox.margin>
-                                <Insets bottom="20.0"/>
+                                <Insets bottom="20.0" />
                             </VBox.margin>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                         </Button>
-                        <Button fx:id="addTransactionBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0"
-                                style="-fx-background-color: #ffa81f;" text="Add Transaction" textAlignment="CENTER">
+                        <Button fx:id="addTransactionBtn" mnemonicParsing="false" prefHeight="32.0" prefWidth="179.0" style="-fx-background-color: #ffa81f;" text="Add Transaction" textAlignment="CENTER">
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <font>
-                                <Font name="Calibri" size="19.0"/>
+                                <Font name="Calibri" size="17.0" />
                             </font>
                             <padding>
-                                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0"/>
+                                <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
                             </padding>
                         </Button>
                     </children>
                 </VBox>
             </children>
         </AnchorPane>
-        <TableView fx:id="transactionTableView" editable="true" prefHeight="200.0" prefWidth="200.0"
-                   GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5">
+        <TableView fx:id="transactionTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5">
             <columns>
-                <TableColumn fx:id="amountColumn" prefWidth="180.0" text="Amount"/>
-                <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="180.0" text="Date"/>
-                <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="180.0" text="Payee"/>
-                <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="180.0" text="Type"/>
-                <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="180.0" text="Category"/>
-                <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="179.0" text="Cleared"/>
+                <TableColumn fx:id="amountColumn" prefWidth="180.0" text="Amount" />
+                <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="180.0" text="Date" />
+                <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="180.0" text="Payee" />
+                <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="180.0" text="Type" />
+                <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="180.0" text="Category" />
+                <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="179.0" text="Cleared" />
             </columns>
         </TableView>
+          <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #ffa81f;" text="Logout" textAlignment="RIGHT" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+              <cursor>
+                  <Cursor fx:constant="HAND" />
+              </cursor>
+         <font>
+            <Font name="Calibri Light" size="19.0" />
+         </font>
+         <GridPane.margin>
+            <Insets right="10.0" />
+         </GridPane.margin>
+          </Button>
     </children>
 </fx:root>
