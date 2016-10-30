@@ -27,9 +27,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private TextField password;
     @FXML
     private Button loginBtn;
+    @FXML
+    private Button newFileBtn;
 
     private String pwd;
-    private File file;
+    private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
 
     LoginPageController() {
@@ -58,6 +60,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             newStage.show();
         });
         this.chooseFileBtn.setOnAction((event -> selectFile()));
+        this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
     }
 
@@ -70,22 +73,47 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         FileChooser chooser = new FileChooser();
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
-            this.file = selectedFile;
-            chooseFileBtn.setText(selectedFile.getName());
+            this.filePath = selectedFile.getAbsolutePath();
+            this.chooseFileBtn.setText(selectedFile.getName());
         }
     }
 
     private void login() {
-        if (this.file == null || this.password.getText().equals(""))
+        this.pwd = this.password.getText();
+        if (this.filePath.equals("") || this.pwd.equals(""))
             return;
 
         try {
-            DbController.INSTANCE.initialize(this.file.getAbsolutePath(), this.password.getText());
+            DbController.INSTANCE.initialize(this.filePath, this.pwd);
 
             Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }
 
+    }
+
+    private void openCreateFilePopup() {
+        CreateDatabaseController controller = new CreateDatabaseController(this);
+        Scene scene = new Scene(controller);
+        this.createModal(scene, "Create New File");
+    }
+
+    /**
+     * Sets the internal file path variable.
+     *
+     * @param path  Path to use
+     */
+    public void setFilePath(String path) {
+        this.filePath = path;
+    }
+
+    /**
+     * Sets the file button's text.
+     *
+     * @param name  String to set the text to
+     */
+    public void setFileBtnText(String name) {
+        this.chooseFileBtn.setText(name);
     }
 }

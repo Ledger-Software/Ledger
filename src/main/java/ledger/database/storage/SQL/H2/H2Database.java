@@ -29,7 +29,8 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         }
 
         try {
-            String url = "jdbc:h2:" + pathToDb + ";CIPHER=AES";
+            String pathToDbExtensionsRemoved = pathToDb.replace(".mv.db", "");
+            String url = "jdbc:h2:" + pathToDbExtensionsRemoved + ";CIPHER=AES";
             String user = "TransACT";
             String pwds = "Ledger " + password;
             databaseObject = DriverManager.getConnection(url, user, pwds);

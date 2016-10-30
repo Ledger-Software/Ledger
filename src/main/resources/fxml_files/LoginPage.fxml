@@ -37,7 +37,7 @@
                         <Font name="Calibri" size="64.0" />
                     </font>
                 </Text>
-                <Button fx:id="loginBtn" layoutX="338.0" layoutY="337.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" style="-fx-background-color: #ffa81f;" text="Login" textAlignment="CENTER">
+                <Button fx:id="loginBtn" layoutX="337.0" layoutY="337.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" style="-fx-background-color: #ffa81f;" text="Login" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="22.0" />
                     </font>
@@ -48,7 +48,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="chooseFileBtn" layoutX="304.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Choose File" textAlignment="CENTER">
+                <Button fx:id="chooseFileBtn" layoutX="435.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Existing File" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="22.0" />
                     </font>
@@ -61,9 +61,20 @@
                 </Button>
             <PasswordField fx:id="password" layoutX="291.0" layoutY="236.0" prefHeight="45.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
                <font>
-                  <Font name="Calibri Bold" size="18.0" />
+                  <Font name="Calibri Bold" size="20.0" />
                </font>
             </PasswordField>
+            <Button fx:id="newFileBtn" layoutX="173.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="New File" textAlignment="CENTER">
+               <font>
+                  <Font name="Calibri" size="22.0" />
+               </font>
+               <padding>
+                  <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
             </children>
         </Pane>
     </children>
