@@ -70,7 +70,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction", e);
-        } finally {
+        } catch (NullPointerException e) {
+            rollbackDatabase();
+            throw new StorageException("Error while adding transaction. Not all necessary fields were given.", e);
+        }finally {
             setDatabaseAutoCommit(true);
         }
     }
