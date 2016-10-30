@@ -56,16 +56,22 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
     private void importFile(ActionEvent actionEvent) {
         File file = fileSelector.getFile();
-        if (file == null)
+        if (file == null) {
+            this.setupErrorPopup("Please make sure a file is selected.", new NullPointerException("Required field is empty."));
             return;
+        }
 
         Account account = accountDropdown.getSelectedAccount();
-        if (account == null)
+        if (account == null) {
+            this.setupErrorPopup("Please make sure an account is selected.", new NullPointerException("Required field is empty."));
             return;
+        }
 
         ImportController.Converter converter = converterSelector.getFileConverter();
-        if (converter == null)
+        if (converter == null) {
+            this.setupErrorPopup("Please make sure a conversion type is selected.", new NullPointerException("Required field is empty."));
             return;
+        }
 
         TaskWithArgs<Account> task = ImportController.INSTANCE.importTransactions(converter, file, account);
         task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> importButton.setDisable(false)));
