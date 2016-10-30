@@ -25,7 +25,7 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to find h2 Driver", e);
+            throw new StorageException("Unable to find h2 Driver", e);
         }
 
         try {
@@ -34,7 +34,7 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
             String pwds = "Ledger " + password;
             databaseObject = DriverManager.getConnection(url, user, pwds);
         } catch (SQLException e) {
-            throw new StorageException("Unable to connect to JDBC Socket. ");
+            throw new StorageException("Unable to connect to JDBC Socket. Either the file or password is invalid.", e);
         }
         initializeDatabase();
     }
