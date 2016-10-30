@@ -1,6 +1,7 @@
 package ledger.controller;
 
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
@@ -46,15 +47,10 @@ public class ImportController {
                 return;
             }
 
-            Importer importer = new Importer();
+            TaskWithArgsReturn<List<Transaction>,List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(result.getVerifiedTransactions());
+            task.startTask();
+            List<Transaction> failedTransactions = task.waitForResult();
 
-            IDatabase db = DbController.INSTANCE.getDb();
-            List<Transaction> verifiedTrans = result.getVerifiedTransactions();
-            if (!importer.importTransactions(db, verifiedTrans)) {
-                // TODO How to show user
-                // Throw Some Exception
-                return;
-            }
         }, account);
     }
 

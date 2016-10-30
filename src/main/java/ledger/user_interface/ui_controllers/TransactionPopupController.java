@@ -176,8 +176,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Payee fromBoxPayee(String name) {
 
         for (Payee pay : this.existingPayees) {
-            if (payee.getName().equals(name))
-                return payee;
+            if (pay.getName().equals(name))
+                return pay;
 
         }
         return new Payee(name, "Auto Generated from Add Transaction");

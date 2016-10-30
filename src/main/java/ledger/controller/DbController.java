@@ -1,12 +1,16 @@
 package ledger.controller;
 
+import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
 import ledger.exception.StorageException;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -27,10 +31,21 @@ public class DbController {
      */
     public DbController() {
         INSTANCE = this;
+        transactionSuccessEvent = new LinkedList<>();
     }
 
     public void initialize(String fileName) throws StorageException {
         this.db = new SQLiteDatabase(fileName);
+    }
+
+    private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
+
+    public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
+        transactionSuccessEvent.add(method);
+    }
+
+    private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
+        methods.forEach(task::RegisterSuccessEvent);
     }
 
     /**
@@ -39,8 +54,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) throws StorageException {
-        return new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
-
+        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
+        registerSuccess(task, transactionSuccessEvent);
+        return task;
     }
 
     /**
@@ -49,7 +65,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) throws StorageException {
-        return new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
+        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
+        registerSuccess(task,transactionSuccessEvent);
+        return task;
 
     }
 
@@ -61,8 +79,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) throws StorageException {
-        return new TaskWithArgs<Transaction>(db::editTransaction, transaction);
-
+        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
+        registerSuccess(task,transactionSuccessEvent);
+        return task;
     }
 
     /**
@@ -277,7 +296,22 @@ public class DbController {
         if (db != null)
             db.shutdown();
     }
+    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions){
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) ->{
+            List<Transaction> list = new ArrayList<>();
+            for (Transaction currentTransaction : transactionList) {
 
+                try {
+                    db.insertTransaction(currentTransaction);
+                } catch (StorageException e) {
+                    list.add(currentTransaction);
+                }
+            }
+            return list;
+        }, transactions);
+        return task;
+    }
+    
     protected IDatabase getDb() {
         return db;
     }
