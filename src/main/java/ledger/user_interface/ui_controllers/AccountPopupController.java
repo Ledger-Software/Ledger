@@ -62,6 +62,8 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 task.startTask();
             } catch (StorageException e) {
                 this.setupErrorPopup("Error on inserting Account.", e);
+            } catch (NullPointerException e2) {
+                this.setupErrorPopup("Required field is null.", e2);
             }
         });
     }
@@ -83,13 +85,14 @@ public class AccountPopupController extends GridPane implements Initializable, I
      *
      * @return a new Account object
      */
-    public Account getAccountSubmission() {
+    public Account getAccountSubmission() throws NullPointerException {
+        if (accountNameText.getText() == null){
+            return null;
+        } else if (accountDescription.getText() == null) {
+            return null;
+        }
         if (act == null) {
-            try {
-                this.act = new Account(accountNameText.getText(), accountDescription.getText());
-            } catch (NullPointerException e) {
-                this.setupErrorPopup("Error submitting account information. Make sure all fields are populated.", e);
-            }
+            this.act = new Account(accountNameText.getText(), accountDescription.getText());
         }
         return this.act;
     }
