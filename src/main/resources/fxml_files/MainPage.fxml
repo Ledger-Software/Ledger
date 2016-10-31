@@ -127,6 +127,6 @@
             </VBox>
         </children>
     </AnchorPane>
-    <TransactionTableView fx:id="transactionTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="900.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS"/>
+    <TransactionTableView fx:id="transactionTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5"/>
 </children>
 </fx:root>

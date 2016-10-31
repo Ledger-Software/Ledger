@@ -61,27 +61,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.importTransactionsBtn.setOnAction((event) -> {
             createImportTransPopup();
         });
-    }
 
-//    private void updateTransactionTableView() {
-//        try {
-//            TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
-//            task.startTask();
-//            List<Transaction> allTransactions = task.waitForResult();
-//
-//            ArrayList<TransactionModel> models = new ArrayList<>();
-//            for (int i = 0; i < allTransactions.size(); i++) {
-//                TransactionModel modelToAdd = new TransactionModel(allTransactions.get(i));
-//                models.add(modelToAdd);
-//            }
-//            ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
-//
-//            this.transactionTableView.setItems(observableTransactionModels);
-//
-//        } catch (StorageException e) {
-//            setupErrorPopup("Error loading all transactions into list view.", e);
-//        }
-//    }
+        this.setFillHeight(this.transactionTableView, true);
+        this.setFillWidth(this.transactionTableView, true);
+    }
 
     /**
      * Creates the Import Transaction modal

@@ -62,7 +62,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 String amountToSetString = t.getNewValue();
                 int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
                 int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
-                int amountToSet = (dollarsToSet * 100) + centsToSet;
+                int amountToSet = (dollarsToSet * 100);
+                if (amountToSet < 0) {
+                    amountToSet -= centsToSet;
+                } else {
+                    amountToSet += centsToSet;
+                }
 
                 Transaction transaction = model.getTransaction();
                 transaction.setAmount(amountToSet);
