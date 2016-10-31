@@ -1,5 +1,6 @@
 package ledger.database.storage.SQL.H2;
 
+import ledger.database.entity.Type;
 import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
@@ -24,16 +25,17 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         try {
             Class.forName("org.h2.Driver");
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("Unable to find h2 Driver", e);
+            throw new StorageException("Unable to find h2 Driver", e);
         }
 
         try {
-            String url = "jdbc:h2:" + pathToDb + ";CIPHER=AES";
+            String pathToDbExtensionsRemoved = pathToDb.replace(".mv.db", "");
+            String url = "jdbc:h2:" + pathToDbExtensionsRemoved + ";CIPHER=AES";
             String user = "TransACT";
             String pwds = "Ledger " + password;
             databaseObject = DriverManager.getConnection(url, user, pwds);
         } catch (SQLException e) {
-            throw new StorageException("Unable to connect to JDBC Socket. ");
+            throw new StorageException("Unable to connect to JDBC Socket. Either the file or password is invalid.", e);
         }
         initializeDatabase();
     }
@@ -63,6 +65,11 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
         } catch (SQLException e) {
             throw new StorageException("Unable to Create Table", e);
         }
+
+        if (this.getAllTypes().size() == 0)
+            for (Type type : TypeTable.defaultTypes()) {
+                this.insertType(type);
+            }
     }
 
     @Override

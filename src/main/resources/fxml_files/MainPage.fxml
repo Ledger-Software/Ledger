@@ -6,8 +6,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
+<?import ledger.user_interface.ui_controllers.TransactionTableView?>
 
 <?import ledger.user_interface.ui_controllers.AccountDropdown?>
 <fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -118,17 +118,8 @@
                 </VBox>
             </children>
         </AnchorPane>
-        <TableView fx:id="transactionTableView" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5">
-            <columns>
-                <TableColumn fx:id="amountColumn" prefWidth="180.0" text="Amount" />
-                <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="180.0" text="Date" />
-                <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="180.0" text="Payee" />
-                <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="180.0" text="Type" />
-                <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="180.0" text="Category" />
-                <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="179.0" text="Cleared" />
-            </columns>
-        </TableView>
-          <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #ffa81f;" text="Logout" textAlignment="RIGHT" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+        <TransactionTableView fx:id="transactionTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" GridPane.columnIndex="1" GridPane.columnSpan="6" GridPane.rowIndex="2" GridPane.rowSpan="5"/>
+        <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #ffa81f;" text="Logout" textAlignment="RIGHT" GridPane.columnIndex="6" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="CENTER">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>

@@ -47,7 +47,6 @@ public class Startup extends Application {
         } catch (StorageException e) {
         }
 
-
         Platform.exit();
     }
 
