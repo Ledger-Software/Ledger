@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="580.0" prefWidth="900.0" type="TableView" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <columns>
+      <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Amount" />
+      <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="150.0" text="Date" />
+      <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="150.0" text="Payee" />
+      <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="150.0" text="Type" />
+      <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="150.0" text="Category" />
+      <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="150.0" text="Cleared" />
+   </columns>
+</fx:root>
