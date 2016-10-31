@@ -16,6 +16,7 @@ import ledger.controller.DbController;
 import ledger.exception.StorageException;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -88,8 +89,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
-            this.filePath = selectedFile.getAbsolutePath();
-            this.chooseFileBtn.setText(selectedFile.getName());
+            setChosenFile(selectedFile);
         }
     }
 
@@ -114,21 +114,9 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.createModal(scene, "Create New File");
     }
 
-    /**
-     * Sets the internal file path variable.
-     *
-     * @param path Path to use
-     */
-    public void setFilePath(String path) {
-        this.filePath = path;
-    }
-
-    /**
-     * Sets the file button's text.
-     *
-     * @param name String to set the text to
-     */
-    public void setFileBtnText(String name) {
-        this.chooseFileBtn.setText(name);
+    public void setChosenFile(File file) {
+        this.filePath = file.getAbsolutePath();
+        this.chooseFileBtn.setText(file.getName());
+        this.password.requestFocus();
     }
 }

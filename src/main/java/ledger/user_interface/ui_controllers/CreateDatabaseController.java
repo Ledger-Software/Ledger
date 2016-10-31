@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,8 +44,7 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
             return;
         }
 
-        this.parentController.setFileBtnText(this.fileName.getText());
-        this.parentController.setFilePath("~/" + this.fileName.getText());
+        this.parentController.setChosenFile(new File("~/" + this.fileName.getText()));
 
         Startup.INSTANCE.runLater(() -> {
             ((Stage) this.getScene().getWindow()).close();
