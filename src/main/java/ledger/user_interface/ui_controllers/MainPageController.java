@@ -61,9 +61,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.importTransactionsBtn.setOnAction((event) -> {
             createImportTransPopup();
         });
-
-        this.setFillHeight(this.transactionTableView, true);
-        this.setFillWidth(this.transactionTableView, true);
     }
 
     /**
