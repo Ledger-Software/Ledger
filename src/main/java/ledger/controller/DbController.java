@@ -311,10 +311,10 @@ public class DbController {
             }
             return list;
         }, transactions);
-        for (CallableMethodVoidNoArgs method: transactionSuccessEvent) {
+
+        for (CallableMethodVoidNoArgs method : transactionSuccessEvent) {
             task.RegisterSuccessEvent((t) -> method.call());
         }
-
 
         return task;
     }
