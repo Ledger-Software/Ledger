@@ -6,6 +6,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -59,6 +61,13 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         });
         this.chooseFileBtn.setOnAction((event -> selectFile()));
         this.loginBtn.setOnAction((event -> login()));
+        this.password.setOnKeyTyped(this::checkForEnter);
+    }
+
+    private void checkForEnter(KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER || "\r".equals(keyEvent.getCharacter())) {
+            loginBtn.fire();
+        }
     }
 
     /**
