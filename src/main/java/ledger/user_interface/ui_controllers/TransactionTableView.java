@@ -36,18 +36,16 @@ import java.util.List;
  * Controls all input and interaction with the Main Page of the application
  */
 
-public class TransactionTableView extends TableView<Transaction> implements IUIController {
+public class TransactionTableView extends TableView<TransactionModel> implements IUIController {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
     // Transaction table UI objects
     @FXML
-    private TableView tableView;
+    private TableColumn payeeColumn;
     @FXML
     private TableColumn amountColumn;
     @FXML
     private TableColumn dateColumn;
-    @FXML
-    private TableColumn payeeColumn;
     @FXML
     private TableColumn typeColumn;
     @FXML
@@ -239,7 +237,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         }
     };
 
-    TransactionTableView() {
+    public TransactionTableView() {
 //        this.initController(pageLoc, this, "Error on main page startup: ");
         FXMLLoader fxmlLoader = new FXMLLoader(
                 getClass().getResource(pageLoc));
@@ -318,7 +316,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
             System.out.println(observableTransactionModels.size());
 
-            this.tableView.setItems(observableTransactionModels);
+            this.setItems(observableTransactionModels);
 
         } catch (StorageException e) {
             setupErrorPopup("Error loading all transactions into list view.", e);
@@ -327,9 +325,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     private void handleDeleteTransactionFromTableView() {
         try {
-            int selectedIndex = this.tableView.getSelectionModel().getSelectedIndex();
+            int selectedIndex = this.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
-                TransactionModel model = (TransactionModel) this.tableView.getItems().get(selectedIndex);
+                TransactionModel model = (TransactionModel) this.getItems().get(selectedIndex);
                 Transaction transactionToDelete = model.getTransaction();
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);

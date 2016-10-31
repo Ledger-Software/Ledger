@@ -61,12 +61,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.importTransactionsBtn.setOnAction((event) -> {
             createImportTransPopup();
         });
-
-        DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
-    }
-
-    private void asyncTableUpdate() {
-        Startup.INSTANCE.runLater(this.transactionTableView::updateTransactionTableView);
     }
 
 //    private void updateTransactionTableView() {
