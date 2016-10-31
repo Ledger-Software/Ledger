@@ -6,7 +6,7 @@ import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
-import ledger.database.storage.SQL.SQLite.SQLiteDatabase;
+import ledger.database.storage.SQL.H2.H2Database;
 import ledger.exception.StorageException;
 
 import java.util.ArrayList;
@@ -34,8 +34,8 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
     }
 
-    public void initialize(String fileName) throws StorageException {
-        this.db = new SQLiteDatabase(fileName);
+    public void initialize(String fileName, String password) throws StorageException {
+        this.db = new H2Database(fileName, password);
     }
 
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
@@ -66,7 +66,7 @@ public class DbController {
      */
     public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) throws StorageException {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
-        registerSuccess(task,transactionSuccessEvent);
+        registerSuccess(task, transactionSuccessEvent);
         return task;
 
     }
@@ -80,7 +80,7 @@ public class DbController {
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) throws StorageException {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
-        registerSuccess(task,transactionSuccessEvent);
+        registerSuccess(task, transactionSuccessEvent);
         return task;
     }
 
@@ -296,8 +296,9 @@ public class DbController {
         if (db != null)
             db.shutdown();
     }
-    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions){
-        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) ->{
+
+    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
             List<Transaction> list = new ArrayList<>();
             for (Transaction currentTransaction : transactionList) {
 
@@ -312,7 +313,7 @@ public class DbController {
         }, transactions);
         return task;
     }
-    
+
     protected IDatabase getDb() {
         return db;
     }

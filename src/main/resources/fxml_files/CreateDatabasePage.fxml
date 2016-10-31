@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="600.0" type="Pane" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+       <Rectangle fx:id="headerBar" fill="#ffa81f" height="41.0" strokeType="INSIDE" width="600.0" />
+       <Text fx:id="popupTitle" layoutX="6.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New File">
+           <font>
+               <Font name="Calibri" size="28.0" />
+           </font>
+       </Text>
+      <Button fx:id="submitButton" layoutX="274.0" layoutY="135.0" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="OK">
+         <font>
+            <Font name="Calibri" size="22.0" />
+         </font></Button>
+      <TextField fx:id="fileName" layoutX="153.0" layoutY="61.0" onAction="#onEnter" prefHeight="48.0" prefWidth="304.0" promptText="File Name" style="-fx-background-color: #abcafc;">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font></TextField>
+   </children>
+</fx:root>

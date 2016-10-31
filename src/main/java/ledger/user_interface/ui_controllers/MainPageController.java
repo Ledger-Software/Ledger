@@ -2,11 +2,14 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.controller.DbController;
-
+import ledger.exception.StorageException;
+import javafx.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,10 +27,14 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
 
-    private final static String pageLoc = "/fxml_files/MainPage.fxml";
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
+
+    @FXML
+    private Button logoutBtn;
+
+    private final static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -61,6 +68,29 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.importTransactionsBtn.setOnAction((event) -> {
             createImportTransPopup();
         });
+
+        this.logoutBtn.setOnAction((event) -> {
+            logout(event);
+        });
+    }
+
+    /**
+     * Redirects to login screen and properly closes the database file
+     *
+     * @param event action event used to reset the stage
+     */
+    private void logout(ActionEvent event) {
+        LoginPageController login = new LoginPageController();
+        Scene scene = new Scene(login);
+        Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        newStage.setScene(scene);
+        newStage.setTitle("Ledger Login");
+        newStage.show();
+        try {
+            DbController.INSTANCE.shutdown();
+        } catch (StorageException e) {
+            this.setupErrorPopup("Database file did not close properly.", e);
+        }
     }
 
     /**
