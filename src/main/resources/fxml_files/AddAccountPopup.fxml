@@ -34,8 +34,38 @@
                 <Insets left="15.0" top="5.0"/>
             </GridPane.margin>
         </Text>
+        <Text fx:id="accountNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Name:" textAlignment="RIGHT"
+              wrappingWidth="232.0927734375" GridPane.rowIndex="1">
+            <font>
+                <Font name="Calibri Light" size="22.0"/>
+            </font>
+        </Text>
+        <TextField fx:id="accountNameText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
+                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets left="15.0"/>
+            </GridPane.margin>
+        </TextField>
+        <Text fx:id="accountDescLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" textAlignment="RIGHT"
+              wrappingWidth="232.0927734375" GridPane.rowIndex="2">
+            <font>
+                <Font name="Calibri Light" size="22.0"/>
+            </font>
+        </Text>
         <TextField fx:id="accountDescription" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
                    style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets left="15.0"/>
+            </GridPane.margin>
+        </TextField>
+        <Text fx:id="startingAmtLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Starting Amount:"
+              textAlignment="RIGHT" wrappingWidth="232.0927734375" GridPane.rowIndex="3">
+            <font>
+                <Font name="Calibri Light" size="22.0"/>
+            </font>
+        </Text>
+        <TextField fx:id="accountAmtText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
+                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="15.0"/>
             </GridPane.margin>
@@ -53,35 +83,5 @@
                 <Cursor fx:constant="HAND"/>
             </cursor>
         </Button>
-        <Text fx:id="accountNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Name:" textAlignment="RIGHT"
-              wrappingWidth="232.0927734375" GridPane.rowIndex="1">
-            <font>
-                <Font name="Calibri Light" size="22.0"/>
-            </font>
-        </Text>
-        <Text fx:id="accountDescLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Description:" textAlignment="RIGHT"
-              wrappingWidth="232.0927734375" GridPane.rowIndex="2">
-            <font>
-                <Font name="Calibri Light" size="22.0"/>
-            </font>
-        </Text>
-        <Text fx:id="startingAmtLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Starting Amount:"
-              textAlignment="RIGHT" wrappingWidth="232.0927734375" GridPane.rowIndex="3">
-            <font>
-                <Font name="Calibri Light" size="22.0"/>
-            </font>
-        </Text>
-        <TextField fx:id="accountNameText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
-                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <GridPane.margin>
-                <Insets left="15.0"/>
-            </GridPane.margin>
-        </TextField>
-        <TextField fx:id="accountAmtText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
-                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
-            <GridPane.margin>
-                <Insets left="15.0"/>
-            </GridPane.margin>
-        </TextField>
     </children>
 </fx:root>
