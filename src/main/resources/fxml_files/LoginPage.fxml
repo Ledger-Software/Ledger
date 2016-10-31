@@ -59,7 +59,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-            <PasswordField fx:id="password" layoutX="291.0" layoutY="236.0" prefHeight="45.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
+            <PasswordField fx:id="password" onAction="#onEnter" layoutX="291.0" layoutY="236.0" prefHeight="45.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
                <font>
                   <Font name="Calibri Bold" size="20.0" />
                </font>

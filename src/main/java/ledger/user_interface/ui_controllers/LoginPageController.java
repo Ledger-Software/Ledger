@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -29,6 +30,10 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private Button loginBtn;
     @FXML
     private Button newFileBtn;
+    @FXML
+    public void onEnter(ActionEvent ae) {
+        login();
+    }
 
     private String pwd;
     private String filePath;

@@ -19,7 +19,7 @@
          <font>
             <Font name="Calibri" size="22.0" />
          </font></Button>
-      <TextField fx:id="fileName" layoutX="153.0" layoutY="61.0" prefHeight="48.0" prefWidth="304.0" promptText="File Name" style="-fx-background-color: #abcafc;">
+      <TextField fx:id="fileName" layoutX="153.0" layoutY="61.0" onAction="#onEnter" prefHeight="48.0" prefWidth="304.0" promptText="File Name" style="-fx-background-color: #abcafc;">
          <font>
             <Font name="System Bold" size="22.0" />
          </font></TextField>
