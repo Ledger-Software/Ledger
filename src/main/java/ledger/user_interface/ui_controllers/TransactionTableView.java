@@ -60,17 +60,17 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
                 String amountToSetString = t.getNewValue();
                 if (InputSanitization.isInvalidAmount(amountToSetString)) {
+                    updateTransactionTableView();
                     setupErrorPopup("Provided amount is invalid", new Exception());
                     return;
                 }
-                int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
-                int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
-                int amountToSet = (dollarsToSet * 100);
-                if (amountToSet < 0) {
-                    amountToSet -= centsToSet;
-                } else {
-                    amountToSet += centsToSet;
+
+                if (amountToSetString.charAt(0) == '$') {
+                    amountToSetString = amountToSetString.substring(1);
                 }
+
+                double amountToSetDecimal = Double.parseDouble(amountToSetString);
+                int amountToSet = (int) Math.round(amountToSetDecimal * 100);
 
                 Transaction transaction = model.getTransaction();
                 transaction.setAmount(amountToSet);
