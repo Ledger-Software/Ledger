@@ -11,7 +11,7 @@ public class InputSanitization {
     private static final String HexDigits = "(\\p{XDigit}+)";
     private static final String Exp = "[eE][+-]?" + Digits;
     private static final String fpRegex =
-            ("$?[\\x00-\\x20]*" + // Optional leading "whitespace"
+            ("[$]?[\\x00-\\x20]*" + // Optional leading "whitespace"
                     "[+-]?(" +         // Optional sign character
 
                     // A decimal floating-point string representing a finite positive
