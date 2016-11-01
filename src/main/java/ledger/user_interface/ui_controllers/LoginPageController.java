@@ -71,7 +71,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
     }
-    
+
     /**
      * Opens a file selector window so the user can choose what file they wish to use.
      *
