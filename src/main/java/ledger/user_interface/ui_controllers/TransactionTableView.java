@@ -76,10 +76,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setAmount(amountToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction amount.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction amount.", e);
             }
@@ -100,10 +102,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setDate(dateToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction date.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction date.", e);
             } catch (ParseException e) {
@@ -134,10 +138,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setPayee(payeeToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction payee.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction payee.", e);
             }
@@ -166,12 +172,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setType(typeToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction type.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction payee.", e);
+                setupErrorPopup("Error editing transaction type.", e);
             }
         }
     };
@@ -205,12 +213,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setTagList(tagsToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction categories.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction payee", e);
+                setupErrorPopup("Error editing transaction categories.", e);
             }
         }
     };
@@ -235,12 +245,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 transaction.setPending(pendingToSet);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error editing transaction pending field.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
-
-                updateTransactionTableView();
             } catch (StorageException e) {
-                setupErrorPopup("Error editing transaction amount.", e);
+                setupErrorPopup("Error editing transaction pending field.", e);
             }
         }
     };
@@ -337,8 +349,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 Transaction transactionToDelete = model.getTransaction();
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error deleting transaction.", e);
+                });
+                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
-                task.waitForComplete();
             } else {
                 setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
             }
