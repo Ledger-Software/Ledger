@@ -47,7 +47,7 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
             setupErrorPopup("Please provide a file name", new Exception());
             return;
         } else if (!this.password.getText().equals(this.confirmPassword.getText())) {
-            setupErrorPopup("The two passwords provided do not match!", new Exception());
+            this.setupErrorPopup("The two passwords provided do not match!", new Exception());
             return;
         }
 
