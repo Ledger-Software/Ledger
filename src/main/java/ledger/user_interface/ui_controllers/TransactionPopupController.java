@@ -46,7 +46,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Button addTrnxnSubmitButton;
 
     private Date date;
-    private boolean cleared;
+    private boolean pending;
     private List<Payee> existingPayees;
     private Payee payee;
     private List<Account> existingAccounts;
@@ -149,7 +149,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             this.date = Date.from(instant);
 
-            this.cleared = this.clearedCheckBox.isSelected();
+            this.pending = !this.clearedCheckBox.isSelected();
 
 
             this.payee = fromBoxPayee(this.payeeText.getValue());
@@ -170,7 +170,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
         }
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
-                this.payee, this.cleared, this.category, this.notes);
+                this.payee, this.pending, this.category, this.notes);
 
         return t;
     }
