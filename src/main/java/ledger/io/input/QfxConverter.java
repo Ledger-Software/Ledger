@@ -109,7 +109,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
         for (int i = 0; i < transactionTypes.getLength(); i++) {
             Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
             //TODO: Discuss what to do about type
-            Type type = TypeConversion.convert("ACH_CREDIT");
+            Type type = TypeConversion.convert("UNKNOWN");
             int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
             Payee payee = new Payee(names.item(i).getTextContent(), "");
             //TODO: Discuss what to do about tags
