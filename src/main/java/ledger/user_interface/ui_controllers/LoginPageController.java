@@ -30,6 +30,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private Button loginBtn;
     @FXML
     private Button newFileBtn;
+
     @FXML
     public void onEnter(ActionEvent ae) {
         login();
@@ -86,7 +87,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private void login() {
         this.pwd = this.password.getText();
-        if (this.filePath.equals("") || this.pwd.equals(""))
+        if ("".equals(this.filePath) || "".equals(this.pwd))
             return;
 
         try {
@@ -96,30 +97,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }
-
     }
 
     private void openCreateFilePopup() {
-        CreateDatabaseController controller = new CreateDatabaseController(this);
+        CreateDatabaseController controller = new CreateDatabaseController();
         Scene scene = new Scene(controller);
         this.createModal(scene, "Create New File");
-    }
-
-    /**
-     * Sets the internal file path variable.
-     *
-     * @param path Path to use
-     */
-    public void setFilePath(String path) {
-        this.filePath = path;
-    }
-
-    /**
-     * Sets the file button's text.
-     *
-     * @param name String to set the text to
-     */
-    public void setFileBtnText(String name) {
-        this.chooseFileBtn.setText(name);
     }
 }
