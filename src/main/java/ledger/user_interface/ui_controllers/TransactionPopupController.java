@@ -11,6 +11,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.exception.StorageException;
+import ledger.io.input.TypeConversion;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
@@ -167,7 +168,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.notes = new Note(this.notesText.getText());
 
 
-            this.type = fromBoxType(this.typeText.getValue());
+            this.type = TypeConversion.convert(this.typeText.getValue());
         } catch (NullPointerException e) {
             this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
         }
@@ -185,17 +186,6 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         }
         return new Payee(name, "Auto Generated from Add Transaction");
-
-    }
-
-    private Type fromBoxType(String name) {
-
-        for (Type type : this.existingTypes) {
-            if (type.getName().equals(name))
-                return type;
-
-        }
-        return new Type(name, "Auto Generated from Add Transaction");
 
     }
 
