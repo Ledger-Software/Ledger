@@ -7,11 +7,11 @@ import java.util.regex.Pattern;
  */
 public class InputSanitization {
 
-    private static final String Digits     = "(\\p{Digit}+)";
-    private static final String HexDigits  = "(\\p{XDigit}+)";
-    private static final String Exp        = "[eE][+-]?"+Digits;
-    private static final String fpRegex    =
-            ("[\\x00-\\x20]*"+ // Optional leading "whitespace"
+    private static final String Digits = "(\\p{Digit}+)";
+    private static final String HexDigits = "(\\p{XDigit}+)";
+    private static final String Exp = "[eE][+-]?" + Digits;
+    private static final String fpRegex =
+            ("[\\x00-\\x20]*" + // Optional leading "whitespace"
                     "[+-]?(" +         // Optional sign character
 
                     // A decimal floating-point string representing a finite positive
@@ -25,10 +25,10 @@ public class InputSanitization {
                     // edition, section 3.10.2.
 
                     // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
-                    "((("+Digits+"(\\.)?("+Digits+"?)("+Exp+")?)|"+
+                    "(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
 
                     // . Digits ExponentPart_opt FloatTypeSuffix_opt
-                    "(\\.("+Digits+")("+Exp+")?)|"+
+                    "(\\.(" + Digits + ")(" + Exp + ")?)|" +
 
                     // Hexadecimal strings
                     "((" +
@@ -42,10 +42,23 @@ public class InputSanitization {
                     "[fFdD]?))" +
                     "[\\x00-\\x20]*");// Optional trailing "whitespace"
 
-    public static boolean isStringInvalid(String str){
+    /**
+     * Checks to see if a string is valid input to the application. The string is required to not be empty or null
+     *
+     * @param str The string to check for validity.
+     * @return True if the string is invalid, false otherwise.
+     */
+    public static boolean isStringInvalid(String str) {
         return "".equals(str) || str == null;
     }
 
+    /**
+     * Checks to see if a string is valid input to the application and is able to be parsed. The string must be able
+     * to be parsed as a Double.
+     *
+     * @param str The string to check for validity.
+     * @return True if the string is invalid, false otherwise.
+     */
     public static boolean isInvalidAmount(String str) {
         return !Pattern.matches(fpRegex, str);
     }

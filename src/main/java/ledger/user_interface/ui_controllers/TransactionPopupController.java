@@ -152,9 +152,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
             this.cleared = this.clearedCheckBox.isSelected();
 
-
             this.payee = fromBoxPayee(this.payeeText.getValue());
-
 
             this.account = this.accountText.getValue();
             this.category = new ArrayList<Tag>() {{
@@ -163,7 +161,6 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
             if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
                 this.setupErrorPopup("Invalid amount entry.", new Exception());
-                return null;
             }
             this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
 
