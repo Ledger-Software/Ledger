@@ -25,6 +25,7 @@ import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.exception.StorageException;
 import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -60,6 +61,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             try {
                 TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
                 String amountToSetString = t.getNewValue();
+                if(InputSanitization.isInvalidAmount(amountToSetString)) {
+                    setupErrorPopup("Provided amount is invalid", new Exception());
+                    return;
+                }
                 int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
                 int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
                 int amountToSet = (dollarsToSet * 100);
