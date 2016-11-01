@@ -58,8 +58,8 @@ public class ChaseConverter implements IInAdapter<Transaction> {
                 Type type = TypeConversion.convert(typeString);
 
                 // TODO: Should Payee be instantiated each time?
-                details = details.substring(0, details.length() - 5).trim();
-                Payee payee = new Payee(details, details);
+                description = description.substring(0, description.length() - 5).trim();
+                Payee payee = new Payee(description, description);
                 List<Tag> tags = null;
                 Note note = null;
 
