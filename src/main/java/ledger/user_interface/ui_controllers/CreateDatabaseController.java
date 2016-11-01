@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,7 +39,7 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
 
     private void submitForm() {
         String fileName = this.fileName.getText();
-        if (fileName == null) {
+        if (InputSanitization.isStringInvalid(fileName)) {
             setupErrorPopup("Please provide a file name", null);
             return;
         }
