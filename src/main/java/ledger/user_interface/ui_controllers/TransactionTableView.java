@@ -12,22 +12,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.exception.StorageException;
 import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.InputSanitization;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +59,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             try {
                 TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
                 String amountToSetString = t.getNewValue();
+                if (InputSanitization.isInvalidAmount(amountToSetString)) {
+                    setupErrorPopup("Provided amount is invalid", new Exception());
+                    return;
+                }
                 int dollarsToSet = Integer.parseInt(amountToSetString.substring(1, amountToSetString.length() - 3));
                 int centsToSet = Integer.parseInt(amountToSetString.substring(amountToSetString.length() - 2, amountToSetString.length()));
                 int amountToSet = (dollarsToSet * 100);
@@ -318,8 +321,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 models.add(modelToAdd);
             }
             ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
-
-            System.out.println(observableTransactionModels.size());
 
             this.setItems(observableTransactionModels);
 

@@ -14,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private Button loginBtn;
     @FXML
     private Button newFileBtn;
+
     @FXML
     public void onEnter(ActionEvent ae) {
         login();
@@ -88,7 +90,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private void login() {
         this.pwd = this.password.getText();
-        if (this.filePath.equals("") || this.pwd.equals(""))
+        if (InputSanitization.isStringInvalid(this.filePath) || InputSanitization.isStringInvalid(this.pwd))
             return;
 
         try {
@@ -98,11 +100,10 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }
-
     }
 
     private void openCreateFilePopup() {
-        CreateDatabaseController controller = new CreateDatabaseController(this);
+        CreateDatabaseController controller = new CreateDatabaseController();
         Scene scene = new Scene(controller);
         this.createModal(scene, "Create New File");
     }
@@ -112,4 +113,5 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.chooseFileBtn.setText(file.getName());
         this.password.requestFocus();
     }
+
 }

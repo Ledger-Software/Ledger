@@ -1,13 +1,16 @@
 package ledger.user_interface.ui_controllers;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ledger.user_interface.utils.InputSanitization;
+import ledger.controller.DbController;
+import ledger.exception.StorageException;
 
 import java.io.File;
 import java.net.URL;
@@ -18,17 +21,20 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
     @FXML
     private TextField fileName;
     @FXML
+    private TextField password;
+    @FXML
+    private TextField confirmPassword;
+    @FXML
     private Button submitButton;
+
     @FXML
     public void onEnter(ActionEvent ae) {
         submitForm();
     }
 
     public final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
-    private LoginPageController parentController;
 
-    CreateDatabaseController(LoginPageController parentControl) {
-        this.parentController = parentControl;
+    CreateDatabaseController() {
         this.initController(pageLoc, this, "Error on new database startup: ");
     }
 
@@ -39,15 +45,30 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
 
     private void submitForm() {
         String fileName = this.fileName.getText();
-        if (fileName == null) {
-            setupErrorPopup("Please provide a file name", null);
+        if (InputSanitization.isStringInvalid(fileName)) {
+            setupErrorPopup("Please provide a file name", new Exception());
+            return;
+        }
+        if (InputSanitization.isStringInvalid(this.password.getText())) {
+            this.setupErrorPopup("Password must exist!", new Exception());
+            return;
+        }
+        if (!this.password.getText().equals(this.confirmPassword.getText())) {
+            this.setupErrorPopup("The two passwords provided do not match!", new Exception());
             return;
         }
 
-        this.parentController.setChosenFile(new File("~/" + this.fileName.getText()));
+        try {
+            DbController.INSTANCE.initialize("~/" + this.fileName.getText(), this.password.getText());
 
-        Startup.INSTANCE.runLater(() -> {
-            ((Stage) this.getScene().getWindow()).close();
-        });
+            Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
+
+            Startup.INSTANCE.runLater(() -> {
+                ((Stage) this.getScene().getWindow()).close();
+            });
+
+        } catch (StorageException e) {
+            this.setupErrorPopup("Unable to connect to database", e);
+        }
     }
 }

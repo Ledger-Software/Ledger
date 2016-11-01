@@ -11,6 +11,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
 import java.time.Instant;
@@ -46,7 +47,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     private Button addTrnxnSubmitButton;
 
     private Date date;
-    private boolean cleared;
+    private boolean pending;
     private List<Payee> existingPayees;
     private Payee payee;
     private List<Account> existingAccounts;
@@ -149,17 +150,18 @@ public class TransactionPopupController extends GridPane implements Initializabl
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             this.date = Date.from(instant);
 
-            this.cleared = this.clearedCheckBox.isSelected();
-
+            this.pending = !this.clearedCheckBox.isSelected();
 
             this.payee = fromBoxPayee(this.payeeText.getValue());
-
 
             this.account = this.accountText.getValue();
             this.category = new ArrayList<Tag>() {{
                 add(new Tag(categoryText.getText(), ""));
             }};
 
+            if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
+                this.setupErrorPopup("Invalid amount entry.", new Exception());
+            }
             this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
 
             this.notes = new Note(this.notesText.getText());
@@ -170,7 +172,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
         }
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
-                this.payee, this.cleared, this.category, this.notes);
+                this.payee, this.pending, this.category, this.notes);
 
         return t;
     }
