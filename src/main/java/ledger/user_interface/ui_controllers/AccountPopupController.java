@@ -11,6 +11,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
 import java.util.Date;
@@ -88,9 +89,9 @@ public class AccountPopupController extends GridPane implements Initializable, I
      * @return a new Account object
      */
     public Account getAccountSubmission() throws NullPointerException {
-        if (accountNameText.getText() == null) {
+        if (InputSanitization.isStringInvalid(accountNameText.getText())) {
             return null;
-        } else if (accountDescription.getText() == null) {
+        } else if (InputSanitization.isStringInvalid(accountDescription.getText())) {
             return null;
         }
         if (act == null) {

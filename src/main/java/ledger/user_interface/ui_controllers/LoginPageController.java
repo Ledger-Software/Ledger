@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.io.File;
 import java.net.URL;
@@ -87,7 +88,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private void login() {
         this.pwd = this.password.getText();
-        if ("".equals(this.filePath) || "".equals(this.pwd))
+        if (InputSanitization.isStringInvalid(this.filePath) || InputSanitization.isStringInvalid(this.pwd))
             return;
 
         try {

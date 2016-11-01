@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import ledger.user_interface.utils.InputSanitization;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 
@@ -43,11 +44,11 @@ public class CreateDatabaseController extends Pane implements IUIController, Ini
 
     private void submitForm() {
         String fileName = this.fileName.getText();
-        if (fileName == null) {
+        if (InputSanitization.isStringInvalid(fileName)) {
             setupErrorPopup("Please provide a file name", new Exception());
             return;
         }
-        if (this.password.getText().equals("")) {
+        if (InputSanitization.isStringInvalid(this.password.getText())) {
             this.setupErrorPopup("Password must exist!", new Exception());
             return;
         }

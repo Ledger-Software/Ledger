@@ -11,6 +11,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
 import java.time.Instant;
@@ -151,15 +152,16 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
             this.pending = !this.clearedCheckBox.isSelected();
 
-
             this.payee = fromBoxPayee(this.payeeText.getValue());
-
 
             this.account = this.accountText.getValue();
             this.category = new ArrayList<Tag>() {{
                 add(new Tag(categoryText.getText(), ""));
             }};
 
+            if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
+                this.setupErrorPopup("Invalid amount entry.", new Exception());
+            }
             this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
 
             this.notes = new Note(this.notesText.getText());
