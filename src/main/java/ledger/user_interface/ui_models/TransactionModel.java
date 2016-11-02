@@ -14,13 +14,17 @@ import java.util.List;
  */
 public class TransactionModel {
     private int id;
+
+    // Use TransactionModel
     private String amount;
     private String date;
-    private String payeeName;
+    private String tagNames;
+
+    // Use comboboxes and StringConverters
     private Type type;
     private Payee payee;
-    private String tagNames;
     private boolean pending;
+
     private Transaction transaction;
 
     public TransactionModel(Transaction transaction) {
@@ -79,14 +83,6 @@ public class TransactionModel {
 
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getPayeeName() {
-        return payeeName;
-    }
-
-    public void setPayeeName(String payeeName) {
-        this.payeeName = payeeName;
     }
 
     public String getTagNames() {
