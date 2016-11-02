@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -15,6 +17,7 @@ import ledger.exception.StorageException;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -81,8 +84,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
-            this.filePath = selectedFile.getAbsolutePath();
-            this.chooseFileBtn.setText(selectedFile.getName());
+            setChosenFile(selectedFile);
         }
     }
 
@@ -105,4 +107,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         Scene scene = new Scene(controller);
         this.createModal(scene, "Create New File");
     }
+
+    public void setChosenFile(File file) {
+        this.filePath = file.getAbsolutePath();
+        this.chooseFileBtn.setText(file.getName());
+        this.password.requestFocus();
+    }
+
 }

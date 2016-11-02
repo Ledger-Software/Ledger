@@ -32,6 +32,7 @@ public class DbController {
     public DbController() {
         INSTANCE = this;
         transactionSuccessEvent = new LinkedList<>();
+        accountSuccessEvent = new LinkedList<>();
     }
 
     public void initialize(String fileName, String password) throws StorageException {
@@ -39,9 +40,14 @@ public class DbController {
     }
 
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
+    private List<CallableMethodVoidNoArgs> accountSuccessEvent;
 
     public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
+    }
+
+    public void registerAccountSuccessEvent(CallableMethodVoidNoArgs method) {
+        accountSuccessEvent.add(method);
     }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
@@ -99,8 +105,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> insertAccount(final Account account) throws StorageException {
-        return new TaskWithArgs<Account>(db::insertAccount, account);
-
+        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::insertAccount, account);
+        registerSuccess(task, accountSuccessEvent);
+        return task;
     }
 
     /**
@@ -109,8 +116,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> deleteAccount(final Account account) throws StorageException {
-        return new TaskWithArgs<Account>(db::deleteAccount, account);
-
+        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::deleteAccount, account);
+        registerSuccess(task, accountSuccessEvent);
+        return task;
     }
 
     /**
@@ -119,8 +127,9 @@ public class DbController {
      * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> editAccount(final Account account) throws StorageException {
-        return new TaskWithArgs<Account>(db::editAccount, account);
-
+        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::editAccount, account);
+        registerSuccess(task, accountSuccessEvent);
+        return task;
     }
 
     /**
@@ -129,7 +138,6 @@ public class DbController {
      */
     public TaskWithReturn<List<Account>> getAllAccounts() throws StorageException {
         return new TaskWithReturn<List<Account>>(db::getAllAccounts);
-
     }
 
     /**

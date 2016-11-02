@@ -31,7 +31,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @FXML
     private DatePicker datePicker;
     @FXML
-    private CheckBox clearedCheckBox;
+    private CheckBox pendingCheckBox;
     @FXML
     private ComboBox<String> payeeText;
     @FXML
@@ -151,7 +151,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             this.date = Date.from(instant);
 
-            this.pending = !this.clearedCheckBox.isSelected();
+            this.pending = this.pendingCheckBox.isSelected();
 
             this.payee = fromBoxPayee(this.payeeText.getValue());
 

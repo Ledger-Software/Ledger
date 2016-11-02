@@ -12,6 +12,7 @@ import ledger.user_interface.utils.InputSanitization;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 

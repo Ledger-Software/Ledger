@@ -15,6 +15,12 @@ import java.util.List;
 public class AccountDropdown extends ChoiceBox<Account> implements IUIController {
 
     public AccountDropdown() {
+        updateAccounts();
+
+        DbController.INSTANCE.registerAccountSuccessEvent(this::updateAccounts);
+    }
+
+    private void updateAccounts() {
         try {
             TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
             task.startTask();
