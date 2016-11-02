@@ -10,8 +10,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
-import ledger.exception.StorageException;
-import ledger.io.input.TypeConversion;
 import ledger.user_interface.utils.InputSanitization;
 import ledger.user_interface.utils.TypeStringConverter;
 
@@ -79,58 +77,42 @@ public class TransactionPopupController extends GridPane implements Initializabl
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        try {
-            TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
-            payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
-            payeesTask.RegisterSuccessEvent((list) -> {
-                this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
-                this.payeeText.setEditable(true);
+        TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
+        payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        payeesTask.RegisterSuccessEvent((list) -> {
+            this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
+            this.payeeText.setEditable(true);
 
-            });
-            payeesTask.startTask();
-            this.existingPayees = payeesTask.waitForResult();
+        });
+        payeesTask.startTask();
+        this.existingPayees = payeesTask.waitForResult();
 
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on payee submission.", e);
-        }
-        try {
-            TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
-            accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
+        accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
-            accountsTask.RegisterSuccessEvent((list) -> {
-                this.accountText.setItems((FXCollections.observableArrayList(list)));
-            });
-            accountsTask.startTask();
-            this.existingAccounts = accountsTask.waitForResult();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on account submission.", e);
-        }
-        try {
-            TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
-            typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        accountsTask.RegisterSuccessEvent((list) -> {
+            this.accountText.setItems((FXCollections.observableArrayList(list)));
+        });
+        accountsTask.startTask();
+        this.existingAccounts = accountsTask.waitForResult();
+        TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
+        typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
-            typeTask.RegisterSuccessEvent((list) -> {
-                this.typeText.setItems(FXCollections.observableArrayList(list));
-                this.typeText.setConverter(new TypeStringConverter());
-            });
-            typeTask.startTask();
-            this.existingTypes = typeTask.waitForResult();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on type submission.", e);
-        }
+        typeTask.RegisterSuccessEvent((list) -> {
+            this.typeText.setItems(FXCollections.observableArrayList(list));
+            this.typeText.setConverter(new TypeStringConverter());
+        });
+        typeTask.startTask();
+        this.existingTypes = typeTask.waitForResult();
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
-            try {
-                Transaction transaction = getTransactionSubmission();
+            Transaction transaction = getTransactionSubmission();
 
-                TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
-                task.RegisterSuccessEvent(() -> closeWindow());
-                task.RegisterFailureEvent((e) -> printStackTrace(e));
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
+            task.RegisterSuccessEvent(() -> closeWindow());
+            task.RegisterFailureEvent((e) -> printStackTrace(e));
 
-                task.startTask();
-            } catch (StorageException e) {
-                this.setupErrorPopup("Error on transaction submission.", e);
-            }
+            task.startTask();
         });
     }
 
@@ -170,7 +152,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
                 amountString = amountString.substring(1);
             }
             double amountToSetDecimal = Double.parseDouble(amountString);
-            this.amount  = (int) Math.round(amountToSetDecimal * 100);
+            this.amount = (int) Math.round(amountToSetDecimal * 100);
 
             this.notes = new Note(this.notesText.getText());
 
@@ -196,31 +178,12 @@ public class TransactionPopupController extends GridPane implements Initializabl
         return new Payee(name, "Auto Generated from Add Transaction");
 
     }
-    private Type fromBoxType(String name) {
-
-        for (Type type : this.existingTypes) {
-            if( type.getName().equals(name))
-                return type;
-
-        }
-        return new Type(name, "Auto Generated from Add Transaction");
-
-    }
 
     private List<String> toStringListPayee(List<Payee> payees) {
         List<String> listy = new ArrayList<>();
         for (Payee payee : payees
                 ) {
             listy.add(payee.getName());
-        }
-        return listy;
-    }
-
-    private List<String> toStringListType(List<Type> types) {
-        List<String> listy = new ArrayList<>();
-        for (Type type : types
-                ) {
-            listy.add(type.getName());
         }
         return listy;
     }

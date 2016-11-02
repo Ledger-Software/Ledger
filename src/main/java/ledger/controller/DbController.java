@@ -59,7 +59,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) throws StorageException {
+    public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction)  {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
         return task;
@@ -70,7 +70,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) throws StorageException {
+    public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
         return task;
@@ -84,7 +84,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) throws StorageException {
+    public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
         return task;
@@ -94,7 +94,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Transactions
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Transaction>> getAllTransactions() throws StorageException {
+    public TaskWithReturn<List<Transaction>> getAllTransactions() {
         return new TaskWithReturn<List<Transaction>>(db::getAllTransactions);
 
     }
@@ -104,7 +104,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Account> insertAccount(final Account account) throws StorageException {
+    public TaskWithArgs<Account> insertAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::insertAccount, account);
         registerSuccess(task, accountSuccessEvent);
         return task;
@@ -115,7 +115,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Account> deleteAccount(final Account account) throws StorageException {
+    public TaskWithArgs<Account> deleteAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::deleteAccount, account);
         registerSuccess(task, accountSuccessEvent);
         return task;
@@ -126,7 +126,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Account> editAccount(final Account account) throws StorageException {
+    public TaskWithArgs<Account> editAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::editAccount, account);
         registerSuccess(task, accountSuccessEvent);
         return task;
@@ -136,7 +136,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Accounts
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Account>> getAllAccounts() throws StorageException {
+    public TaskWithReturn<List<Account>> getAllAccounts() {
         return new TaskWithReturn<List<Account>>(db::getAllAccounts);
     }
 
@@ -145,7 +145,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException
      */
-    public TaskWithArgs<Payee> insertPayee(final Payee payee) throws StorageException {
+    public TaskWithArgs<Payee> insertPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::insertPayee, payee);
 
     }
@@ -155,7 +155,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Payee> deletePayee(final Payee payee) throws StorageException {
+    public TaskWithArgs<Payee> deletePayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::deletePayee, payee);
 
     }
@@ -165,7 +165,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Payee> editPayee(final Payee payee) throws StorageException {
+    public TaskWithArgs<Payee> editPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::editPayee, payee);
 
     }
@@ -174,7 +174,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Payees
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Payee>> getAllPayees() throws StorageException {
+    public TaskWithReturn<List<Payee>> getAllPayees() {
         return new TaskWithReturn<List<Payee>>(db::getAllPayees);
 
     }
@@ -184,7 +184,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Note> insertNote(final Note note) throws StorageException {
+    public TaskWithArgs<Note> insertNote(final Note note) {
         return new TaskWithArgs<Note>(db::insertNote, note);
 
     }
@@ -194,7 +194,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Note> deleteNote(final Note note) throws StorageException {
+    public TaskWithArgs<Note> deleteNote(final Note note) {
         return new TaskWithArgs<Note>(db::deleteNote, note);
 
     }
@@ -204,7 +204,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Note> editNote(final Note note) throws StorageException {
+    public TaskWithArgs<Note> editNote(final Note note) {
         return new TaskWithArgs<Note>(db::editNote, note);
 
     }
@@ -213,7 +213,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Notes
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Note>> getAllNotes() throws StorageException {
+    public TaskWithReturn<List<Note>> getAllNotes() {
         return new TaskWithReturn<List<Note>>(db::getAllNotes);
 
     }
@@ -223,7 +223,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Tag> insertTag(final Tag tag) throws StorageException {
+    public TaskWithArgs<Tag> insertTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::insertTag, tag);
 
     }
@@ -233,7 +233,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Tag> deleteTag(final Tag tag) throws StorageException {
+    public TaskWithArgs<Tag> deleteTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::deleteTag, tag);
 
     }
@@ -243,7 +243,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Tag> editTag(final Tag tag) throws StorageException {
+    public TaskWithArgs<Tag> editTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::editTag, tag);
 
     }
@@ -252,7 +252,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Transactions
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Tag>> getAllTags() throws StorageException {
+    public TaskWithReturn<List<Tag>> getAllTags() {
         return new TaskWithReturn<List<Tag>>(db::getAllTags);
 
     }
@@ -262,7 +262,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Type> insertType(final Type type) throws StorageException {
+    public TaskWithArgs<Type> insertType(final Type type) {
         return new TaskWithArgs<Type>(db::insertType, type);
 
     }
@@ -272,7 +272,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Type> deleteType(final Type type) throws StorageException {
+    public TaskWithArgs<Type> deleteType(final Type type) {
         return new TaskWithArgs<Type>(db::deleteType, type);
 
     }
@@ -282,7 +282,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Type> editType(final Type type) throws StorageException {
+    public TaskWithArgs<Type> editType(final Type type) {
         return new TaskWithArgs<Type>(db::editType, type);
 
     }
@@ -291,7 +291,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Types
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithReturn<List<Type>> getAllTypes() throws StorageException {
+    public TaskWithReturn<List<Type>> getAllTypes() {
         return new TaskWithReturn<List<Type>>(db::getAllTypes);
     }
 

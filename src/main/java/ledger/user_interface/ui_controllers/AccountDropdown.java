@@ -21,16 +21,11 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
     }
 
     private void updateAccounts() {
-        try {
-            TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
-            task.startTask();
-            List<Account> accounts = task.waitForResult();
+        TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
+        task.startTask();
+        List<Account> accounts = task.waitForResult();
 
-            this.setItems(FXCollections.observableArrayList(accounts));
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error with Account Dropdown.", e);
-            e.printStackTrace();
-        }
+        this.setItems(FXCollections.observableArrayList(accounts));
     }
 
     public Account getSelectedAccount() {

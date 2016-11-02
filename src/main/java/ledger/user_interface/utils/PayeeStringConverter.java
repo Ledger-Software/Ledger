@@ -14,23 +14,18 @@ import java.util.List;
 public class PayeeStringConverter extends StringConverter<Payee> {
 
     public Payee fromString(String payeeName) {
-        try {
-            // convert from a string to a Type instance
-            TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
-            getAllPayeesTask.startTask();
-            List<Payee> allPayees = getAllPayeesTask.waitForResult();
+        // convert from a string to a Type instance
+        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
+        getAllPayeesTask.startTask();
+        List<Payee> allPayees = getAllPayeesTask.waitForResult();
 
-            for (Payee currentPayee : allPayees) {
-                if (currentPayee.getName().equals(payeeName)) {
-                    return currentPayee;
-                }
+        for (Payee currentPayee : allPayees) {
+            if (currentPayee.getName().equals(payeeName)) {
+                return currentPayee;
             }
-
-            return null;
-        } catch (StorageException e) {
-            // TODO: what do here
-            return null;
         }
+
+        return null;
     }
 
     public String toString(Payee payee) {
