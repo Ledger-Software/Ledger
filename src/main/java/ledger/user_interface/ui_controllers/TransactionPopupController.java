@@ -13,6 +13,7 @@ import ledger.database.entity.*;
 import ledger.exception.StorageException;
 import ledger.io.input.TypeConversion;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.TypeStringConverter;
 
 import java.net.URL;
 import java.time.Instant;
@@ -43,7 +44,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @FXML
     private TextArea notesText;
     @FXML
-    private ComboBox<String> typeText;
+    private ComboBox<Type> typeText;
     @FXML
     private Button addTrnxnSubmitButton;
 
@@ -109,7 +110,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
             typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
             typeTask.RegisterSuccessEvent((list) -> {
-                this.typeText.setItems(FXCollections.observableArrayList(toStringListType(list)));
+                this.typeText.setItems(FXCollections.observableArrayList(list));
+                this.typeText.setConverter(new TypeStringConverter());
             });
             typeTask.startTask();
             this.existingTypes = typeTask.waitForResult();
@@ -163,12 +165,18 @@ public class TransactionPopupController extends GridPane implements Initializabl
             if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
                 this.setupErrorPopup("Invalid amount entry.", new Exception());
             }
-            this.amount = (int) (Double.parseDouble(this.amountText.getText()) * 100);
+            String amountString = this.amountText.getText();
+            if (amountString.charAt(0) == '$') {
+                amountString = amountString.substring(1);
+            }
+            double amountToSetDecimal = Double.parseDouble(amountString);
+            this.amount  = (int) Math.round(amountToSetDecimal * 100);
 
             this.notes = new Note(this.notesText.getText());
 
 
-            this.type = TypeConversion.convert(this.typeText.getValue());
+            Type typeToSet = this.typeText.getValue();
+            this.type = typeToSet;
         } catch (NullPointerException e) {
             this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
         }
@@ -186,6 +194,16 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         }
         return new Payee(name, "Auto Generated from Add Transaction");
+
+    }
+    private Type fromBoxType(String name) {
+
+        for (Type type : this.existingTypes) {
+            if( type.getName().equals(name))
+                return type;
+
+        }
+        return new Type(name, "Auto Generated from Add Transaction");
 
     }
 

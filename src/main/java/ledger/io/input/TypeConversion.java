@@ -44,6 +44,29 @@ public class TypeConversion {
         }
     }
 
+    public static Type convertName(String name) {
+        switch (name) {
+            case "Debit Card":
+                return DEBIT_CARD;
+            case "Credit Card":
+                return CREDIT_CARD;
+            case "Cash":
+                return CASH;
+            case "Check":
+                return CHECK;
+            case "Account Credit":
+                return ACH_CREDIT;
+            case "Account Debit":
+                return ACH_DEBIT;
+            case "Misc Debit":
+                return MISC_DEBIT;
+            case "Misc Credit":
+                return MISC_CREDIT;
+            default:
+                return UNKNOWN;
+        }
+    }
+
     public static List<Type> getAllTypes() {
         List<Type> types = new ArrayList<Type>();
 
