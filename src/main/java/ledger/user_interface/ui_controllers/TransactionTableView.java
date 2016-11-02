@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
@@ -19,9 +20,11 @@ import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
-import ledger.exception.StorageException;
 import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.PayeeStringConverter;
+import ledger.user_interface.utils.PendingStringConverter;
+import ledger.user_interface.utils.TypeStringConverter;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -38,6 +41,9 @@ import java.util.List;
 public class TransactionTableView extends TableView<TransactionModel> implements IUIController {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
+
+    private ObservableList<Payee> observableAllPayees;
+
     // Transaction table UI objects
     @FXML
     private TableColumn payeeColumn;
@@ -79,8 +85,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction amount.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
@@ -102,30 +110,21 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction date.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (ParseException e) {
                 setupErrorPopup("Error parsing date string.", e);
             }
         }
     };
 
-    private EventHandler<CellEditEvent<TransactionModel, String>> payeeEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+    private EventHandler<CellEditEvent<TransactionModel, Payee>> payeeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Payee>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
+        public void handle(CellEditEvent<TransactionModel, Payee> t) {
             TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            String payeeNameToSet = t.getNewValue();
-
-            TaskWithReturn<List<Payee>> payeeQuery = DbController.INSTANCE.getAllPayees();
-            payeeQuery.startTask();
-            List<Payee> allPayees = payeeQuery.waitForResult();
-
-            Payee payeeToSet = new Payee(payeeNameToSet, "");
-            for (Payee currentPayee : allPayees) {
-                if (currentPayee.getName().equals(payeeNameToSet)) {
-                    payeeToSet = currentPayee;
-                }
-            }
+            Payee payeeToSet = t.getNewValue();
 
             Transaction transaction = model.getTransaction();
             transaction.setPayee(payeeToSet);
@@ -135,27 +134,18 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction payee.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
-    private EventHandler<CellEditEvent<TransactionModel, String>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+    private EventHandler<CellEditEvent<TransactionModel, Type>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Type>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
+        public void handle(CellEditEvent<TransactionModel, Type> t) {
             TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            String typeNameToSet = t.getNewValue();
-
-            TaskWithReturn<List<Type>> typeQuery = DbController.INSTANCE.getAllTypes();
-            typeQuery.startTask();
-            List<Type> allTypes = typeQuery.waitForResult();
-
-            Type typeToSet = new Type(typeNameToSet, "");
-            for (Type currentType : allTypes) {
-                if (currentType.getName().equals(typeNameToSet)) {
-                    typeToSet = currentType;
-                }
-            }
+            Type typeToSet = t.getNewValue();
 
             Transaction transaction = model.getTransaction();
             transaction.setType(typeToSet);
@@ -165,8 +155,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction type.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
@@ -202,25 +194,18 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction categories.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
-    private EventHandler<CellEditEvent<TransactionModel, String>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+    private EventHandler<CellEditEvent<TransactionModel, Boolean>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, Boolean>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
+        public void handle(CellEditEvent<TransactionModel, Boolean> t) {
             TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            String pendingToSetString = t.getNewValue();
-
-            boolean pendingToSet = model.getTransaction().isPending();
-            if (pendingToSetString.equals("Cleared")) {
-                pendingToSet = false;
-            } else if (pendingToSetString.equals("Pending")) {
-                pendingToSet = true;
-            } else {
-                setupErrorPopup("Transaction pending status not updated. Invalid input - must be 'Cleared' or 'Pending'.", new NullPointerException("Invalid Input"));
-            }
+            boolean pendingToSet = t.getNewValue();
 
             Transaction transaction = model.getTransaction();
             transaction.setPending(pendingToSet);
@@ -230,8 +215,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction pending field.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
@@ -263,10 +250,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     private void configureTransactionTableView() {
         this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("date"));
-        this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("payeeName"));
-        this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("typeName"));
+        this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
+        this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
         this.categoryColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("tagNames"));
-        this.clearedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("pending"));
+        this.clearedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Boolean>("pending"));
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.amountColumn.setOnEditCommit(this.amountEditHandler);
@@ -274,16 +261,28 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.dateColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.dateColumn.setOnEditCommit(this.dateEditHandler);
 
-        this.payeeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
+        getAllPayeesTask.startTask();
+        List<Payee> allPayees = getAllPayeesTask.waitForResult();
+
+        this.observableAllPayees = FXCollections.observableList(allPayees);
+        this.payeeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
         this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
 
-        this.typeColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        TaskWithReturn<List<Type>> getAllTypesTask = DbController.INSTANCE.getAllTypes();
+        getAllTypesTask.startTask();
+        List<Type> allTypes = getAllTypesTask.waitForResult();
+
+        ObservableList<Type> observableAllTypes = FXCollections.observableList(allTypes);
+        this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
 
         this.categoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
 
-        this.clearedColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
+
+        this.clearedColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PendingStringConverter(), observableAllPending));
         this.clearedColumn.setOnEditCommit(this.closedEditHandler);
 
         // Add ability to delete transactions form tableView
@@ -300,6 +299,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     }
 
     public void updateTransactionTableView() {
+        // Update table rows
         TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
         task.startTask();
         List<Transaction> allTransactions = task.waitForResult();
@@ -312,6 +312,17 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
 
         this.setItems(observableTransactionModels);
+
+        // Update Payee dropdown
+        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
+        getAllPayeesTask.startTask();
+        List<Payee> allPayees = getAllPayeesTask.waitForResult();
+
+        for (Payee currentPayee : allPayees) {
+            if (!this.observableAllPayees.contains(currentPayee)) {
+                this.observableAllPayees.add(currentPayee);
+            }
+        }
 
     }
 
@@ -326,8 +337,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error deleting transaction.", e);
             });
-            task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         } else {
             setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
         }
