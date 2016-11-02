@@ -79,7 +79,7 @@
                 <Insets left="10.0" />
             </GridPane.margin>
         </DatePicker>
-        <Text fx:id="clearedLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Pending?" wrappingWidth="97.6640625" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <Text fx:id="clearedLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Pending" wrappingWidth="97.6640625" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <font>
                 <Font name="Calibri" size="24.0" />
             </font>

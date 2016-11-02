@@ -10,11 +10,15 @@ import ledger.io.input.TypeConversion;
 public class TypeStringConverter extends StringConverter<Type> {
 
     public Type fromString(String typeName) {
-        return TypeConversion.convert(typeName);
+        return TypeConversion.convertName(typeName);
     }
 
     public String toString(Type type) {
         // convert a Type instance to the text displayed in the choice box
-        return type.getName();
+        if (type != null) {
+            return type.getName();
+        } else {
+            return "";
+        }
     }
 }
