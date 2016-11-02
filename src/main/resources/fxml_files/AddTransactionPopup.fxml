@@ -87,7 +87,7 @@
                 <Insets left="10.0" />
             </GridPane.margin>
         </Text>
-        <CheckBox fx:id="clearedCheckBox" maxHeight="37.0" maxWidth="25.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="25.0" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <CheckBox fx:id="pendingCheckBox" maxHeight="37.0" maxWidth="25.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="25.0" textAlignment="JUSTIFY" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets left="110.0" />
             </GridPane.margin>
