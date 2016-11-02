@@ -61,8 +61,6 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 task.RegisterSuccessEvent(this::insertDone);
                 task.RegisterFailureEvent(this::insertFail);
                 task.startTask();
-            } catch (StorageException e) {
-                this.setupErrorPopup("Error on inserting Account.", e);
             } catch (NullPointerException e2) {
                 this.setupErrorPopup("Required field is null.", e2);
             } catch (NumberFormatException e3) {

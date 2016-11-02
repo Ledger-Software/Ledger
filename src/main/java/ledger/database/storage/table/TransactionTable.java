@@ -19,7 +19,7 @@ public class TransactionTable {
     public static String CreateStatementSQLite() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                         "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "%s REAL NOT NULL, " +
+                        "%s LONG NOT NULL, " +
                         "%s INT NOT NULL, " +
                         "%s BOOLEAN NOT NULL, " +
                         "%s INT NOT NULL, " +
@@ -44,7 +44,7 @@ public class TransactionTable {
     public static String CreateStatementH2() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                         "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-                        "%s REAL NOT NULL, " +
+                        "%s BIGINT NOT NULL, " +
                         "%s INT NOT NULL, " +
                         "%s BOOLEAN NOT NULL, " +
                         "%s INT NOT NULL, " +

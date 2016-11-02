@@ -2,6 +2,7 @@ package ledger.io.input;
 
 import ledger.database.IDatabase;
 import ledger.database.entity.Transaction;
+import ledger.database.entity.Type;
 import ledger.exception.StorageException;
 
 import java.util.ArrayList;
@@ -63,11 +64,12 @@ public class DuplicateDetector {
                 return o1.getAccount().getDescription().compareTo(o2.getAccount().getDescription());
             }
 
-            if (!o1.getType().equals(o2.getType())) {
-                if (o1.getType().getId() != o2.getType().getId())
-                    return Integer.compare(o1.getType().getId(), o2.getType().getId());
-                return o1.getType().getDescription().compareTo(o2.getType().getDescription());
-            }
+            Type t1 = o1.getType();
+            Type t2 = o2.getType();
+            if(!t1.getName().equals(t2.getName()))
+                return t1.getName().compareTo(t2.getName());
+            if(!t1.getDescription().equals(t2.getDescription()))
+                return t1.getDescription().compareTo(t2.getDescription());
 
             return 0;
         }

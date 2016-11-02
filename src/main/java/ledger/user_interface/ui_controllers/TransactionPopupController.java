@@ -78,57 +78,41 @@ public class TransactionPopupController extends GridPane implements Initializabl
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        try {
-            TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
-            payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
-            payeesTask.RegisterSuccessEvent((list) -> {
-                this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
-                this.payeeText.setEditable(true);
+        TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
+        payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        payeesTask.RegisterSuccessEvent((list) -> {
+            this.payeeText.setItems(FXCollections.observableArrayList(toStringListPayee(list)));
+            this.payeeText.setEditable(true);
 
-            });
-            payeesTask.startTask();
-            this.existingPayees = payeesTask.waitForResult();
+        });
+        payeesTask.startTask();
+        this.existingPayees = payeesTask.waitForResult();
 
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on payee submission.", e);
-        }
-        try {
-            TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
-            accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
+        accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
-            accountsTask.RegisterSuccessEvent((list) -> {
-                this.accountText.setItems((FXCollections.observableArrayList(list)));
-            });
-            accountsTask.startTask();
-            this.existingAccounts = accountsTask.waitForResult();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on account submission.", e);
-        }
-        try {
-            TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
-            typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        accountsTask.RegisterSuccessEvent((list) -> {
+            this.accountText.setItems((FXCollections.observableArrayList(list)));
+        });
+        accountsTask.startTask();
+        this.existingAccounts = accountsTask.waitForResult();
+        TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
+        typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
-            typeTask.RegisterSuccessEvent((list) -> {
-                this.typeText.setItems(FXCollections.observableArrayList(toStringListType(list)));
-            });
-            typeTask.startTask();
-            this.existingTypes = typeTask.waitForResult();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Error on type submission.", e);
-        }
+        typeTask.RegisterSuccessEvent((list) -> {
+            this.typeText.setItems(FXCollections.observableArrayList(toStringListType(list)));
+        });
+        typeTask.startTask();
+        this.existingTypes = typeTask.waitForResult();
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
-            try {
-                Transaction transaction = getTransactionSubmission();
+            Transaction transaction = getTransactionSubmission();
 
-                TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
-                task.RegisterSuccessEvent(() -> closeWindow());
-                task.RegisterFailureEvent((e) -> printStackTrace(e));
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
+            task.RegisterSuccessEvent(() -> closeWindow());
+            task.RegisterFailureEvent((e) -> printStackTrace(e));
 
-                task.startTask();
-            } catch (StorageException e) {
-                this.setupErrorPopup("Error on transaction submission.", e);
-            }
+            task.startTask();
         });
     }
 

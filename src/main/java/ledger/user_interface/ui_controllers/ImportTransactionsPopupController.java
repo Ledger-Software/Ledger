@@ -3,12 +3,16 @@ package ledger.user_interface.ui_controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ledger.controller.ImportController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.entity.Account;
+import ledger.database.entity.Transaction;
 
 import java.io.File;
 import java.net.URL;
@@ -73,13 +77,32 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             return;
         }
 
-        TaskWithArgs<Account> task = ImportController.INSTANCE.importTransactions(converter, file, account);
+        TaskWithArgsReturn<Account, ImportController.ImportFailures> task = ImportController.INSTANCE.importTransactions(converter, file, account);
         task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> importButton.setDisable(false)));
-        task.RegisterSuccessEvent(this::closeWindow);
+        task.RegisterSuccessEvent(this::handleReturn);
         importButton.setDisable(true);
 
 
         task.startTask();
+    }
+
+    private void handleReturn(ImportController.ImportFailures importFailures) {
+        for(Transaction fail: importFailures.failedTransactions) {
+            // Todo: Do we even want to show the user?
+        }
+
+        if(importFailures.duplicateTransactions.size() > 0)
+            Startup.INSTANCE.runLater(() -> {
+                DuplicateTransactionPopup popup = new DuplicateTransactionPopup(importFailures.duplicateTransactions);
+                Scene scene = new Scene(popup);
+                Stage newStage = new Stage();
+                newStage.setScene(scene);
+                newStage.setTitle("Duplicate!");
+                newStage.initModality(Modality.APPLICATION_MODAL);
+                newStage.show();
+            });
+
+        closeWindow();
     }
 
     private void closeWindow() {

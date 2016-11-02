@@ -32,8 +32,8 @@ public class ImportController {
      * Returns a task that handles the file import with a given Converter type, file path and an account to link too.
      * It will also run duplicate detection.
      */
-    public TaskWithArgs<Account> importTransactions(Converter type, File path, Account account) {
-        return new TaskWithArgs<Account>((acc) -> {
+    public TaskWithArgsReturn<Account, ImportFailures> importTransactions(Converter type, File path, Account account) {
+        return new TaskWithArgsReturn<Account, ImportFailures>((acc) -> {
             IInAdapter<Transaction> converter = type.method.create(path, acc);
 
             List<Transaction> trans = converter.convert();
@@ -41,17 +41,23 @@ public class ImportController {
             DuplicateDetector dups = new DuplicateDetector(trans);
             DetectionResult result = dups.detectDuplicates(DbController.INSTANCE.getDb());
 
-            if (result.getPossibleDuplicates().size() != 0) {
-                //TODO how to show user
-                // Throw Some Exception
-                return;
-            }
-
             TaskWithArgsReturn<List<Transaction>,List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(result.getVerifiedTransactions());
             task.startTask();
             List<Transaction> failedTransactions = task.waitForResult();
+            List<Transaction> duplicateTransaction = result.getPossibleDuplicates();
 
+            return new ImportFailures(failedTransactions, duplicateTransaction);
         }, account);
+    }
+
+    public class ImportFailures {
+        public List<Transaction> failedTransactions;
+        public List<Transaction> duplicateTransactions;
+
+        public ImportFailures(List<Transaction> failedTransactions, List<Transaction> duplicateTransactions) {
+            this.failedTransactions = failedTransactions;
+            this.duplicateTransactions = duplicateTransactions;
+        }
     }
 
     /**
