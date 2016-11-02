@@ -46,6 +46,9 @@ import java.util.List;
 public class TransactionTableView extends TableView<TransactionModel> implements IUIController {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
+
+    private ObservableList<Payee> observableAllPayees;
+
     // Transaction table UI objects
     @FXML
     private TableColumn payeeColumn;
@@ -88,8 +91,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction amount.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction amount.", e);
             }
@@ -114,8 +119,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction date.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction date.", e);
             } catch (ParseException e) {
@@ -139,8 +146,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction payee.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction payee.", e);
             }
@@ -162,8 +171,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction type.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction type.", e);
             }
@@ -203,8 +214,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction categories.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction categories.", e);
             }
@@ -226,8 +239,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error editing transaction pending field.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } catch (StorageException e) {
                 setupErrorPopup("Error editing transaction pending field.", e);
             }
@@ -278,7 +293,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             getAllPayeesTask.startTask();
             List<Payee> allPayees = getAllPayeesTask.waitForResult();
 
-            ObservableList<Payee> observableAllPayees = FXCollections.observableList(allPayees);
+            this.observableAllPayees = FXCollections.observableList(allPayees);
             this.payeeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
             this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
 
@@ -289,7 +304,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             ObservableList<Type> observableAllTypes = FXCollections.observableList(allTypes);
             this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
             this.typeColumn.setOnEditCommit(this.typeEditHandler);
-
 
             this.categoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
             this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
@@ -317,6 +331,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     public void updateTransactionTableView() {
         try {
+            // Update table rows
             TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
             task.startTask();
             List<Transaction> allTransactions = task.waitForResult();
@@ -329,6 +344,17 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
 
             this.setItems(observableTransactionModels);
+
+            // Update Payee dropdown
+            TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
+            getAllPayeesTask.startTask();
+            List<Payee> allPayees = getAllPayeesTask.waitForResult();
+
+            for (Payee currentPayee : allPayees) {
+                if (!this.observableAllPayees.contains(currentPayee)) {
+                    this.observableAllPayees.add(currentPayee);
+                }
+            }
 
         } catch (StorageException e) {
             setupErrorPopup("Error loading all transactions into list view.", e);
@@ -347,8 +373,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error deleting transaction.", e);
                 });
-                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
+                task.waitForComplete();
+                updateTransactionTableView();
             } else {
                 setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
             }
