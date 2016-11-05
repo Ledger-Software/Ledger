@@ -1,11 +1,9 @@
 package ledger.user_interface.ui_controllers;
 
-import com.sun.org.apache.xml.internal.security.Init;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -28,7 +26,6 @@ import ledger.user_interface.utils.PayeeStringConverter;
 import ledger.user_interface.utils.PendingStringConverter;
 import ledger.user_interface.utils.TypeStringConverter;
 
-import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;

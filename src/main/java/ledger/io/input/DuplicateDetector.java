@@ -66,9 +66,9 @@ public class DuplicateDetector {
 
             Type t1 = o1.getType();
             Type t2 = o2.getType();
-            if(!t1.getName().equals(t2.getName()))
+            if (!t1.getName().equals(t2.getName()))
                 return t1.getName().compareTo(t2.getName());
-            if(!t1.getDescription().equals(t2.getDescription()))
+            if (!t1.getDescription().equals(t2.getDescription()))
                 return t1.getDescription().compareTo(t2.getDescription());
 
             return 0;

@@ -59,7 +59,7 @@ public class DbController {
      * @return a Task for the Async Call
      * @throws StorageException When a DB error occurs
      */
-    public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction)  {
+    public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
         return task;

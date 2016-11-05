@@ -10,14 +10,14 @@ import java.util.List;
 /**
  * Created by gert on 10/19/16.
  */
-public class TaskWithArgsReturn<A,R> {
+public class TaskWithArgsReturn<A, R> {
 
     private List<CallableMethod<R>> SuccessEvents;
     private List<CallableMethod<Exception>> FailureEvents;
     private Thread t;
     private R result;
 
-    public TaskWithArgsReturn(final CallableReturnMethod<A,R> task, final A arg) {
+    public TaskWithArgsReturn(final CallableReturnMethod<A, R> task, final A arg) {
         SuccessEvents = new ArrayList<CallableMethod<R>>();
         FailureEvents = new ArrayList<CallableMethod<Exception>>();
         t = new Thread(new Runnable() {

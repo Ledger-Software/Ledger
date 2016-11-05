@@ -8,11 +8,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import ledger.user_interface.utils.InputSanitization;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.utils.InputSanitization;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
