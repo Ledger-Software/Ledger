@@ -1,10 +1,12 @@
 package ledger.user_interface.ui_controllers;
 
+import com.sun.org.apache.xml.internal.security.Init;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -27,18 +29,20 @@ import ledger.user_interface.utils.PendingStringConverter;
 import ledger.user_interface.utils.TypeStringConverter;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Controls all input and interaction with the Main Page of the application
  */
 
-public class TransactionTableView extends TableView<TransactionModel> implements IUIController {
+public class TransactionTableView extends TableView<TransactionModel> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -223,24 +227,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     };
 
     public TransactionTableView() {
-//        this.initController(pageLoc, this, "Error on main page startup: ");
-        FXMLLoader fxmlLoader = new FXMLLoader(
-                getClass().getResource(pageLoc));
-
-        fxmlLoader.setRoot(this);
-        fxmlLoader.setController(this);
-
-        try {
-            fxmlLoader.load();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        // Populate listView w/ transactions from DB
-        configureTransactionTableView();
-        updateTransactionTableView();
-
-        DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
+        this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
     private void asyncTableUpdate() {
@@ -344,5 +331,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         } else {
             setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
         }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Populate listView w/ transactions from DB
+        configureTransactionTableView();
+        updateTransactionTableView();
+
+        DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
     }
 }
