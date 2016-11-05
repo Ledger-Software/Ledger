@@ -18,7 +18,7 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
     private static final String pageLoc = "/fxml_files/ChoiceBox.fxml";
 
     public AccountDropdown() {
-        this.initController(pageLoc, this, "Unable to load Accoutn Dropdown");
+        this.initController(pageLoc, this, "Unable to load Account Dropdown");
     }
 
     @Override
