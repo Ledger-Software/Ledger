@@ -5,6 +5,9 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +18,7 @@ public class TransactionModel {
 
     // Use TransactionModel
     private String amount;
-    private String date;
+    private LocalDate date;
     private String tagNames;
 
     // Use comboboxes and StringConverters
@@ -32,9 +35,10 @@ public class TransactionModel {
         String cents = amountInCents.substring(amountInCents.length() - 2, amountInCents.length());
         this.amount = "$" + dollars + "." + cents;
         if (transaction.getDate() != null) {
-            this.date = transaction.getDate().toString();
+            LocalDate date = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            this.date = date;
         } else {
-            this.date = "";
+            this.date = null;
         }
         this.tagNames = "";
         if (transaction.getTagList() != null) {
@@ -75,11 +79,11 @@ public class TransactionModel {
         this.amount = amount;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

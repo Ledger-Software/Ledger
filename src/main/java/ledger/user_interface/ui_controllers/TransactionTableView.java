@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -13,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -21,15 +23,13 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.user_interface.ui_models.TransactionModel;
-import ledger.user_interface.utils.InputSanitization;
-import ledger.user_interface.utils.PayeeStringConverter;
-import ledger.user_interface.utils.PendingStringConverter;
-import ledger.user_interface.utils.TypeStringConverter;
+import ledger.user_interface.utils.*;
 
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -93,31 +93,26 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         }
     };
 
-    private EventHandler<CellEditEvent<TransactionModel, String>> dateEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
+    private EventHandler<CellEditEvent<TransactionModel, LocalDate>> dateEditHandler = new EventHandler<CellEditEvent<TransactionModel, LocalDate>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
-            try {
-                TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-                String dateToSetString = t.getNewValue();
+        public void handle(CellEditEvent<TransactionModel, LocalDate> t) {
+            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+            LocalDate localDateToSet = t.getNewValue();
 
-                DateFormat formatter = new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy");
-                Date dateToSet = formatter.parse(dateToSetString);
+            java.util.Date dateToSet = java.sql.Date.valueOf(localDateToSet);
 
-                Transaction transaction = model.getTransaction();
-                transaction.setDate(dateToSet);
+            Transaction transaction = model.getTransaction();
+            transaction.setDate(dateToSet);
 
-                TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-                task.RegisterFailureEvent((e) -> {
-                    updateTransactionTableView();
-                    setupErrorPopup("Error editing transaction date.", e);
-                });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
-                task.startTask();
-                task.waitForComplete();
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
+            task.RegisterFailureEvent((e) -> {
                 updateTransactionTableView();
-            } catch (ParseException e) {
-                setupErrorPopup("Error parsing date string.", e);
-            }
+                setupErrorPopup("Error editing transaction date.", e);
+            });
+//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+            task.startTask();
+            task.waitForComplete();
+            updateTransactionTableView();
         }
     };
 
@@ -233,7 +228,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     private void configureTransactionTableView() {
         this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
-        this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("date"));
+        this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
         this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
         this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
         this.categoryColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("tagNames"));
@@ -242,7 +237,9 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.amountColumn.setOnEditCommit(this.amountEditHandler);
 
-        this.dateColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.dateColumn.setCellFactory(column -> {
+            return new LocalDateTableCell<>(dateColumn);
+        });
         this.dateColumn.setOnEditCommit(this.dateEditHandler);
 
         TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
