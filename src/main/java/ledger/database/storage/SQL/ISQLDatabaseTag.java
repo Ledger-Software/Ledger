@@ -16,6 +16,19 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     @Override
     default void insertTag(Tag tag) throws StorageException {
         try {
+
+            PreparedStatement checkIfExistsStmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_NAME +
+                    " FROM " + TagTable.TABLE_NAME + " WHERE " + TagTable.TAG_NAME + "=?");
+            checkIfExistsStmt.setString(1, tag.getName());
+
+            System.out.println(checkIfExistsStmt.toString());
+
+            checkIfExistsStmt.executeQuery();
+            ResultSet existingPayees = checkIfExistsStmt.getGeneratedKeys();
+            if (existingPayees.next()) {
+                return;
+            }
+
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TagTable.TABLE_NAME +
                     " (" + TagTable.TAG_NAME + ", " + TagTable.TAG_DESC + ") VALUES (?, ?)");
             stmt.setString(1, tag.getName());
