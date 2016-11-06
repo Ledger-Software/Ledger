@@ -112,7 +112,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             task.RegisterSuccessEvent(() -> closeWindow());
             task.RegisterFailureEvent((e) -> printStackTrace(e));
 
-            task.startTask();
+                task.startTask();
         });
     }
 
@@ -138,8 +138,14 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.pending = this.pendingCheckBox.isSelected();
 
             this.payee = fromBoxPayee(this.payeeText.getValue());
-
+            if (InputSanitization.isInvalidPayee(this.payee)){
+                this.setupErrorPopup("Invalid Payee entry.", new Exception());
+            }
+            if (this.accountText.getSelectionModel().isEmpty()){
+                this.setupErrorPopup("No account selected.", new Exception());
+            }
             this.account = this.accountText.getValue();
+
             this.category = new ArrayList<Tag>() {{
                 add(new Tag(categoryText.getText(), ""));
             }};
@@ -156,9 +162,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
             this.notes = new Note(this.notesText.getText());
 
-
-            Type typeToSet = this.typeText.getValue();
-            this.type = typeToSet;
+            if( this.typeText.getSelectionModel().isEmpty()) {
+                this.setupErrorPopup("No type selected.", new Exception());
+            }
+            this.type = this.typeText.getValue();
         } catch (NullPointerException e) {
             this.setupErrorPopup("Error getting transaction information - ensure all fields are populated.", e);
         }
