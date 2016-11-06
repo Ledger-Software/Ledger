@@ -13,6 +13,9 @@ import java.util.List;
 public class PayeeStringConverter extends StringConverter<Payee> {
 
     public Payee fromString(String payeeName) {
+        if(payeeName == null || payeeName.isEmpty())
+            return null;
+
         // convert from a string to a Type instance
         TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
         getAllPayeesTask.startTask();
@@ -24,7 +27,7 @@ public class PayeeStringConverter extends StringConverter<Payee> {
             }
         }
 
-        return null;
+        return new Payee(payeeName, payeeName);
     }
 
     public String toString(Payee payee) {
