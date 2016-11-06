@@ -203,6 +203,6 @@ public class Transaction implements IEntity {
 
     @Override
     public String toString() {
-        return String.format("[%s : %s : %s] %s for $%s (Pending? %s)", date.toString(), account.getName(), type.getName(), payee.getName(), amount / 100.0,  pending);
+        return String.format("[%s : %s : %s] %s for $%s (Pending? %s)", date.toString(), account.getName(), type.getName(), payee.getName(), amount / 100.0, pending);
     }
 }

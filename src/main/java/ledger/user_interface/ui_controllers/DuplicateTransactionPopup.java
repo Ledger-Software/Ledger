@@ -35,7 +35,8 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
     private Transaction currentTrans;
 
 
-    public DuplicateTransactionPopup() { }
+    public DuplicateTransactionPopup() {
+    }
 
     public DuplicateTransactionPopup(List<Transaction> trans) {
         this.trans = trans;
@@ -59,14 +60,13 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
     }
 
     private void next(ActionEvent actionEvent) {
-        if(iter.hasNext()) {
+        if (iter.hasNext()) {
             currentTrans = iter.next();
             transactionText.setText(currentTrans.toString());
         } else {
             closeWindow();
         }
     }
-
 
 
     private void closeWindow() {

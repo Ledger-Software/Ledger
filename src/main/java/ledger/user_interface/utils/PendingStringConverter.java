@@ -1,8 +1,6 @@
 package ledger.user_interface.utils;
 
 import javafx.util.StringConverter;
-import ledger.database.entity.Type;
-import ledger.io.input.TypeConversion;
 
 /**
  * Created by Tayler How on 11/1/2016.

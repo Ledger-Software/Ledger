@@ -9,7 +9,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ledger.controller.ImportController;
-import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
@@ -87,11 +86,11 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     }
 
     private void handleReturn(ImportController.ImportFailures importFailures) {
-        for(Transaction fail: importFailures.failedTransactions) {
+        for (Transaction fail : importFailures.failedTransactions) {
             // Todo: Do we even want to show the user?
         }
 
-        if(importFailures.duplicateTransactions.size() > 0)
+        if (importFailures.duplicateTransactions.size() > 0)
             Startup.INSTANCE.runLater(() -> {
                 DuplicateTransactionPopup popup = new DuplicateTransactionPopup(importFailures.duplicateTransactions);
                 Scene scene = new Scene(popup);

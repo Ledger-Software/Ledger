@@ -10,7 +10,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
-import ledger.exception.StorageException;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;

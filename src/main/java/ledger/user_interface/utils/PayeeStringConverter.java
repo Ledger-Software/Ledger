@@ -4,7 +4,6 @@ import javafx.util.StringConverter;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
-import ledger.exception.StorageException;
 
 import java.util.List;
 

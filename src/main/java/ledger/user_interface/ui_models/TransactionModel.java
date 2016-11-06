@@ -1,7 +1,5 @@
 package ledger.user_interface.ui_models;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import javafx.beans.property.BooleanProperty;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;

@@ -73,7 +73,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         } catch (NullPointerException e) {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction. Not all necessary fields were given.", e);
-        }finally {
+        } finally {
             setDatabaseAutoCommit(true);
         }
     }

@@ -19,7 +19,7 @@ public interface IUIController {
      */
     default void setupErrorPopup(String s, Exception e) {
         String errMsg = " ";
-        if(e.getMessage() != null) {
+        if (e.getMessage() != null) {
             errMsg = e.getMessage();
         }
         GenericPopupController errCon = new GenericPopupController(s + "\n" + errMsg, "Error!");
