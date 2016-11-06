@@ -20,26 +20,25 @@ package ledger.user_interface.utils;
  * limitations under the License.
  */
 
-        import java.time.LocalDate;
-        import java.time.format.DateTimeFormatter;
-        import java.util.Optional;
-        import javafx.beans.binding.Bindings;
-        import javafx.beans.value.ChangeListener;
-        import javafx.beans.value.ObservableValue;
-        import javafx.scene.control.ContentDisplay;
-        import javafx.scene.control.DatePicker;
-        import javafx.scene.control.TableCell;
-        import javafx.scene.control.TableColumn;
-        import javafx.scene.control.TableView;
-        import javafx.util.StringConverter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
-        import static java.time.format.FormatStyle.MEDIUM;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.util.StringConverter;
+
+import static java.time.format.FormatStyle.MEDIUM;
 
 /**
- * Renderes a localized LocalDate
+ * Renders a localized LocalDate
  *
- * @author Michael J. Simons, 2014-10-17
  * @param <T>
+ * @author Michael J. Simons, 2014-10-17
  */
 public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(MEDIUM);
@@ -51,7 +50,7 @@ public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
             @Override
             public String toString(LocalDate object) {
                 String rv = null;
-                if(object != null) {
+                if (object != null) {
                     rv = formatter.format(object);
                 }
                 return rv;
@@ -60,7 +59,7 @@ public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
             @Override
             public LocalDate fromString(String string) {
                 LocalDate rv = null;
-                if(!Optional.ofNullable(string).orElse("").isEmpty()) {
+                if (!Optional.ofNullable(string).orElse("").isEmpty()) {
                     rv = LocalDate.parse(string, formatter);
                 }
                 return rv;
@@ -68,14 +67,14 @@ public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
         });
         // Manage editing
         this.datePicker.getEditor().focusedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
                 final TableView<T> tableView = getTableView();
                 tableView.getSelectionModel().select(getTableRow().getIndex());
                 tableView.edit(tableView.getSelectionModel().getSelectedIndex(), column);
             }
         });
         this.datePicker.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(isEditing()) {
+            if (isEditing()) {
                 commitEdit(newValue);
             }
         });
@@ -94,14 +93,14 @@ public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
     protected void updateItem(LocalDate item, boolean empty) {
         super.updateItem(item, empty);
 
-        if(empty) {
+        if (empty) {
             setText(null);
             setGraphic(null);
         } else {
             // Datepicker can handle null values
             this.datePicker.setValue(item);
             setGraphic(this.datePicker);
-            if(item == null) {
+            if (item == null) {
                 setText(null);
             } else {
                 setText(formatter.format(item));
