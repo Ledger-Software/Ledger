@@ -8,12 +8,12 @@ import ledger.database.entity.Account;
 import java.util.List;
 
 /**
- * Created by CJ on 11/6/2016.
+ * Allows conversion of an Account Entity both to and from a String representation.
  */
 public class AccountStringConverter extends StringConverter<Account> {
 
     public Account fromString(String accountName) {
-        if(accountName == null || accountName.isEmpty())
+        if (accountName == null || accountName.isEmpty())
             return null;
 
         TaskWithReturn<List<Account>> getAllAccountsTask = DbController.INSTANCE.getAllAccounts();
@@ -26,7 +26,7 @@ public class AccountStringConverter extends StringConverter<Account> {
             }
         }
 
-        return new Account(accountName,accountName);
+        return new Account(accountName, accountName);
     }
 
     public String toString(Account account) {
