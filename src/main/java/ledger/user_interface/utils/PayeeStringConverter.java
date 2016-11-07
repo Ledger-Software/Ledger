@@ -7,13 +7,15 @@ import ledger.database.entity.Payee;
 
 import java.util.List;
 
+import static ledger.user_interface.utils.InputSanitization.isStringInvalid;
+
 /**
  * Created by Tayler How on 11/1/2016.
  */
 public class PayeeStringConverter extends StringConverter<Payee> {
 
     public Payee fromString(String payeeName) {
-        if(payeeName == null || payeeName.isEmpty())
+        if(isStringInvalid(payeeName))
             return null;
 
         // convert from a string to a Type instance

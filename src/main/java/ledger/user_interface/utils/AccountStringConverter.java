@@ -7,13 +7,15 @@ import ledger.database.entity.Account;
 
 import java.util.List;
 
+import static ledger.user_interface.utils.InputSanitization.isStringInvalid;
+
 /**
  * Allows conversion of an Account Entity both to and from a String representation.
  */
 public class AccountStringConverter extends StringConverter<Account> {
 
     public Account fromString(String accountName) {
-        if (accountName == null || accountName.isEmpty())
+        if (isStringInvalid(accountName))
             return null;
 
         TaskWithReturn<List<Account>> getAllAccountsTask = DbController.INSTANCE.getAllAccounts();
