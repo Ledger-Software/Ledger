@@ -7,12 +7,17 @@ import ledger.database.entity.Payee;
 
 import java.util.List;
 
+import static ledger.user_interface.utils.InputSanitization.isStringInvalid;
+
 /**
  * Created by Tayler How on 11/1/2016.
  */
 public class PayeeStringConverter extends StringConverter<Payee> {
 
     public Payee fromString(String payeeName) {
+        if(isStringInvalid(payeeName))
+            return null;
+
         // convert from a string to a Type instance
         TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
         getAllPayeesTask.startTask();
@@ -24,7 +29,7 @@ public class PayeeStringConverter extends StringConverter<Payee> {
             }
         }
 
-        return null;
+        return new Payee(payeeName, payeeName);
     }
 
     public String toString(Payee payee) {

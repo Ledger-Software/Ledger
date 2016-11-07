@@ -85,7 +85,6 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
         });
         payeesTask.startTask();
-        this.existingPayees = payeesTask.waitForResult();
 
         TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
         accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
@@ -94,7 +93,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.accountText.setItems((FXCollections.observableArrayList(list)));
         });
         accountsTask.startTask();
-        this.existingAccounts = accountsTask.waitForResult();
+
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
         typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
 
@@ -103,7 +102,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
             this.typeText.setConverter(new TypeStringConverter());
         });
         typeTask.startTask();
-        this.existingTypes = typeTask.waitForResult();
+
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             Transaction transaction = getTransactionSubmission();
@@ -114,6 +113,10 @@ public class TransactionPopupController extends GridPane implements Initializabl
 
             task.startTask();
         });
+
+        this.existingPayees = payeesTask.waitForResult();
+        this.existingAccounts = accountsTask.waitForResult();
+        this.existingTypes = typeTask.waitForResult();
     }
 
     private void closeWindow() {
