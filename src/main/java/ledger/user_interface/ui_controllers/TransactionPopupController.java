@@ -107,7 +107,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             Transaction transaction = getTransactionSubmission();
-            if(!(transaction==null)) {
+            if(transaction!=null) {
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
                 task.RegisterSuccessEvent(() -> closeWindow());
                 task.RegisterFailureEvent((e) -> printStackTrace(e));
