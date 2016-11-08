@@ -243,7 +243,8 @@ public class H2DatabaseTest {
     public void insertPayee() throws Exception {
         int sizeBefore = database.getAllPayees().size();
 
-        database.insertPayee(samplePayee);
+        Payee testPayee = new Payee("test", "");
+        database.insertPayee(testPayee);
 
         List<Payee> payees = database.getAllPayees();
         assertEquals(sizeBefore + 1, payees.size());
@@ -251,14 +252,38 @@ public class H2DatabaseTest {
         Payee insertedPayee = null;
 
         for (Payee p : payees) {
-            if (p.getId() == samplePayee.getId()) insertedPayee = p;
+            if (p.getId() == testPayee.getId()) insertedPayee = p;
         }
 
         if (insertedPayee == null) fail();
 
-        assertEquals(samplePayee.getId(), insertedPayee.getId());
-        assertEquals(samplePayee.getName(), insertedPayee.getName());
-        assertEquals(samplePayee.getDescription(), insertedPayee.getDescription());
+        assertEquals(testPayee.getId(), insertedPayee.getId());
+        assertEquals(testPayee.getName(), insertedPayee.getName());
+        assertEquals(testPayee.getDescription(), insertedPayee.getDescription());
+    }
+
+    @Test
+    public void insertPayeeDuplicate() throws Exception {
+        int sizeBefore = database.getAllPayees().size();
+
+        Payee testPayee = new Payee("testInsertPayeeDupes", "");
+        database.insertPayee(testPayee);
+        database.insertPayee(testPayee);
+
+        List<Payee> payees = database.getAllPayees();
+        assertEquals(sizeBefore + 1, payees.size());
+
+        Payee insertedPayee = null;
+
+        for (Payee p : payees) {
+            if (p.getId() == testPayee.getId()) insertedPayee = p;
+        }
+
+        if (insertedPayee == null) fail();
+
+        assertEquals(testPayee.getId(), insertedPayee.getId());
+        assertEquals(testPayee.getName(), insertedPayee.getName());
+        assertEquals(testPayee.getDescription(), insertedPayee.getDescription());
     }
 
     @Test
@@ -444,19 +469,41 @@ public class H2DatabaseTest {
     public void insertTag() throws Exception {
         List<Tag> tagsBeforeInsertion = database.getAllTags();
 
-        database.insertTag(sampleTag);
+        Tag testTag = new Tag("testInsertTag", "");
+        database.insertTag(testTag);
 
         List<Tag> tagsAfterInsertion = database.getAllTags();
 
         Tag insertedTag = null;
         for (Tag t : tagsAfterInsertion) {
-            if (t.getId() == sampleTag.getId()) insertedTag = t;
+            if (t.getId() == testTag.getId()) insertedTag = t;
         }
         if (insertedTag == null) fail();
 
         assertEquals(tagsBeforeInsertion.size() + 1, tagsAfterInsertion.size());
-        assertEquals(sampleTag.getId(), insertedTag.getId());
-        assertEquals(sampleTag.getName(), insertedTag.getName());
+        assertEquals(testTag.getId(), insertedTag.getId());
+        assertEquals(testTag.getName(), insertedTag.getName());
+    }
+
+    @Test
+    public void insertTagDuplicate() throws Exception {
+        List<Tag> tagsBeforeInsertion = database.getAllTags();
+
+        Tag testTag = new Tag("testInsertTagDupes", "");
+        database.insertTag(testTag);
+        database.insertTag(testTag);
+
+        List<Tag> tagsAfterInsertion = database.getAllTags();
+
+        Tag insertedTag = null;
+        for (Tag t : tagsAfterInsertion) {
+            if (t.getId() == testTag.getId()) insertedTag = t;
+        }
+        if (insertedTag == null) fail();
+
+        assertEquals(tagsBeforeInsertion.size() + 1, tagsAfterInsertion.size());
+        assertEquals(testTag.getId(), insertedTag.getId());
+        assertEquals(testTag.getName(), insertedTag.getName());
     }
 
     @Test

@@ -72,5 +72,25 @@ public class Payee implements IEntity {
         this.id = id;
     }
 
+    /**
+     * Determines equality between this Payee and another object
+     *
+     * @param o The object to compare to this Payee
+     * @return True if this Payee is equal to the provided object. False otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (!(o instanceof Payee)) return false;
+
+        Payee otherPayee = ((Payee) o);
+
+        if(this.getName() == null && otherPayee.getName() != null) return false;
+        if(this.getDescription() == null && otherPayee.getDescription() != null) return false;
+        if(this.getName() != null && !this.getName().equals((otherPayee.getName()))) return false;
+        if(this.getDescription() != null && !this.getDescription().equals((otherPayee.getDescription()))) return false;
+        return true;
+    }
+
 }
 

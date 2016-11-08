@@ -16,6 +16,24 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
     @Override
     default void insertPayee(Payee payee) throws StorageException {
         try {
+
+            PreparedStatement checkIfExistsStmt = getDatabase().prepareStatement("SELECT " + PayeeTable.PAYEE_ID + ", "
+                    + PayeeTable.PAYEE_NAME + ", " + PayeeTable.PAYEE_DESC +
+                    " FROM " + PayeeTable.TABLE_NAME + " WHERE " + PayeeTable.PAYEE_NAME + "=?");
+            checkIfExistsStmt.setString(1, payee.getName());
+
+            ResultSet existingPayees = checkIfExistsStmt.executeQuery();
+            if (existingPayees.next()) {
+                int payeeID = existingPayees.getInt(PayeeTable.PAYEE_ID);
+                String payeeName = existingPayees.getString(PayeeTable.PAYEE_NAME);
+                String payeeDescription = existingPayees.getString(PayeeTable.PAYEE_DESC);
+
+                payee.setId(payeeID);
+                payee.setName(payeeName);
+                payee.setDescription(payeeDescription);
+                return;
+            }
+
             PreparedStatement stmt =
                     getDatabase().prepareStatement("INSERT INTO " + PayeeTable.TABLE_NAME +
                             " (" + PayeeTable.PAYEE_NAME +

@@ -76,7 +76,7 @@ public class Account implements IEntity {
      * Determines equality between this Account and another object
      *
      * @param o The object to compare to this Account
-     * @return True of this Account is equal to the provided object. False otherwise
+     * @return True if this Account is equal to the provided object. False otherwise
      */
     @Override
     public boolean equals(Object o) {

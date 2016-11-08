@@ -3,6 +3,7 @@ package ledger.database.storage.SQL;
 import ledger.database.entity.Tag;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.TagTable;
+import ledger.database.storage.table.TagToTransTable;
 import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
@@ -16,6 +17,24 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     @Override
     default void insertTag(Tag tag) throws StorageException {
         try {
+
+            PreparedStatement checkIfExistsStmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID + ", " + TagTable.TAG_NAME +
+                    ", " + TagTable.TAG_DESC + " FROM " + TagTable.TABLE_NAME + " WHERE " + TagTable.TAG_NAME + "=?");
+            checkIfExistsStmt.setString(1, tag.getName());
+
+            ResultSet existingTags = checkIfExistsStmt.executeQuery();
+            if (existingTags.next()) {
+                int id = existingTags.getInt(TagTable.TAG_ID);
+                String name = existingTags.getString(TagTable.TAG_NAME);
+                String description = existingTags.getString(TagTable.TAG_DESC);
+
+                tag.setId(id);
+                tag.setName(name);
+                tag.setDescription(description);
+
+                return;
+            }
+
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TagTable.TABLE_NAME +
                     " (" + TagTable.TAG_NAME + ", " + TagTable.TAG_DESC + ") VALUES (?, ?)");
             stmt.setString(1, tag.getName());
@@ -35,6 +54,11 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     @Override
     default void deleteTag(Tag tag) throws StorageException {
         try {
+            PreparedStatement tttsDelete = getDatabase().prepareStatement("DELETE FROM " + TagToTransTable.TABLE_NAME +
+                " WHERE " + TagToTransTable.TTTS_TAG_ID + "=?");
+            tttsDelete.setInt(1, tag.getId());
+            tttsDelete.executeUpdate();
+
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagTable.TABLE_NAME +
                     " WHERE " + TagTable.TAG_ID + " = ?");
             stmt.setInt(1, tag.getId());
@@ -81,7 +105,7 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
             }
             return tags;
         } catch (java.sql.SQLException e) {
-            throw new StorageException("Error while getting all notes", e);
+            throw new StorageException("Error while getting all tags", e);
         }
     }
 
