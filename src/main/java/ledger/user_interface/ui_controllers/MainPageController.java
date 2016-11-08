@@ -31,7 +31,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
-    private AccountDropdown chooseAccount;
+    private FilteringAccountDropdown chooseAccount;
 
     // Transaction table UI objects
     @FXML
@@ -41,7 +41,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button logoutBtn;
 
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
-    private final static Account allAccounts = new Account("All Accounts", "View all transactions");
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -80,12 +79,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             logout(event);
         });
 
-        this.chooseAccount.getItems().add(allAccounts);
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
             public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
-                if (newValue == allAccounts) transactionTableView.updateAccountFilter(null);
-                else transactionTableView.updateAccountFilter(newValue);
+                transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
             }
         });
     }

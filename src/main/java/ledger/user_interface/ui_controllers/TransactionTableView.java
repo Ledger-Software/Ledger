@@ -15,7 +15,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
-import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.user_interface.ui_models.TransactionModel;
@@ -302,7 +301,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 this.observableAllPayees.add(currentPayee);
             }
         }
-
     }
 
     private void handleDeleteTransactionFromTableView() {
