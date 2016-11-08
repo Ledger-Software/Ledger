@@ -1,5 +1,7 @@
 package ledger.user_interface.utils;
 
+import ledger.database.entity.Payee;
+
 import java.util.regex.Pattern;
 
 /**
@@ -62,4 +64,11 @@ public class InputSanitization {
     public static boolean isInvalidAmount(String str) {
         return !Pattern.matches(fpRegex, str);
     }
+    public static boolean isInvalidPayee(Object o) {
+        if (o == null) return true;
+        if (!(o instanceof Payee)) return true;
+        if (isStringInvalid(((Payee) o).getName())) return true;
+        return false;
+    }
+
 }

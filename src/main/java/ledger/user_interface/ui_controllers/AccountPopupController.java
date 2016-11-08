@@ -52,18 +52,19 @@ public class AccountPopupController extends GridPane implements Initializable, I
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.submitAccountInfo.setOnAction((event) -> {
-            try {
-                Account account = getAccountSubmission();
-                AccountBalance balance = getAccountBalance();
-
+            Account account = getAccountSubmission();
+            AccountBalance balance = getAccountBalance();
+            if (account != null && balance != null) {
                 TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
                 task.RegisterSuccessEvent(this::insertDone);
                 task.RegisterFailureEvent(this::insertFail);
                 task.startTask();
-            } catch (NullPointerException e2) {
-                this.setupErrorPopup("Required field is null.", e2);
-            } catch (NumberFormatException e3) {
-                this.setupErrorPopup("Account starting amount must be an integer.", e3);
+                return;
+            }
+            if (account == null) {
+                this.setupErrorPopup("Required field is null.", new Exception());
+            } else {
+                this.setupErrorPopup("Account starting amount must be an integer.", new Exception());
             }
         });
     }
@@ -105,6 +106,9 @@ public class AccountPopupController extends GridPane implements Initializable, I
     public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
         AccountBalance ab;
         int amount = 0;
+        if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
+            return null;
+        }
         amount = Integer.parseInt(accountAmtText.getText());
         ab = new AccountBalance(this.act, new Date(), amount);
         return ab;
