@@ -54,7 +54,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
         this.submitAccountInfo.setOnAction((event) -> {
             Account account = getAccountSubmission();
             AccountBalance balance = getAccountBalance();
-            if (account!=null&&balance!=null) {
+            if (account != null && balance != null) {
                 TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
                 task.RegisterSuccessEvent(this::insertDone);
                 task.RegisterFailureEvent(this::insertFail);
