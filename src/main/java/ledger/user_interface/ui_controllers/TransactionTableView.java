@@ -275,16 +275,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     public void updateTransactionTableView() {
         // Update table rows
-        List<Transaction> transactions;
+        TaskWithReturn<List<Transaction>> task;
         if (accountFilter == null) {
-            TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
-            task.startTask();
-            transactions = task.waitForResult();
+            task = DbController.INSTANCE.getAllTransactions();
         } else {
-            TaskWithArgsReturn<Account, List<Transaction>> task = DbController.INSTANCE.getAllTransactionsForAccount(accountFilter);
-            task.startTask();
-            transactions = task.waitForResult();
+            task = DbController.INSTANCE.getAllTransactionsForAccount(accountFilter);
         }
+        task.startTask();
+        List<Transaction> transactions = task.waitForResult();
 
         ArrayList<TransactionModel> models = new ArrayList<>();
         for (int i = 0; i < transactions.size(); i++) {

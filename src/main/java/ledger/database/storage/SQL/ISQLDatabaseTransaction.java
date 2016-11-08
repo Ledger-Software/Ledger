@@ -185,29 +185,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     " FROM " + TransactionTable.TABLE_NAME +
                     ";");
 
-            ArrayList<Transaction> transactionList = new ArrayList<>();
+            return extractTransactions(rs);
 
-            while (rs.next()) {
-                Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
-                int transactionID = rs.getInt(TransactionTable.TRANS_ID);
-                int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
-                int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
-                boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
-                int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
-                int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
-
-                Type type = getTypeForID(typeID);
-                Account account = getAccountForID(accountID);
-                Payee payee = getPayeeForID(payeeID);
-                List<Tag> tags = getTagsForTransactionID(transactionID);
-                Note note = getNoteForTransactionID(transactionID);
-
-                Transaction currentTransaction = new Transaction(date, type, amount, account, payee, pending, tags, note, transactionID);
-
-                transactionList.add(currentTransaction);
-            }
-
-            return transactionList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all transactions", e);
         }
@@ -228,33 +207,36 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             stmt.setInt(1, account.getId());
             ResultSet rs = stmt.executeQuery();
 
-            ArrayList<Transaction> transactionList = new ArrayList<>();
+            return extractTransactions(rs);
 
-            while (rs.next()) {
-                Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
-                int transactionID = rs.getInt(TransactionTable.TRANS_ID);
-                int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
-                int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
-                boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
-                int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
-                int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
-
-                Type type = getTypeForID(typeID);
-                Account transAccount = getAccountForID(accountID);
-                System.out.println(transAccount.toString());
-                Payee payee = getPayeeForID(payeeID);
-                List<Tag> tags = getTagsForTransactionID(transactionID);
-                Note note = getNoteForTransactionID(transactionID);
-
-                Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, transactionID);
-
-                transactionList.add(currentTransaction);
-            }
-
-            return transactionList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all transactions", e);
         }
+    }
+
+    default ArrayList<Transaction> extractTransactions(ResultSet rs) throws SQLException, StorageException {
+        ArrayList<Transaction> transactionList = new ArrayList<>();
+
+        while (rs.next()) {
+            Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
+            int transactionID = rs.getInt(TransactionTable.TRANS_ID);
+            int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
+            int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
+            boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
+            int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
+            int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
+
+            Type type = getTypeForID(typeID);
+            Account transAccount = getAccountForID(accountID);
+            Payee payee = getPayeeForID(payeeID);
+            List<Tag> tags = getTagsForTransactionID(transactionID);
+            Note note = getNoteForTransactionID(transactionID);
+
+            Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, transactionID);
+
+            transactionList.add(currentTransaction);
+        }
+        return transactionList;
     }
 
     // Private helper methods
