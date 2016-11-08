@@ -107,7 +107,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
         this.typeText.setEditable(true);
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             Transaction transaction = getTransactionSubmission();
-            if(transaction != null) {
+            if (transaction != null) {
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
                 task.RegisterSuccessEvent(() -> closeWindow());
                 task.RegisterFailureEvent((e) -> printStackTrace(e));
@@ -132,46 +132,46 @@ public class TransactionPopupController extends GridPane implements Initializabl
      */
     public Transaction getTransactionSubmission() {
 
-            LocalDate localDate = this.datePicker.getValue();
-            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            this.date = Date.from(instant);
+        LocalDate localDate = this.datePicker.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        this.date = Date.from(instant);
 
-            this.pending = this.pendingCheckBox.isSelected();
+        this.pending = this.pendingCheckBox.isSelected();
 
-            this.payee = fromBoxPayee(this.payeeText.getValue());
-            if (InputSanitization.isInvalidPayee(this.payee)){
-                this.setupErrorPopup("Invalid Payee entry.", new Exception());
-                return null;
-            }
-            if (this.accountText.getSelectionModel().isEmpty()){
-                this.setupErrorPopup("No account selected.", new Exception());
+        this.payee = fromBoxPayee(this.payeeText.getValue());
+        if (InputSanitization.isInvalidPayee(this.payee)) {
+            this.setupErrorPopup("Invalid Payee entry.", new Exception());
+            return null;
+        }
+        if (this.accountText.getSelectionModel().isEmpty()) {
+            this.setupErrorPopup("No account selected.", new Exception());
 
-                return null;
-            }
-            this.account = this.accountText.getValue();
+            return null;
+        }
+        this.account = this.accountText.getValue();
 
-            this.category = new ArrayList<Tag>() {{
-                add(new Tag(categoryText.getText(), ""));
-            }};
+        this.category = new ArrayList<Tag>() {{
+            add(new Tag(categoryText.getText(), ""));
+        }};
 
-            if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
-                this.setupErrorPopup("Invalid amount entry.", new Exception());
-                return null;
-            }
-            String amountString = this.amountText.getText();
-            if (amountString.charAt(0) == '$') {
-                amountString = amountString.substring(1);
-            }
-            double amountToSetDecimal = Double.parseDouble(amountString);
-            this.amount = (int) Math.round(amountToSetDecimal * 100);
+        if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
+            this.setupErrorPopup("Invalid amount entry.", new Exception());
+            return null;
+        }
+        String amountString = this.amountText.getText();
+        if (amountString.charAt(0) == '$') {
+            amountString = amountString.substring(1);
+        }
+        double amountToSetDecimal = Double.parseDouble(amountString);
+        this.amount = (int) Math.round(amountToSetDecimal * 100);
 
-            this.notes = new Note(this.notesText.getText());
+        this.notes = new Note(this.notesText.getText());
 
-            if( this.typeText.getSelectionModel().isEmpty()) {
-                this.setupErrorPopup("No type selected.", new Exception());
-                return null;
-            }
-            this.type = this.typeText.getValue();
+        if (this.typeText.getSelectionModel().isEmpty()) {
+            this.setupErrorPopup("No type selected.", new Exception());
+            return null;
+        }
+        this.type = this.typeText.getValue();
 
         Transaction t = new Transaction(this.date, this.type, this.amount, this.account,
                 this.payee, this.pending, this.category, this.notes);

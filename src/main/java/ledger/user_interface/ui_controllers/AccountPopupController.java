@@ -61,7 +61,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 task.startTask();
                 return;
             }
-            if (account==null) {
+            if (account == null) {
                 this.setupErrorPopup("Required field is null.", new Exception());
             } else {
                 this.setupErrorPopup("Account starting amount must be an integer.", new Exception());
@@ -106,7 +106,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
         AccountBalance ab;
         int amount = 0;
-        if(InputSanitization.isInvalidAmount(accountAmtText.getText())){
+        if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
             return null;
         }
         amount = Integer.parseInt(accountAmtText.getText());
