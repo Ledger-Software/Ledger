@@ -214,7 +214,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
-    default ArrayList<Transaction> extractTransactions(ResultSet rs) throws SQLException, StorageException {
+    default List<Transaction> extractTransactions(ResultSet rs) throws SQLException, StorageException {
         List<Transaction> transactionList = new ArrayList<>();
 
         while (rs.next()) {
