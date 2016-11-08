@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
+import ledger.database.entity.Account;
 import ledger.exception.StorageException;
 
 import java.net.URL;
@@ -27,6 +30,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button trackSpendingBtn;
     @FXML
     private Button addTransactionBtn;
+    @FXML
+    private AccountDropdown chooseAccount;
 
     // Transaction table UI objects
     @FXML
@@ -36,6 +41,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button logoutBtn;
 
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    private final static Account allAccounts = new Account("All Accounts", "View all transactions");
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -72,6 +78,15 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.logoutBtn.setOnAction((event) -> {
             logout(event);
+        });
+
+        this.chooseAccount.getItems().add(allAccounts);
+        this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
+            @Override
+            public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
+                if (newValue == allAccounts) transactionTableView.updateAccountFilter(null);
+                else transactionTableView.updateAccountFilter(newValue);
+            }
         });
     }
 

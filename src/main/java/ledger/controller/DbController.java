@@ -96,7 +96,14 @@ public class DbController {
      */
     public TaskWithReturn<List<Transaction>> getAllTransactions() {
         return new TaskWithReturn<List<Transaction>>(db::getAllTransactions);
+    }
 
+    /**
+     * @return A task for the Async Call that returns a list of all the Transactions
+     * @throws StorageException When a DB error occurs
+     */
+    public TaskWithArgsReturn<Account, List<Transaction>> getAllTransactionsForAccount(Account account) {
+        return new TaskWithArgsReturn<Account, List<Transaction>>(db::getAllTransactionsForAccount, account);
     }
 
     /**
