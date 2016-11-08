@@ -24,7 +24,7 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateAccounts();
-        DbController.INSTANCE.registerAccountSuccessEvent(this::updateAccounts);
+        DbController.INSTANCE.registerAccountSuccessEvent(() -> Startup.INSTANCE.runLater(this::updateAccounts));
     }
 
     private void updateAccounts() {
