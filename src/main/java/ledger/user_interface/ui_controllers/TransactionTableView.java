@@ -285,9 +285,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         List<Transaction> transactions = task.waitForResult();
 
         ArrayList<TransactionModel> models = new ArrayList<>();
-        for (int i = 0; i < transactions.size(); i++) {
-            TransactionModel modelToAdd = new TransactionModel(transactions.get(i));
-            models.add(modelToAdd);
+        for (Transaction trans : transactions) {
+            models.add(new TransactionModel(trans));
         }
         ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
 
@@ -337,6 +336,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     public void updateAccountFilter(Account accountToFilterBy) {
         this.accountFilter = accountToFilterBy;
-        this.updateTransactionTableView();
+        this.asyncTableUpdate();
     }
 }
