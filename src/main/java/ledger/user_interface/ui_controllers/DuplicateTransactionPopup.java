@@ -32,7 +32,7 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
 
     private List<Transaction> trans;
     private Iterator<Transaction> iter;
-    private Transaction currentTrans;
+//    private Transaction currentTrans;
 
 
     public DuplicateTransactionPopup() {
@@ -54,7 +54,7 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
     }
 
     private void importTrans(ActionEvent actionEvent) {
-        TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(currentTrans);
+        TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transactionInput.getTransactionSubmission());
 
         task.RegisterSuccessEvent(() -> this.next(null));
         task.RegisterFailureEvent((e) -> this.next(null));
@@ -66,7 +66,7 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
 
     private void next(ActionEvent actionEvent) {
         if (iter.hasNext()) {
-            currentTrans = iter.next();
+            Transaction currentTrans = iter.next();
             Startup.INSTANCE.runLater(() -> {
                 transactionInput.setTransaction(currentTrans);
                 importButton.setDisable(false);
