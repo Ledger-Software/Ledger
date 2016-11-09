@@ -24,6 +24,8 @@ public interface IDatabase {
 
     List<Transaction> getAllTransactions() throws StorageException;
 
+    List<Transaction> getAllTransactionsForAccount(Account account) throws StorageException;
+
     void insertAccount(Account account) throws StorageException;
 
     void deleteAccount(Account account) throws StorageException;

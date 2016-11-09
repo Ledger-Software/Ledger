@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -14,21 +13,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Payee;
-import ledger.database.entity.Tag;
-import ledger.database.entity.Transaction;
-import ledger.database.entity.Type;
+import ledger.database.entity.*;
 import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.*;
 
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,6 +36,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
     private ObservableList<Payee> observableAllPayees;
+    private Account accountFilter;
 
     // Transaction table UI objects
     @FXML
@@ -281,14 +274,18 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     public void updateTransactionTableView() {
         // Update table rows
-        TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
+        TaskWithReturn<List<Transaction>> task;
+        if (accountFilter == null) {
+            task = DbController.INSTANCE.getAllTransactions();
+        } else {
+            task = DbController.INSTANCE.getAllTransactionsForAccount(accountFilter);
+        }
         task.startTask();
-        List<Transaction> allTransactions = task.waitForResult();
+        List<Transaction> transactions = task.waitForResult();
 
         ArrayList<TransactionModel> models = new ArrayList<>();
-        for (int i = 0; i < allTransactions.size(); i++) {
-            TransactionModel modelToAdd = new TransactionModel(allTransactions.get(i));
-            models.add(modelToAdd);
+        for (Transaction trans : transactions) {
+            models.add(new TransactionModel(trans));
         }
         ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
 
@@ -304,7 +301,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 this.observableAllPayees.add(currentPayee);
             }
         }
-
     }
 
     private void handleDeleteTransactionFromTableView() {
@@ -334,5 +330,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         updateTransactionTableView();
 
         DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
+    }
+
+    public void updateAccountFilter(Account accountToFilterBy) {
+        this.accountFilter = accountToFilterBy;
+        this.asyncTableUpdate();
     }
 }

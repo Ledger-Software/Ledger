@@ -1,8 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
-import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -12,19 +10,22 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * JavaFx Dropdown that is linked to Account
+ * Account dropdown with an added "All Accounts" option. Used to filter transactions by account.
  */
-public class AccountDropdown extends ChoiceBox<Account> implements IUIController, Initializable {
+public class FilteringAccountDropdown extends AccountDropdown {
+
+    private final static Account allAccounts = new Account("All Accounts", "View all transactions");
     private static final String pageLoc = "/fxml_files/ChoiceBox.fxml";
 
-    public AccountDropdown() {
-        this.initController(pageLoc, this, "Unable to load Account Dropdown");
+    public FilteringAccountDropdown() {
+        this.initController(pageLoc, this, "Unable to load Filtering Account Dropdown");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateAccounts();
         DbController.INSTANCE.registerAccountSuccessEvent(() -> Startup.INSTANCE.runLater(this::updateAccounts));
+        this.getSelectionModel().select(allAccounts);
     }
 
     private void updateAccounts() {
@@ -32,10 +33,21 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
         task.startTask();
         List<Account> accounts = task.waitForResult();
 
+        accounts.add(allAccounts);
+
         this.setItems(FXCollections.observableArrayList(accounts));
     }
 
+    /**
+     * Gets the selected Account. 
+     *
+     * @return  Selected account, or null if "All Accounts" selected
+     */
+    @Override
     public Account getSelectedAccount() {
+        if (this.getValue() == allAccounts) {
+            return null;
+        }
         return this.getValue();
     }
 }
