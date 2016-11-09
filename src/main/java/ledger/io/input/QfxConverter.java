@@ -107,7 +107,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
 
         // pull out relevant data and create java objects
         for (int i = 0; i < transactionTypes.getLength(); i++) {
-            Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent())*1000);
+            Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
             //TODO: Discuss what to do about type
             Type type = TypeConversion.convert("UNKNOWN");
             int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));

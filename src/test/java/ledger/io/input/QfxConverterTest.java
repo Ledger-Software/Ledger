@@ -38,10 +38,10 @@ public class QfxConverterTest {
         assertEquals(-499, convertedTransactions.get(2).getAmount());
         assertEquals(-699, convertedTransactions.get(3).getAmount());
 
-        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]") * 1000), convertedTransactions.get(0).getDate());
-        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]")* 1000), convertedTransactions.get(1).getDate());
-        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]")* 1000), convertedTransactions.get(2).getDate());
-        assertEquals(new Date(GenerateEpoch.generate("20160919000000[-4:EDT]")* 1000), convertedTransactions.get(3).getDate());
+        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]")), convertedTransactions.get(0).getDate());
+        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]")), convertedTransactions.get(1).getDate());
+        assertEquals(new Date(GenerateEpoch.generate("20160912000000[-4:EDT]")), convertedTransactions.get(2).getDate());
+        assertEquals(new Date(GenerateEpoch.generate("20160919000000[-4:EDT]")), convertedTransactions.get(3).getDate());
 
         assertEquals("OUTBACK 1515", convertedTransactions.get(0).getPayee().getName());
         assertEquals("BIG RED LIQUORS - 011", convertedTransactions.get(1).getPayee().getName());

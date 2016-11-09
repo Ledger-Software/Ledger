@@ -37,6 +37,6 @@ public class GenerateEpoch {
 
         dateTime.minusHours(timezoneOffset);
 
-        return dateTime.toEpochSecond();
+        return dateTime.toEpochSecond() * 1000;
     }
 }
