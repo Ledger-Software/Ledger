@@ -168,9 +168,13 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         if (tags.size() > 0)
             this.categoryText.setText(tags.get(0).toString());
+        else
+            this.categoryText.setText("");
 
         Note note = currentTrans.getNote();
         if (note != null)
             this.notesText.setText(note.getNoteText());
+        else
+            this.notesText.setText("");
     }
 }
