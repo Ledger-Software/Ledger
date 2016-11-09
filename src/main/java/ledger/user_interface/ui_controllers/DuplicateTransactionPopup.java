@@ -56,15 +56,21 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
 
         task.RegisterSuccessEvent(() -> this.next(null));
         task.RegisterFailureEvent((e) -> this.next(null));
+
+        importButton.setDisable(true);
         task.startTask();
+
     }
 
     private void next(ActionEvent actionEvent) {
         if (iter.hasNext()) {
             currentTrans = iter.next();
-            transactionText.setText(currentTrans.toString());
+            Startup.INSTANCE.runLater(() -> {
+                transactionText.setText(currentTrans.toString());
+                importButton.setDisable(false);
+            });
         } else {
-            closeWindow();
+            Startup.INSTANCE.runLater(this::closeWindow);
         }
     }
 
