@@ -1,25 +1,15 @@
 package ledger.user_interface.ui_controllers;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
-import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.*;
-import ledger.user_interface.utils.InputSanitization;
-import ledger.user_interface.utils.TypeStringConverter;
+import ledger.database.entity.Transaction;
 
 import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**

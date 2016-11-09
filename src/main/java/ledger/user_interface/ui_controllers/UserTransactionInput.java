@@ -5,12 +5,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.user_interface.utils.InputSanitization;
@@ -108,7 +104,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     public Transaction getTransactionSubmission() {
 
         LocalDate localDate = this.datePicker.getValue();
-        if(localDate == null) {
+        if (localDate == null) {
             this.setupErrorPopup("No Date selected", new Exception());
             return null;
         }
@@ -163,18 +159,18 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     public void setTransaction(Transaction currentTrans) {
         this.datePicker.setValue(currentTrans.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.typeText.setValue(currentTrans.getType());
-        this.amountText.setText( Double.toString(currentTrans.getAmount() / 100.0));
+        this.amountText.setText(Double.toString(currentTrans.getAmount() / 100.0));
         this.accountText.setValue(currentTrans.getAccount());
         this.payeeText.setValue(currentTrans.getPayee());
         this.pendingCheckBox.setSelected(currentTrans.isPending());
 
         List<Tag> tags = currentTrans.getTagList();
 
-        if(tags.size() > 0)
+        if (tags.size() > 0)
             this.categoryText.setText(tags.get(0).toString());
 
         Note note = currentTrans.getNote();
-        if(note != null)
+        if (note != null)
             this.notesText.setText(note.getNoteText());
     }
 }
