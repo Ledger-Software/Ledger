@@ -108,6 +108,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     public Transaction getTransactionSubmission() {
 
         LocalDate localDate = this.datePicker.getValue();
+        if(localDate == null) {
+            this.setupErrorPopup("No Date selected", new Exception());
+            return null;
+        }
+
         Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
         Date date = Date.from(instant);
 
@@ -142,11 +147,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         Note notes = new Note(this.notesText.getText());
 
-        if (this.typeText.getSelectionModel().isEmpty()) {
+        Type type = this.typeText.getValue();
+        if (type == null) {
             this.setupErrorPopup("No type selected.", new Exception());
             return null;
         }
-        Type type = this.typeText.getValue();
 
         Transaction t = new Transaction(date, type, amount, account,
                 payee, pending, category, notes);
