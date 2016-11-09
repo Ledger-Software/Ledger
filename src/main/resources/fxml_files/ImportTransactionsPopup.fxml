@@ -36,7 +36,7 @@
         <FileSelectorButton fx:id="fileSelector" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
         <ConverterDropdown fx:id="converterSelector" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
         <AccountDropdown fx:id="accountDropdown" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-        <Button fx:id="importButton" mnemonicParsing="false" text="Import" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+        <Button fx:id="importButton" mnemonicParsing="false" text="Import" style="-fx-background-color: #ffa81f;" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
             <font>
                 <Font name="Calibri" size="22.0" />
             </font>
