@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by Jesse Shellabarger on 11/8/2016.
+ * Account dropdown with an added "All Accounts" option. Used to filter transactions by account.
  */
 public class FilteringAccountDropdown extends AccountDropdown {
 
@@ -38,6 +38,11 @@ public class FilteringAccountDropdown extends AccountDropdown {
         this.setItems(FXCollections.observableArrayList(accounts));
     }
 
+    /**
+     * Gets the selected Account. 
+     *
+     * @return  Selected account, or null if "All Accounts" selected
+     */
     @Override
     public Account getSelectedAccount() {
         if (this.getValue() == allAccounts) {
