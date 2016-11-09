@@ -12,6 +12,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -26,7 +27,7 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
     @FXML
     private Button skipButton;
     @FXML
-    private Text transactionText;
+    private UserTransactionInput transactionInput;
 
     private static final String pageLoc = "/fxml_files/DuplicateTransactionPopup.fxml";
 
@@ -36,6 +37,8 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
 
 
     public DuplicateTransactionPopup() {
+        this.initController(pageLoc, this, "Unable to load Duplicate Transaction Popup");
+        this.trans = new ArrayList<>();
     }
 
     public DuplicateTransactionPopup(List<Transaction> trans) {
@@ -66,7 +69,7 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
         if (iter.hasNext()) {
             currentTrans = iter.next();
             Startup.INSTANCE.runLater(() -> {
-                transactionText.setText(currentTrans.toString());
+                transactionInput.setTransaction(currentTrans);
                 importButton.setDisable(false);
             });
         } else {
