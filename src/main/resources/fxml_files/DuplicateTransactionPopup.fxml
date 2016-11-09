@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.UserTransactionInput?>
 
-<fx:root type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #ffffff;">
+<fx:root style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints />
@@ -43,7 +43,7 @@
          <children>
             <Button fx:id="importButton" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Import" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <GridPane.margin>
-                  <Insets right="20.0" />
+                  <Insets bottom="10.0" right="20.0" />
                </GridPane.margin>
                 <font>
                     <Font name="Calibri" size="22.0" />
@@ -57,7 +57,7 @@
             </Button>
             <Button fx:id="skipButton" alignment="CENTER_RIGHT" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Skip" textAlignment="CENTER" GridPane.halignment="LEFT">
                <GridPane.margin>
-                  <Insets left="20.0" />
+                  <Insets bottom="10.0" left="20.0" />
                </GridPane.margin>
                 <font>
                     <Font name="Calibri" size="22.0" />
