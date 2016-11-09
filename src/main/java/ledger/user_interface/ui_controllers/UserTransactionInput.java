@@ -166,7 +166,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         this.amountText.setText( Double.toString(currentTrans.getAmount() / 100.0));
         this.accountText.setValue(currentTrans.getAccount());
         this.payeeText.setValue(currentTrans.getPayee());
-        this.pendingCheckBox.setVisible(currentTrans.isPending());
+        this.pendingCheckBox.setSelected(currentTrans.isPending());
 
         List<Tag> tags = currentTrans.getTagList();
 
