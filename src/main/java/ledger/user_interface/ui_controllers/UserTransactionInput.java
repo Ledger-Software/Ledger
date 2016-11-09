@@ -71,7 +71,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         this.typeText.setDisable(true);
 
         TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
-        payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
+        payeesTask.RegisterFailureEvent((e) -> e.printStackTrace());
         payeesTask.RegisterSuccessEvent((list) -> {
             ObservableList<Payee> payees = FXCollections.observableList(list);
             this.payeeText.setItems(payees);
@@ -82,8 +82,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         payeesTask.startTask();
 
         TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
-        accountsTask.RegisterFailureEvent((e) -> printStackTrace(e));
-
+        accountsTask.RegisterFailureEvent((e) -> e.printStackTrace());
         accountsTask.RegisterSuccessEvent((list) -> {
             this.accountText.setItems((FXCollections.observableArrayList(list)));
             this.accountText.setDisable(false);
@@ -91,21 +90,14 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         accountsTask.startTask();
 
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
-        typeTask.RegisterFailureEvent((e) -> printStackTrace(e));
-
+        typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
         typeTask.RegisterSuccessEvent((list) -> {
             this.typeText.setItems(FXCollections.observableArrayList(list));
             this.typeText.setConverter(new TypeStringConverter());
             this.typeText.setDisable(false);
+            this.typeText.setEditable(true);
         });
         typeTask.startTask();
-
-        this.typeText.setEditable(true);
-    }
-
-
-    private void printStackTrace(Exception e) {
-        e.printStackTrace();
     }
 
     /**
