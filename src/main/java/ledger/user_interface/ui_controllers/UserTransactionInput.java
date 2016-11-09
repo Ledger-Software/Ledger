@@ -157,6 +157,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         return t;
     }
 
+    /**
+     * Sets the fields in this control to their corresponding values in the given transaction
+     * @param currentTrans non-null Transaction to set the data in this control too
+     */
     public void setTransaction(Transaction currentTrans) {
         this.datePicker.setValue(currentTrans.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.typeText.setValue(currentTrans.getType());
