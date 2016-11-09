@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 11/9/2016.
+ * Control that allows for user input of transactions. On calling getAccountSubmission it does sanitation and tells the
+ * user what is wrong. For code it will return null.
  */
 public class UserTransactionInput extends GridPane implements IUIController, Initializable {
     private static final String pageLog = "/fxml_files/UserTransactionInput.fxml";
