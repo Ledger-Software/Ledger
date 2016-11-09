@@ -123,12 +123,13 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             this.setupErrorPopup("Invalid Payee entry.", new Exception());
             return null;
         }
-        if (this.accountText.getSelectionModel().isEmpty()) {
+
+        Account account = this.accountText.getValue();
+        if (account == null) {
             this.setupErrorPopup("No account selected.", new Exception());
 
             return null;
         }
-        Account account = this.accountText.getValue();
 
         List<Tag> category = new ArrayList<Tag>() {{
             add(new Tag(categoryText.getText(), ""));
@@ -161,5 +162,19 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
     public void setTransaction(Transaction currentTrans) {
         this.datePicker.setValue(currentTrans.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        this.typeText.setValue(currentTrans.getType());
+        this.amountText.setText( Double.toString(currentTrans.getAmount() / 100.0));
+        this.accountText.setValue(currentTrans.getAccount());
+        this.payeeText.setValue(currentTrans.getPayee());
+        this.pendingCheckBox.setVisible(currentTrans.isPending());
+
+        List<Tag> tags = currentTrans.getTagList();
+
+        if(tags.size() > 0)
+            this.categoryText.setText(tags.get(0).toString());
+
+        Note note = currentTrans.getNote();
+        if(note != null)
+            this.notesText.setText(note.getNoteText());
     }
 }
