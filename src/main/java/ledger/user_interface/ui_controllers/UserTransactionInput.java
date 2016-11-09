@@ -66,6 +66,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        this.payeeText.setDisable(true);
+        this.accountText.setDisable(true);
+        this.typeText.setDisable(true);
+
         TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
         payeesTask.RegisterFailureEvent((e) -> printStackTrace(e));
         payeesTask.RegisterSuccessEvent((list) -> {
@@ -73,6 +77,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             this.payeeText.setItems(payees);
             this.payeeText.setConverter(new PayeeStringConverter());
             this.payeeText.setEditable(true);
+            this.payeeText.setDisable(false);
         });
         payeesTask.startTask();
 
@@ -81,6 +86,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         accountsTask.RegisterSuccessEvent((list) -> {
             this.accountText.setItems((FXCollections.observableArrayList(list)));
+            this.accountText.setDisable(false);
         });
         accountsTask.startTask();
 
@@ -90,15 +96,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         typeTask.RegisterSuccessEvent((list) -> {
             this.typeText.setItems(FXCollections.observableArrayList(list));
             this.typeText.setConverter(new TypeStringConverter());
+            this.typeText.setDisable(false);
         });
         typeTask.startTask();
 
         this.typeText.setEditable(true);
-
-        
-        payeesTask.waitForResult();
-        accountsTask.waitForResult();
-        typeTask.waitForResult();
     }
 
 
