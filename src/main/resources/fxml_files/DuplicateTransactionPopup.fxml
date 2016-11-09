@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.UserTransactionInput?>
 
-<fx:root type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #ffffff;">
   <columnConstraints>
     <ColumnConstraints hgrow="ALWAYS" />
       <ColumnConstraints />
