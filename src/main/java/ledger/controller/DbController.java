@@ -57,7 +57,6 @@ public class DbController {
     /**
      * @param transaction The transaction to insert
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
@@ -68,7 +67,6 @@ public class DbController {
     /**
      * @param transaction The transaction to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
@@ -78,11 +76,8 @@ public class DbController {
     }
 
     /**
-     * <
-     *
      * @param transaction The transaction to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
@@ -92,7 +87,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Transactions
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Transaction>> getAllTransactions() {
         return new TaskWithReturn<List<Transaction>>(db::getAllTransactions);
@@ -100,7 +94,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Transactions
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Transaction>> getAllTransactionsForAccount(Account account) {
         return new TaskWithReturn<List<Transaction>>(() -> db.getAllTransactionsForAccount(account));
@@ -109,7 +102,6 @@ public class DbController {
     /**
      * @param account The account to insert
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> insertAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::insertAccount, account);
@@ -120,7 +112,6 @@ public class DbController {
     /**
      * @param account The account to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> deleteAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::deleteAccount, account);
@@ -131,7 +122,6 @@ public class DbController {
     /**
      * @param account The account to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Account> editAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::editAccount, account);
@@ -141,7 +131,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Accounts
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Account>> getAllAccounts() {
         return new TaskWithReturn<List<Account>>(db::getAllAccounts);
@@ -150,7 +139,6 @@ public class DbController {
     /**
      * @param payee The payee to insert
      * @return a Task for the Async Call
-     * @throws StorageException
      */
     public TaskWithArgs<Payee> insertPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::insertPayee, payee);
@@ -160,7 +148,6 @@ public class DbController {
     /**
      * @param payee The payee to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Payee> deletePayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::deletePayee, payee);
@@ -170,7 +157,6 @@ public class DbController {
     /**
      * @param payee The payee to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Payee> editPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::editPayee, payee);
@@ -179,7 +165,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Payees
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Payee>> getAllPayees() {
         return new TaskWithReturn<List<Payee>>(db::getAllPayees);
@@ -189,7 +174,6 @@ public class DbController {
     /**
      * @param note The note to insert
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Note> insertNote(final Note note) {
         return new TaskWithArgs<Note>(db::insertNote, note);
@@ -199,7 +183,6 @@ public class DbController {
     /**
      * @param note The note to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Note> deleteNote(final Note note) {
         return new TaskWithArgs<Note>(db::deleteNote, note);
@@ -209,7 +192,6 @@ public class DbController {
     /**
      * @param note The note to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Note> editNote(final Note note) {
         return new TaskWithArgs<Note>(db::editNote, note);
@@ -218,7 +200,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Notes
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Note>> getAllNotes() {
         return new TaskWithReturn<List<Note>>(db::getAllNotes);
@@ -228,7 +209,6 @@ public class DbController {
     /**
      * @param tag the tag to insert
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Tag> insertTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::insertTag, tag);
@@ -238,7 +218,6 @@ public class DbController {
     /**
      * @param tag the tag to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Tag> deleteTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::deleteTag, tag);
@@ -248,7 +227,6 @@ public class DbController {
     /**
      * @param tag the tag to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Tag> editTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::editTag, tag);
@@ -257,7 +235,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Transactions
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Tag>> getAllTags() {
         return new TaskWithReturn<List<Tag>>(db::getAllTags);
@@ -267,7 +244,6 @@ public class DbController {
     /**
      * @param type the type to insert
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Type> insertType(final Type type) {
         return new TaskWithArgs<Type>(db::insertType, type);
@@ -277,7 +253,6 @@ public class DbController {
     /**
      * @param type the type to delete
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Type> deleteType(final Type type) {
         return new TaskWithArgs<Type>(db::deleteType, type);
@@ -287,7 +262,6 @@ public class DbController {
     /**
      * @param type the type to edit
      * @return a Task for the Async Call
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithArgs<Type> editType(final Type type) {
         return new TaskWithArgs<Type>(db::editType, type);
@@ -296,7 +270,6 @@ public class DbController {
 
     /**
      * @return A task for the Async Call that returns a list of all the Types
-     * @throws StorageException When a DB error occurs
      */
     public TaskWithReturn<List<Type>> getAllTypes() {
         return new TaskWithReturn<List<Type>>(db::getAllTypes);
