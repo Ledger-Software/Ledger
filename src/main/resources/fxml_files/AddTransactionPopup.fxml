@@ -10,6 +10,7 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.UserTransactionInput?>
 
+<?import javafx.scene.Cursor?>
 <fx:root fx:id="addTrnxnGridPane" minHeight="320.0" minWidth="696.0" prefHeight="417.0" prefWidth="707.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" />
@@ -29,9 +30,19 @@
               </Text>
          </children></Pane>
       <UserTransactionInput fx:id="transactionInput" GridPane.rowIndex="1" />
-      <Button fx:id="addTrnxnSubmitButton" mnemonicParsing="false" text="Add Transaction" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+      <Button fx:id="addTrnxnSubmitButton" mnemonicParsing="false" text="Add Transaction" GridPane.halignment="RIGHT" GridPane.rowIndex="2" style="-fx-background-color: #ffa81f;">
          <GridPane.margin>
             <Insets right="20.0" />
-         </GridPane.margin></Button>
+         </GridPane.margin>
+          <font>
+              <Font name="Calibri" size="22.0" />
+          </font>
+          <padding>
+              <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+          </padding>
+          <cursor>
+              <Cursor fx:constant="HAND" />
+          </cursor>
+      </Button>
     </children>
 </fx:root>

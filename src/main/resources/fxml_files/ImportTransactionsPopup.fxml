@@ -11,6 +11,8 @@
 <?import ledger.user_interface.ui_controllers.ConverterDropdown?>
 <?import ledger.user_interface.ui_controllers.FileSelectorButton?>
 
+<?import javafx.scene.Cursor?>
+<?import javafx.geometry.Insets?>
 <fx:root fx:id="addAcctGridPane" alignment="CENTER" maxHeight="150.0" maxWidth="500.0" minHeight="150.0" minWidth="500.0" prefHeight="150.0" prefWidth="500.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="349.0" />
@@ -34,6 +36,17 @@
         <FileSelectorButton fx:id="fileSelector" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
         <ConverterDropdown fx:id="converterSelector" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
         <AccountDropdown fx:id="accountDropdown" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-        <Button fx:id="importButton" mnemonicParsing="false" text="Import" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+        <Button fx:id="importButton" mnemonicParsing="false" text="Import" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <font>
+                <Font name="Calibri" size="22.0" />
+            </font>
+            <padding>
+                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+            </padding>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+
     </children>
 </fx:root>
