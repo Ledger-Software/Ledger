@@ -15,7 +15,7 @@ task wrapper(type: Wrapper) {
 task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Version': version,
-                'Main-Class': 'ledger.Startup'
+                'Main-Class': 'ledger.user_interface.ui_controllers.Startup'
     }
     baseName = 'Ledger'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
