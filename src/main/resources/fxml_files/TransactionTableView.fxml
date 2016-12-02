@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 
-<fx:root editable="true" type="TableView" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="TableView" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
    <columns>
       <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Amount" />
       <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="150.0" text="Date" />
