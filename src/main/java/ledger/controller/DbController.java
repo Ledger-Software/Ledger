@@ -9,6 +9,7 @@ import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
 import ledger.exception.StorageException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,6 +22,7 @@ public class DbController {
 
     public static DbController INSTANCE;
     private IDatabase db;
+    private File dbFile;
 
     static {
         new DbController();
@@ -37,6 +39,7 @@ public class DbController {
 
     public void initialize(String fileName, String password) throws StorageException {
         this.db = new H2Database(fileName, password);
+        this.dbFile = new File(fileName);
     }
 
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
@@ -283,6 +286,10 @@ public class DbController {
     public void shutdown() throws StorageException {
         if (db != null)
             db.shutdown();
+    }
+
+    public File getDbFile() {
+        return this.dbFile;
     }
 
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {

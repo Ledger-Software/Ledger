@@ -14,7 +14,13 @@ import ledger.controller.DbController;
 import ledger.database.entity.Account;
 import ledger.exception.StorageException;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -30,6 +36,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button trackSpendingBtn;
     @FXML
     private Button addTransactionBtn;
+    @FXML
+    private Button exportDataBtn;
     @FXML
     private FilteringAccountDropdown chooseAccount;
 
@@ -77,6 +85,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.logoutBtn.setOnAction((event) -> {
             logout(event);
+        });
+
+        this.exportDataBtn.setOnAction((event) -> {
+           exportData();
         });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
@@ -140,5 +152,30 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
         this.createModal(scene, "Add Account");
+    }
+
+    /**
+     * Exports the database file to the chosen directory.
+     */
+    private void exportData() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setCurrentDirectory(new java.io.File("~"));
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int returnVal = chooser.showSaveDialog(chooser);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            File saveLocation = chooser.getSelectedFile();
+            File currentDbFile = DbController.INSTANCE.getDbFile();
+            String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
+            System.out.println(timeStamp);
+            File newDbFile = new File(saveLocation.toPath().toString(), timeStamp + currentDbFile.getName());
+
+            try {
+                //DbController.INSTANCE.shutdown();
+                Files.copy(currentDbFile.toPath(), newDbFile.toPath());
+            } catch (IOException e) {
+                this.setupErrorPopup("Unable to properly copy data.", e);
+                e.printStackTrace();
+            }
+        }
     }
 }
