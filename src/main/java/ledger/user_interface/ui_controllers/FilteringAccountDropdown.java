@@ -29,6 +29,7 @@ public class FilteringAccountDropdown extends AccountDropdown {
     }
 
     private void updateAccounts() {
+        Account currentSelection = this.getValue();
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.startTask();
         List<Account> accounts = task.waitForResult();
@@ -36,6 +37,7 @@ public class FilteringAccountDropdown extends AccountDropdown {
         accounts.add(allAccounts);
 
         this.setItems(FXCollections.observableArrayList(accounts));
+        this.setValue(currentSelection);
     }
 
     /**
