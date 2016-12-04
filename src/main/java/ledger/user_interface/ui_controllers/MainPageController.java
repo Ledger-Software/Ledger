@@ -88,7 +88,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         });
 
         this.exportDataBtn.setOnAction((event) -> {
-           exportData();
+            exportData();
         });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
@@ -162,20 +162,21 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         chooser.setCurrentDirectory(new java.io.File("~"));
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnVal = chooser.showSaveDialog(chooser);
-        if(returnVal == JFileChooser.APPROVE_OPTION) {
-            File saveLocation = chooser.getSelectedFile();
-            File currentDbFile = DbController.INSTANCE.getDbFile();
-            String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-            System.out.println(timeStamp);
-            File newDbFile = new File(saveLocation.toPath().toString(), timeStamp + currentDbFile.getName());
+        if (returnVal != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+        File saveLocation = chooser.getSelectedFile();
+        File currentDbFile = DbController.INSTANCE.getDbFile();
+        String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
+        System.out.println(timeStamp);
+        File newDbFile = new File(saveLocation.toPath().toString(), timeStamp + currentDbFile.getName());
 
-            try {
-                //DbController.INSTANCE.shutdown();
-                Files.copy(currentDbFile.toPath(), newDbFile.toPath());
-            } catch (IOException e) {
-                this.setupErrorPopup("Unable to properly copy data.", e);
-                e.printStackTrace();
-            }
+        try {
+            this.logoutBtn.fire();
+            Files.copy(currentDbFile.toPath(), newDbFile.toPath());
+        } catch (IOException e) {
+            this.setupErrorPopup("Unable to properly copy data.", e);
+            e.printStackTrace();
         }
     }
 }
