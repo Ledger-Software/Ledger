@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -12,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<fx:root fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #2a96cd;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" stylesheets="@../../java/ledger/user_interface/css/loginPage.css" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="280.0" minWidth="10.0" prefWidth="249.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="310.0" minWidth="10.0" prefWidth="257.0" />
@@ -37,7 +44,7 @@
                         <Font name="Calibri" size="64.0" />
                     </font>
                 </Text>
-                <Button fx:id="loginBtn" layoutX="337.0" layoutY="337.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" style="-fx-background-color: #ffa81f;" text="Login" textAlignment="CENTER">
+                <Button fx:id="loginBtn" layoutX="337.0" layoutY="337.0" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Login" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="22.0" />
                     </font>
@@ -48,7 +55,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="chooseFileBtn" layoutX="435.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="Existing File" textAlignment="CENTER">
+                <Button fx:id="chooseFileBtn" layoutX="435.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" text="Existing File" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="22.0" />
                     </font>
@@ -59,12 +66,12 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-            <PasswordField fx:id="password" onAction="#onEnter" layoutX="291.0" layoutY="236.0" prefHeight="45.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
+            <PasswordField fx:id="password" layoutX="291.0" layoutY="236.0" onAction="#onEnter" prefHeight="45.0" prefWidth="200.0" promptText="Password" style="-fx-background-color: #abcafc;">
                <font>
                   <Font name="Calibri Bold" size="20.0" />
                </font>
             </PasswordField>
-            <Button fx:id="newFileBtn" layoutX="173.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" style="-fx-background-color: #ffa81f;" text="New File" textAlignment="CENTER">
+            <Button fx:id="newFileBtn" layoutX="173.0" layoutY="152.0" maxHeight="35.0" maxWidth="175.0" minHeight="35.0" minWidth="175.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="175.0" text="New File" textAlignment="CENTER">
                <font>
                   <Font name="Calibri" size="22.0" />
                </font>
