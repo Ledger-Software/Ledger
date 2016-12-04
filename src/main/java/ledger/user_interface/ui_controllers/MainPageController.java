@@ -99,12 +99,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
     private void clearSearch(ActionEvent actionEvent) {
         searchTextField.setText("");
+        transactionTableView.updateSearchFilterString("");
+
     }
 
     private void searchClick(ActionEvent actionEvent) {
         String searchText = searchTextField.getText();
-
-        // TODO pass to Transaction Table View
+        transactionTableView.updateSearchFilterString(searchText);
 
     }
 
