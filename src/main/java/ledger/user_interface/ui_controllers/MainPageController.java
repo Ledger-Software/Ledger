@@ -89,6 +89,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
+        this.searchTextField.setOnAction(this::searchClick);
+
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
             public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
@@ -100,13 +102,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void clearSearch(ActionEvent actionEvent) {
         searchTextField.setText("");
         transactionTableView.updateSearchFilterString("");
-
     }
 
     private void searchClick(ActionEvent actionEvent) {
         String searchText = searchTextField.getText();
         transactionTableView.updateSearchFilterString(searchText);
-
     }
 
     /**
