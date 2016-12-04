@@ -168,15 +168,31 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         File saveLocation = chooser.getSelectedFile();
         File currentDbFile = DbController.INSTANCE.getDbFile();
         String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-        System.out.println(timeStamp);
-        File newDbFile = new File(saveLocation.toPath().toString(), timeStamp + currentDbFile.getName());
+        String fileName = timeStamp + currentDbFile.getName();
+        File newDbFile = new File(saveLocation.toPath().toString(), fileName);
+
+        int numFiles = 1;
+        while (newDbFile.exists()) {
+            fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
+            newDbFile = new File(saveLocation.toPath().toString(), fileName);
+        }
 
         try {
-            this.logoutBtn.fire();
+            DbController.INSTANCE.shutdown();
             Files.copy(currentDbFile.toPath(), newDbFile.toPath());
         } catch (IOException e) {
             this.setupErrorPopup("Unable to properly copy data.", e);
             e.printStackTrace();
+        } catch (StorageException e) {
+            this.setupErrorPopup("Unable to properly close database.", e);
+            e.printStackTrace();
         }
+        this.displayPasswordPrompt();
+    }
+
+    private void displayPasswordPrompt() {
+        PasswordPromptController promptController = new PasswordPromptController();
+        Scene scene = new Scene(promptController);
+        this.createModal(scene, "Login");
     }
 }
