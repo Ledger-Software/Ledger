@@ -32,6 +32,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button addTransactionBtn;
     @FXML
     private FilteringAccountDropdown chooseAccount;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private Button searchTextField;
 
     // Transaction table UI objects
     @FXML
@@ -79,12 +85,26 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             logout(event);
         });
 
+        this.searchButton.setOnAction(this::searchClick);
+        this.clearButton.setOnAction(this::clearSearch);
+
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
             public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
                 transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
             }
         });
+    }
+
+    private void clearSearch(ActionEvent actionEvent) {
+        searchTextField.setText("");
+    }
+
+    private void searchClick(ActionEvent actionEvent) {
+        String searchText = searchTextField.getText();
+
+        // TODO pass to Transaction Table View
+
     }
 
     /**
