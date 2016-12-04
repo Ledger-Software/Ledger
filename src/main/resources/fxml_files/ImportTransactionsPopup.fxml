@@ -13,6 +13,7 @@
 
 <?import javafx.scene.Cursor?>
 <?import javafx.geometry.Insets?>
+<?import java.net.URL?>
 <fx:root fx:id="addAcctGridPane" alignment="CENTER" maxHeight="180.0" maxWidth="500.0" minHeight="180.0"
          minWidth="500.0" prefHeight="180.0" prefWidth="500.0" style="-fx-background-color: #ffffff;" type="GridPane"
          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -28,10 +29,10 @@
         <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <Pane style="-fx-background-color: #ffa81f;" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS"
+        <Pane fx:id="header" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS"
               GridPane.vgrow="ALWAYS">
             <children>
-                <Text layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bulk Import">
+                <Text fx:id="text" layoutX="14.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bulk Import">
                     <font>
                         <Font size="24.0"/>
                     </font>
@@ -62,7 +63,7 @@
                            GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
         <AccountDropdown fx:id="accountDropdown" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER"
                          GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
-        <Button fx:id="importButton" mnemonicParsing="false" text="Import" style="-fx-background-color: #ffa81f;"
+        <Button fx:id="importButton" mnemonicParsing="false" text="Import"
                 GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3"
                 GridPane.valignment="CENTER">
             <font>
@@ -75,6 +76,9 @@
                 <Cursor fx:constant="HAND"/>
             </cursor>
         </Button>
-
     </children>
+    <stylesheets>
+        <URL value="@../css/colorStyle.css" />
+        <URL value="@../css/importTrxn.css" />
+    </stylesheets>
 </fx:root>
