@@ -97,6 +97,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Scene scene = new Scene(login);
         Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         newStage.setScene(scene);
+        newStage.setMinWidth(780);
+        newStage.setWidth(780);
+        newStage.setHeight(450);
+        newStage.setMinHeight(450);
+        newStage.setResizable(false);
         newStage.setTitle("Ledger Login");
         newStage.show();
         try {

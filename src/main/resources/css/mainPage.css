@@ -1,3 +1,7 @@
 #header {
     -fx-background-color: #6f8fa2;
 }
+
+#title {
+    -fx-fill: whitesmoke;
+}

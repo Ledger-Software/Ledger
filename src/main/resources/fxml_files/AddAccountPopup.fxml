@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.*?>
+<?import java.net.URL?>
 <fx:root fx:id="addAcctGridPane" maxHeight="340.0" maxWidth="700.0" minHeight="340.0" minWidth="700.0"
          prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" type="GridPane"
          xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
@@ -24,7 +25,7 @@
         <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <Rectangle fx:id="orangeHeaderBar" arcHeight="5.0" arcWidth="5.0" fill="#ffa81f" height="40.0" stroke="#ffa81f"
+        <Rectangle fx:id="orangeHeaderBar" arcHeight="5.0" arcWidth="5.0" height="40.0"
                    strokeType="OUTSIDE" width="700.0" GridPane.columnSpan="3"/>
         <Text fx:id="addAccountHeader" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Account">
             <font>
@@ -41,7 +42,7 @@
             </font>
         </Text>
         <TextField fx:id="accountNameText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
-                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                   GridPane.columnIndex="1" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets left="15.0"/>
             </GridPane.margin>
@@ -53,7 +54,7 @@
             </font>
         </Text>
         <TextField fx:id="accountDescription" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
-                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                   GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="15.0"/>
             </GridPane.margin>
@@ -65,13 +66,13 @@
             </font>
         </Text>
         <TextField fx:id="accountAmtText" maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0"
-                   style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                    GridPane.columnIndex="1" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="15.0"/>
             </GridPane.margin>
         </TextField>
         <Button fx:id="submitAccountInfo" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0"
-                style="-fx-background-color: #ffa81f;" text="Submit as Complete" GridPane.columnIndex="1"
+                text="Submit as Complete" GridPane.columnIndex="1"
                 GridPane.rowIndex="4">
             <GridPane.margin>
                 <Insets left="15.0"/>
@@ -84,4 +85,8 @@
             </cursor>
         </Button>
     </children>
+    <stylesheets>
+        <URL value="@../css/addAccount.css" />
+        <URL value="@../css/colorStyle.css" />
+    </stylesheets>
 </fx:root>
