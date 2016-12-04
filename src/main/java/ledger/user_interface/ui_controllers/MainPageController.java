@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -37,7 +38,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button clearButton;
     @FXML
-    private Button searchTextField;
+    private TextField searchTextField;
 
     // Transaction table UI objects
     @FXML
