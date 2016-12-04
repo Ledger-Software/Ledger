@@ -8,6 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import java.net.URL?>
 <fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="314.0" prefWidth="600.0" type="Pane" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
    <children>
        <Rectangle fx:id="headerBar" fill="#ffa81f" height="41.0" strokeType="INSIDE" width="600.0" />
@@ -16,7 +17,7 @@
                <Font name="Calibri" size="28.0" />
            </font>
        </Text>
-      <Button fx:id="submitButton" layoutX="272.0" layoutY="255.0" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="OK">
+      <Button fx:id="submitButton" layoutX="272.0" layoutY="255.0" mnemonicParsing="false" text="OK">
          <font>
             <Font name="Calibri" size="22.0" />
          </font></Button>
@@ -35,4 +36,8 @@
          </font>
       </PasswordField>
    </children>
+    <stylesheets>
+        <URL value="@../css/createDb.css" />
+        <URL value="@../css/colorStyle.css" />
+    </stylesheets>
 </fx:root>

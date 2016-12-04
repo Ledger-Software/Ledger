@@ -11,6 +11,7 @@
 <?import ledger.user_interface.ui_controllers.UserTransactionInput?>
 
 <?import javafx.scene.Cursor?>
+<?import java.net.URL?>
 <fx:root fx:id="addTrnxnGridPane" minHeight="320.0" minWidth="696.0" prefHeight="417.0" prefWidth="707.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" />
@@ -21,7 +22,7 @@
       <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
-      <Pane style="-fx-background-color: #ffa81f;" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+      <Pane  fx:id="header" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
               <Text fx:id="addTrnxnHeader" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Transaction">
                   <font>
@@ -30,7 +31,7 @@
               </Text>
          </children></Pane>
       <UserTransactionInput fx:id="transactionInput" GridPane.rowIndex="1" />
-      <Button fx:id="addTrnxnSubmitButton" mnemonicParsing="false" text="Add Transaction" GridPane.halignment="RIGHT" GridPane.rowIndex="2" style="-fx-background-color: #ffa81f;">
+      <Button fx:id="addTrnxnSubmitButton" mnemonicParsing="false" text="Add Transaction" GridPane.halignment="RIGHT" GridPane.rowIndex="2" >
          <GridPane.margin>
             <Insets right="20.0" />
          </GridPane.margin>
@@ -45,4 +46,8 @@
           </cursor>
       </Button>
     </children>
+    <stylesheets>
+        <URL value="@../css/addTransaction.css" />
+        <URL value="@../css/colorStyle.css" />
+    </stylesheets>
 </fx:root>
