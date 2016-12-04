@@ -62,6 +62,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             MainPageController mainPageController = new MainPageController();
             Scene scene = new Scene(mainPageController);
             Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            newStage.setMinWidth(780);
+            newStage.setWidth(1280);
+            newStage.setHeight(800);
+            newStage.setMinHeight(5000);
+            newStage.setResizable(true);
             newStage.setScene(scene);
             newStage.setTitle("Ledger: Transaction View");
             newStage.show();
