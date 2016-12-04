@@ -41,9 +41,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
 
-    LoginPageController() {
-        this.initController(pageLoc, this, "Error on login startup: ");
-    }
+    LoginPageController() { this.initController(pageLoc, this, "Error on login startup: "); }
 
     /**
      * Sets up action listeners for the buttons on the page.

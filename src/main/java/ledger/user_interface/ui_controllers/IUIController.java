@@ -26,6 +26,7 @@ public interface IUIController {
         Scene scene = new Scene(errCon);
         Stage newStage = new Stage();
         newStage.setScene(scene);
+        newStage.setResizable(false);
         newStage.setTitle("Error!");
         newStage.initModality(Modality.APPLICATION_MODAL);
         newStage.show();
@@ -58,6 +59,7 @@ public interface IUIController {
     default void createModal(Scene s, String windowName) {
         Stage newStage = new Stage();
         newStage.setScene(s);
+        newStage.setResizable(false);
         newStage.setTitle(windowName);
         newStage.initModality(Modality.APPLICATION_MODAL);
         newStage.show();
