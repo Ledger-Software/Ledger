@@ -96,6 +96,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
                 Scene scene = new Scene(popup);
                 Stage newStage = new Stage();
                 newStage.setScene(scene);
+                newStage.setResizable(false);
                 newStage.setTitle("Duplicate!");
                 newStage.initModality(Modality.APPLICATION_MODAL);
                 newStage.show();

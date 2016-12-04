@@ -37,7 +37,7 @@
         <RowConstraints maxHeight="174.0" minHeight="10.0" prefHeight="175.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Pane fx:id="loginPane" maxHeight="283.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" prefHeight="283.0" prefWidth="0.0" style="-fx-background-color: #ffffff;" GridPane.columnSpan="3" GridPane.rowSpan="4">
+        <Pane fx:id="loginPane" maxHeight="450.0" maxWidth="780.0" minHeight="450.0" minWidth="780.0" prefHeight="450.0" prefWidth="780.0" style="-fx-background-color: #ffffff;" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="4">
             <children>
                 <Rectangle fx:id="headerBar" fill="#ffa81f" height="41.0" strokeType="INSIDE" width="781.0" />
                 <Text fx:id="transactTitle" fill="#28536c" fontSmoothingType="LCD" layoutX="260.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TransACT" textAlignment="CENTER" wrappingWidth="262.375">

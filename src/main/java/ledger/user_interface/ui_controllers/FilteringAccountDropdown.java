@@ -25,10 +25,11 @@ public class FilteringAccountDropdown extends AccountDropdown {
     public void initialize(URL location, ResourceBundle resources) {
         updateAccounts();
         DbController.INSTANCE.registerAccountSuccessEvent(() -> Startup.INSTANCE.runLater(this::updateAccounts));
-        this.getSelectionModel().select(allAccounts);
+        this.setValue(allAccounts);
     }
 
     private void updateAccounts() {
+        Account currentSelection = this.getValue();
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.startTask();
         List<Account> accounts = task.waitForResult();
@@ -36,6 +37,7 @@ public class FilteringAccountDropdown extends AccountDropdown {
         accounts.add(allAccounts);
 
         this.setItems(FXCollections.observableArrayList(accounts));
+        this.setValue(currentSelection);
     }
 
     /**
