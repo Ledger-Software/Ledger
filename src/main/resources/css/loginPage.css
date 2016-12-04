@@ -1,0 +1,10 @@
+GridPane {
+    -fx-background-color: white;
+    -fx-pref-height: 450;
+    -fx-pref-width: 780;
+}
+
+#loginPane {
+    -fx-background-color: whitesmoke;
+    -fx-border-color: #477087;
+}

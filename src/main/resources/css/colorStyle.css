@@ -1,0 +1,11 @@
+Rectangle {
+    -fx-fill: #6f8fa2;
+}
+
+Button {
+    -fx-background-color: #dc7373;
+}
+
+Text {
+    -fx-fill: #28536c;
+}
