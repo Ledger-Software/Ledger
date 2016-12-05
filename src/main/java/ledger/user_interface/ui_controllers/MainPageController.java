@@ -9,6 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.database.entity.Account;
@@ -158,14 +160,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      * Exports the database file to the chosen directory.
      */
     private void exportData() {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setCurrentDirectory(new java.io.File("~"));
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int returnVal = chooser.showSaveDialog(chooser);
-        if (returnVal != JFileChooser.APPROVE_OPTION) {
-            return;
-        }
-        File saveLocation = chooser.getSelectedFile();
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select Directory");
+        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        File saveLocation = chooser.showDialog(this.exportDataBtn.getScene().getWindow());
         File currentDbFile = DbController.INSTANCE.getDbFile();
         String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
         String fileName = timeStamp + currentDbFile.getName();
@@ -193,6 +192,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void displayPasswordPrompt() {
         PasswordPromptController promptController = new PasswordPromptController();
         Scene scene = new Scene(promptController);
-        this.createModal(scene, "Login");
+        this.createModal(scene, "Verify Password");
     }
 }
