@@ -1,10 +1,6 @@
-GridPane {
-    -fx-background-color: white;
-    -fx-pref-height: 450;
+#headerBar {
+    -fx-background-color: #6f8fa2;
+    -fx-pref-height: 45;
+    -fx-max-height: 45;
     -fx-pref-width: 780;
-}
-
-#loginPane {
-    -fx-background-color: whitesmoke;
-    -fx-border-color: #477087;
 }
