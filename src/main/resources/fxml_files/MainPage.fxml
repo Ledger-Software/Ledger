@@ -89,6 +89,14 @@
                         <Font name="Calibri" size="17.0" />
                     </font>
                 </Button>
+                <Button fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Export Data" textAlignment="CENTER">
+                    <cursor>
+                        <Cursor fx:constant="HAND" />
+                    </cursor>
+                    <font>
+                        <Font name="Calibri" size="17.0" />
+                    </font>
+                </Button>
             </children>
          <GridPane.margin>
             <Insets left="10.0" right="10.0" top="5.0" />

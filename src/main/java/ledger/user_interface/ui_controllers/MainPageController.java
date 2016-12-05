@@ -9,12 +9,20 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.database.entity.Account;
 import ledger.exception.StorageException;
 
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 /**
@@ -30,6 +38,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button trackSpendingBtn;
     @FXML
     private Button addTransactionBtn;
+    @FXML
+    private Button exportDataBtn;
     @FXML
     private FilteringAccountDropdown chooseAccount;
 
@@ -77,6 +87,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.logoutBtn.setOnAction((event) -> {
             logout(event);
+        });
+
+        this.exportDataBtn.setOnAction((event) -> {
+            exportData();
         });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
@@ -141,5 +155,44 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
         this.createModal(scene, "Add Account");
+    }
+
+    /**
+     * Exports the database file to the chosen directory.
+     */
+    private void exportData() {
+        DirectoryChooser chooser = new DirectoryChooser();
+        chooser.setTitle("Select Directory");
+        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+
+        File saveLocation = chooser.showDialog(this.exportDataBtn.getScene().getWindow());
+        File currentDbFile = DbController.INSTANCE.getDbFile();
+        String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
+        String fileName = timeStamp + currentDbFile.getName();
+        File newDbFile = new File(saveLocation.toPath().toString(), fileName);
+
+        int numFiles = 1;
+        while (newDbFile.exists()) {
+            fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
+            newDbFile = new File(saveLocation.toPath().toString(), fileName);
+        }
+
+        try {
+            DbController.INSTANCE.shutdown();
+            Files.copy(currentDbFile.toPath(), newDbFile.toPath());
+        } catch (IOException e) {
+            this.setupErrorPopup("Unable to properly copy data.", e);
+            e.printStackTrace();
+        } catch (StorageException e) {
+            this.setupErrorPopup("Unable to properly close database.", e);
+            e.printStackTrace();
+        }
+        this.displayPasswordPrompt();
+    }
+
+    private void displayPasswordPrompt() {
+        PasswordPromptController promptController = new PasswordPromptController();
+        Scene scene = new Scene(promptController);
+        this.createModal(scene, "Verify Password");
     }
 }
