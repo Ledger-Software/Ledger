@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -7,16 +12,10 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-
 <?import java.net.URL?>
-<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="314.0" prefWidth="600.0" type="Pane" xmlns="http://javafx.com/javafx/8.0.112-ea" xmlns:fx="http://javafx.com/fxml/1">
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="314.0" prefWidth="600.0" type="Pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-       <Rectangle fx:id="headerBar" fill="#ffa81f" height="41.0" strokeType="INSIDE" width="600.0" />
-       <Text fx:id="popupTitle" layoutX="6.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New File">
-           <font>
-               <Font name="Calibri" size="28.0" />
-           </font>
-       </Text>
       <Button fx:id="submitButton" layoutX="272.0" layoutY="255.0" mnemonicParsing="false" text="OK">
          <font>
             <Font name="Calibri" size="22.0" />
@@ -35,9 +34,17 @@
             <Font name="System Bold" size="22.0" />
          </font>
       </PasswordField>
+      <Pane fx:id="header" prefHeight="48.0" prefWidth="600.0">
+         <children>
+             <Text fx:id="title" layoutX="14.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New File">
+                 <font>
+                     <Font name="Calibri" size="28.0" />
+                 </font>
+             </Text>
+         </children>
+      </Pane>
    </children>
     <stylesheets>
-        <URL value="@../css/createDb.css" />
         <URL value="@../css/colorStyle.css" />
     </stylesheets>
 </fx:root>

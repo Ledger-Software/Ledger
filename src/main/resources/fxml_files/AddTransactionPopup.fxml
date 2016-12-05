@@ -24,7 +24,7 @@
     <children>
       <Pane  fx:id="header" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-              <Text fx:id="addTrnxnHeader" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Transaction">
+              <Text fx:id="title" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Transaction">
                   <font>
                       <Font name="Calibri" size="28.0" />
                   </font>
@@ -47,7 +47,6 @@
       </Button>
     </children>
     <stylesheets>
-        <URL value="@../css/addTransaction.css" />
         <URL value="@../css/colorStyle.css" />
     </stylesheets>
 </fx:root>

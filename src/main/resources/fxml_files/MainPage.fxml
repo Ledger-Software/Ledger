@@ -14,7 +14,7 @@
 <?import ledger.user_interface.ui_controllers.TransactionTableView?>
 
 <?import java.net.URL?>
-<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" stylesheets="@../css/mainPage.css" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
@@ -112,7 +112,6 @@
           </Button>
     </children>
     <stylesheets>
-        <URL value="@../css/mainPage.css" />
         <URL value="@../css/colorStyle.css" />
     </stylesheets>
 </fx:root>

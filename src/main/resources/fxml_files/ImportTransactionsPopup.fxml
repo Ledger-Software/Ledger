@@ -38,7 +38,7 @@
     <children>
         <Pane fx:id="header" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.valignment="TOP" GridPane.vgrow="ALWAYS">
             <children>
-                <Text fx:id="text" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bulk Import">
+                <Text fx:id="title" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bulk Import">
                     <font>
                         <Font size="24.0" />
                     </font>
@@ -84,6 +84,5 @@
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
-        <URL value="@../css/importTrxn.css" />
     </stylesheets>
 </fx:root>

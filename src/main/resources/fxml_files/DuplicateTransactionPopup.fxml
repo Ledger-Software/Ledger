@@ -25,7 +25,7 @@
    <children>
       <Pane fx:id="header"  GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
          <children>
-            <Text fx:id="text" layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duplicate Transaction" textAlignment="CENTER">
+            <Text fx:id="title" layoutX="14.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Duplicate Transaction" textAlignment="CENTER">
                <font>
                   <Font size="24.0" />
                </font>
@@ -77,7 +77,6 @@
       </GridPane>
    </children>
     <stylesheets>
-        <URL value="@../css/dupeTransaction.css" />
         <URL value="@../css/colorStyle.css" />
     </stylesheets>
 </fx:root>

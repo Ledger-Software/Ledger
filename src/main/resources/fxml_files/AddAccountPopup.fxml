@@ -72,7 +72,7 @@
         </Button>
       <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="3">
          <children>
-              <Text fx:id="addAccountHeader" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Account">
+              <Text fx:id="title" layoutX="14.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Account">
                   <font>
                       <Font name="Calibri" size="28.0" />
                   </font>
@@ -81,7 +81,6 @@
       </Pane>
     </children>
     <stylesheets>
-        <URL value="@../css/addAccount.css" />
         <URL value="@../css/colorStyle.css" />
     </stylesheets>
 </fx:root>
