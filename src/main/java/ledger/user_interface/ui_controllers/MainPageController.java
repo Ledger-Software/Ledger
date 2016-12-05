@@ -95,11 +95,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void logout(ActionEvent event) {
         LoginPageController login = new LoginPageController();
         Scene scene = new Scene(login);
-        Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        newStage.setScene(scene);
-        newStage.setHeight(450);
-        newStage.setMinHeight(450);
-        newStage.setMaxHeight(450);
+        Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currStage.close();
+        Stage newStage = new Stage();
+        newStage.setResizable(false);
+        newStage.setScene(scene);;
         newStage.setTitle("Ledger Login");
         newStage.show();
         try {
