@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import java.net.URL?>
-<fx:root fx:id="addAcctGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="addAcctGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="340.0" prefWidth="700.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="363.0" minWidth="10.0" prefWidth="282.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="424.0" minWidth="10.0" prefWidth="418.0" />
@@ -27,15 +27,6 @@
         <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <Rectangle fx:id="orangeHeaderBar" arcHeight="5.0" arcWidth="5.0" height="40.0" strokeType="OUTSIDE" width="700.0" GridPane.columnSpan="3" />
-        <Text fx:id="popupTitle" strokeType="OUTSIDE" strokeWidth="0.0">
-            <font>
-                <Font name="Calibri" size="28.0" />
-            </font>
-            <GridPane.margin>
-                <Insets left="15.0" top="5.0" />
-            </GridPane.margin>
-        </Text>
         <Label fx:id="errorText" alignment="CENTER" prefHeight="111.0" prefWidth="718.0" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="2" GridPane.rowIndex="2" GridPane.rowSpan="2">
             <padding>
                 <Insets left="20.0" right="20.0" />
@@ -55,6 +46,15 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
+      <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2">
+         <children>
+              <Text fx:id="title" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <font>
+                      <Font name="Calibri" size="28.0" />
+                  </font>
+              </Text>
+         </children>
+      </Pane>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
