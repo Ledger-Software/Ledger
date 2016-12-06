@@ -36,16 +36,6 @@
         </Text>
         <VBox fx:id="buttonsVBox" spacing="10.0" GridPane.rowIndex="1">
             <children>
-                <Text fx:id="chooseActText" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter by Account:">
-                    <font>
-                        <Font name="Calibri" size="18.0" />
-                    </font>
-                </Text>
-                <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                    <cursor>
-                        <Cursor fx:constant="HAND" />
-                    </cursor>
-                </FilteringAccountDropdown>
                 <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="17.0" />
@@ -99,20 +89,39 @@
          <children>
             <GridPane>
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                  <ColumnConstraints hgrow="SOMETIMES" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
                   <ColumnConstraints halignment="CENTER" hgrow="NEVER" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" vgrow="NEVER" />
               </rowConstraints>
-               <children>
-                  <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" GridPane.hgrow="ALWAYS" />
-                  <Button fx:id="searchButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" text="Search" GridPane.columnIndex="1">
+                <children>
+                    <Text fx:id="chooseActText" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter by Account:">
+                        <font>
+                            <Font name="Calibri" size="18.0" />
+                        </font>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                    </Text>
+                    <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
+                        <cursor>
+                            <Cursor fx:constant="HAND" />
+                        </cursor>
+                     <GridPane.margin>
+                        <Insets right="10.0" />
+                     </GridPane.margin>
+                    </FilteringAccountDropdown>
+
+                    <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
+                  <Button fx:id="searchButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" text="Search" GridPane.columnIndex="3">
                      <GridPane.margin>
                         <Insets left="5.0" />
                      </GridPane.margin></Button>
-                  <Button fx:id="clearButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" text="Clear" GridPane.columnIndex="2">
+                  <Button fx:id="clearButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" text="Clear" GridPane.columnIndex="4">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin></Button>
