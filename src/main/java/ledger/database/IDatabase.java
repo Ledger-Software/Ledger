@@ -65,4 +65,15 @@ public interface IDatabase {
     void editTag(Tag tag) throws StorageException;
 
     List<Tag> getAllTags() throws StorageException;
+
+    List<Tag> getAllTagsForPayee(Payee payee) throws StorageException;
+
+    void deleteTagForPayee(Tag tag, Payee payee) throws StorageException;
+
+    void addTagForPayee(Tag tag, Payee payee) throws StorageException;
+
+    Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription);
+
+    Tag getTagForNameAndDescription(String tagName, String tagDescription);
 }
+

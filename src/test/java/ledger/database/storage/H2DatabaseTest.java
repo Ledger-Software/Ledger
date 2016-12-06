@@ -545,7 +545,35 @@ public class H2DatabaseTest {
         assertEquals(textToSet, editedTag.getDescription());
         assertEquals(tagToEdit.getId(), editedTag.getId());
     }
+    @Test
+    public void addTagForPayee() throws Exception {
+        database.addTagForPayee(sampleTag, samplePayee);
 
+        List<Tag> tags = database.getAllTagsForPayee(samplePayee);
+
+        assertEquals(1, tags.size());
+        assertEquals(tags.get(0).getName(), "Groceries");
+
+        database.addTagForPayee(sampleTag2, samplePayee);
+        tags = database.getAllTagsForPayee(samplePayee);
+        assertEquals(2, tags.size());
+    }
+    @Test
+    public void deleteTagForPayee() throws Exception {
+        database.addTagForPayee(sampleTag, samplePayee);
+        database.addTagForPayee(sampleTag2, samplePayee);
+        List<Tag> tags = database.getAllTagsForPayee(samplePayee);
+
+        assertEquals(2, tags.size());
+
+        database.deleteTagForPayee(sampleTag2, samplePayee);
+        tags = database.getAllTagsForPayee(samplePayee);
+        assertEquals(1, tags.size());
+        assertEquals(tags.get(0).getName(), "Groceries");
+        database.deleteTagForPayee(sampleTag, samplePayee);
+        tags = database.getAllTagsForPayee(samplePayee);
+        assertEquals(0, tags.size());
+    }
     @AfterClass
     public static void afterTests() throws Exception {
         database.shutdown();
