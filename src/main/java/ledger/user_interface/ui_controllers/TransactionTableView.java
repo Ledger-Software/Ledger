@@ -2,6 +2,8 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,6 +39,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     private ObservableList<Payee> observableAllPayees;
     private Account accountFilter;
+    private String searchFilterString = "";
 
     // Transaction table UI objects
     @FXML
@@ -289,7 +292,40 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         }
         ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
 
-        this.setItems(observableTransactionModels);
+//        this.setItems(observableTransactionModels);
+
+        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+        FilteredList<TransactionModel> filteredData = new FilteredList<>(observableTransactionModels, p -> true);
+
+        // 2. Set the filter Predicate.
+        filteredData.setPredicate(transactionModel -> {
+            // If filter text is empty, display all persons.
+            if (searchFilterString == null || searchFilterString.isEmpty()) {
+                return true;
+            }
+
+            // Compare first name and last name of every person with filter text.
+            String lowerCaseFilter = searchFilterString.toLowerCase();
+
+            if (transactionModel.getAmount().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches amount.
+            } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches Payee name.
+            } else if (transactionModel.getTagNames().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches tags.
+            } else {
+                return false; // Filter does not match.
+            }
+        });
+
+        // 3. Wrap the FilteredList in a SortedList.
+        SortedList<TransactionModel> sortedData = new SortedList<>(filteredData);
+
+        // 4. Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(this.comparatorProperty());
+
+        // 5. Add sorted (and filtered) data to the table.
+        this.setItems(sortedData);
 
         // Update Payee dropdown
         TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
@@ -334,6 +370,11 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     public void updateAccountFilter(Account accountToFilterBy) {
         this.accountFilter = accountToFilterBy;
+        this.asyncTableUpdate();
+    }
+
+    public void updateSearchFilterString(String searchFilterString) {
+        this.searchFilterString = searchFilterString;
         this.asyncTableUpdate();
     }
 }

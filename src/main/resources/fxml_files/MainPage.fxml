@@ -107,16 +107,16 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                     </Text>
-                    <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1">
+                    <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.valignment="CENTER">
                         <cursor>
                             <Cursor fx:constant="HAND" />
                         </cursor>
                      <GridPane.margin>
-                        <Insets right="10.0" />
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
                      </GridPane.margin>
                     </FilteringAccountDropdown>
 
-                    <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
+                    <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" promptText="Search..." GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" />
                   <Button fx:id="searchButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" text="Search" GridPane.columnIndex="3">
                      <GridPane.margin>
                         <Insets left="5.0" />
