@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -42,6 +43,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button exportDataBtn;
     @FXML
     private FilteringAccountDropdown chooseAccount;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private TextField searchTextField;
 
     // Transaction table UI objects
     @FXML
@@ -89,6 +96,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             logout(event);
         });
 
+        this.searchButton.setOnAction(this::searchClick);
+        this.clearButton.setOnAction(this::clearSearch);
+
+        this.searchTextField.setOnAction(this::searchClick);
+
         this.exportDataBtn.setOnAction((event) -> {
             exportData();
         });
@@ -99,6 +111,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
             }
         });
+    }
+
+    private void clearSearch(ActionEvent actionEvent) {
+        searchTextField.setText("");
+        transactionTableView.updateSearchFilterString("");
+    }
+
+    private void searchClick(ActionEvent actionEvent) {
+        String searchText = searchTextField.getText();
+        transactionTableView.updateSearchFilterString(searchText);
     }
 
     /**
