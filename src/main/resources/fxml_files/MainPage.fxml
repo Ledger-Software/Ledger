@@ -13,6 +13,7 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.FilteringAccountDropdown?>
 <?import ledger.user_interface.ui_controllers.TransactionTableView?>
+<?import java.net.URL?>
 
 <fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
@@ -25,8 +26,8 @@
       <RowConstraints maxHeight="45.0" minHeight="45.0" prefHeight="45.0" />
     </rowConstraints>
     <children>
-      <Pane style="-fx-background-color: #2a96cd;" GridPane.columnSpan="2" />
-        <Text fx:id="title" fill="#ffa81f" strokeType="OUTSIDE" strokeWidth="0.0" text="TransACT">
+      <Pane fx:id="header" GridPane.columnSpan="2" />
+        <Text fx:id="title" strokeType="OUTSIDE" strokeWidth="0.0" text="TransACT">
             <font>
                 <Font name="Calibri Bold" size="34.0" />
             </font>
@@ -46,7 +47,7 @@
                       <Cursor fx:constant="HAND" />
                   </cursor>
               </FilteringAccountDropdown>
-                <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Add Account" textAlignment="CENTER">
+                <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Account" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="17.0" />
                     </font>
@@ -60,7 +61,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Track Spending" textAlignment="CENTER">
+                <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Track Spending" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="17.0" />
                     </font>
@@ -71,7 +72,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Import Transactions" textAlignment="CENTER">
+                <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER">
                     <font>
                         <Font name="Calibri" size="17.0" />
                     </font>
@@ -82,7 +83,7 @@
                         <Cursor fx:constant="HAND" />
                     </cursor>
                 </Button>
-                <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Add Transaction" textAlignment="CENTER">
+                <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
@@ -90,7 +91,7 @@
                         <Font name="Calibri" size="17.0" />
                     </font>
                 </Button>
-                <Button fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" style="-fx-background-color: #ffa81f;" text="Export Data" textAlignment="CENTER">
+                <Button fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
@@ -132,7 +133,7 @@
               <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" />
          </children>
       </VBox>
-        <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" style="-fx-background-color: #ffa81f;" text="Logout" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+        <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
               <cursor>
                   <Cursor fx:constant="HAND" />
               </cursor>
@@ -144,4 +145,7 @@
          </GridPane.margin>
           </Button>
     </children>
+    <stylesheets>
+        <URL value="@../css/colorStyle.css" />
+    </stylesheets>
 </fx:root>
