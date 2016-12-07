@@ -159,6 +159,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
     /**
      * Sets the fields in this control to their corresponding values in the given transaction
+     *
      * @param currentTrans non-null Transaction to set the data in this control too
      */
     public void setTransaction(Transaction currentTrans) {

@@ -11,13 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.database.entity.Account;
 import ledger.exception.StorageException;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -134,10 +132,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currStage.close();
         Stage newStage = new Stage();
-        newStage.setResizable(false);
-        newStage.setScene(scene);;
+        newStage.setScene(scene);
         newStage.setTitle("Ledger Login");
         newStage.show();
+        newStage.setMinWidth(newStage.getWidth());
+        newStage.setMinHeight(newStage.getHeight());
         try {
             DbController.INSTANCE.shutdown();
         } catch (StorageException e) {

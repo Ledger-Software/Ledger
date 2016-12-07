@@ -20,17 +20,13 @@ package ledger.user_interface.utils;
  * limitations under the License.
  */
 
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.*;
+import javafx.util.StringConverter;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
-
-import javafx.beans.binding.Bindings;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.util.StringConverter;
 
 import static java.time.format.FormatStyle.MEDIUM;
 

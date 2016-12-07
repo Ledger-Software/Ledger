@@ -8,8 +8,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
 
-import java.io.File;
-
 /**
  * Handles any tasks relevant for init of the Program.
  */
@@ -64,8 +62,9 @@ public class Startup extends Application {
     public void switchScene(Scene scene, String title) {
         this.stage.setScene(scene);
         this.stage.setTitle(title);
-        this.stage.setResizable(false);
         this.stage.show();
+        this.stage.setMinHeight(stage.getHeight());
+        this.stage.setMinWidth(stage.getWidth());
     }
 
     public void runLater(CallableMethodVoidNoArgs method) {

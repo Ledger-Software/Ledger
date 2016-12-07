@@ -21,6 +21,7 @@ public class PasswordPromptController extends Pane implements IUIController, Ini
     private PasswordField password;
     @FXML
     private Button loginBtn;
+
     @FXML
     public void onEnter(ActionEvent ae) {
         this.reconnect();
@@ -36,6 +37,7 @@ public class PasswordPromptController extends Pane implements IUIController, Ini
     public void initialize(URL location, ResourceBundle resources) {
         this.loginBtn.setOnAction(event -> reconnect());
     }
+
     private void reconnect() {
         Boolean loginSuccess = true;
         File dbFile = DbController.INSTANCE.getDbFile();

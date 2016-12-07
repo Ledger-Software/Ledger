@@ -41,9 +41,9 @@ public class FilteringAccountDropdown extends AccountDropdown {
     }
 
     /**
-     * Gets the selected Account. 
+     * Gets the selected Account.
      *
-     * @return  Selected account, or null if "All Accounts" selected
+     * @return Selected account, or null if "All Accounts" selected
      */
     @Override
     public Account getSelectedAccount() {
