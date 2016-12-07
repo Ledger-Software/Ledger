@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -38,7 +37,6 @@ public class CreateDatabaseController extends GridPane implements IUIController,
     public final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
 
 
-
     CreateDatabaseController() {
         this.initController(pageLoc, this, "Error on new database startup: ");
     }
@@ -58,7 +56,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
         fileChooser.setSelectedExtensionFilter(extFilter);
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File file = fileChooser.showSaveDialog(this.getScene().getWindow());
-        if(file != null) {
+        if (file != null) {
             this.saveLocationButton.setText(file.getName());
             this.saveLocation = file;
         }
@@ -79,7 +77,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
         }
 
         try {
-            if(this.saveLocation.exists())
+            if (this.saveLocation.exists())
                 this.saveLocation.delete();
 
             DbController.INSTANCE.initialize(saveLocation.getAbsolutePath(), this.password.getText());

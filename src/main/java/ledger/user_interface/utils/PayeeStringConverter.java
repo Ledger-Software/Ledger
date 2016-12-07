@@ -15,7 +15,7 @@ import static ledger.user_interface.utils.InputSanitization.isStringInvalid;
 public class PayeeStringConverter extends StringConverter<Payee> {
 
     public Payee fromString(String payeeName) {
-        if(isStringInvalid(payeeName))
+        if (isStringInvalid(payeeName))
             return null;
 
         // convert from a string to a Type instance

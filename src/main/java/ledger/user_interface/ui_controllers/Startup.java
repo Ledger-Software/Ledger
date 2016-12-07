@@ -8,8 +8,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
 
-import java.io.File;
-
 /**
  * Handles any tasks relevant for init of the Program.
  */

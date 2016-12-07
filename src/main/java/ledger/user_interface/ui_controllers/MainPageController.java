@@ -11,13 +11,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.database.entity.Account;
 import ledger.exception.StorageException;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

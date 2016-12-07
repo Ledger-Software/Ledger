@@ -55,7 +55,7 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     default void deleteTag(Tag tag) throws StorageException {
         try {
             PreparedStatement tttsDelete = getDatabase().prepareStatement("DELETE FROM " + TagToTransTable.TABLE_NAME +
-                " WHERE " + TagToTransTable.TTTS_TAG_ID + "=?");
+                    " WHERE " + TagToTransTable.TTTS_TAG_ID + "=?");
             tttsDelete.setInt(1, tag.getId());
             tttsDelete.executeUpdate();
 

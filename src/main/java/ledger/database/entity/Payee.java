@@ -85,10 +85,10 @@ public class Payee implements IEntity {
 
         Payee otherPayee = ((Payee) o);
 
-        if(this.getName() == null && otherPayee.getName() != null) return false;
-        if(this.getDescription() == null && otherPayee.getDescription() != null) return false;
-        if(this.getName() != null && !this.getName().equals((otherPayee.getName()))) return false;
-        if(this.getDescription() != null && !this.getDescription().equals((otherPayee.getDescription()))) return false;
+        if (this.getName() == null && otherPayee.getName() != null) return false;
+        if (this.getDescription() == null && otherPayee.getDescription() != null) return false;
+        if (this.getName() != null && !this.getName().equals((otherPayee.getName()))) return false;
+        if (this.getDescription() != null && !this.getDescription().equals((otherPayee.getDescription()))) return false;
         return true;
     }
 
