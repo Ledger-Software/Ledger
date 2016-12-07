@@ -134,10 +134,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currStage.close();
         Stage newStage = new Stage();
-        newStage.setResizable(false);
-        newStage.setScene(scene);;
+        newStage.setScene(scene);
         newStage.setTitle("Ledger Login");
         newStage.show();
+        newStage.setMinWidth(newStage.getWidth());
+        newStage.setMinHeight(newStage.getHeight());
         try {
             DbController.INSTANCE.shutdown();
         } catch (StorageException e) {

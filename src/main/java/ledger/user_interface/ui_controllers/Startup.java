@@ -64,8 +64,9 @@ public class Startup extends Application {
     public void switchScene(Scene scene, String title) {
         this.stage.setScene(scene);
         this.stage.setTitle(title);
-        this.stage.setResizable(false);
         this.stage.show();
+        this.stage.setMinHeight(stage.getHeight());
+        this.stage.setMinWidth(stage.getWidth());
     }
 
     public void runLater(CallableMethodVoidNoArgs method) {
