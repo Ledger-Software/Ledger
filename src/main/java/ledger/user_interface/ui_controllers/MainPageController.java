@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -42,6 +43,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button exportDataBtn;
     @FXML
     private FilteringAccountDropdown chooseAccount;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private Button clearButton;
+    @FXML
+    private TextField searchTextField;
 
     // Transaction table UI objects
     @FXML
@@ -89,6 +96,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             logout(event);
         });
 
+        this.searchButton.setOnAction(this::searchClick);
+        this.clearButton.setOnAction(this::clearSearch);
+
+        this.searchTextField.setOnAction(this::searchClick);
+
         this.exportDataBtn.setOnAction((event) -> {
             exportData();
         });
@@ -101,6 +113,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         });
     }
 
+    private void clearSearch(ActionEvent actionEvent) {
+        searchTextField.setText("");
+        transactionTableView.updateSearchFilterString("");
+    }
+
+    private void searchClick(ActionEvent actionEvent) {
+        String searchText = searchTextField.getText();
+        transactionTableView.updateSearchFilterString(searchText);
+    }
+
     /**
      * Redirects to login screen and properly closes the database file
      *
@@ -109,9 +131,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void logout(ActionEvent event) {
         LoginPageController login = new LoginPageController();
         Scene scene = new Scene(login);
-        Stage newStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        newStage.setScene(scene);
+        Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        currStage.close();
+        Stage newStage = new Stage();
         newStage.setResizable(false);
+        newStage.setScene(scene);;
         newStage.setTitle("Ledger Login");
         newStage.show();
         try {
