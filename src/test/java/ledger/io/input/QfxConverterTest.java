@@ -26,7 +26,7 @@ public class QfxConverterTest {
         List<Transaction> convertedTransactions = null;
         try {
             convertedTransactions = adapter.convert();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
