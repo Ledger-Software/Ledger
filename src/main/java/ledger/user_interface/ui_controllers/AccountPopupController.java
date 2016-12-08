@@ -54,18 +54,18 @@ public class AccountPopupController extends GridPane implements Initializable, I
         this.submitAccountInfo.setOnAction((event) -> {
             Account account = getAccountSubmission();
             AccountBalance balance = getAccountBalance();
-            if (account != null && balance != null) {
-                TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
-                task.RegisterSuccessEvent(this::insertDone);
-                task.RegisterFailureEvent(this::insertFail);
-                task.startTask();
+            if (account == null) {
+                this.setupErrorPopup("Required Account field is null.", new Exception());
                 return;
             }
-            if (account == null) {
-                this.setupErrorPopup("Required field is null.", new Exception());
-            } else {
+            if (balance == null) {
                 this.setupErrorPopup("Account starting amount must be an integer.", new Exception());
+                return;
             }
+            TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
+            task.RegisterSuccessEvent(this::insertDone);
+            task.RegisterFailureEvent(this::insertFail);
+            task.startTask();
         });
     }
 
