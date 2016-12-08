@@ -1,13 +1,13 @@
 Button {
-    -fx-background-color: #dc7373;
+    -fx-background-color: #BBA5E6;
 }
 
 Text {
-    -fx-fill: #28536c;
+    -fx-fill: black;
 }
 
 #header {
-    -fx-background-color: #6f8fa2;
+    -fx-background-color: #7b8ad0;
 }
 
 #title {
