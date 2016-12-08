@@ -1,6 +1,7 @@
 package ledger.io.input;
 
 import ledger.database.entity.*;
+import ledger.exception.LedgerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -35,7 +36,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
      * @throws IOException When unable to read the given file
      */
     @Override
-    public List<Transaction> convert() throws IOException {
+    public List<Transaction> convert() throws IOException, LedgerException {
         List<Transaction> transactions = new ArrayList();
 
         // read in given file
@@ -55,16 +56,14 @@ public class QfxConverter implements IInAdapter<Transaction> {
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            //TODO: Handle this
-            e.printStackTrace();
+            throw new LedgerException("Unable to create new XML parser.", e);
         }
         InputSource is = new InputSource(new StringReader(correctedXml.toString()));
         Document xml = null;
         try {
             xml = builder.parse(is);
         } catch (SAXException e) {
-            //TODO: Handle This
-            e.printStackTrace();
+            throw new LedgerException("Unable to parse the given file.", e);
         }
         parseXml(transactions, xml);
 
@@ -108,15 +107,13 @@ public class QfxConverter implements IInAdapter<Transaction> {
         // pull out relevant data and create java objects
         for (int i = 0; i < transactionTypes.getLength(); i++) {
             Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
-            //TODO: Discuss what to do about type
+
             Type type = TypeConversion.convert("UNKNOWN");
             int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
             Payee payee = new Payee(names.item(i).getTextContent(), "");
-            //TODO: Discuss what to do about tags
+
             List<Tag> tags = new LinkedList<Tag>();
             Note note = new Note(memos.item(i).getTextContent());
-
-            //TODO: Discuss what to do about pending
 
             Transaction transaction = new Transaction(date, type, amount, this.account, payee, false, tags, note);
             transactions.add(transaction);

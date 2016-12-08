@@ -2,6 +2,7 @@ package ledger.io.input;
 
 
 import ledger.database.entity.IEntity;
+import ledger.exception.LedgerException;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface IInAdapter<T extends IEntity> {
 
-    List<T> convert() throws IOException;
+    List<T> convert() throws IOException, LedgerException;
 }
