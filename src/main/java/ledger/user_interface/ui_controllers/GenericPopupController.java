@@ -21,7 +21,7 @@ public class GenericPopupController extends GridPane implements Initializable, I
     @FXML
     private Button okayBtn;
     @FXML
-    private Text popupTitle;
+    private Text title;
 
     private final static String pageLoc = "/fxml_files/GenericPopup.fxml";
     private String msg;
@@ -47,7 +47,7 @@ public class GenericPopupController extends GridPane implements Initializable, I
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.errorText.setText(this.msg);
-        this.popupTitle.setText(this.windowTitle);
+        this.title.setText(this.windowTitle);
         this.okayBtn.setOnAction((event) -> close());
     }
 
