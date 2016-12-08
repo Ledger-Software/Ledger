@@ -150,7 +150,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createImportTransPopup() {
         ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
         Scene scene = new Scene(importTrxnController);
-        this.createModal(scene, "Import Transactions");
+        this.createModal(this.getScene().getWindow(), scene, "Import Transactions");
     }
 
     /**
@@ -159,7 +159,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         ExpenditureChartsController chartController = new ExpenditureChartsController();
         Scene scene = new Scene(chartController);
-        this.createModal(scene, "Expenditure Charts");
+        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts");
     }
 
     /**
@@ -168,7 +168,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createAddTransPopup() {
         TransactionPopupController trxnController = new TransactionPopupController();
         Scene scene = new Scene(trxnController);
-        this.createModal(scene, "Add Transaction");
+        this.createModal(this.getScene().getWindow(), scene, "Add Transaction");
     }
 
     /**
@@ -177,7 +177,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createAccountPopup() {
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
-        this.createModal(scene, "Add Account");
+        this.createModal(this.getScene().getWindow(), scene, "Add Account");
     }
 
     /**
