@@ -19,7 +19,7 @@ public class AddTaggingRulesPopupController implements Initializable, IUIControl
 
 
     AddTaggingRulesPopupController() {
-        this.initController(pageLoc, this, "Add taggins rules popup startup error: ");
+        this.initController(pageLoc, this, "Add tagging rules popup startup error: ");
     }
 
     /**
