@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root fx:id="addTaggingRulesGridPane" minHeight="320.0" minWidth="696.0" prefHeight="417.0" prefWidth="707.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints vgrow="NEVER" />
+      <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+        <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
+    </rowConstraints>
+    <children>
+        <Pane fx:id="header" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+            <children>
+                <Text fx:id="title" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Tagging Rules">
+                    <font>
+                        <Font name="Calibri" size="28.0" />
+                    </font>
+                </Text>
+            </children>
+        </Pane>
+        <Button fx:id="taggingDoneBtn" mnemonicParsing="false" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+            <GridPane.margin>
+                <Insets right="20.0" />
+            </GridPane.margin>
+            <font>
+                <Font name="Calibri" size="22.0" />
+            </font>
+            <padding>
+                <Insets bottom="5.0" left="30.0" right="30.0" top="5.0" />
+            </padding>
+            <cursor>
+                <Cursor fx:constant="HAND" />
+            </cursor>
+        </Button>
+    </children>
+    <stylesheets>
+        <URL value="@../css/colorStyle.css" />
+    </stylesheets>
+</fx:root>
