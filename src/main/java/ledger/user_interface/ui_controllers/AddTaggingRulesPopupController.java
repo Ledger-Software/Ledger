@@ -3,10 +3,6 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
-import ledger.database.entity.Account;
-import ledger.database.entity.AccountBalance;
 
 import java.net.URL;
 import java.util.ResourceBundle;
