@@ -2,7 +2,6 @@ package ledger.io.input;
 
 import ledger.database.entity.*;
 import ledger.exception.ConverterException;
-import ledger.exception.LedgerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -22,12 +21,12 @@ import java.util.regex.Pattern;
 /**
  * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
  */
-public class QfxConverter implements IInAdapter<Transaction> {
+public class USBankQfxConverter implements IInAdapter<Transaction> {
 
     private File qfxFile;
     private Account account;
 
-    public QfxConverter(File file, Account account) {
+    public USBankQfxConverter(File file, Account account) {
         this.qfxFile = file;
         this.account = account;
     }
@@ -122,9 +121,24 @@ public class QfxConverter implements IInAdapter<Transaction> {
                 Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
 
                 Type type = TypeConversion.convert(transactionTypes.item(i).getTextContent());
+                Payee payee = new Payee(names.item(i).getTextContent(), "");
+                if (names.item(i).getTextContent().contains("DEBIT PURCHASE -VISA ")) {
+                    type = TypeConversion.convert("DEBIT_CARD");
+                    payee.setName(names.item(i).getTextContent().split("DEBIT PURCHASE -VISA ")[1]);
+                } else if (names.item(i).getTextContent().contains("WEB AUTHORIZED PMT ")) {
+                    type = TypeConversion.convert("ACH_DEBIT");
+                    payee.setName(names.item(i).getTextContent().split("WEB AUTHORIZED PMT ")[1]);
+                } else if (names.item(i).getTextContent().contains("ELECTRONIC DEPOSIT ")) {
+                    type = TypeConversion.convert("ACH_CREDIT");
+                    payee.setName(names.item(i).getTextContent().split("ELECTRONIC DEPOSIT ")[1]);
+                }
+
+                String[] memoData = memos.item(i).getTextContent().split("Download from usbank\\.com\\.");
+                if (memoData.length > 0 && memoData[1].length() > payee.getName().length()) {
+                    payee.setName(memoData[1].substring(1));
+                }
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
-                Payee payee = new Payee(names.item(i).getTextContent(), "");
 
                 List<Tag> tags = new LinkedList<Tag>();
                 Note note = new Note(memos.item(i).getTextContent());

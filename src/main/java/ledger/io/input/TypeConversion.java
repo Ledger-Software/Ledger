@@ -37,7 +37,11 @@ public class TypeConversion {
                 return ACH_DEBIT;
             case "MISC_DEBIT":
                 return MISC_DEBIT;
+            case "DEBIT":
+                return MISC_DEBIT;
             case "MISC_CREDIT":
+                return MISC_CREDIT;
+            case "CREDIT":
                 return MISC_CREDIT;
             default:
                 return UNKNOWN;
