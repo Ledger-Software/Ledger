@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -54,19 +55,20 @@ public class QfxConverter implements IInAdapter<Transaction> {
         sgml = sgml.substring(indexOfFirstTrans);
 
         int lastIndexOfTrans = sgml.indexOf("</BANKTRANLIST>");
+        if(lastIndexOfTrans == -1) throw new ConverterException("The provided QFX file is malformed.", new IndexOutOfBoundsException());
         sgml = sgml.substring(0, lastIndexOfTrans);
 
         StringBuilder correctedXml = correctXml(sgml);
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = null;
+        DocumentBuilder builder;
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             throw new ConverterException("Unable to create new XML parser.", e);
         }
         InputSource is = new InputSource(new StringReader(correctedXml.toString()));
-        Document xml = null;
+        Document xml;
         try {
             xml = builder.parse(is);
         } catch (SAXException e) {
@@ -105,7 +107,7 @@ public class QfxConverter implements IInAdapter<Transaction> {
         return correctedXml;
     }
 
-    private void parseXml(List<Transaction> transactions, Document xml) {
+    private void parseXml(List<Transaction> transactions, Document xml) throws ConverterException {
         //parse xml
         NodeList transactionTypes = xml.getElementsByTagName("TRNTYPE");
         NodeList transactionDates = xml.getElementsByTagName("DTPOSTED");
@@ -114,18 +116,26 @@ public class QfxConverter implements IInAdapter<Transaction> {
         NodeList memos = xml.getElementsByTagName("MEMO");
 
         // pull out relevant data and create java objects
-        for (int i = 0; i < transactionTypes.getLength(); i++) {
-            Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
+        try {
+            for (int i = 0; i < transactionTypes.getLength(); i++) {
+                Date date = new Date(GenerateEpoch.generate(transactionDates.item(i).getTextContent()));
 
-            Type type = TypeConversion.convert("UNKNOWN");
-            int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
-            Payee payee = new Payee(names.item(i).getTextContent(), "");
+                Type type = TypeConversion.convert("UNKNOWN");
+                int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
+                Payee payee = new Payee(names.item(i).getTextContent(), "");
 
-            List<Tag> tags = new LinkedList<Tag>();
-            Note note = new Note(memos.item(i).getTextContent());
+                List<Tag> tags = new LinkedList<Tag>();
+                Note note = new Note(memos.item(i).getTextContent());
 
-            Transaction transaction = new Transaction(date, type, amount, this.account, payee, false, tags, note);
-            transactions.add(transaction);
+                Transaction transaction = new Transaction(date, type, amount, this.account, payee, false, tags, note);
+                transactions.add(transaction);
+            }
+        } catch (NullPointerException e) {
+            throw new ConverterException("Qfx data invalid!", e);
+        } catch (NumberFormatException e2) {
+            throw new ConverterException("Qfx data invalid!", e2);
+        } catch (DateTimeParseException e3) {
+            throw new ConverterException("Qfx data invalid!", e3);
         }
     }
 }
