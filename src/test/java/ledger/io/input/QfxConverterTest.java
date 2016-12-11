@@ -4,13 +4,10 @@ import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.exception.ConverterException;
 import ledger.exception.LedgerException;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * Created by Jesse Shellabarger on 10/11/2016.
+ * Tests for the applications QfxConverter class
  */
 public class QfxConverterTest {
 
@@ -60,59 +57,41 @@ public class QfxConverterTest {
     }
 
     // Test when the body of the file gets mangled for whatever reason
-    @Test(expected=ConverterException.class)
+    @Test(expected = ConverterException.class)
     public void importTransactionFailureMalformedQfx() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxMalformedBody.QFX");
         IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
 
-        try {
-            adapter.convert();
-            fail();
-        } catch (IOException e) {
-            fail();
-        }
+        adapter.convert();
     }
 
     // Test when the body of the file is only slightly malformed
-    @Test(expected=ConverterException.class)
+    @Test(expected = ConverterException.class)
     public void importTransactionFailureMalformedQfx2() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxMalformedBody3.QFX");
         IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
 
-        try {
-            adapter.convert();
-            fail();
-        } catch (IOException e) {
-            fail();
-        }
+        adapter.convert();
+
     }
 
     // Test when the given amount value cannot be parsed
-    @Test(expected=ConverterException.class)
+    @Test(expected = ConverterException.class)
     public void importTransactionFailureInvalidData() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxInvalidData.QFX");
         IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
 
-        try {
-            adapter.convert();
-            fail();
-        } catch (IOException e) {
-            fail();
-        }
+        adapter.convert();
+
     }
 
     // Test when the given Date value cannot be parsed
-    @Test(expected=ConverterException.class)
+    @Test(expected = ConverterException.class)
     public void importTransactionFailureInvalidData2() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxInvalidData2.QFX");
         IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
 
-        try {
-            adapter.convert();
-            fail();
-        } catch (IOException e) {
-            fail();
-        }
+        adapter.convert();
     }
 
     // Test that misisng the <QFX> tag(s) has no effect.

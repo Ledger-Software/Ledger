@@ -2,6 +2,7 @@ package ledger.io.input;
 
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
+import ledger.exception.ConverterException;
 import org.junit.Test;
 
 import java.io.File;
@@ -13,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ChaseConverterTest {
 
-    @Test(expected = FileNotFoundException.class)
+    @Test(expected = ConverterException.class)
     public void throwExceptionOnMissingFile() throws Exception {
         Account testAccount = new Account("Test Account", "Account only used for Testing");
         ChaseConverter converter = new ChaseConverter(new File(UUID.randomUUID().toString()), testAccount);
