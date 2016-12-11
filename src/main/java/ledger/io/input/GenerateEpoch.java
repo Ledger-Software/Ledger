@@ -14,9 +14,6 @@ public class GenerateEpoch {
         String month = xmlDate.substring(4, 6);
         String day = xmlDate.substring(6, 8);
         String hours = xmlDate.substring(8, 10);
-        int indexOfOpenBracket = xmlDate.indexOf("[");
-        int indexOfColon = xmlDate.indexOf(":");
-        int timezoneOffset = Integer.parseInt(xmlDate.substring(indexOfOpenBracket + 1, indexOfColon));
         String minutes = xmlDate.substring(10, 12);
         String seconds = xmlDate.substring(12, 14);
 
@@ -35,7 +32,13 @@ public class GenerateEpoch {
 
         OffsetDateTime dateTime = OffsetDateTime.parse(extractedDate.toString());
 
-        dateTime.minusHours(timezoneOffset);
+        if (xmlDate.matches(".*\\[.*:.*\\].*")) {
+            int indexOfOpenBracket = xmlDate.indexOf("[");
+            int indexOfColon = xmlDate.indexOf(":");
+            int timezoneOffset = Integer.parseInt(xmlDate.substring(indexOfOpenBracket + 1, indexOfColon));
+
+            dateTime.minusHours(timezoneOffset);
+        }
 
         return dateTime.toEpochSecond() * 1000;
     }

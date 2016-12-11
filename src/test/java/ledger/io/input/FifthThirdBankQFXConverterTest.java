@@ -15,15 +15,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for the applications QfxConverter class
+ * Tests for the applications FifthThirdBankQFXConverter class
  */
-public class QfxConverterTest {
+public class FifthThirdBankQFXConverterTest {
 
     // Test normal operating conditions
     @Test
     public void importTransactionsTest() throws FileNotFoundException {
         File testFile = new File("src/test/resources/testQfx.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         List<Transaction> convertedTransactions = null;
         try {
@@ -60,7 +60,7 @@ public class QfxConverterTest {
     @Test(expected = ConverterException.class)
     public void importTransactionFailureMalformedQfx() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxMalformedBody.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         adapter.convert();
     }
@@ -69,7 +69,7 @@ public class QfxConverterTest {
     @Test(expected = ConverterException.class)
     public void importTransactionFailureMalformedQfx2() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxMalformedBody3.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         adapter.convert();
 
@@ -79,7 +79,7 @@ public class QfxConverterTest {
     @Test(expected = ConverterException.class)
     public void importTransactionFailureInvalidData() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxInvalidData.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         adapter.convert();
 
@@ -89,7 +89,7 @@ public class QfxConverterTest {
     @Test(expected = ConverterException.class)
     public void importTransactionFailureInvalidData2() throws LedgerException {
         File testFile = new File("src/test/resources/testQfxInvalidData2.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         adapter.convert();
     }
@@ -98,7 +98,7 @@ public class QfxConverterTest {
     @Test
     public void importTransactionFailureMalformedQfxMissingOpenningQfxTag() {
         File testFile = new File("src/test/resources/testQfxMalformedBody2.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         List<Transaction> convertedTransactions = null;
         try {
@@ -135,7 +135,7 @@ public class QfxConverterTest {
     @Test
     public void importTransactionFailureMalformedHeader() {
         File testFile = new File("src/test/resources/testQfxMalformedHeader.QFX");
-        IInAdapter adapter = new QfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new FifthThirdBankQFXConverter(testFile, new Account("test", "test"));
 
         List<Transaction> convertedTransactions = null;
         try {
