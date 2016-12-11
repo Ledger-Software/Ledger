@@ -2,6 +2,7 @@ package ledger.io.input;
 
 import au.com.bytecode.opencsv.CSVReader;
 import ledger.database.entity.*;
+import ledger.exception.ConverterException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,8 +29,13 @@ public class ChaseConverter implements IInAdapter<Transaction> {
     }
 
     @Override
-    public List<Transaction> convert() throws FileNotFoundException {
-        CSVReader reader = new CSVReader(new FileReader(file), ',', '"', 1);
+    public List<Transaction> convert() throws ConverterException{
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(file), ',', '"', 1);
+        } catch (FileNotFoundException e) {
+            throw new ConverterException("Specified CSV file could not be found!", e);
+        }
         List<Transaction> transactions = new LinkedList<>();
 
         try {

@@ -3,8 +3,8 @@ package ledger.io.input;
 import java.time.OffsetDateTime;
 
 /**
- * Created by Jesse Shellabarger on 10/12/2016.
- */
+ *  Generates the UNIX epoch from a yyyymmddhhmmss timestamp
+ **/
 public class GenerateEpoch {
 
     public static long generate(String xmlDate) {
