@@ -77,6 +77,7 @@ public class TypeConversion {
         types.add(DEBIT_CARD);
         types.add(CREDIT_CARD);
         types.add(CASH);
+        types.add(CHECK);
         types.add(ACH_CREDIT);
         types.add(ACH_DEBIT);
         types.add(MISC_DEBIT);

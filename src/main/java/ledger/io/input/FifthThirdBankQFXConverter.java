@@ -22,12 +22,12 @@ import java.util.regex.Pattern;
 /**
  * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
  */
-public class QfxConverter implements IInAdapter<Transaction> {
+public class FifthThirdBankQFXConverter implements IInAdapter<Transaction> {
 
     private File qfxFile;
     private Account account;
 
-    public QfxConverter(File file, Account account) {
+    public FifthThirdBankQFXConverter(File file, Account account) {
         this.qfxFile = file;
         this.account = account;
     }

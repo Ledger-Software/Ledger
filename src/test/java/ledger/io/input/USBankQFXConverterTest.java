@@ -2,9 +2,6 @@ package ledger.io.input;
 
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
-import ledger.database.entity.Type;
-import ledger.exception.ConverterException;
-import ledger.exception.LedgerException;
 import org.junit.Test;
 
 import java.io.File;
@@ -16,15 +13,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * Tests for the applications QfxConverter class
+ * Tests for the applications FifthThirdBankQFXConverter class
  */
-public class USBankQfxConverterTest {
+public class USBankQFXConverterTest {
 
     // Test normal operating conditions
     @Test
     public void importTransactionsTest() throws FileNotFoundException {
         File testFile = new File("src/test/resources/USBankSample.qfx");
-        IInAdapter adapter = new USBankQfxConverter(testFile, new Account("test", "test"));
+        IInAdapter adapter = new USBankQFXConverter(testFile, new Account("test", "test"));
 
         List<Transaction> convertedTransactions = null;
         try {
