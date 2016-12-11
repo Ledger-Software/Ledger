@@ -1,6 +1,7 @@
 package ledger.io.input;
 
 import ledger.database.entity.*;
+import ledger.exception.ConverterException;
 import ledger.exception.LedgerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -11,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.*;
@@ -36,11 +38,16 @@ public class QfxConverter implements IInAdapter<Transaction> {
      * @throws IOException When unable to read the given file
      */
     @Override
-    public List<Transaction> convert() throws IOException, LedgerException {
+    public List<Transaction> convert() throws ConverterException {
         List<Transaction> transactions = new ArrayList();
 
         // read in given file
-        String sgml = new Scanner(qfxFile).useDelimiter("\\Z").next();
+        String sgml = null;
+        try {
+            sgml = new Scanner(qfxFile).useDelimiter("\\Z").next();
+        } catch (FileNotFoundException e) {
+            throw new ConverterException("The QFX file could not be found.", e);
+        }
 
         // chop off everything before and after transactions (before/after STMTTRN)
         int indexOfFirstTrans = sgml.indexOf("<STMTTRN>");
@@ -56,14 +63,16 @@ public class QfxConverter implements IInAdapter<Transaction> {
         try {
             builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            throw new LedgerException("Unable to create new XML parser.", e);
+            throw new ConverterException("Unable to create new XML parser.", e);
         }
         InputSource is = new InputSource(new StringReader(correctedXml.toString()));
         Document xml = null;
         try {
             xml = builder.parse(is);
         } catch (SAXException e) {
-            throw new LedgerException("Unable to parse the given file.", e);
+            throw new ConverterException("Unable to parse the given file.", e);
+        } catch (IOException e) {
+            throw new ConverterException("Unable to parse the given file.", e);
         }
         parseXml(transactions, xml);
 
