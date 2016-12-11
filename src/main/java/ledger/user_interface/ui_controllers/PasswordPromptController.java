@@ -45,7 +45,7 @@ public class PasswordPromptController extends Pane implements IUIController, Ini
             DbController.INSTANCE.initialize(dbFile.getAbsolutePath(), this.password.getText());
         } catch (StorageException e) {
             loginSuccess = false;
-            this.setupErrorPopup("Unable to reconnect to database.", e);
+            this.setupErrorPopup("Incorrect Password!\nPlease try again.", new Exception());
             e.getStackTrace();
         }
         if (loginSuccess) ((Stage) this.getScene().getWindow()).close();
