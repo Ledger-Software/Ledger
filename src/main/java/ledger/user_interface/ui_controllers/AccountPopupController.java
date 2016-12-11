@@ -105,11 +105,12 @@ public class AccountPopupController extends GridPane implements Initializable, I
      */
     public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
         AccountBalance ab;
-        int amount = 0;
+        int amount;
         if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
             return null;
         }
-        amount = Integer.parseInt(accountAmtText.getText());
+        Double tmpAmt = Double.parseDouble(accountAmtText.getText()) * 100;
+        amount = tmpAmt.intValue();
         ab = new AccountBalance(this.act, new Date(), amount);
         return ab;
     }
