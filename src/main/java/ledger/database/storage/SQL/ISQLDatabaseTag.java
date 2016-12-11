@@ -142,6 +142,35 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
         }
     }
     @Override
+    default List<Tag> getAllTagsNotForPayee(Payee payee) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID +
+                    ", " + TagTable.TAG_NAME +
+                    ", " + TagTable.TAG_DESC +
+                    " FROM " + TagTable.TABLE_NAME +" WHERE " + TagTable.TAG_ID + " NOT IN (SELECT " + TagToPayeeTable.TTPE_TAG_ID +
+
+                    " FROM " + TagToPayeeTable.TABLE_NAME +
+                    " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID +" =?)");
+            stmt.setInt(1, lookupAndInsertPayee(payee).getId());
+            ResultSet rs = stmt.executeQuery();
+            ArrayList<Tag> tags = new ArrayList<>();
+
+            while (rs.next()) {
+
+                int tagID = rs.getInt(TagTable.TAG_ID);
+                String tagName = rs.getString(TagTable.TAG_NAME);
+                String tagDescription = rs.getString(TagTable.TAG_DESC);
+
+                Tag currentTag = new Tag(tagName, tagDescription, tagID);
+
+                tags.add(currentTag);
+            }
+            return tags;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all tags for a payee", e);
+        }
+    }
+    @Override
     default void deleteTagForPayee(Tag tag, Payee payee) throws StorageException{
        payee = lookupAndInsertPayee(payee);
        tag = lookupAndInsertTag(tag);
