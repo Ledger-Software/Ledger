@@ -77,7 +77,10 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         }
 
         TaskWithArgsReturn<Account, ImportController.ImportFailures> task = ImportController.INSTANCE.importTransactions(converter, file, account);
-        task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> importButton.setDisable(false)));
+        task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> {
+            importButton.setDisable(false);
+            this.setupErrorPopup(e.getMessage(), e);
+            }));
         task.RegisterSuccessEvent(this::handleReturn);
         importButton.setDisable(true);
 
