@@ -28,20 +28,13 @@ public class LogoutButton extends Button implements IUIController, Initializable
     }
 
     private void OnClick(ActionEvent actionEvent) {
-        LoginPageController login = new LoginPageController();
-        Scene scene = new Scene(login);
-        Stage currStage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        currStage.close();
-        Stage newStage = new Stage();
-        newStage.setScene(scene);
-        newStage.setTitle("Ledger Login");
-        newStage.show();
-        newStage.setMinWidth(newStage.getWidth());
-        newStage.setMinHeight(newStage.getHeight());
         try {
             DbController.INSTANCE.shutdown();
         } catch (StorageException e) {
             this.setupErrorPopup("Database file did not close properly.", e);
         }
+        LoginPageController login = new LoginPageController();
+        Scene scene = new Scene(login);
+        Startup.INSTANCE.newStage(scene, "Leger Login");
     }
 }
