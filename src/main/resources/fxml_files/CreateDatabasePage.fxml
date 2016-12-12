@@ -37,17 +37,11 @@
             <GridPane.margin>
                 <Insets top="10.0"/>
             </GridPane.margin>
-            <font>
-                <Font size="18.0"/>
-            </font>
         </Button>
         <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
                        minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="300.0"
                        promptText="Password" style="-fx-background-color: #abcafc;" GridPane.halignment="CENTER"
                        GridPane.rowIndex="2">
-            <font>
-                <Font name="System Bold" size="22.0"/>
-            </font>
             <GridPane.margin>
                 <Insets top="10.0"/>
             </GridPane.margin>
@@ -56,18 +50,12 @@
                        minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="300.0"
                        promptText="Confirm Password" style="-fx-background-color: #abcafc;" GridPane.halignment="CENTER"
                        GridPane.rowIndex="3">
-            <font>
-                <Font name="System Bold" size="22.0"/>
-            </font>
             <GridPane.margin>
                 <Insets top="10.0"/>
             </GridPane.margin>
         </PasswordField>
         <Button fx:id="submitButton" mnemonicParsing="false" text="OK" GridPane.halignment="CENTER"
                 GridPane.rowIndex="4">
-            <font>
-                <Font name="Calibri" size="22.0"/>
-            </font>
             <GridPane.margin>
                 <Insets bottom="10.0" top="10.0"/>
             </GridPane.margin>
