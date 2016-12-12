@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -15,7 +16,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class PasswordPromptController extends Pane implements IUIController, Initializable {
+public class PasswordPromptController extends GridPane implements IUIController, Initializable {
 
     @FXML
     private PasswordField password;
