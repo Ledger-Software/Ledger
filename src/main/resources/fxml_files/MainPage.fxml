@@ -9,6 +9,7 @@
 <?import ledger.user_interface.ui_controllers.TransactionTableView?>
 <?import java.net.URL?>
 <?import ledger.user_interface.ui_controllers.ExportButton?>
+<?import ledger.user_interface.ui_controllers.LogoutButton?>
 <fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea"
          xmlns:fx="http://javafx.com/fxml/1">
@@ -142,10 +143,10 @@
                                       GridPane.columnSpan="3" GridPane.rowIndex="1"/>
             </children>
         </GridPane>
-        <Button fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0"
-                maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0"
-                text="Logout" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                GridPane.valignment="CENTER">
+        <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0"
+                      maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0"
+                      text="Logout" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                      GridPane.valignment="CENTER">
             <cursor>
                 <Cursor fx:constant="HAND"/>
             </cursor>
@@ -155,7 +156,7 @@
             <GridPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </GridPane.margin>
-        </Button>
+        </LogoutButton>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css"/>

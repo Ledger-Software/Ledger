@@ -50,9 +50,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private TransactionTableView transactionTableView;
 
-    @FXML
-    private Button logoutBtn;
-
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
 
     MainPageController() {
@@ -88,10 +85,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             createImportTransPopup();
         });
 
-        this.logoutBtn.setOnAction((event) -> {
-            logout(event);
-        });
-
         this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
@@ -113,29 +106,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void searchClick(ActionEvent actionEvent) {
         String searchText = searchTextField.getText();
         transactionTableView.updateSearchFilterString(searchText);
-    }
-
-    /**
-     * Redirects to login screen and properly closes the database file
-     *
-     * @param event action event used to reset the stage
-     */
-    private void logout(ActionEvent event) {
-        LoginPageController login = new LoginPageController();
-        Scene scene = new Scene(login);
-        Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currStage.close();
-        Stage newStage = new Stage();
-        newStage.setScene(scene);
-        newStage.setTitle("Ledger Login");
-        newStage.show();
-        newStage.setMinWidth(newStage.getWidth());
-        newStage.setMinHeight(newStage.getHeight());
-        try {
-            DbController.INSTANCE.shutdown();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Database file did not close properly.", e);
-        }
     }
 
     /**
