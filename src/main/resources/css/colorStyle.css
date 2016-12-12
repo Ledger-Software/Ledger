@@ -1,5 +1,12 @@
 Button, ExportButton, LogoutButton {
     -fx-background-color: #A6B3E6;
+    -fx-font-family: "Calibri Light";
+    -fx-font-size: 17px;
+    -fx-cursor: hand;
+}
+
+.smallButton {
+    -fx-font-size: 12px;
 }
 
 Text {
@@ -16,5 +23,7 @@ PasswordField {
 
 #title {
     -fx-fill: whitesmoke;
+    -fx-font-family: "Calibri";
+    -fx-font-size: 28px;
 }
 

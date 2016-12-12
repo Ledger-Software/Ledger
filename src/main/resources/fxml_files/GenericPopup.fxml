@@ -26,7 +26,7 @@
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS">
             <children>
-                <Text fx:id="popupTitle" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0">
+                <Text fx:id="title" layoutX="14.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0">
                     <font>
                         <Font name="Calibri" size="28.0" />
                     </font>
@@ -37,23 +37,17 @@
          </opaqueInsets>
         </Pane>
         <Text fx:id="errorText" textAlignment="CENTER" wrappingWidth="700.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
-            <font>
-                <Font name="Calibri" size="24.0" />
-            </font>
          <GridPane.margin>
             <Insets left="20.0" right="20.0" />
          </GridPane.margin>
+            <font>
+                <Font name="Calibri" size="24.0" />
+            </font>
         </Text>
         <Button fx:id="okayBtn" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="OK" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="15.0" right="15.0" />
             </GridPane.margin>
-            <font>
-                <Font name="Calibri Light" size="16.0" />
-            </font>
-            <cursor>
-                <Cursor fx:constant="HAND" />
-            </cursor>
         </Button>
     </children>
     <stylesheets>
