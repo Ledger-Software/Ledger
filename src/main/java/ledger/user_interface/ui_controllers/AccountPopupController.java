@@ -59,7 +59,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 return;
             }
             if (balance == null) {
-                this.setupErrorPopup("Account starting amount must be an integer.", new Exception());
+                this.setupErrorPopup("Account starting amount must have a value.", new Exception());
                 return;
             }
             TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
