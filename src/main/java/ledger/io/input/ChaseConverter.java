@@ -75,11 +75,9 @@ public class ChaseConverter implements IInAdapter<Transaction> {
             }
 
         } catch (IOException e) {
-            // TODO: Decide what to do
-            e.printStackTrace();
+            throw new ConverterException("Unable to read file.", e);
         } catch (ParseException e) {
-            // TODO: Throw Custom Exception
-            e.printStackTrace();
+            throw new ConverterException("File is not in the valid CSV format.", e);
         }
         return transactions;
     }
