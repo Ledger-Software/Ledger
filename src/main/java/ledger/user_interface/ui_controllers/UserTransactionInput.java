@@ -34,9 +34,9 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @FXML
     private CheckBox pendingCheckBox;
     @FXML
-    private ComboBox<Payee> payeeText;
+    private PayeeDropdown payeeText;
     @FXML
-    private ComboBox<Account> accountText;
+    private AccountDropdown accountText;
     @FXML
     private TextField categoryText;
     @FXML
@@ -63,28 +63,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.payeeText.setDisable(true);
-        this.accountText.setDisable(true);
         this.typeText.setDisable(true);
-
-        TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
-        payeesTask.RegisterFailureEvent((e) -> e.printStackTrace());
-        payeesTask.RegisterSuccessEvent((list) -> {
-            ObservableList<Payee> payees = FXCollections.observableList(list);
-            this.payeeText.setItems(payees);
-            this.payeeText.setConverter(new PayeeStringConverter());
-            this.payeeText.setEditable(true);
-            this.payeeText.setDisable(false);
-        });
-        payeesTask.startTask();
-
-        TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
-        accountsTask.RegisterFailureEvent((e) -> e.printStackTrace());
-        accountsTask.RegisterSuccessEvent((list) -> {
-            this.accountText.setItems((FXCollections.observableArrayList(list)));
-            this.accountText.setDisable(false);
-        });
-        accountsTask.startTask();
 
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
         typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
@@ -115,13 +94,13 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         boolean pending = this.pendingCheckBox.isSelected();
 
-        Payee payee = this.payeeText.getValue();
+        Payee payee = this.payeeText.getSelectedPayee();
         if (InputSanitization.isInvalidPayee(payee)) {
             this.setupErrorPopup("Invalid Payee entry.", new Exception());
             return null;
         }
 
-        Account account = this.accountText.getValue();
+        Account account = this.accountText.getSelectedAccount();
         if (account == null) {
             this.setupErrorPopup("No account selected.", new Exception());
             return null;
