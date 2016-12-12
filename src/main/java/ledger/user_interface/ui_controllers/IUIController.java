@@ -48,6 +48,7 @@ public interface IUIController {
             loader.load();
         } catch (IOException e) {
             System.out.println(errMsg + " : " + e);
+            e.printStackTrace();
         }
 
     }

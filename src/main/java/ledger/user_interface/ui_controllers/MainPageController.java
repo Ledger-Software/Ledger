@@ -189,6 +189,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         File saveLocation = chooser.showDialog(this.exportDataBtn.getScene().getWindow());
+        if (saveLocation == null) return;
         File currentDbFile = DbController.INSTANCE.getDbFile();
         String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
         String fileName = timeStamp + currentDbFile.getName();
