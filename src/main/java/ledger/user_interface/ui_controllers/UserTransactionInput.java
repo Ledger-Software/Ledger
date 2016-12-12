@@ -124,7 +124,6 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         Account account = this.accountText.getValue();
         if (account == null) {
             this.setupErrorPopup("No account selected.", new Exception());
-
             return null;
         }
 

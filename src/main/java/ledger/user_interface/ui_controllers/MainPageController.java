@@ -38,8 +38,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
-    private Button exportDataBtn;
-    @FXML
     private FilteringAccountDropdown chooseAccount;
     @FXML
     private Button searchButton;
@@ -98,10 +96,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.clearButton.setOnAction(this::clearSearch);
 
         this.searchTextField.setOnAction(this::searchClick);
-
-        this.exportDataBtn.setOnAction((event) -> {
-            exportData();
-        });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
@@ -178,45 +172,5 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
         this.createModal(this.getScene().getWindow(), scene, "Add Account");
-    }
-
-    /**
-     * Exports the database file to the chosen directory.
-     */
-    private void exportData() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Select Directory");
-        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-        File saveLocation = chooser.showDialog(this.exportDataBtn.getScene().getWindow());
-        if (saveLocation == null) return;
-        File currentDbFile = DbController.INSTANCE.getDbFile();
-        String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-        String fileName = timeStamp + currentDbFile.getName();
-        File newDbFile = new File(saveLocation.toPath().toString(), fileName);
-
-        int numFiles = 1;
-        while (newDbFile.exists()) {
-            fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
-            newDbFile = new File(saveLocation.toPath().toString(), fileName);
-        }
-
-        try {
-            DbController.INSTANCE.shutdown();
-            Files.copy(currentDbFile.toPath(), newDbFile.toPath());
-        } catch (IOException e) {
-            this.setupErrorPopup("Unable to properly copy data.", e);
-            e.printStackTrace();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Unable to properly close database.", e);
-            e.printStackTrace();
-        }
-        this.displayPasswordPrompt();
-    }
-
-    private void displayPasswordPrompt() {
-        PasswordPromptController promptController = new PasswordPromptController();
-        Scene scene = new Scene(promptController);
-        this.createModal(scene, "Verify Password");
     }
 }

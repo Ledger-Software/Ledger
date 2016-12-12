@@ -1,9 +1,16 @@
-Button {
+Button, ExportButton {
     -fx-background-color: #A6B3E6;
 }
 
+
+
 Text {
     -fx-fill: black;
+
+}
+
+PasswordField {
+    -fx-prompt-text-fill: #777777;
 }
 
 #header {
@@ -13,3 +20,4 @@ Text {
 #title {
     -fx-fill: whitesmoke;
 }
+

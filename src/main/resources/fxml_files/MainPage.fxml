@@ -8,6 +8,7 @@
 <?import ledger.user_interface.ui_controllers.FilteringAccountDropdown?>
 <?import ledger.user_interface.ui_controllers.TransactionTableView?>
 <?import java.net.URL?>
+<?import ledger.user_interface.ui_controllers.ExportButton?>
 <fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea"
          xmlns:fx="http://javafx.com/fxml/1">
@@ -93,15 +94,15 @@
                         <Font name="Calibri" size="17.0"/>
                     </font>
                 </Button>
-                <Button fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                        mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
+                <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                              mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
                     <cursor>
                         <Cursor fx:constant="HAND"/>
                     </cursor>
                     <font>
                         <Font name="Calibri" size="17.0"/>
                     </font>
-                </Button>
+                </ExportButton>
             </children>
             <GridPane.margin>
                 <Insets left="10.0" right="10.0" top="30.0"/>
