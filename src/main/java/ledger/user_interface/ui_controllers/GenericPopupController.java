@@ -50,6 +50,7 @@ public class GenericPopupController extends GridPane implements Initializable, I
         this.errorText.setText(this.msg);
         this.title.setText(this.windowTitle);
         this.okayBtn.setOnAction((event) -> close());
+        this.okayBtn.requestFocus();
     }
 
     /**
