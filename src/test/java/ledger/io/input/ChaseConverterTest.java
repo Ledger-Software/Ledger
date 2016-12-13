@@ -49,9 +49,14 @@ public class ChaseConverterTest {
     @Test(expected = ConverterException.class)
     public void testIOException() throws Exception {
         File csvFile = new File("./src/test/resources/ChaseSmallTest.csv");
-        csvFile.setReadable(false);
 
+        RandomAccessFile file = new RandomAccessFile(csvFile, "rw");
+        FileLock lock = file.getChannel().lock();
+
+        csvFile.setReadable(false);
         try {
+
+
             Account testAccount = new Account("Test Account", "Account only used for Testing");
             ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
 
