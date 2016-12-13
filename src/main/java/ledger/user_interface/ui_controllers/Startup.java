@@ -70,7 +70,7 @@ public class Startup extends Application {
     public void newStage(Scene scene, String title) {
         this.stage.close();
         this.stage = new Stage();
-        this.switchScene(scene,title);
+        this.switchScene(scene, title);
     }
 
     public void runLater(CallableMethodVoidNoArgs method) {

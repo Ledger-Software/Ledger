@@ -545,6 +545,7 @@ public class H2DatabaseTest {
         assertEquals(textToSet, editedTag.getDescription());
         assertEquals(tagToEdit.getId(), editedTag.getId());
     }
+
     @Test
     public void addTagForPayee() throws Exception {
         database.addTagForPayee(sampleTag, samplePayee);
@@ -558,6 +559,7 @@ public class H2DatabaseTest {
         tags = database.getAllTagsForPayee(samplePayee);
         assertEquals(2, tags.size());
     }
+
     @Test
     public void deleteTagForPayee() throws Exception {
         database.addTagForPayee(sampleTag, samplePayee);
@@ -574,6 +576,7 @@ public class H2DatabaseTest {
         tags = database.getAllTagsForPayee(samplePayee);
         assertEquals(0, tags.size());
     }
+
     @AfterClass
     public static void afterTests() throws Exception {
         database.shutdown();

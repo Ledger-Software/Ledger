@@ -2,7 +2,6 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;

@@ -29,7 +29,7 @@ public class ChaseConverter implements IInAdapter<Transaction> {
     }
 
     @Override
-    public List<Transaction> convert() throws ConverterException{
+    public List<Transaction> convert() throws ConverterException {
         CSVReader reader = null;
         try {
             reader = new CSVReader(new FileReader(file), ',', '"', 1);

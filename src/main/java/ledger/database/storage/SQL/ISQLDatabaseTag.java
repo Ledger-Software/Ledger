@@ -3,12 +3,10 @@ package ledger.database.storage.SQL;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
-import ledger.database.storage.table.PayeeTable;
 import ledger.database.storage.table.TagTable;
 import ledger.database.storage.table.TagToPayeeTable;
 import ledger.database.storage.table.TagToTransTable;
 import ledger.exception.StorageException;
-import org.h2.command.Prepared;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -112,16 +110,17 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
             throw new StorageException("Error while getting all tags", e);
         }
     }
+
     @Override
     default List<Tag> getAllTagsForPayee(Payee payee) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID +
-                            ", " + TagTable.TAG_NAME +
-                            ", " + TagTable.TAG_DESC +
-                            " FROM " + TagTable.TABLE_NAME +" WHERE " + TagTable.TAG_ID + " IN (SELECT " + TagToPayeeTable.TTPE_TAG_ID +
+                    ", " + TagTable.TAG_NAME +
+                    ", " + TagTable.TAG_DESC +
+                    " FROM " + TagTable.TABLE_NAME + " WHERE " + TagTable.TAG_ID + " IN (SELECT " + TagToPayeeTable.TTPE_TAG_ID +
 
                     " FROM " + TagToPayeeTable.TABLE_NAME +
-                    " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID +" =?)");
+                    " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =?)");
             stmt.setInt(1, lookupAndInsertPayee(payee).getId());
             ResultSet rs = stmt.executeQuery();
             ArrayList<Tag> tags = new ArrayList<>();
@@ -141,29 +140,31 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
             throw new StorageException("Error while getting all tags for a payee", e);
         }
     }
+
     @Override
-    default void deleteTagForPayee(Tag tag, Payee payee) throws StorageException{
-       payee = lookupAndInsertPayee(payee);
-       tag = lookupAndInsertTag(tag);
-        try {
-            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagToPayeeTable.TABLE_NAME + " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =? AND " + TagToPayeeTable.TTPE_TAG_ID + "=?");
-            stmt.setInt(1,payee.getId());
-            stmt.setInt(2, tag.getId());
-            stmt.execute();
-        } catch (java.sql.SQLException e){
-            throw new StorageException("Error while deleting a tag for a payee", e);
-        }
-    }
-    @Override
-    default void addTagForPayee(Tag tag, Payee payee) throws StorageException{
+    default void deleteTagForPayee(Tag tag, Payee payee) throws StorageException {
         payee = lookupAndInsertPayee(payee);
         tag = lookupAndInsertTag(tag);
         try {
-            PreparedStatement stmt  = getDatabase().prepareStatement("INSERT INTO " + TagToPayeeTable.TABLE_NAME + " ( " +TagToPayeeTable.TTPE_TAG_ID + ", " +TagToPayeeTable.TTPE_PAYEE_ID +" ) VALUES (?,?)" );
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagToPayeeTable.TABLE_NAME + " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =? AND " + TagToPayeeTable.TTPE_TAG_ID + "=?");
+            stmt.setInt(1, payee.getId());
+            stmt.setInt(2, tag.getId());
+            stmt.execute();
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while deleting a tag for a payee", e);
+        }
+    }
+
+    @Override
+    default void addTagForPayee(Tag tag, Payee payee) throws StorageException {
+        payee = lookupAndInsertPayee(payee);
+        tag = lookupAndInsertTag(tag);
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TagToPayeeTable.TABLE_NAME + " ( " + TagToPayeeTable.TTPE_TAG_ID + ", " + TagToPayeeTable.TTPE_PAYEE_ID + " ) VALUES (?,?)");
             stmt.setInt(1, tag.getId());
             stmt.setInt(2, payee.getId());
             stmt.execute();
-        } catch (java.sql.SQLException e){
+        } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding a tag for a payee", e);
         }
     }
@@ -183,6 +184,7 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
         }
         return currentTag;
     }
+
     default Payee lookupAndInsertPayee(Payee currentPayee) throws StorageException {
         Payee existingPayee;
         if (currentPayee.getId() != -1) {

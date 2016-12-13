@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class ChaseConverterTest {
 
@@ -38,6 +37,7 @@ public class ChaseConverterTest {
 
         assertEquals(1, countOfPending);
     }
+
     @Test(expected = ConverterException.class)
     public void dateErrorTest() throws ConverterException {
         Account testAccount = new Account("Test Account", "Account only used for Testing");

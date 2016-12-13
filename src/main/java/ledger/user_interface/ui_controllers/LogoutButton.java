@@ -2,10 +2,8 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 

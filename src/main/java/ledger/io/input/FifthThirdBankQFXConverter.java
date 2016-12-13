@@ -2,22 +2,14 @@ package ledger.io.input;
 
 import ledger.database.entity.*;
 import ledger.exception.ConverterException;
-import ledger.exception.LedgerException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.StringReader;
 import java.time.format.DateTimeParseException;
-import java.util.*;
-import java.util.regex.Pattern;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
@@ -25,7 +17,7 @@ import java.util.regex.Pattern;
 public class FifthThirdBankQFXConverter extends AbstractUFXConverter {
 
     public FifthThirdBankQFXConverter(File file, Account account) {
-        super(file,account);
+        super(file, account);
     }
 
     protected void parseXml(List<Transaction> transactions, Document xml) throws ConverterException {

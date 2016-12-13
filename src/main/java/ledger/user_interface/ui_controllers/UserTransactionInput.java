@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,7 +9,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.user_interface.utils.InputSanitization;
-import ledger.user_interface.utils.PayeeStringConverter;
 import ledger.user_interface.utils.TypeStringConverter;
 
 import java.net.URL;

@@ -1,7 +1,5 @@
 package ledger.exception;
 
-import ledger.controller.ImportController;
-
 /**
  * Exception returned from TransAct's file converters
  */
