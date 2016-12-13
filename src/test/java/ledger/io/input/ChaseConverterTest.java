@@ -6,11 +6,13 @@ import ledger.exception.ConverterException;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ChaseConverterTest {
 
@@ -35,5 +37,32 @@ public class ChaseConverterTest {
         int countOfPending = transactionList.parallelStream().mapToInt(t -> t.isPending() ? 1 : 0).sum();
 
         assertEquals(1, countOfPending);
+    }
+    @Test(expected = ConverterException.class)
+    public void dateErrorTest() throws ConverterException {
+        Account testAccount = new Account("Test Account", "Account only used for Testing");
+        ChaseConverter converter = new ChaseConverter(new File("./src/test/resources/ChaseDataError.csv"), testAccount);
+
+        converter.convert();
+    }
+
+    @Test(expected = ConverterException.class)
+    public void testIOException() throws Exception {
+        File csvFile = new File("./src/test/resources/ChaseSmallTest.csv");
+
+        RandomAccessFile file = new RandomAccessFile(csvFile, "rw");
+        FileLock lock = file.getChannel().lock();
+
+        csvFile.setReadable(false);
+        try {
+
+
+            Account testAccount = new Account("Test Account", "Account only used for Testing");
+            ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
+
+            converter.convert();
+        } finally {
+            csvFile.setReadable(true);
+        }
     }
 }
