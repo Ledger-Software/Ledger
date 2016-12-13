@@ -15,6 +15,7 @@ Text {
 
 PasswordField {
     -fx-prompt-text-fill: #777777;
+    -fx-font-size: 17px;
 }
 
 #header {
