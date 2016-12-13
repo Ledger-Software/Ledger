@@ -70,7 +70,7 @@ public interface IUIController {
         newStage.initModality(Modality.WINDOW_MODAL);
         newStage.show();
 
-        if(parrent != null) {
+        if (parrent != null) {
             double x = parrent.getX();
             double y = parrent.getY();
 

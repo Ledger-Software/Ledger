@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
 /**
  * Exports the database file to the chosen directory.
  */
-public class ExportButton extends Button implements IUIController, Initializable{
+public class ExportButton extends Button implements IUIController, Initializable {
 
     private static String pageLoc = "/fxml_files/Button.fxml";
 

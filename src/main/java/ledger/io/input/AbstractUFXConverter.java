@@ -56,7 +56,8 @@ public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
         sgml = sgml.substring(indexOfFirstTrans);
 
         int lastIndexOfTrans = sgml.indexOf("</BANKTRANLIST>");
-        if(lastIndexOfTrans == -1) throw new ConverterException("The provided QFX file is malformed.", new IndexOutOfBoundsException());
+        if (lastIndexOfTrans == -1)
+            throw new ConverterException("The provided QFX file is malformed.", new IndexOutOfBoundsException());
         sgml = sgml.substring(0, lastIndexOfTrans);
 
         StringBuilder correctedXml = correctXml(sgml);

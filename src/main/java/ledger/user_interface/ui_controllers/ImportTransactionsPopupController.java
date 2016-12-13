@@ -80,7 +80,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> {
             importButton.setDisable(false);
             this.setupErrorPopup("Unable to import data.", e);
-            }));
+        }));
         task.RegisterSuccessEvent(this::handleReturn);
         importButton.setDisable(true);
 

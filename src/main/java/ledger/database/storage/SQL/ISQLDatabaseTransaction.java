@@ -301,6 +301,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             throw new StorageException("Error while getting Account by Name", e);
         }
     }
+
     @Override
     default Tag getTagForNameAndDescription(String tagName, String tagDescription) {
         try {
@@ -327,6 +328,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
         return null;
     }
+
     @Override
     default Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription) {
         try {

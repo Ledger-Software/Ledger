@@ -168,7 +168,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             ArrayList<Tag> tagsToSet = new ArrayList<>();
 
-            for(String currentTagName: tagNames) {
+            for (String currentTagName : tagNames) {
                 Tag currentTagToSet = new Tag(currentTagName, "");
                 for (Tag currentTag : allTags) {
                     if (currentTag.getName().equals(currentTagName)) {
