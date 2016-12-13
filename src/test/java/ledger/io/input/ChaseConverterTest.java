@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ChaseConverterTest {
 
@@ -49,7 +50,13 @@ public class ChaseConverterTest {
     public void testIOException() throws Exception {
         File csvFile = new File("./src/test/resources/ChaseSmallTest.csv");
         final RandomAccessFile raFile = new RandomAccessFile(csvFile, "rw");
-        FileLock lock = raFile.getChannel().lock();
+        FileLock lock = null;
+        try {
+            lock = raFile.getChannel().lock();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Unable to obtain file lock");
+        }
 
         Account testAccount = new Account("Test Account", "Account only used for Testing");
         ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
