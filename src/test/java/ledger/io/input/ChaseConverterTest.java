@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ChaseConverterTest {
 
@@ -55,8 +56,8 @@ public class ChaseConverterTest {
             ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
 
             converter.convert();
-        }
-        finally {
+        } finally {
             csvFile.setReadable(true);
         }
+    }
 }
