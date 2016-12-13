@@ -1,15 +1,13 @@
 package ledger.io.input;
 
-import ledger.controller.ImportController;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.exception.ConverterException;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileLock;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,11 +49,13 @@ public class ChaseConverterTest {
     public void testIOException() throws Exception {
         File csvFile = new File("./src/test/resources/ChaseSmallTest.csv");
         final RandomAccessFile raFile = new RandomAccessFile(csvFile, "rw");
-        raFile.getChannel().lock();
+        FileLock lock = raFile.getChannel().lock();
 
         Account testAccount = new Account("Test Account", "Account only used for Testing");
         ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
 
         converter.convert();
+
+        lock.release();
     }
 }
