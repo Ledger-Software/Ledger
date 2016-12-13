@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.io.IOException;
 
@@ -28,7 +29,7 @@ public interface IUIController {
         newStage.setScene(scene);
         newStage.setResizable(false);
         newStage.setTitle("Error!");
-        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.initModality(Modality.WINDOW_MODAL);
         newStage.show();
     }
 
@@ -58,11 +59,32 @@ public interface IUIController {
      * @param s the previously initialized Scene that is set on the new Stage
      */
     default void createModal(Scene s, String windowName) {
+        createModal(null, s, windowName);
+    }
+
+    default void createModal(Window parrent, Scene child, String windowName) {
         Stage newStage = new Stage();
-        newStage.setScene(s);
+        newStage.setScene(child);
         newStage.setResizable(false);
         newStage.setTitle(windowName);
-        newStage.initModality(Modality.APPLICATION_MODAL);
+        newStage.initModality(Modality.WINDOW_MODAL);
         newStage.show();
+
+        if(parrent != null) {
+            double x = parrent.getX();
+            double y = parrent.getY();
+
+            double xSize = parrent.getWidth();
+            double ySize = parrent.getHeight();
+
+            double centerX = x + xSize / 2;
+            double centerY = y + ySize / 2;
+
+            double childX = newStage.getWidth();
+            double childY = newStage.getHeight();
+
+            newStage.setX(centerX - childX / 2);
+            newStage.setY(centerY - childY / 2);
+        }
     }
 }

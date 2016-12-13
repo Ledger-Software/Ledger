@@ -16,8 +16,9 @@ import java.util.ResourceBundle;
  * fit whatever purpose we need
  */
 public class GenericPopupController extends GridPane implements Initializable, IUIController {
+
     @FXML
-    private Label errorText;
+    private Text errorText;
     @FXML
     private Button okayBtn;
     @FXML
@@ -49,6 +50,7 @@ public class GenericPopupController extends GridPane implements Initializable, I
         this.errorText.setText(this.msg);
         this.title.setText(this.windowTitle);
         this.okayBtn.setOnAction((event) -> close());
+        this.okayBtn.requestFocus();
     }
 
     /**

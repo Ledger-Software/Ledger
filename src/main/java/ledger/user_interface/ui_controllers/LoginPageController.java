@@ -58,21 +58,6 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.loginBtn.setOnAction((event) -> {
-            MainPageController mainPageController = new MainPageController();
-            Scene scene = new Scene(mainPageController);
-            Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currStage.close();
-            Stage newStage = new Stage();
-            newStage.setMinWidth(780);
-            newStage.setWidth(1280);
-            newStage.setHeight(800);
-            newStage.setMinHeight(5000);
-            newStage.setResizable(true);
-            newStage.setScene(scene);
-            newStage.setTitle("Ledger: Transaction View");
-            newStage.show();
-        });
         this.chooseFileBtn.setOnAction((event -> selectFile()));
         this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
@@ -100,7 +85,20 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         try {
             DbController.INSTANCE.initialize(this.filePath, this.pwd);
 
-            Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
+//            MainPageController mainPageController = new MainPageController();
+//            Scene scene = new Scene(mainPageController);
+//            Stage currStage = (Stage) this.getScene().getWindow();
+//            currStage.close();
+//            Stage newStage = new Stage();
+//            newStage.setMinWidth(780);
+//            newStage.setWidth(1280);
+//            newStage.setHeight(800);
+//            newStage.setMinHeight(5000);
+//            newStage.setResizable(true);
+//            newStage.setScene(scene);
+//            newStage.setTitle("Ledger: Transaction View");
+//            newStage.show();
+            Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }

@@ -84,7 +84,6 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         task.RegisterSuccessEvent(this::handleReturn);
         importButton.setDisable(true);
 
-
         task.startTask();
     }
 

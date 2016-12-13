@@ -38,8 +38,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
-    private Button exportDataBtn;
-    @FXML
     private FilteringAccountDropdown chooseAccount;
     @FXML
     private Button searchButton;
@@ -51,9 +49,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
-
-    @FXML
-    private Button logoutBtn;
 
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
 
@@ -90,18 +85,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             createImportTransPopup();
         });
 
-        this.logoutBtn.setOnAction((event) -> {
-            logout(event);
-        });
-
         this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
         this.searchTextField.setOnAction(this::searchClick);
-
-        this.exportDataBtn.setOnAction((event) -> {
-            exportData();
-        });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
             @Override
@@ -122,35 +109,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     }
 
     /**
-     * Redirects to login screen and properly closes the database file
-     *
-     * @param event action event used to reset the stage
-     */
-    private void logout(ActionEvent event) {
-        LoginPageController login = new LoginPageController();
-        Scene scene = new Scene(login);
-        Stage currStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currStage.close();
-        Stage newStage = new Stage();
-        newStage.setScene(scene);
-        newStage.setTitle("Ledger Login");
-        newStage.show();
-        newStage.setMinWidth(newStage.getWidth());
-        newStage.setMinHeight(newStage.getHeight());
-        try {
-            DbController.INSTANCE.shutdown();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Database file did not close properly.", e);
-        }
-    }
-
-    /**
      * Creates the Import Transaction modal
      */
     private void createImportTransPopup() {
         ImportTransactionsPopupController importTrxnController = new ImportTransactionsPopupController();
         Scene scene = new Scene(importTrxnController);
-        this.createModal(scene, "Import Transactions");
+        this.createModal(this.getScene().getWindow(), scene, "Import Transactions");
     }
 
     /**
@@ -159,7 +123,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         ExpenditureChartsController chartController = new ExpenditureChartsController();
         Scene scene = new Scene(chartController);
-        this.createModal(scene, "Expenditure Charts");
+        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts");
     }
 
     /**
@@ -168,7 +132,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createAddTransPopup() {
         TransactionPopupController trxnController = new TransactionPopupController();
         Scene scene = new Scene(trxnController);
-        this.createModal(scene, "Add Transaction");
+        this.createModal(this.getScene().getWindow(), scene, "Add Transaction");
     }
 
     /**
@@ -177,46 +141,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createAccountPopup() {
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
-        this.createModal(scene, "Add Account");
-    }
-
-    /**
-     * Exports the database file to the chosen directory.
-     */
-    private void exportData() {
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Select Directory");
-        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-        File saveLocation = chooser.showDialog(this.exportDataBtn.getScene().getWindow());
-        if (saveLocation == null) return;
-        File currentDbFile = DbController.INSTANCE.getDbFile();
-        String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
-        String fileName = timeStamp + currentDbFile.getName();
-        File newDbFile = new File(saveLocation.toPath().toString(), fileName);
-
-        int numFiles = 1;
-        while (newDbFile.exists()) {
-            fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
-            newDbFile = new File(saveLocation.toPath().toString(), fileName);
-        }
-
-        try {
-            DbController.INSTANCE.shutdown();
-            Files.copy(currentDbFile.toPath(), newDbFile.toPath());
-        } catch (IOException e) {
-            this.setupErrorPopup("Unable to properly copy data.", e);
-            e.printStackTrace();
-        } catch (StorageException e) {
-            this.setupErrorPopup("Unable to properly close database.", e);
-            e.printStackTrace();
-        }
-        this.displayPasswordPrompt();
-    }
-
-    private void displayPasswordPrompt() {
-        PasswordPromptController promptController = new PasswordPromptController();
-        Scene scene = new Scene(promptController);
-        this.createModal(scene, "Verify Password");
+        this.createModal(this.getScene().getWindow(), scene, "Add Account");
     }
 }

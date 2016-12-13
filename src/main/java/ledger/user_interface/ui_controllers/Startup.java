@@ -67,6 +67,12 @@ public class Startup extends Application {
         this.stage.setMinWidth(stage.getWidth());
     }
 
+    public void newStage(Scene scene, String title) {
+        this.stage.close();
+        this.stage = new Stage();
+        this.switchScene(scene,title);
+    }
+
     public void runLater(CallableMethodVoidNoArgs method) {
         Platform.runLater(() -> {
             try {

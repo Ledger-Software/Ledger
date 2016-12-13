@@ -8,6 +8,7 @@ import ledger.database.entity.Type;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Tayler How on 10/26/2016.
@@ -39,16 +40,14 @@ public class TransactionModel {
         } else {
             this.date = null;
         }
+
         this.tagNames = "";
         if (transaction.getTagList() != null) {
-            List<Tag> tags = transaction.getTagList();
-            for (int i = 0; i < tags.size(); i++) {
-                this.tagNames += tags.get(i).getName();
-                if (i != tags.size() - 1) {
-                    this.tagNames += ", ";
-                }
-            }
+            this.tagNames = transaction.getTagList().stream()
+                    .map(Tag::getName)
+                    .collect(Collectors.joining(", "));
         }
+
         if (transaction.isPending()) {
             this.pending = true;
         } else {

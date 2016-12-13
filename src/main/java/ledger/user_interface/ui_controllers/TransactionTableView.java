@@ -105,7 +105,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction date.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+
             task.startTask();
             task.waitForComplete();
             updateTransactionTableView();
@@ -126,7 +126,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction payee.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+
             task.startTask();
             task.waitForComplete();
             updateTransactionTableView();
@@ -147,7 +147,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction type.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+
             task.startTask();
             task.waitForComplete();
             updateTransactionTableView();
@@ -167,12 +167,13 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             List<Tag> allTags = tagQuery.waitForResult();
 
             ArrayList<Tag> tagsToSet = new ArrayList<>();
-            for (int i = 0; i < tagNames.length; i++) {
-                String currentTagName = tagNames[i];
+
+            for(String currentTagName: tagNames) {
                 Tag currentTagToSet = new Tag(currentTagName, "");
                 for (Tag currentTag : allTags) {
                     if (currentTag.getName().equals(currentTagName)) {
                         currentTagToSet = currentTag;
+                        break;
                     }
                 }
                 tagsToSet.add(currentTagToSet);
@@ -186,7 +187,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction categories.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+
             task.startTask();
             task.waitForComplete();
             updateTransactionTableView();
@@ -207,7 +208,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 updateTransactionTableView();
                 setupErrorPopup("Error editing transaction pending field.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
+
             task.startTask();
             task.waitForComplete();
             updateTransactionTableView();
