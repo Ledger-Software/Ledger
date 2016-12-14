@@ -42,9 +42,28 @@ public class TagInput extends GridPane implements IUIController, Initializable {
     private ObservableList<Tag> notPayeeTags;
 
     public TagInput() {
+
+        this.initController(pageLog, this, "Unable to load User Tag Input");
+
+    }
+
+    /**
+     * Sets up action listener for the button on the page
+     * <p>
+     * Called to initialize a controller after its root element has been
+     * completely processed.
+     *
+     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
+     *                         <tt>null</tt> if the location is not known.
+     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
+     *                         the root object was not localized.
+     */
+    @Override
+    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        this.tagSelector.setDisable(true);
+        this.tagContainer.setDisable(true);
         this.payeeTags = FXCollections.observableArrayList();
         this.notPayeeTags = FXCollections.observableArrayList();
-        this.initController(pageLog, this, "Unable to load User Tag Input");
         this.payeeTags.addListener(new ListChangeListener<Tag>() {
             @Override
             public void onChanged(Change<? extends Tag> c) {
@@ -65,29 +84,12 @@ public class TagInput extends GridPane implements IUIController, Initializable {
         this.tagSelector.setConverter(new TagStringConverter());
         this.tagSelector.setItems(this.notPayeeTags);
         this.tagSelector.setOnAction((event)->{
-                if(!tagSelector.getSelectionModel().isEmpty()) {
-                    addPayeeTag(tagSelector.getSelectionModel().getSelectedItem());
-                    tagSelector.getSelectionModel().clearSelection();
+                    if(!tagSelector.getSelectionModel().isEmpty()) {
+                        addPayeeTag(tagSelector.getSelectionModel().getSelectedItem());
+                        tagSelector.getSelectionModel().clearSelection();
+                    }
                 }
-            }
         );
-    }
-
-    /**
-     * Sets up action listener for the button on the page
-     * <p>
-     * Called to initialize a controller after its root element has been
-     * completely processed.
-     *
-     * @param fxmlFileLocation The location used to resolve relative paths for the root object, or
-     *                         <tt>null</tt> if the location is not known.
-     * @param resources        The resources used to localize the root object, or <tt>null</tt> if
-     *                         the root object was not localized.
-     */
-    @Override
-    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.tagSelector.setDisable(true);
-        this.tagContainer.setDisable(true);
         updateLists();
     }
 

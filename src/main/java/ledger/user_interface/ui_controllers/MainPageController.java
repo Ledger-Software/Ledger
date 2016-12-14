@@ -46,6 +46,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button clearButton;
     @FXML
+    private Button tagEngineButton;
+    @FXML
     private TextField searchTextField;
 
     // Transaction table UI objects
@@ -101,6 +103,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.exportDataBtn.setOnAction((event) -> {
             exportData();
+        });
+        tagEngineButton.setOnAction((event)-> {
+            createTaggingPopup();
         });
 
         this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
@@ -179,7 +184,14 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Scene scene = new Scene(accountController);
         this.createModal(scene, "Add Account");
     }
-
+    /**
+     * Creates the tagging modal
+     */
+    private void createTaggingPopup() {
+        AddTaggingRulesPopupController addTaggingRulesPopupController = new AddTaggingRulesPopupController();
+        Scene scene = new Scene(addTaggingRulesPopupController);
+        this.createModal(scene, "Tagging Rules!");
+    }
     /**
      * Exports the database file to the chosen directory.
      */

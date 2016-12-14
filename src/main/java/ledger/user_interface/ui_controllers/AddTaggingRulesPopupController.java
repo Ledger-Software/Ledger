@@ -1,12 +1,20 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ledger.controller.DbController;
+import ledger.controller.register.TaskWithReturn;
+import ledger.database.entity.Payee;
+import ledger.user_interface.utils.PayeeStringConverter;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -18,7 +26,9 @@ public class AddTaggingRulesPopupController extends GridPane implements Initiali
     private Button taggingDoneBtn;
     @FXML
     private TagInput tagInput;
-    private final static String pageLoc = "/fxml_files/AddTaggingRulesPopupController.fxml";
+    @FXML
+    private ComboBox<Payee> payeeText;
+    private final static String pageLoc = "/fxml_files/AddTaggingRulesPopup.fxml";
 
 
     AddTaggingRulesPopupController() {
@@ -39,8 +49,27 @@ public class AddTaggingRulesPopupController extends GridPane implements Initiali
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.taggingDoneBtn.setOnAction((event) -> {
-
+            closeWindow();
         });
+
+        this.payeeText.setDisable(true);
+        this.payeeText.setOnAction((event)->{
+                    if(!payeeText.getSelectionModel().isEmpty()) {
+                        tagInput.setPayee(payeeText.getSelectionModel().getSelectedItem());
+                    }
+                }
+        );
+
+        TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
+        payeesTask.RegisterFailureEvent((e) -> e.printStackTrace());
+        payeesTask.RegisterSuccessEvent((list) -> {
+            ObservableList<Payee> payees = FXCollections.observableList(list);
+            this.payeeText.setItems(payees);
+            this.payeeText.setConverter(new PayeeStringConverter());
+            this.payeeText.setEditable(true);
+            this.payeeText.setDisable(false);
+        });
+        payeesTask.waitForComplete();
     }
     private void closeWindow() {
         Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());

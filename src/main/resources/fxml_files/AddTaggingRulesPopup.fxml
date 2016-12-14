@@ -4,16 +4,20 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import ledger.user_interface.ui_controllers.TagInput?>
 
-<fx:root fx:id="addTaggingRulesGridPane" minHeight="320.0" minWidth="696.0" prefHeight="417.0" prefWidth="707.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="addTaggingRulesGridPane" minHeight="320.0" minWidth="696.0" prefHeight="417.0" prefWidth="707.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="407.0" minWidth="300.0" prefWidth="352.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="407.0" minWidth="10.0" prefWidth="355.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
@@ -26,7 +30,7 @@
         <RowConstraints maxHeight="357.0" minHeight="10.0" prefHeight="70.0" vgrow="ALWAYS" />
     </rowConstraints>
     <children>
-        <Pane fx:id="header" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+        <Pane fx:id="header" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
             <children>
                 <Text fx:id="title" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Add Tagging Rules">
                     <font>
@@ -35,7 +39,7 @@
                 </Text>
             </children>
         </Pane>
-        <Button fx:id="taggingDoneBtn" mnemonicParsing="false" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
+        <Button fx:id="taggingDoneBtn" mnemonicParsing="false" text="Done" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="7">
             <GridPane.margin>
                 <Insets right="20.0" />
             </GridPane.margin>
@@ -49,6 +53,20 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
+      <ComboBox fx:id="payeeText" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin>
+      </ComboBox>
+      <Label text="Payee:" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="150.0" />
+         </GridPane.margin>
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+        <TagInput fx:id="tagInput" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="4" />
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
