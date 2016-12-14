@@ -70,9 +70,9 @@ public interface IDatabase {
 
     List<Tag> getAllTagsNotForPayee(Payee payee) throws StorageException;
 
-    void deleteTagForPayee(Tag tag, Payee payee) throws StorageException;
+    void deleteTagForPayee(List<IEntity> tagAndPayee) throws StorageException;
 
-    void addTagForPayee(Tag tag, Payee payee) throws StorageException;
+    void addTagForPayee(List<IEntity> tagAndPayee) throws StorageException;
 
     Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription);
 

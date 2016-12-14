@@ -1,5 +1,6 @@
 package ledger.database.storage.SQL;
 
+import ledger.database.entity.IEntity;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
@@ -171,9 +172,9 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
         }
     }
     @Override
-    default void deleteTagForPayee(Tag tag, Payee payee) throws StorageException{
-       payee = lookupAndInsertPayee(payee);
-       tag = lookupAndInsertTag(tag);
+    default void deleteTagForPayee(List<IEntity> tagAndPayee) throws StorageException{
+        Tag tag = lookupAndInsertTag((Tag)tagAndPayee.get(0));
+        Payee payee = lookupAndInsertPayee((Payee)tagAndPayee.get(1));
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagToPayeeTable.TABLE_NAME + " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =? AND " + TagToPayeeTable.TTPE_TAG_ID + "=?");
             stmt.setInt(1,payee.getId());
@@ -184,9 +185,10 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
         }
     }
     @Override
-    default void addTagForPayee(Tag tag, Payee payee) throws StorageException{
-        payee = lookupAndInsertPayee(payee);
-        tag = lookupAndInsertTag(tag);
+    default void addTagForPayee(List<IEntity> tagAndPayee) throws StorageException{
+        Tag tag = lookupAndInsertTag((Tag)tagAndPayee.get(0));
+        Payee payee = lookupAndInsertPayee((Payee)tagAndPayee.get(1));
+
         try {
             PreparedStatement stmt  = getDatabase().prepareStatement("INSERT INTO " + TagToPayeeTable.TABLE_NAME + " ( " +TagToPayeeTable.TTPE_TAG_ID + ", " +TagToPayeeTable.TTPE_PAYEE_ID +" ) VALUES (?,?)" );
             stmt.setInt(1, tag.getId());

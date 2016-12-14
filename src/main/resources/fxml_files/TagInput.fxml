@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ComboBox fx:id="tagSelector" prefWidth="150.0">
+         <HBox.margin>
+            <Insets />
+         </HBox.margin></ComboBox>
+      <FlowPane fx:id="TagContainer" prefHeight="200.0" prefWidth="200.0" />
+   </children>
+</HBox>

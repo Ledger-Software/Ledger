@@ -11,6 +11,7 @@ import ledger.exception.StorageException;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -235,13 +236,43 @@ public class DbController {
         return new TaskWithArgs<Tag>(db::editTag, tag);
 
     }
+    /**
+     * @param tag the tag to add
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<List<IEntity>> addTagforPayee(final Tag tag, final Payee payee) {
+        return new TaskWithArgs<List<IEntity>>(db::addTagForPayee, new ArrayList<IEntity>(Arrays.asList(tag,payee)));
+
+    }
 
     /**
-     * @return A task for the Async Call that returns a list of all the Transactions
+     * @param tag the tag to delete
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<List<IEntity>> deleteTagforPayee(final Tag tag, final Payee payee) {
+        return new TaskWithArgs<List<IEntity>>(db::deleteTagForPayee, new ArrayList<IEntity>(Arrays.asList(tag,payee)));
+
+    }
+
+    /**
+     * @return A task for the Async Call that returns a list of all the Tags
      */
     public TaskWithReturn<List<Tag>> getAllTags() {
         return new TaskWithReturn<List<Tag>>(db::getAllTags);
 
+    }
+    /**
+     * @return A task for the Async Call that returns a list of all the Tags for a given PAyee
+     */
+    public TaskWithArgsReturn<Payee, List<Tag>> getAllTagsForPayee(final Payee payee) {
+        return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsForPayee, payee);
+
+    }
+    /**
+     * @return A task for the Async Call that returns a list of all the Tags not for a given Payee
+     */
+    public TaskWithArgsReturn<Payee, List<Tag>> getAllTagsNotForPayee(Payee payee) {
+        return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsNotForPayee, payee);
     }
 
     /**
