@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import ledger.controller.DbController;
@@ -28,7 +29,7 @@ import java.util.ResourceBundle;
 /**
  * Created by gert on 12/10/16.
  */
-public class TagInput extends HBox implements IUIController, Initializable {
+public class TagInput extends GridPane implements IUIController, Initializable {
     private static final String pageLog = "/fxml_files/TagInput.fxml";
     @FXML
     private ComboBox<Tag> tagSelector;
@@ -138,7 +139,7 @@ public class TagInput extends HBox implements IUIController, Initializable {
 
     private class TagBox extends HBox{
         private Tag tag;
-        public TagBox(Tag tg){
+        TagBox(Tag tg){
             tag = tg;
             Button removeButton = new Button("X");
             removeButton.setOnAction((evt) -> removePayeeTag(tag));
@@ -149,5 +150,4 @@ public class TagInput extends HBox implements IUIController, Initializable {
         }
     }
 
-    }
 }

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -547,30 +548,30 @@ public class H2DatabaseTest {
     }
     @Test
     public void addTagForPayee() throws Exception {
-        database.addTagForPayee(sampleTag, samplePayee);
+        database.addTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag, samplePayee)));
 
         List<Tag> tags = database.getAllTagsForPayee(samplePayee);
 
         assertEquals(1, tags.size());
         assertEquals(tags.get(0).getName(), "Groceries");
 
-        database.addTagForPayee(sampleTag2, samplePayee);
+        database.addTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag2, samplePayee)));
         tags = database.getAllTagsForPayee(samplePayee);
         assertEquals(2, tags.size());
     }
     @Test
     public void deleteTagForPayee() throws Exception {
-        database.addTagForPayee(sampleTag, samplePayee);
-        database.addTagForPayee(sampleTag2, samplePayee);
+        database.addTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag, samplePayee)));
+        database.addTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag2, samplePayee)));
         List<Tag> tags = database.getAllTagsForPayee(samplePayee);
 
         assertEquals(2, tags.size());
 
-        database.deleteTagForPayee(sampleTag2, samplePayee);
+        database.deleteTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag2, samplePayee)));
         tags = database.getAllTagsForPayee(samplePayee);
         assertEquals(1, tags.size());
         assertEquals(tags.get(0).getName(), "Groceries");
-        database.deleteTagForPayee(sampleTag, samplePayee);
+        database.deleteTagForPayee(new ArrayList<IEntity>(Arrays.asList(sampleTag, samplePayee)));
         tags = database.getAllTagsForPayee(samplePayee);
         assertEquals(0, tags.size());
     }

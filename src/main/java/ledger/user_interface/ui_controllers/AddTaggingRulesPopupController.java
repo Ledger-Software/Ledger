@@ -3,6 +3,8 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,11 +12,12 @@ import java.util.ResourceBundle;
 /**
  * Controls what happens with the data taken from the Add Tagging Rules UI.
  */
-public class AddTaggingRulesPopupController implements Initializable, IUIController {
+public class AddTaggingRulesPopupController extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button taggingDoneBtn;
-
+    @FXML
+    private TagInput tagInput;
     private final static String pageLoc = "/fxml_files/AddTaggingRulesPopupController.fxml";
 
 
@@ -39,6 +42,8 @@ public class AddTaggingRulesPopupController implements Initializable, IUIControl
 
         });
     }
-
+    private void closeWindow() {
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
+    }
 
 }
