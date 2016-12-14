@@ -66,7 +66,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-        <TagInput fx:id="tagInput" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.rowSpan="4" />
+      <TagInput fx:id="tagInput" maxHeight="200.0" maxWidth="707.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="186.0" prefWidth="707.0" GridPane.rowIndex="5" />
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />

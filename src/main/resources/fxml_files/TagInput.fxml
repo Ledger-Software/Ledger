@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<fx:root type="GridPane" fx:id="tagInputGridPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="tagInputGridPane" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
   </columnConstraints>
   <rowConstraints>
@@ -18,6 +20,7 @@
   </rowConstraints>
    <children>
       <ComboBox fx:id="tagSelector" prefWidth="150.0" GridPane.rowIndex="1" />
-      <FlowPane fx:id="tagContainer" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowSpan="3" />
+      <FlowPane fx:id="tagContainer" prefWrapLength="0.0" GridPane.columnIndex="2" GridPane.rowSpan="3" />
+      <Button fx:id="addButton" mnemonicParsing="false" text="Add Tag" GridPane.columnIndex="1" GridPane.rowIndex="1" />
    </children>
 </fx:root>

@@ -1,6 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -35,10 +36,11 @@ public class TagInput extends GridPane implements IUIController, Initializable {
     private ComboBox<Tag> tagSelector;
     @FXML
     private FlowPane tagContainer;
+    @FXML
+    private Button addButton;
 
     private Payee myPayee;
 
-    private ObservableList<Tag> payeeTags;
     private ObservableList<Tag> notPayeeTags;
 
     public TagInput() {
@@ -60,37 +62,23 @@ public class TagInput extends GridPane implements IUIController, Initializable {
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        myPayee = null;
         this.tagSelector.setDisable(true);
+        this.tagSelector.setEditable(true);
         this.tagContainer.setDisable(true);
-        this.payeeTags = FXCollections.observableArrayList();
         this.notPayeeTags = FXCollections.observableArrayList();
-        this.payeeTags.addListener(new ListChangeListener<Tag>() {
-            @Override
-            public void onChanged(Change<? extends Tag> c) {
-                while(c.next()) {
-                    if (c.wasAdded()) {
-                        for (Tag t : c.getAddedSubList()) {
-                            tagContainer.getChildren().add(new TagBox(t));
-                        }
-                    }
-                    if (c.wasRemoved()) {
-                        for (Tag t : c.getRemoved()) {
-                            tagContainer.getChildren().remove(c.getFrom(), c.getFrom() + c.getRemovedSize());
-                        }
-                    }
-                }
-            }
-        });
         this.tagSelector.setConverter(new TagStringConverter());
         this.tagSelector.setItems(this.notPayeeTags);
         this.tagSelector.setOnAction((event)->{
                     if(!tagSelector.getSelectionModel().isEmpty()) {
-                        addPayeeTag(tagSelector.getSelectionModel().getSelectedItem());
-                        tagSelector.getSelectionModel().clearSelection();
+                        addPayeeTag(tagSelector.getValue());
                     }
                 }
         );
         updateLists();
+        this.addButton.setOnAction((event -> {
+            addPayeeTag(tagSelector.getValue());
+            this.tagSelector.getSelectionModel().clearSelection();}));
     }
 
     public void setPayee(Payee payee){
@@ -99,18 +87,22 @@ public class TagInput extends GridPane implements IUIController, Initializable {
     }
     private void updateLists(){
         if(this.myPayee!=null){
+
             TaskWithArgsReturn<Payee,List<Tag>> tagsForPayeeTask =
                     DbController.INSTANCE.getAllTagsForPayee(this.myPayee);
             tagsForPayeeTask.RegisterFailureEvent((e) -> e.printStackTrace());
             tagsForPayeeTask.RegisterSuccessEvent((list) -> {
-                this.payeeTags.addAll(list);
+                setTagBoxes(list);
                 this.tagContainer.setDisable(false);
             });
+
             TaskWithArgsReturn<Payee,List<Tag>> tagsNotForPayeeTask =
                     DbController.INSTANCE.getAllTagsNotForPayee(this.myPayee);
             tagsNotForPayeeTask.RegisterFailureEvent((e) -> e.printStackTrace());
             tagsNotForPayeeTask.RegisterSuccessEvent((list) -> {
-                this.notPayeeTags.addAll(list);
+                Platform.runLater(() -> this.notPayeeTags.clear());
+                Platform.runLater(() -> this.notPayeeTags.addAll(list));
+
                 this.tagSelector.setDisable(false);
             });
             tagsForPayeeTask.startTask();
@@ -118,12 +110,17 @@ public class TagInput extends GridPane implements IUIController, Initializable {
         }
 
     }
+    private void setTagBoxes(List<Tag> tags){
+        Platform.runLater(() -> this.tagContainer.getChildren().clear());
+        for (Tag tag: tags){
+        Platform.runLater(() -> this.tagContainer.getChildren().add(new TagBox(tag)));
+        }
+    }
     public void removePayeeTag(Tag tag){
 
         TaskWithArgs<List<IEntity>> deleteTagForPayeeTask = DbController.INSTANCE.deleteTagforPayee(tag,this.myPayee);
         deleteTagForPayeeTask.RegisterSuccessEvent(()->{
-            this.payeeTags.remove(tag);
-            this.notPayeeTags.add(tag);
+            updateLists();
         });
         deleteTagForPayeeTask.RegisterFailureEvent((e)-> this.setupErrorPopup("Tag failed to be removed", e));
         deleteTagForPayeeTask.startTask();
@@ -132,8 +129,7 @@ public class TagInput extends GridPane implements IUIController, Initializable {
 
         TaskWithArgs<List<IEntity>> addTagForPayeeTask = DbController.INSTANCE.addTagforPayee(tag,this.myPayee);
         addTagForPayeeTask.RegisterSuccessEvent(()->{
-            this.payeeTags.add(tag);
-            this.notPayeeTags.remove(tag);
+            updateLists();
         });
         addTagForPayeeTask.RegisterFailureEvent((e)-> this.setupErrorPopup("Tag failed to be added", e));
         addTagForPayeeTask.startTask();

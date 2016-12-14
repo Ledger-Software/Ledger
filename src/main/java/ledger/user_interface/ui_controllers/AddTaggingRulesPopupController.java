@@ -48,17 +48,10 @@ public class AddTaggingRulesPopupController extends GridPane implements Initiali
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.taggingDoneBtn.setOnAction((event) -> {
-            closeWindow();
-        });
+
 
         this.payeeText.setDisable(true);
-        this.payeeText.setOnAction((event)->{
-                    if(!payeeText.getSelectionModel().isEmpty()) {
-                        tagInput.setPayee(payeeText.getSelectionModel().getSelectedItem());
-                    }
-                }
-        );
+
 
         TaskWithReturn<List<Payee>> payeesTask = DbController.INSTANCE.getAllPayees();
         payeesTask.RegisterFailureEvent((e) -> e.printStackTrace());
@@ -69,7 +62,14 @@ public class AddTaggingRulesPopupController extends GridPane implements Initiali
             this.payeeText.setEditable(true);
             this.payeeText.setDisable(false);
         });
-        payeesTask.waitForComplete();
+        payeesTask.startTask();
+        this.payeeText.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                    this.tagInput.setPayee(newValue);
+                }
+        );
+        this.taggingDoneBtn.setOnAction((event) -> {
+            closeWindow();
+        });
     }
     private void closeWindow() {
         Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
