@@ -18,7 +18,7 @@ public class ChaseConverterTest {
     @Test(expected = ConverterException.class)
     public void throwExceptionOnMissingFile() throws Exception {
         Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseConverter converter = new ChaseConverter(new File(UUID.randomUUID().toString()), testAccount);
+        ChaseCSVConverter converter = new ChaseCSVConverter(new File(UUID.randomUUID().toString()), testAccount);
 
         converter.convert();
     }
@@ -26,7 +26,7 @@ public class ChaseConverterTest {
     @Test
     public void convertTest() throws Exception {
         Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseConverter converter = new ChaseConverter(new File("./src/test/resources/ChaseSmallTest.csv"), testAccount);
+        ChaseCSVConverter converter = new ChaseCSVConverter(new File("./src/test/resources/ChaseSmallTest.csv"), testAccount);
 
         List<Transaction> transactionList = converter.convert();
 
@@ -41,7 +41,7 @@ public class ChaseConverterTest {
     @Test(expected = ConverterException.class)
     public void dateErrorTest() throws ConverterException {
         Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseConverter converter = new ChaseConverter(new File("./src/test/resources/ChaseDataError.csv"), testAccount);
+        ChaseCSVConverter converter = new ChaseCSVConverter(new File("./src/test/resources/ChaseDataError.csv"), testAccount);
 
         converter.convert();
     }
@@ -58,7 +58,7 @@ public class ChaseConverterTest {
 
 
             Account testAccount = new Account("Test Account", "Account only used for Testing");
-            ChaseConverter converter = new ChaseConverter(csvFile, testAccount);
+            ChaseCSVConverter converter = new ChaseCSVConverter(csvFile, testAccount);
 
             converter.convert();
         } finally {
