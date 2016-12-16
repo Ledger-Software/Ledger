@@ -36,13 +36,16 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
                 // PayPal handles multiple currencies. We need to decide what to do for other currencies.
                 if (!currency.equals("USD")) continue;
 
+                String status = nextLine[5];
+                // Need to discuss what to do here.
+                if (status.equals("Denied")) continue;
+
                 String dateString = nextLine[0];
                 String payeeName = nextLine[3];
-                String status = nextLine[5];
                 String amountString = nextLine[7];
-                //String typeString = nextLine[4];
 
-                //Date date, Type type, int amount, Account account, Payee payee, boolean pending, List<Tag> tagList, Note note
+                //Doesnt look like PayPal types will be useful to us
+                //String typeString = nextLine[4];
 
                 Date date = this.df.parse(dateString);
                 boolean pending = isPending(status);
