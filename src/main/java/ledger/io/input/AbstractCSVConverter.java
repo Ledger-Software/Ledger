@@ -27,6 +27,12 @@ public abstract class AbstractCSVConverter implements IInAdapter<Transaction> {
         this.account = account;
     }
 
+    /**
+     * Converter the data in the CsvConverter's file to TransACT objects.
+     *
+     * @return A List of Transaciton objects
+     * @throws ConverterException   When unexpected behavior leads to a situation that cannot be recovered from.
+     */
     public List<Transaction> convert() throws ConverterException {
         CSVReader reader = null;
         try {
