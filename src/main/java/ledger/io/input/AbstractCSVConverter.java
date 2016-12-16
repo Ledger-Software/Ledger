@@ -9,7 +9,8 @@ import ledger.exception.ConverterException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.LinkedList;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public abstract class AbstractCSVConverter implements IInAdapter<Transaction> {
 
     protected File file;
     protected Account account;
+    protected static DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
     public AbstractCSVConverter(File file, Account account) {
         this.file = file;

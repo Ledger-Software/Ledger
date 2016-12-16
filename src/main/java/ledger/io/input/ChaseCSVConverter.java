@@ -31,10 +31,6 @@ public class ChaseCSVConverter extends AbstractCSVConverter {
         try {
             String[] nextLine;
 
-
-
-            DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
             while ((nextLine = reader.readNext()) != null) {
                 String details = nextLine[0];
                 String dateString = nextLine[1];
@@ -46,7 +42,7 @@ public class ChaseCSVConverter extends AbstractCSVConverter {
 
                 //Date date, Type type, int amount, Account account, Payee payee, boolean pending, List<Tag> tagList, Note note
 
-                Date date = df.parse(dateString);
+                Date date = this.df.parse(dateString);
                 boolean pending = isPending(balanceString);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
                 int balance = 0;

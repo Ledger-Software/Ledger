@@ -2,11 +2,14 @@ package ledger.io.input;
 
 
 import au.com.bytecode.opencsv.CSVReader;
-import ledger.database.entity.Account;
-import ledger.database.entity.Transaction;
+import ledger.database.entity.*;
 import ledger.exception.ConverterException;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,6 +23,50 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
 
     @Override
     protected List<Transaction> readFile(CSVReader reader) throws ConverterException {
-        return null;
+        List<Transaction> transactions = new LinkedList();
+
+        try {
+            String[] nextLine;
+
+            Type type = TypeConversion.convert("");
+
+            while ((nextLine = reader.readNext()) != null) {
+
+                String currency = nextLine[6];
+                // PayPal handles multiple currencies. We need to decide what to do for other currencies.
+                if (!currency.equals("USD")) continue;
+
+                String dateString = nextLine[0];
+                String payeeName = nextLine[3];
+                String status = nextLine[5];
+                String amountString = nextLine[7];
+                //String typeString = nextLine[4];
+
+                //Date date, Type type, int amount, Account account, Payee payee, boolean pending, List<Tag> tagList, Note note
+
+                Date date = this.df.parse(dateString);
+                boolean pending = isPending(status);
+                int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
+
+                Payee payee = new Payee(payeeName, "");
+                List<Tag> tags = null;
+                Note note = null;
+
+                Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
+
+                transactions.add(transaction);
+            }
+
+        } catch (IOException e) {
+            throw new ConverterException("Unable to read file.", e);
+        } catch (ParseException e) {
+            throw new ConverterException("File is not in the valid CSV format.", e);
+        }
+
+        return transactions;
+    }
+
+    private boolean isPending(String status) {
+        return status.equals("Pending");
     }
 }
