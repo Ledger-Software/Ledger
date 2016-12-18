@@ -278,6 +278,11 @@ public class DbController {
         return new TaskWithReturn<List<Type>>(db::getAllTypes);
     }
 
+
+    public TaskWithArgsReturn<Payee, List<Tag>> getTagsForPayee(final Payee payee) {
+        return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsForPayee, payee);
+    }
+
     /**
      * Closes the DB safely.
      *
