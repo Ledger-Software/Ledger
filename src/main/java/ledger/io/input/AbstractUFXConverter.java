@@ -27,10 +27,12 @@ public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
 
     private File qfxFile;
     private Account account;
+    private boolean missingClosingTags;
 
-    public AbstractUFXConverter(File file, Account account) {
+    public AbstractUFXConverter(File file, Account account, boolean missingClosingTags) {
         this.qfxFile = file;
         this.account = account;
+        this.missingClosingTags = missingClosingTags;
     }
 
     /**
@@ -87,27 +89,33 @@ public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
     protected abstract void parseXml(List<Transaction> transactions, Document xml) throws ConverterException;
 
     private StringBuilder correctXml(String sgml) {
-        // add tags to the all rows that are not STMTTRN
-        String[] splitPieces = sgml.split("<");
-        LinkedList<String> modifiedPieces = new LinkedList();
-        for (String piece : splitPieces) {
-            piece = piece.trim();
-            boolean matches = Pattern.matches("(?!STMTTRN[>].*|[/]STMTTRN[>].*).*[>].*", piece);
-            if (matches) {
-                int lastClosingTag = piece.indexOf(">");
-                String xmlTag = piece.substring(0, lastClosingTag);
-                String correctXml = "<" + piece + "</" + xmlTag + ">";
-                modifiedPieces.add(correctXml + "\n");
-            } else if (!piece.equals("")) {
-                modifiedPieces.add("<" + piece + "\n");
-            }
-        }
-
         StringBuilder correctedXml = new StringBuilder();
         correctedXml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + "\n" + "<QFX>");
-        for (String piece : modifiedPieces) {
-            correctedXml.append(piece);
+
+        if (this.missingClosingTags) {
+            // add tags to the all rows that are not STMTTRN
+            String[] splitPieces = sgml.split("<");
+            LinkedList<String> modifiedPieces = new LinkedList();
+            for (String piece : splitPieces) {
+                piece = piece.trim();
+                boolean matches = Pattern.matches("(?!STMTTRN[>].*|[/]STMTTRN[>].*).*[>].*", piece);
+                if (matches) {
+                    int lastClosingTag = piece.indexOf(">");
+                    String xmlTag = piece.substring(0, lastClosingTag);
+                    String correctXml = "<" + piece + "</" + xmlTag + ">";
+                    modifiedPieces.add(correctXml + "\n");
+                } else if (!piece.equals("")) {
+                    modifiedPieces.add("<" + piece + "\n");
+                }
+            }
+
+            for (String piece : modifiedPieces) {
+                correctedXml.append(piece);
+            }
+        } else {
+            correctedXml.append(sgml);
         }
+
         correctedXml.append("\n" + "</QFX>");
         return correctedXml;
     }

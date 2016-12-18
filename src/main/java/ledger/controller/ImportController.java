@@ -63,7 +63,8 @@ public class ImportController {
     public enum Converter {
         ChaseBankCSV("Chase Bank CSV", ChaseConverter::new),
         FifthThirdBankQFX("Fifth Third Bank QFX", FifthThirdBankQFXConverter::new),
-        USBankQFX("US Bank QFX", USBankQFXConverter::new);
+        USBankQFX("US Bank QFX", USBankQFXConverter::new),
+        AmericanExpressSavingsQFX("American Express Savings QFX", AmericanExpressSavingsQFXConverter::new);
 
         private String niceName;
         private ConverterConstructor method;
