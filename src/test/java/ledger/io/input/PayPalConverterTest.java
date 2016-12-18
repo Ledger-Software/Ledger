@@ -7,26 +7,28 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileLock;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
-public class ChaseConverterTest {
+/**
+ * Tests for the applications PayPalCSVConverter class
+ */
+public class PayPalConverterTest {
+
+    private Account testAccount = new Account("Test Account", "Account only used for Testing");
 
     @Test(expected = ConverterException.class)
     public void throwExceptionOnMissingFile() throws Exception {
-        Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseCSVConverter converter = new ChaseCSVConverter(new File(UUID.randomUUID().toString()), testAccount);
+        IInAdapter<Transaction> converter = new PayPalCSVConverter(new File(UUID.randomUUID().toString()), testAccount);
 
         converter.convert();
     }
 
     @Test
     public void convertTest() throws Exception {
-        Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseCSVConverter converter = new ChaseCSVConverter(new File("./src/test/resources/ChaseSmallTest.csv"), testAccount);
+        IInAdapter<Transaction> converter = new PayPalCSVConverter(new File("./src/test/resources/PayPalSample.csv"), testAccount);
 
         List<Transaction> transactionList = converter.convert();
 
@@ -35,30 +37,26 @@ public class ChaseConverterTest {
 
         int countOfPending = transactionList.parallelStream().mapToInt(t -> t.isPending() ? 1 : 0).sum();
 
-        assertEquals(1, countOfPending);
+        assertEquals(2, countOfPending);
     }
 
     @Test(expected = ConverterException.class)
     public void dateErrorTest() throws ConverterException {
-        Account testAccount = new Account("Test Account", "Account only used for Testing");
-        ChaseCSVConverter converter = new ChaseCSVConverter(new File("./src/test/resources/ChaseDataError.csv"), testAccount);
+        IInAdapter<Transaction> converter = new PayPalCSVConverter(new File("./src/test/resources/PayPalSampleDataError.csv"), testAccount);
 
         converter.convert();
     }
 
     @Test(expected = ConverterException.class)
     public void testIOException() throws Exception {
-        File csvFile = new File("./src/test/resources/ChaseSmallTest.csv");
+        File csvFile = new File("./src/test/resources/PayPalSample.csv");
 
         RandomAccessFile file = new RandomAccessFile(csvFile, "rw");
-        FileLock lock = file.getChannel().lock();
+        file.getChannel().lock();
 
         csvFile.setReadable(false);
         try {
-
-
-            Account testAccount = new Account("Test Account", "Account only used for Testing");
-            ChaseCSVConverter converter = new ChaseCSVConverter(csvFile, testAccount);
+            IInAdapter<Transaction> converter = new PayPalCSVConverter(csvFile, testAccount);
 
             converter.convert();
         } finally {
