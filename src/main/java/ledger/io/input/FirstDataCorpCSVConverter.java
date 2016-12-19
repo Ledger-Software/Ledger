@@ -27,7 +27,7 @@ public class FirstDataCorpCSVConverter extends AbstractCSVConverter {
         try {
             String[] nextLine;
 
-            Payee payee = new Payee("", "");
+            Payee payee = new Payee("***Not Available***", "Payee information was not included in the provided data");
             boolean pending = false;
             List<Tag> tags = null;
             Note note = null;
