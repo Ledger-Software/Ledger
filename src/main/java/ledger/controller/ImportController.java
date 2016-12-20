@@ -64,7 +64,8 @@ public class ImportController {
         ChaseBankCSV("Chase Bank CSV", ChaseCSVConverter::new),
         PayPalCSV("PayPal CSV", PayPalCSVConverter::new),
         FifthThirdBankQFX("Fifth Third Bank QFX", FifthThirdBankQFXConverter::new),
-        USBankQFX("US Bank QFX", USBankQFXConverter::new);
+        USBankQFX("US Bank QFX", USBankQFXConverter::new),
+        USBankCSV("US Bank CSV", USBankCSVConverter::new);
 
         private String niceName;
         private ConverterConstructor method;

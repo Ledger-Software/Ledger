@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
-public class ChaseConverterTest {
+public class ChaseCSVConverterTest {
 
     @Test(expected = ConverterException.class)
     public void throwExceptionOnMissingFile() throws Exception {

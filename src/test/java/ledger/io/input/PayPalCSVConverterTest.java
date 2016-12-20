@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests for the applications PayPalCSVConverter class
  */
-public class PayPalConverterTest {
+public class PayPalCSVConverterTest {
 
     private Account testAccount = new Account("Test Account", "Account only used for Testing");
 
