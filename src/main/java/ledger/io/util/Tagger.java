@@ -30,7 +30,8 @@ public class Tagger {
             fullList.addAll(originalList);
 
             List<Tag> payeeTags = DbController.INSTANCE.getTagsForPayee(t.getPayee()).waitForResult();
-            fullList.addAll(payeeTags);
+            if(payeeTags != null)
+                fullList.addAll(payeeTags);
 
             List<Tag> newList = new ArrayList<Tag>();
             newList.addAll(fullList);
