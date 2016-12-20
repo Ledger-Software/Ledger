@@ -61,11 +61,13 @@ public class ImportController {
      * Enum that holds the available converters in an easy to instantiate format
      */
     public enum Converter {
+        AmericanExpressSavingsQFX("American Express Savings QFX", AmericanExpressSavingsQFXConverter::new),
         ChaseBankCSV("Chase Bank CSV", ChaseCSVConverter::new),
-        PayPalCSV("PayPal CSV", PayPalCSVConverter::new),
         FifthThirdBankQFX("Fifth Third Bank QFX", FifthThirdBankQFXConverter::new),
-        USBankQFX("US Bank QFX", USBankQFXConverter::new),
-        USBankCSV("US Bank CSV", USBankCSVConverter::new);
+        FirstDataCorpCSV("First Data Corp CSV", FirstDataCorpCSVConverter::new),
+        PayPalCSV("PayPal CSV", PayPalCSVConverter::new),
+        USBankCSV("US Bank CSV", USBankCSVConverter::new),
+        USBankQFX("US Bank QFX", USBankQFXConverter::new);
 
         private String niceName;
         private ConverterConstructor method;
