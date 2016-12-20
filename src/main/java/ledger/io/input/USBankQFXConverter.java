@@ -17,7 +17,7 @@ import java.util.List;
 public class USBankQFXConverter extends AbstractUFXConverter {
 
     public USBankQFXConverter(File file, Account account) {
-        super(file, account);
+        super(file, account, true);
     }
 
     protected void parseXml(List<Transaction> transactions, Document xml) throws ConverterException {

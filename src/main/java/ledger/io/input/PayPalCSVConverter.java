@@ -51,7 +51,9 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
                 boolean pending = isPending(status);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
 
-                Payee payee = new Payee(payeeName, "");
+                Payee payee;
+                if (!payeeName.equals("")) payee = new Payee(payeeName, "");
+                else payee = new Payee("***Not Available***" , "Payee information was not included in the provided data");
                 List<Tag> tags = null;
                 Note note = null;
 
