@@ -2,6 +2,8 @@ package ledger.io.input;
 
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
+import ledger.exception.ConverterException;
+import ledger.exception.LedgerException;
 import org.junit.Test;
 
 import java.io.File;
@@ -47,5 +49,24 @@ public class AmericanExpressSavingsQFXConverterTest {
 
         assertEquals(TypeConversion.convert("DEBIT"), convertedTransactions.get(0).getType());
         assertEquals(TypeConversion.convert("CREDIT"), convertedTransactions.get(1).getType());
+    }
+
+    // Test when the given amount value cannot be parsed
+    @Test(expected = ConverterException.class)
+    public void importTransactionFailureInvalidDate() throws LedgerException {
+        File testFile = new File("src/test/resources/AmericanExpressSavingsSampleInvalidDate.qfx");
+        IInAdapter adapter = new AmericanExpressSavingsQFXConverter(testFile, new Account("test", "test"));
+
+        adapter.convert();
+
+    }
+
+    // Test when the given Date value cannot be parsed
+    @Test(expected = ConverterException.class)
+    public void importTransactionFailureInvalidAmount() throws LedgerException {
+        File testFile = new File("src/test/resources/AmericanExpressSavingsSampleInvalidAmount.qfx");
+        IInAdapter adapter = new AmericanExpressSavingsQFXConverter(testFile, new Account("test", "test"));
+
+        adapter.convert();
     }
 }
