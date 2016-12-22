@@ -4,6 +4,7 @@ import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.io.input.*;
+import ledger.io.util.Tagger;
 
 import java.io.File;
 import java.util.List;
@@ -38,7 +39,11 @@ public class ImportController {
             DuplicateDetector dups = new DuplicateDetector(trans);
             DetectionResult result = dups.detectDuplicates(DbController.INSTANCE.getDb());
 
-            TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(result.getVerifiedTransactions());
+            List<Transaction> transactions = result.getVerifiedTransactions();
+            Tagger tagger = new Tagger(transactions);
+            tagger.tagTransactions();
+
+            TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(transactions);
             task.startTask();
             List<Transaction> failedTransactions = task.waitForResult();
             List<Transaction> duplicateTransaction = result.getPossibleDuplicates();
