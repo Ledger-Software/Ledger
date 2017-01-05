@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -23,6 +24,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private DatePicker toDateFilter;
     @FXML
     private StackedBarChart expenditureBarChart;
+    @FXML
+    private Label displayLabel;
 
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 

@@ -6,6 +6,7 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
@@ -95,6 +96,11 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
+            <Label text="Currently showing: " GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+               <font>
+                  <Font name="Calibri Light" size="18.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
     </children>
