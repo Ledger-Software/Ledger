@@ -2,6 +2,7 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.DatePicker;
@@ -26,6 +27,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private StackedBarChart expenditureBarChart;
     @FXML
     private Label displayLabel;
+    @FXML
+    private LineChart expendituresLineChart;
 
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 

@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.StackedBarChart?>
 <?import javafx.scene.control.DatePicker?>
@@ -96,13 +97,24 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Label text="Currently showing: " GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <Label text="Currently showing: " GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Label>
          </children>
       </GridPane>
+      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditures Over Time" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+         <padding>
+            <Insets bottom="25.0" />
+         </padding>
+      </LineChart>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
