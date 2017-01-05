@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
@@ -15,7 +16,11 @@ import java.util.ResourceBundle;
 public class ExpenditureChartsController extends GridPane implements Initializable, IUIController {
 
     @FXML
-    private PieChart expenditurePieChart;
+    private AccountDropdown accountFilterDropdown;
+    @FXML
+    private DatePicker fromDateFilter;
+    @FXML
+    private DatePicker toDateFilter;
     @FXML
     private StackedBarChart expenditureBarChart;
 

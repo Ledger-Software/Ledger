@@ -35,7 +35,7 @@
         <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="193.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <StackedBarChart fx:id="expenditureBarChart" title="Expenditures per Month" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+        <StackedBarChart fx:id="expenditureBarChart" title="Expenditures" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
             <xAxis>
                 <CategoryAxis side="BOTTOM" />
             </xAxis>
