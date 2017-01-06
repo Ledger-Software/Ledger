@@ -6,6 +6,7 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.StackedBarChart?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -102,6 +103,7 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Label>
+            <Button fx:id="filterEnterButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditures Over Time" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">

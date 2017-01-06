@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -29,6 +30,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private Label displayLabel;
     @FXML
     private LineChart expendituresLineChart;
+    @FXML
+    private Button filterEnterButton;
 
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
