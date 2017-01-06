@@ -149,6 +149,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             setupErrorPopup("Please select an account to delete", new Exception());
             return;
         }
-        DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
+        DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount()).startTask();
     }
 }
