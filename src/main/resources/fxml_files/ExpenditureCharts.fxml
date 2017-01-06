@@ -58,7 +58,7 @@
                 </Text>
             </children>
         </Pane>
-      <GridPane GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
+      <GridPane style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="138.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" prefWidth="161.0" />
@@ -105,6 +105,9 @@
             </Label>
             <Button fx:id="filterEnterButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
          </children>
+         <padding>
+            <Insets bottom="5.0" />
+         </padding>
       </GridPane>
       <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditures Over Time" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
         <xAxis>
@@ -116,6 +119,9 @@
          <padding>
             <Insets bottom="25.0" />
          </padding>
+         <GridPane.margin>
+            <Insets top="10.0" />
+         </GridPane.margin>
       </LineChart>
     </children>
     <stylesheets>

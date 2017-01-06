@@ -3,7 +3,6 @@ package ledger.user_interface.ui_controllers;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -52,5 +51,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+
+        this.filterEnterButton.setOnAction((event) -> {
+
+        });
+
     }
 }
