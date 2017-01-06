@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import ledger.controller.DbController;
 import ledger.database.entity.Account;
 
 import java.net.URL;
@@ -21,6 +22,8 @@ import java.util.ResourceBundle;
 public class MainPageController extends GridPane implements Initializable, IUIController {
     @FXML
     private Button addAccountBtn;
+    @FXML
+    private Button deleteAccountBtn;
     @FXML
     private Button importTransactionsBtn;
     @FXML
@@ -61,6 +64,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.addAccountBtn.setOnAction((event) -> {
             createAccountPopup();
+        });
+
+        this.deleteAccountBtn.setOnAction( (event) -> {
+            deleteAccount();
         });
 
         this.addTransactionBtn.setOnAction((event) -> {
@@ -132,5 +139,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         AccountPopupController accountController = new AccountPopupController();
         Scene scene = new Scene(accountController);
         this.createModal(this.getScene().getWindow(), scene, "Add Account");
+    }
+
+    /**
+     * Deletes the Account selected in the chooseAccount dropdown
+     */
+    private void deleteAccount() {
+        if (chooseAccount.getSelectedAccount() == null) {
+            setupErrorPopup("Please select an account to delete", new Exception());
+            return;
+        }
+        DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
     }
 }
