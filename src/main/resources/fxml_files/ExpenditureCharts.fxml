@@ -38,7 +38,7 @@
         <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="193.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <StackedBarChart fx:id="expenditureBarChart" title="Expenditures" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+        <StackedBarChart fx:id="expenditureBarChart" title="Filtered Expenditures" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
             <xAxis>
                 <CategoryAxis side="BOTTOM" />
             </xAxis>
@@ -91,7 +91,7 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <DatePicker fx:id="fromDatefFilter" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="fromDateFilter" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <DatePicker fx:id="toDateFilter" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="to" wrappingWidth="15.3017578125" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                <font>
@@ -109,7 +109,7 @@
             <Insets bottom="5.0" />
          </padding>
       </GridPane>
-      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditures Over Time" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
+      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditure History" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
