@@ -2,8 +2,7 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.StackedBarChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,11 +13,9 @@ import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 
 import java.net.URL;
+import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.ExecutionException;
+import java.util.*;
 
 /**
  * Controls how the charts render with user given information.
@@ -45,6 +42,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
+        getTransactions();
+        setupExpenditureHistoryChart();
     }
 
     /**
@@ -62,9 +61,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            getTransactions();
-            setupExpenditureHistoryChart();
-
             Account accountSelected = accountFilterDropdown.getSelectedAccount();
             LocalDate fromDateSelected = fromDateFilter.getValue();
             LocalDate toDateSelected = toDateFilter.getValue();
@@ -101,15 +97,37 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             setupErrorPopup("Error retrieving transactions.", new Exception());
         });
         task.startTask();
-        List<Transaction> allTransactions = task.waitForResult();
-        this.allTransactions = allTransactions;
+        this.allTransactions = task.waitForResult();
     }
 
     /**
      * Builds the line chart to show trends in amount spent over the last six months
      */
     private void setupExpenditureHistoryChart() {
+        Calendar cal = Calendar.getInstance();
+        Date today = cal.getTime();
+        cal.add(Calendar.MONTH, -6);
+        Date sixMonthsAgo = cal.getTime();
+        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+        for (Transaction t : this.allTransactions) {
+            if ((t.getDate().before(today) || t.getDate().equals(today))
+                    && (t.getDate().after(sixMonthsAgo) || t.getDate().equals(sixMonthsAgo))) {
+                filteredTransactions.add(t);
+            }
+        }
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Month");
+        yAxis.setLabel("Amount Spent");
+        this.expendituresLineChart = new LineChart<>(xAxis, yAxis);
 
+        XYChart.Series series = new XYChart.Series();
+        // need to get all months out and put in array, then get a corresponding array for spending amounts
+        
+        for (Transaction t : filteredTransactions) {
+            cal.setTime(t.getDate());
+            series.getData().add(new XYChart.Data(new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH) - 1], t.getAmount()));
+        }
     }
 
     /**
