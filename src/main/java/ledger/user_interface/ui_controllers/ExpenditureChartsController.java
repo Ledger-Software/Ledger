@@ -8,12 +8,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import ledger.controller.DbController;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.database.entity.Transaction;
 
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Controls how the charts render with user given information.
@@ -35,6 +40,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private Button filterEnterButton;
 
+    private List<Transaction> allTransactions;
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     ExpenditureChartsController() {
@@ -83,16 +89,20 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 }
                 createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
             }
-
         });
-
     }
 
     /**
      * Retrieves transactions from the database and sets field for use
      */
     private void getTransactions() {
-
+        TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
+        task.RegisterFailureEvent((e) -> {
+            setupErrorPopup("Error retrieving transactions.", new Exception());
+        });
+        task.startTask();
+        List<Transaction> allTransactions = task.waitForResult();
+        this.allTransactions = allTransactions;
     }
 
     /**
