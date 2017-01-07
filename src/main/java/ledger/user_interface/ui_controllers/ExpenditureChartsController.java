@@ -2,11 +2,13 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -64,21 +66,21 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             Account accountSelected = accountFilterDropdown.getSelectedAccount();
             LocalDate fromDateSelected = fromDateFilter.getValue();
             LocalDate toDateSelected = toDateFilter.getValue();
-            if (accountSelected.equals(null) && fromDateSelected.equals(null) && toDateSelected.equals(null)) {
-                this.setupErrorPopup("You must either select an Account or a date range to continue!", new Exception());
+            if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
+                this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
                 return;
             }
-            if (!accountSelected.equals(null) && (fromDateSelected.equals(null) || toDateSelected.equals(null))) {
+            if (!(accountSelected == null) && ((fromDateSelected == null) || (toDateSelected == null))) {
                 createBasedOnAccount(accountSelected);
             }
-            if (accountSelected.equals(null) && !(fromDateSelected.equals(null) && toDateSelected.equals(null))) {
+            if ((accountSelected == null) && !((fromDateSelected == null) && (toDateSelected == null))) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
                 createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
-            if (!(accountSelected.equals(null) && fromDateSelected.equals(null) && toDateSelected.equals(null))) {
+            if (!((accountSelected == null) && (fromDateSelected == null) && (toDateSelected == null))) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
@@ -108,7 +110,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         Date today = cal.getTime();
         cal.add(Calendar.MONTH, -6);
         Date sixMonthsAgo = cal.getTime();
-        ArrayList<Transaction> filteredTransactions = new ArrayList<>();
+        List<Transaction> filteredTransactions = new ArrayList<>();
         for (Transaction t : this.allTransactions) {
             if ((t.getDate().before(today) || t.getDate().equals(today))
                     && (t.getDate().after(sixMonthsAgo) || t.getDate().equals(sixMonthsAgo))) {
@@ -120,14 +122,27 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         xAxis.setLabel("Month");
         yAxis.setLabel("Amount Spent");
         this.expendituresLineChart = new LineChart<>(xAxis, yAxis);
+        this.expendituresLineChart.getXAxis().setAutoRanging(true);
+        this.expendituresLineChart.getYAxis().setAutoRanging(true);
 
-        XYChart.Series series = new XYChart.Series();
-        // need to get all months out and put in array, then get a corresponding array for spending amounts
-        
+        Map<String, Integer> monthToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             cal.setTime(t.getDate());
-            series.getData().add(new XYChart.Data(new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH) - 1], t.getAmount()));
+            String month = new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH)];
+            if (!monthToAmountSpent.keySet().contains(month)) {
+                monthToAmountSpent.put(month, new Integer(t.getAmount()));
+            } else {
+                Integer existingAmount = monthToAmountSpent.get(month);
+                Integer newAmount = existingAmount + new Integer(t.getAmount());
+                monthToAmountSpent.put(month, newAmount);
+            }
         }
+
+        XYChart.Series series = new XYChart.Series();
+        for (String key : monthToAmountSpent.keySet()) {
+            series.getData().add(new XYChart.Data(key, monthToAmountSpent.get(key) / 100));
+        }
+        this.expendituresLineChart.getData().add(series);
     }
 
     /**
