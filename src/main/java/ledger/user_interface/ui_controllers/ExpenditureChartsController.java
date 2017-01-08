@@ -1,6 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -19,6 +20,7 @@ import ledger.database.entity.Transaction;
 import java.net.URL;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -33,7 +35,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private DatePicker toDateFilter;
     @FXML
-    private StackedBarChart expenditureBarChart;
+    private PieChart expendituresPieChart;
     @FXML
     private Label displayLabel;
     @FXML
@@ -139,6 +141,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             series.getData().add(new XYChart.Data(key, monthToAmountSpent.get(key) / 100));
         }
         this.expendituresLineChart.getData().add(series);
+        // TODO get to show up
     }
 
     /**
@@ -153,32 +156,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 filteredTransactions.add(t);
             }
         }
-        Map<Tag, Integer> tagToAmountSpent = new HashMap<>();
-        for (Transaction t : filteredTransactions) {
-            for (Tag tag : t.getTagList()) {
-                addToMap(tagToAmountSpent, tag, t.getAmount());
-            }
-        }
-        // now need to make the bars according to all different tags
-        CategoryAxis xAxis = new CategoryAxis();
-        List<String> tagList = new ArrayList<>();
-        for (Tag t : tagToAmountSpent.keySet()) {
-            tagList.add(t.getName());
-        }
-        xAxis.setCategories(FXCollections.observableArrayList(tagList));
-        xAxis.setLabel("Tags");
-        NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Expenditures (in dollars)");
 
-        this.expenditureBarChart = new StackedBarChart(xAxis, yAxis);
-
-        XYChart.Series series = new XYChart.Series();
-        for (Tag key : tagToAmountSpent.keySet()) {
-            series.getData().add(new XYChart.Data(key.getName(), tagToAmountSpent.get(key) / 100));
-        }
-        series.setName(account.getName());
-
-        this.expenditureBarChart.getData().add(series);
+        populateTagMapAndCreatePieChart(filteredTransactions);
     }
 
     /**
@@ -188,7 +167,18 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param toDate ending date to filter transactions by
      */
     private void createBasedOnDateRange(LocalDate fromDate, LocalDate toDate) {
+        Date from = Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date to = Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+        List<Transaction> filteredTransactions = new ArrayList<>();
+        for (Transaction t : this.allTransactions) {
+            if ((t.getDate().before(to) || t.getDate().equals(to))
+                    && (t.getDate().after(from) || t.getDate().equals(from))) {
+                filteredTransactions.add(t);
+            }
+        }
+
+        populateTagMapAndCreatePieChart(filteredTransactions);
     }
 
     /**
@@ -199,9 +189,47 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param toDate ending date to filter transactions by
      */
     private void createBasedOnAccountAndDateRange(Account account, LocalDate fromDate, LocalDate toDate) {
+        List<Transaction> filteredByAccountTransactions = new ArrayList<>();
+        for (Transaction t : this.allTransactions) {
+            if (t.getAccount().equals(account)) {
+                filteredByAccountTransactions.add(t);
+            }
+        }
 
+        Date from = Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date to = Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<Transaction> filteredTransactions = new ArrayList<>();
+        for (Transaction t : filteredByAccountTransactions) {
+            if ((t.getDate().before(to) || t.getDate().equals(to))
+                    && (t.getDate().after(from) || t.getDate().equals(from))) {
+                filteredTransactions.add(t);
+            }
+        }
+
+        populateTagMapAndCreatePieChart(filteredTransactions);
     }
 
+    /**
+     * Creates a map of tag to amount spent on that tag, and then uses the map to create a Pie chart
+     *
+     * @param filteredTransactions transactions fitting the criteria of the filter
+     */
+    private void populateTagMapAndCreatePieChart(List<Transaction> filteredTransactions) {
+        Map<Tag, Integer> tagToAmountSpent = new HashMap<>();
+        for (Transaction t : filteredTransactions) {
+            for (Tag tag : t.getTagList()) {
+                addToMap(tagToAmountSpent, tag, t.getAmount());
+            }
+        }
+
+        List<PieChart.Data> dataList = new ArrayList<>();
+        for (Tag t : tagToAmountSpent.keySet()) {
+            dataList.add(new PieChart.Data(t.getName(), tagToAmountSpent.get(t) / 100));
+        }
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
+        this.expendituresPieChart = new PieChart(pieChartData);
+        //TODO get pie chart to actually show up
+    }
 
     /**
      * Used to fill map with filtered data to show on expenditure charts
