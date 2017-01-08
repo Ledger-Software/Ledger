@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ledger.controller.ImportController;
@@ -53,6 +54,9 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        fileSelector.addFileExtensionFilter(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
+        fileSelector.addFileExtensionFilter(new ExtensionFilter("QFX files (*.qfx)", "*.qfx"));
+        fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
         importButton.setOnAction(this::importFile);
         // TODO Hook up insert
     }
