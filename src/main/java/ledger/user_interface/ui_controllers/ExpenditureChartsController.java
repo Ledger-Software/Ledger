@@ -4,13 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -161,7 +159,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * Takes care of ordering the months chronologically and also handles the switch
      * from December to January in a new year
      *
-     * @param monthToYear HashMap that keeps references from each month to their respective year
+     * @param monthToYear      HashMap that keeps references from each month to their respective year
      * @param preorderedMonths Unordered list of months
      */
     private void orderMonthsAndYears(Map<String, Integer> monthToYear, List<String> preorderedMonths) {
