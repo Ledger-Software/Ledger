@@ -6,13 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Account;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -146,9 +150,27 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      */
     private void deleteAccount() {
         if (chooseAccount.getSelectedAccount() == null) {
-            setupErrorPopup("Please select an account to delete", new Exception());
+            setupErrorPopup("Cannot delete the All Accounts aggregation", new Exception());
             return;
         }
-        DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount()).startTask();
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Account Delete");
+        alert.setHeaderText(null);
+        alert.setContentText("Deleting " + chooseAccount.getSelectedAccount().getName() + " will delete all Transactions" +
+                " associated with the account. Do you wish to proceed?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            // ... user chose OK
+            TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
+            t.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> chooseAccount.selectDefault()));
+            t.RegisterFailureEvent((e) -> {
+                e.printStackTrace();
+            });
+            t.startTask();
+        } else {
+           return;
+        }
     }
 }

@@ -16,7 +16,7 @@ public class TagToTransTable {
                         "(%s INT NOT NULL, " +
                         "%s INT NOT NULL, " +
                         "FOREIGN KEY(%s) REFERENCES %s(%s), " +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s)" +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE" +
                         ")", TABLE_NAME, TTTS_TAG_ID, TTTS_TRANS_ID,
                 TTTS_TAG_ID, TagTable.TABLE_NAME, TagTable.TAG_ID,
                 TTTS_TRANS_ID, TransactionTable.TABLE_NAME, TransactionTable.TRANS_ID

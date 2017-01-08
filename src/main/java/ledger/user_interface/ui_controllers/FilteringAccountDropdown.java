@@ -52,4 +52,8 @@ public class FilteringAccountDropdown extends AccountDropdown {
         }
         return this.getValue();
     }
+
+    public void selectDefault() {
+        this.setValue(allAccounts);
+    }
 }
