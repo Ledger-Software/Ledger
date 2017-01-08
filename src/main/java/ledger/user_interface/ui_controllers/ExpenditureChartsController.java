@@ -52,6 +52,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
         getTransactions();
         setupExpenditureHistoryChart();
+        setupInitialPieChart();
     }
 
     /**
@@ -195,6 +196,13 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         // takes the months in the next year out of the beginning of the list and tacks them on the end
         preorderedMonths.removeAll(monthsInNextYear);
         preorderedMonths.addAll(monthsInNextYear);
+    }
+
+    /**
+     * Sets up PieChart seen on initialization of expenditures screen. Data is loaded from all accounts.
+     */
+    private void setupInitialPieChart() {
+        createPieChart(this.allTransactions);
     }
 
     /**
