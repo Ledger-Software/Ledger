@@ -12,6 +12,11 @@ import com.google.api.client.util.Key;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Checks the Github repo releases to see if there is a new version.
+ * The version it checks against is the one included in the manifest file.
+ * (will only work if running for a jar with a manifest version)
+ */
 public class GitHubChecker {
     static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
     static final JacksonFactory JACKSON_FACTORY = new JacksonFactory();

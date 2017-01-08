@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/7/2017.
+ * Asks user if he wants to download the given release. It then runs that release and closes the current one.
  */
 public class UpdateConfirmation extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/UpdateConfirmation.fxml";
