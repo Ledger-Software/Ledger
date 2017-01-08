@@ -87,12 +87,18 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Label text="Currently showing: " GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <Label fx:id="currentlyShowingLabel" prefHeight="55.0" prefWidth="404.0" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.rowSpan="2">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
+               <GridPane.margin>
+                  <Insets left="20.0" right="10.0" />
+               </GridPane.margin>
             </Label>
-            <Button fx:id="filterEnterButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+            <Button fx:id="filterEnterButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets bottom="15.0" left="70.0" />
+               </GridPane.margin></Button>
          </children>
          <padding>
             <Insets bottom="5.0" />
@@ -112,7 +118,7 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </LineChart>
-      <PieChart fx:id="expendituresPieChart" title="Filtered Expenditures" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+      <PieChart fx:id="expendituresPieChart" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
          <GridPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </GridPane.margin>

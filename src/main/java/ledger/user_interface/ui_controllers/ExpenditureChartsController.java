@@ -39,7 +39,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private PieChart expendituresPieChart;
     @FXML
-    private Label displayLabel;
+    private Label currentlyShowingLabel;
     @FXML
     private LineChart expendituresLineChart;
     @FXML
@@ -69,14 +69,15 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            Account accountSelected = accountFilterDropdown.getSelectedAccount();
-            LocalDate fromDateSelected = fromDateFilter.getValue();
-            LocalDate toDateSelected = toDateFilter.getValue();
+            Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
+            LocalDate fromDateSelected = this.fromDateFilter.getValue();
+            LocalDate toDateSelected = this.toDateFilter.getValue();
             if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
                 this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
                 return;
             }
             if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
+                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName());
                 createBasedOnAccount(accountSelected);
             }
             if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -84,6 +85,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
+                this.currentlyShowingLabel.setText("Currently showing expenditures for the above date range.");
                 createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
             if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -91,6 +93,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
+                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName() + " within the above date range.");
                 createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
             }
         });
@@ -142,16 +145,16 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             preorderedMonths.add(m);
         }
         preorderedMonths.sort((String o1, String o2) -> {
-                SimpleDateFormat s = new SimpleDateFormat("MMM");
-                Date s1 = null;
-                Date s2 = null;
-                try {
-                    s1 = s.parse(o1);
-                    s2 = s.parse(o2);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return s1.compareTo(s2);
+            SimpleDateFormat s = new SimpleDateFormat("MMM");
+            Date s1 = null;
+            Date s2 = null;
+            try {
+                s1 = s.parse(o1);
+                s2 = s.parse(o2);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return s1.compareTo(s2);
         });
 
         XYChart.Series series = new XYChart.Series();
@@ -247,6 +250,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
+        this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
     }
 
