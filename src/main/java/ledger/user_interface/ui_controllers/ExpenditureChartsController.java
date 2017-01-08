@@ -23,6 +23,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
+import static java.awt.Color.red;
+
 /**
  * Controls how the charts render with user given information.
  */
@@ -285,6 +287,12 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
+        int i = 0;
+        List<String> pieColors = Arrays.asList("red", "orange", "yellow", "green", "blue", "purple", "pink");
+        for (PieChart.Data data : dataList) {
+            data.getNode().setStyle("-fx-pie-color: " + pieColors.get(i % pieColors.size()) + ";");
+            i++;
+        }
     }
 
     /**
