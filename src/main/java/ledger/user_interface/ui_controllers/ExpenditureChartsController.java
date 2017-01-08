@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 
 import java.net.URL;
@@ -70,17 +72,17 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
                 return;
             }
-            if (!(accountSelected == null) && ((fromDateSelected == null) || (toDateSelected == null))) {
+            if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
                 createBasedOnAccount(accountSelected);
             }
-            if ((accountSelected == null) && !((fromDateSelected == null) && (toDateSelected == null))) {
+            if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
                 createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
-            if (!((accountSelected == null) && (fromDateSelected == null) && (toDateSelected == null))) {
+            if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
@@ -129,13 +131,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         for (Transaction t : filteredTransactions) {
             cal.setTime(t.getDate());
             String month = new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH)];
-            if (!monthToAmountSpent.keySet().contains(month)) {
-                monthToAmountSpent.put(month, new Integer(t.getAmount()));
-            } else {
-                Integer existingAmount = monthToAmountSpent.get(month);
-                Integer newAmount = existingAmount + new Integer(t.getAmount());
-                monthToAmountSpent.put(month, newAmount);
-            }
+            addToMap(monthToAmountSpent, month, t.getAmount());
         }
 
         XYChart.Series series = new XYChart.Series();
@@ -151,7 +147,38 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param account the account to filter the transactions by
      */
     private void createBasedOnAccount(Account account) {
+        List<Transaction> filteredTransactions = new ArrayList<>();
+        for (Transaction t : this.allTransactions) {
+            if (t.getAccount().equals(account)) {
+                filteredTransactions.add(t);
+            }
+        }
+        Map<Tag, Integer> tagToAmountSpent = new HashMap<>();
+        for (Transaction t : filteredTransactions) {
+            for (Tag tag : t.getTagList()) {
+                addToMap(tagToAmountSpent, tag, t.getAmount());
+            }
+        }
+        // now need to make the bars according to all different tags
+        CategoryAxis xAxis = new CategoryAxis();
+        List<String> tagList = new ArrayList<>();
+        for (Tag t : tagToAmountSpent.keySet()) {
+            tagList.add(t.getName());
+        }
+        xAxis.setCategories(FXCollections.observableArrayList(tagList));
+        xAxis.setLabel("Tags");
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Expenditures (in dollars)");
 
+        this.expenditureBarChart = new StackedBarChart(xAxis, yAxis);
+
+        XYChart.Series series = new XYChart.Series();
+        for (Tag key : tagToAmountSpent.keySet()) {
+            series.getData().add(new XYChart.Data(key.getName(), tagToAmountSpent.get(key) / 100));
+        }
+        series.setName(account.getName());
+
+        this.expenditureBarChart.getData().add(series);
     }
 
     /**
@@ -173,5 +200,23 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void createBasedOnAccountAndDateRange(Account account, LocalDate fromDate, LocalDate toDate) {
 
+    }
+
+
+    /**
+     * Used to fill map with filtered data to show on expenditure charts
+     *
+     * @param map map in which the data is organized
+     * @param key map key to check value
+     * @param value value to add to existing value or empty map
+     */
+    private void addToMap(Map map, Object key, Object value) {
+        if (!map.keySet().contains(key)) {
+            map.put(key, value);
+        } else {
+            Integer existingAmount = (Integer) map.get(key);
+            Integer newAmount = existingAmount + (Integer) value;
+            map.put(key, newAmount);
+        }
     }
 }
