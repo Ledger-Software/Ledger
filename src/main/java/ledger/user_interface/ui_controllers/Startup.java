@@ -41,7 +41,7 @@ public class Startup extends Application {
         this.stage = primaryStage;
 
         GitHubChecker checker = new GitHubChecker();
-        if(checker.isUpdateAvaliable()) {
+        if (checker.isUpdateAvaliable()) {
             UpdateConfirmation uc = new UpdateConfirmation(checker.getNewerRelease());
             Scene scene = new Scene(uc);
             Stage newStage = new Stage();
@@ -57,7 +57,8 @@ public class Startup extends Application {
     private void shutdown() {
         try {
             DbController.INSTANCE.shutdown();
-        } catch (StorageException e) { }
+        } catch (StorageException e) {
+        }
 
         Platform.exit();
     }
