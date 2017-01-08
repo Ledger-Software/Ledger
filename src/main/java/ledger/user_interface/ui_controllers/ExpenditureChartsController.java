@@ -19,6 +19,8 @@ import ledger.database.entity.Transaction;
 
 import java.net.URL;
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -121,11 +123,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 filteredTransactions.add(t);
             }
         }
-        final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        xAxis.setLabel("Month");
-        yAxis.setLabel("Amount Spent");
-        this.expendituresLineChart = new LineChart<>(xAxis, yAxis);
+
+        this.expendituresLineChart.getXAxis().setLabel("Month");
+        this.expendituresLineChart.getYAxis().setLabel("Net Expenditure");
         this.expendituresLineChart.getXAxis().setAutoRanging(true);
         this.expendituresLineChart.getYAxis().setAutoRanging(true);
 
@@ -136,12 +136,35 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             addToMap(monthToAmountSpent, month, t.getAmount());
         }
 
-        XYChart.Series series = new XYChart.Series();
-        for (String key : monthToAmountSpent.keySet()) {
-            series.getData().add(new XYChart.Data(key, monthToAmountSpent.get(key) / 100));
+        Set<String> months = monthToAmountSpent.keySet();
+        List<String> preorderedMonths = new ArrayList<>();
+        for (String m : months) {
+            preorderedMonths.add(m);
         }
+        final Comparator<String> monthCompare = new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                SimpleDateFormat s = new SimpleDateFormat("MMM");
+                Date s1 = null;
+                Date s2 = null;
+                try {
+                    s1 = s.parse(o1);
+                    s2 = s.parse(o2);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return s1.compareTo(s2);
+            }
+        };
+        Collections.sort(preorderedMonths, monthCompare);
+
+        XYChart.Series series = new XYChart.Series();
+        for (String m : preorderedMonths) {
+            series.getData().add(new XYChart.Data(m, monthToAmountSpent.get(m) / 100));
+        }
+        series.setName("Change in Account Balance");
         this.expendituresLineChart.getData().add(series);
-        // TODO get to show up
+        this.expendituresLineChart.setVisible(true);
     }
 
     /**
@@ -164,7 +187,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * Creates the stacked bar chart based on transactions in a specified date range
      *
      * @param fromDate starting date to filter transactions by
-     * @param toDate ending date to filter transactions by
+     * @param toDate   ending date to filter transactions by
      */
     private void createBasedOnDateRange(LocalDate fromDate, LocalDate toDate) {
         Date from = Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -184,9 +207,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     /**
      * Creates the stacked bar chart based the transactions that exist in a specified account within a given date range
      *
-     * @param account the account to filter the transactions by
+     * @param account  the account to filter the transactions by
      * @param fromDate starting date to filter transactions by
-     * @param toDate ending date to filter transactions by
+     * @param toDate   ending date to filter transactions by
      */
     private void createBasedOnAccountAndDateRange(Account account, LocalDate fromDate, LocalDate toDate) {
         List<Transaction> filteredByAccountTransactions = new ArrayList<>();
@@ -221,21 +244,22 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 addToMap(tagToAmountSpent, tag, t.getAmount());
             }
         }
-
         List<PieChart.Data> dataList = new ArrayList<>();
         for (Tag t : tagToAmountSpent.keySet()) {
-            dataList.add(new PieChart.Data(t.getName(), tagToAmountSpent.get(t) / 100));
+            // use absolute value here so it's not negative
+            dataList.add(new PieChart.Data(t.getName(), Math.abs(tagToAmountSpent.get(t)) / 100));
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
-        this.expendituresPieChart = new PieChart(pieChartData);
+        this.expendituresPieChart.setData(pieChartData);
         //TODO get pie chart to actually show up
     }
 
     /**
      * Used to fill map with filtered data to show on expenditure charts
+     * Only adds up amount spent on items - doesn't consider deposits
      *
-     * @param map map in which the data is organized
-     * @param key map key to check value
+     * @param map   map in which the data is organized
+     * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
     private void addToMap(Map map, Object key, Object value) {
@@ -243,7 +267,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             map.put(key, value);
         } else {
             Integer existingAmount = (Integer) map.get(key);
-            Integer newAmount = existingAmount + (Integer) value;
+            Integer newAmount = existingAmount;
+            if ((Integer) value < 0) {
+                newAmount += (Integer) value;
+            }
             map.put(key, newAmount);
         }
     }
