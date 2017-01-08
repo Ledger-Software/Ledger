@@ -139,13 +139,32 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             String month = new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH)];
             Integer year = cal.get(Calendar.YEAR);
             monthToYear.put(month, year);
-            addToMap(monthToAmountSpent, month, t.getAmount());
+            addToMapForLineChart(monthToAmountSpent, month, t.getAmount());
         }
 
         Set<String> months = monthToAmountSpent.keySet();
         List<String> preorderedMonths = new ArrayList<>();
         preorderedMonths.addAll(months);
 
+        orderMonthsAndYears(monthToYear, preorderedMonths);
+
+        XYChart.Series series = new XYChart.Series();
+        for (String m : preorderedMonths) {
+            series.getData().add(new XYChart.Data(m, monthToAmountSpent.get(m) / 100));
+        }
+        series.setName("Change in Account Balance");
+        this.expendituresLineChart.getData().add(series);
+        this.expendituresLineChart.setVisible(true);
+    }
+
+    /**
+     * Takes care of ordering the months chronologically and also handles the switch
+     * from December to January in a new year
+     *
+     * @param monthToYear HashMap that keeps references from each month to their respective year
+     * @param preorderedMonths Unordered list of months
+     */
+    private void orderMonthsAndYears(Map<String, Integer> monthToYear, List<String> preorderedMonths) {
         preorderedMonths.sort((String o1, String o2) -> {
             SimpleDateFormat s = new SimpleDateFormat("MMM");
             Date s1 = null;
@@ -158,6 +177,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
             return s1.compareTo(s2);
         });
+        // takes care of transitioning into a new year
         List<String> monthsInNextYear = new ArrayList<>();
         Integer lowestYear = 0;
         for (int j = 0; j < preorderedMonths.size(); j++) {
@@ -175,15 +195,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         // takes the months in the next year out of the beginning of the list and tacks them on the end
         preorderedMonths.removeAll(monthsInNextYear);
         preorderedMonths.addAll(monthsInNextYear);
-
-
-        XYChart.Series series = new XYChart.Series();
-        for (String m : preorderedMonths) {
-            series.getData().add(new XYChart.Data(m, monthToAmountSpent.get(m) / 100));
-        }
-        series.setName("Change in Account Balance");
-        this.expendituresLineChart.getData().add(series);
-        this.expendituresLineChart.setVisible(true);
     }
 
     /**
@@ -260,7 +271,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             for (Tag tag : t.getTagList()) {
-                addToMap(tagNameToAmountSpent, tag.getName(), t.getAmount());
+                addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
             }
         }
         List<PieChart.Data> dataList = new ArrayList<>();
@@ -275,22 +286,46 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     }
 
     /**
-     * Used to fill map with filtered data to show on expenditure charts
-     * Only adds up amount spent on items - doesn't consider deposits
+     * Used to determine what filtered data should show on expenditure pie chart
+     * Only adds up amount spent (minus dollars) on items - doesn't consider deposits
      *
      * @param map   map in which the data is organized
      * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
-    private void addToMap(Map map, String key, Integer value) {
+    private void addToMapForPieChart(Map map, String key, Integer value) {
+        if (!key.equals("") && value <= 0) {
+            populateMap(map, key, value);
+        }
+    }
+
+    /**
+     * Used to determine what filtered data should show on expenditure line chart
+     * Adds up amount spent and considers deposits for a net account balance change
+     *
+     * @param map   map in which the data is organized
+     * @param key   map key to check value
+     * @param value value to add to existing value or empty map
+     */
+    private void addToMapForLineChart(Map map, String key, Integer value) {
+        populateMap(map, key, value);
+    }
+
+    /**
+     * Populates the map passed in with given key and value
+     *
+     * @param map   map in which the data is organized
+     * @param key   map key to check value
+     * @param value value to add to existing value or empty map
+     */
+    private void populateMap(Map map, String key, Integer value) {
         if (!map.keySet().contains(key)) {
             map.put(key, value);
         } else {
             Integer existingAmount = (Integer) map.get(key);
             Integer newAmount = existingAmount;
-            if (value < 0) {
-                newAmount += value;
-            }
+            newAmount += value;
+
             map.put(key, newAmount);
         }
     }
