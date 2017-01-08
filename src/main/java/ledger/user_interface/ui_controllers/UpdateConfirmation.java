@@ -4,15 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ledger.updater.GitHubChecker;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -35,6 +33,8 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
     public Button cancelButton;
     @FXML
     public Button updateButton;
+    @FXML
+    public ProgressBar progressBar;
 
     public UpdateConfirmation(GitHubChecker.Release release) {
         this.release = release;
@@ -51,30 +51,45 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
     }
 
     private void downloadUpdate(ActionEvent actionEvent) {
-        try {
-            URL website = new URL(release.getDownloadURL());
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+        updateButton.setDisable(true);
 
-            File jar = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-            String jarFolder = jar.getParent();
-            String newJar = jarFolder + File.separator + release.getDownloadName();
+        new Thread(() -> {
+            try {
+                URL website = new URL(release.getDownloadURL());
+                InputStream in = website.openStream();
 
-            FileOutputStream fos = new FileOutputStream(newJar);
-            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            fos.close();
+                File jar = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+                String jarFolder = jar.getParent();
+                String newJar = jarFolder + File.separator + release.getDownloadName();
 
-            new ProcessBuilder(
-                    "java", "-jar", newJar).start();
+                byte[] buffer = new byte[65536];
+                FileOutputStream fos = new FileOutputStream(newJar);
 
-            System.exit(0);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+                int count;
+                long total = 0;
+                long finalSize = release.getDownloadAsset().size;
+                while((count = in.read(buffer, 0, buffer.length)) != -1) {
+                    total += count;
+                    double percent = total/(double)finalSize;
+                    progressBar.setProgress(percent);
+                    fos.write(buffer,0,count);
+                }
+                in.close();
+                fos.close();
+
+                new ProcessBuilder(
+                        "java", "-jar", newJar).start();
+
+                System.exit(0);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

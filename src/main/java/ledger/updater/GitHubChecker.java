@@ -28,13 +28,18 @@ public class GitHubChecker {
         @Key
         public String name;
 
-        public String getDownloadURL() {
+        public Asset getDownloadAsset() {
             for(Asset a: assets) {
                 if(a.name.endsWith(".jar")) {
-                    return a.browser_download_url;
+                    return a;
                 }
             }
             return null;
+        }
+
+        public String getDownloadURL() {
+            Asset asset = getDownloadAsset();
+            return asset == null ? null : asset.browser_download_url;
         }
 
         public String getName() {
@@ -46,12 +51,8 @@ public class GitHubChecker {
         }
 
         public String getDownloadName() {
-            for(Asset a: assets) {
-                if(a.name.endsWith(".jar")) {
-                    return a.name;
-                }
-            }
-            return null;
+            Asset asset = getDownloadAsset();
+            return asset == null ? null : asset.name;
         }
     }
 
@@ -60,6 +61,8 @@ public class GitHubChecker {
         public String browser_download_url;
         @Key
         public String name;
+        @Key
+        public long size;
     }
 
     public boolean isUpdateAvaliable() {
