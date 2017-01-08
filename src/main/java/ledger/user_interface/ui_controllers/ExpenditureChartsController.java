@@ -277,6 +277,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             // use absolute value here so it's not negative
             dataList.add(new PieChart.Data(tag, Math.abs(tagNameToAmountSpent.get(tag)) / 100));
         }
+        if (dataList.isEmpty()) {
+            this.setupErrorPopup("There's no data to be displayed!", new Exception());
+            return;
+        }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
