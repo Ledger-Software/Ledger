@@ -157,7 +157,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         }
 
-        populateTagMapAndCreatePieChart(filteredTransactions);
+        createPieChart(filteredTransactions);
     }
 
     /**
@@ -178,7 +178,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         }
 
-        populateTagMapAndCreatePieChart(filteredTransactions);
+        createPieChart(filteredTransactions);
     }
 
     /**
@@ -206,7 +206,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         }
 
-        populateTagMapAndCreatePieChart(filteredTransactions);
+        createPieChart(filteredTransactions);
     }
 
     /**
@@ -214,7 +214,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      *
      * @param filteredTransactions transactions fitting the criteria of the filter
      */
-    private void populateTagMapAndCreatePieChart(List<Transaction> filteredTransactions) {
+    private void createPieChart(List<Transaction> filteredTransactions) {
         Map<Tag, Integer> tagToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             for (Tag tag : t.getTagList()) {
