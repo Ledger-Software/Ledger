@@ -1,5 +1,5 @@
 group 'ledgersoft'
-version '0.0.1'
+version '0.3.0'
 
 apply plugin: 'java'
 
@@ -8,6 +8,7 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
+
 task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
@@ -16,19 +17,21 @@ task fatJar(type: Jar) {
     manifest {
         attributes 'Implementation-Version': version,
                 'Main-Class': 'ledger.user_interface.ui_controllers.Startup'
+//                'Main-Class': 'ledger.updater.GitHubChecker'
     }
     baseName = 'Ledger'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
+
 task myJavadocs(type: Javadoc) {
     source = sourceSets.main.allJava
 }
+
 task prod(dependsOn: [clean, build, test, fatJar, myJavadocs]) {
     build.mustRunAfter clean
     fatJar.mustRunAfter test
     myJavadocs.mustRunAfter test
-
 }
 
 dependencies {
@@ -36,8 +39,14 @@ dependencies {
     testCompile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     testCompile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     testCompile group: 'com.h2database', name: 'h2', version: '1.4.192'
+    testCompile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
+    testCompile group: 'com.google.http-client', name: 'google-http-client-jackson', version: '1.22.0'
+//    testCompile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     compile group: 'com.h2database', name: 'h2', version: '1.4.192'
+    compile group: 'com.google.http-client', name: 'google-http-client', version: '1.22.0'
+    compile group: 'com.google.http-client', name: 'google-http-client-jackson', version: '1.22.0'
+//    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
 }
