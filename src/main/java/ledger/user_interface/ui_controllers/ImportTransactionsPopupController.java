@@ -54,9 +54,9 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("QFX files (*.qfx)", "*.qfx"));
-        fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
         importButton.setOnAction(this::importFile);
         // TODO Hook up insert
     }
