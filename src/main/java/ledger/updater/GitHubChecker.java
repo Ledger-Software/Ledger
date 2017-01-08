@@ -1,6 +1,9 @@
 package ledger.updater;
 
-import com.google.api.client.http.*;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson.JacksonFactory;
@@ -29,8 +32,8 @@ public class GitHubChecker {
         public String name;
 
         public Asset getDownloadAsset() {
-            for(Asset a: assets) {
-                if(a.name.endsWith(".jar")) {
+            for (Asset a : assets) {
+                if (a.name.endsWith(".jar")) {
                     return a;
                 }
             }
@@ -68,25 +71,25 @@ public class GitHubChecker {
     public boolean isUpdateAvaliable() {
         try {
             Release[] releases = getReleases();
-            if(hasNewerRelease(releases)) {
+            if (hasNewerRelease(releases)) {
                 return true;
             }
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
     private boolean hasNewerRelease(Release[] releases) {
-        if(releases.length < 1)
+        if (releases.length < 1)
             return false;
 
         String currentVersion = this.getClass().getPackage().getImplementationVersion();
-        if(currentVersion == null) {
+        if (currentVersion == null) {
             return false;
         }
 
-        if(isVersionGreater(releases[0].tag_name, currentVersion)) {
+        if (isVersionGreater(releases[0].tag_name, currentVersion)) {
             this.newerRelease = releases[0];
             return true;
         }
@@ -98,11 +101,11 @@ public class GitHubChecker {
         String[] tagSplit = tag_name.split("\\.");
         String[] currentSplit = currentVersion.split("\\.");
         try {
-            for(int i =0; i < tagSplit.length; i++) {
+            for (int i = 0; i < tagSplit.length; i++) {
                 int tagV = Integer.parseInt(tagSplit[i]);
                 int currentV = Integer.parseInt(currentSplit[i]);
 
-                if(tagV > currentV)
+                if (tagV > currentV)
                     return true;
             }
         } catch (NumberFormatException e) {

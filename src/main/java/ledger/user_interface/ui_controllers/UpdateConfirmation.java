@@ -14,8 +14,6 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ResourceBundle;
 
 /**
@@ -46,7 +44,7 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
         this.titleText.setText("Title: " + release.getName());
         this.versionText.setText("Version: " + release.getVersion());
 
-        cancelButton.setOnAction((ae) -> ((Stage)this.getScene().getWindow()).close());
+        cancelButton.setOnAction((ae) -> ((Stage) this.getScene().getWindow()).close());
         updateButton.setOnAction(this::downloadUpdate);
     }
 
@@ -68,11 +66,11 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
                 int count;
                 long total = 0;
                 long finalSize = release.getDownloadAsset().size;
-                while((count = in.read(buffer, 0, buffer.length)) != -1) {
+                while ((count = in.read(buffer, 0, buffer.length)) != -1) {
                     total += count;
-                    double percent = total/(double)finalSize;
+                    double percent = total / (double) finalSize;
                     progressBar.setProgress(percent);
-                    fos.write(buffer,0,count);
+                    fos.write(buffer, 0, count);
                 }
                 in.close();
                 fos.close();
