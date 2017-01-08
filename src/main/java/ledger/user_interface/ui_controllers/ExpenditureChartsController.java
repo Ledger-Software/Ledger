@@ -133,17 +133,19 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getYAxis().setAutoRanging(true);
 
         Map<String, Integer> monthToAmountSpent = new HashMap<>();
+        Map<String, Integer> monthToYear = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             cal.setTime(t.getDate());
             String month = new DateFormatSymbols().getMonths()[cal.get(Calendar.MONTH)];
+            Integer year = cal.get(Calendar.YEAR);
+            monthToYear.put(month, year);
             addToMap(monthToAmountSpent, month, t.getAmount());
         }
 
         Set<String> months = monthToAmountSpent.keySet();
         List<String> preorderedMonths = new ArrayList<>();
-        for (String m : months) {
-            preorderedMonths.add(m);
-        }
+        preorderedMonths.addAll(months);
+
         preorderedMonths.sort((String o1, String o2) -> {
             SimpleDateFormat s = new SimpleDateFormat("MMM");
             Date s1 = null;
@@ -156,6 +158,24 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
             return s1.compareTo(s2);
         });
+        List<String> monthsInNextYear = new ArrayList<>();
+        Integer lowestYear = 0;
+        for (int j = 0; j < preorderedMonths.size(); j++) {
+            if (j == 0) {
+                lowestYear = monthToYear.get(preorderedMonths.get(j));
+            } else if (monthToYear.get(preorderedMonths.get(j)) < lowestYear) {
+                lowestYear = monthToYear.get(preorderedMonths.get(j));
+            }
+        }
+        for (int i = 0; i < preorderedMonths.size(); i++) {
+            if (monthToYear.get(preorderedMonths.get(i)) > lowestYear) {
+                monthsInNextYear.add(preorderedMonths.get(i));
+            }
+        }
+        // takes the months in the next year out of the beginning of the list and tacks them on the end
+        preorderedMonths.removeAll(monthsInNextYear);
+        preorderedMonths.addAll(monthsInNextYear);
+
 
         XYChart.Series series = new XYChart.Series();
         for (String m : preorderedMonths) {
