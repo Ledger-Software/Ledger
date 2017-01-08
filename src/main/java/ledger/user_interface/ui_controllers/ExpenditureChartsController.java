@@ -234,20 +234,20 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param filteredTransactions transactions fitting the criteria of the filter
      */
     private void createPieChart(List<Transaction> filteredTransactions) {
-        Map<Tag, Integer> tagToAmountSpent = new HashMap<>();
+        Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             for (Tag tag : t.getTagList()) {
-                addToMap(tagToAmountSpent, tag, t.getAmount());
+                addToMap(tagNameToAmountSpent, tag.getName(), t.getAmount());
             }
         }
         List<PieChart.Data> dataList = new ArrayList<>();
-        for (Tag t : tagToAmountSpent.keySet()) {
+        for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
-            dataList.add(new PieChart.Data(t.getName(), Math.abs(tagToAmountSpent.get(t)) / 100));
+            dataList.add(new PieChart.Data(tag, Math.abs(tagNameToAmountSpent.get(tag)) / 100));
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
-        //TODO get pie chart to actually show up
+        this.expendituresPieChart.setVisible(true);
     }
 
     /**
@@ -258,14 +258,14 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
-    private void addToMap(Map map, Object key, Object value) {
+    private void addToMap(Map map, String key, Integer value) {
         if (!map.keySet().contains(key)) {
             map.put(key, value);
         } else {
             Integer existingAmount = (Integer) map.get(key);
             Integer newAmount = existingAmount;
-            if ((Integer) value < 0) {
-                newAmount += (Integer) value;
+            if (value < 0) {
+                newAmount += value;
             }
             map.put(key, newAmount);
         }
