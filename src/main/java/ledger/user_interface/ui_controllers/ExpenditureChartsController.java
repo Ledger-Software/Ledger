@@ -141,9 +141,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         for (String m : months) {
             preorderedMonths.add(m);
         }
-        final Comparator<String> monthCompare = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
+        preorderedMonths.sort((String o1, String o2) -> {
                 SimpleDateFormat s = new SimpleDateFormat("MMM");
                 Date s1 = null;
                 Date s2 = null;
@@ -154,9 +152,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     e.printStackTrace();
                 }
                 return s1.compareTo(s2);
-            }
-        };
-        Collections.sort(preorderedMonths, monthCompare);
+        });
 
         XYChart.Series series = new XYChart.Series();
         for (String m : preorderedMonths) {
