@@ -28,7 +28,7 @@ public class NoteTable {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                 "%s TEXT NOT NULL, " +
-                "FOREIGN KEY(%s) REFERENCES %s(%s)" +
+                "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE" +
                 ")", TABLE_NAME, NOTE_TRANS_ID, NOTE_TEXT, NOTE_TRANS_ID, TransactionTable.TABLE_NAME, TransactionTable.TRANS_ID);
     }
 }

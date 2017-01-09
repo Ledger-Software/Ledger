@@ -12,7 +12,7 @@ public class TransactionTable {
     public static final String TRANS_TYPE_ID = "TRANS_TYPE_ID";
 
     /**
-     * Creates the String command to create the table for this object.
+     * Creates the String command to create the SQLite table for this object.
      *
      * @return String for creating the SQLite Table corresponding to this object
      */
@@ -37,7 +37,7 @@ public class TransactionTable {
     }
 
     /**
-     * Creates the String command to create the table for this object.
+     * Creates the String command to create the HT table for this object.
      *
      * @return String for creating the H2 Table corresponding to this object
      */
@@ -50,7 +50,7 @@ public class TransactionTable {
                         "%s INT NOT NULL, " +
                         "%s INT NOT NULL, " +
                         "%s INT NOT NULL, " +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s), " +
+                        "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE, " +
                         "FOREIGN KEY(%s) REFERENCES %s(%s)," +
                         "FOREIGN KEY(%s) REFERENCES %s(%s)" +
                         ")", TABLE_NAME,
