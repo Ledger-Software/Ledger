@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -300,7 +301,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
         int i = 0;
-        List<String> pieColors = Arrays.asList("red", "orange", "yellow", "green", "blue", "purple", "pink");
+        List<String> pieColors = Arrays.asList("red", "orange", "green", "blue", "purple", "pink", "yellow");
         for (PieChart.Data data : dataList) {
             data.getNode().setStyle("-fx-pie-color: " + pieColors.get(i % pieColors.size()) + ";");
             i++;

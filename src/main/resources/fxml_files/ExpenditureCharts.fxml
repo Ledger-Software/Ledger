@@ -118,7 +118,7 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </LineChart>
-      <PieChart fx:id="expendituresPieChart" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+      <PieChart fx:id="expendituresPieChart" animated="false" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
          <GridPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </GridPane.margin>
