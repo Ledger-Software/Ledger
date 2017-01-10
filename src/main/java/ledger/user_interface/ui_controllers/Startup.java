@@ -3,10 +3,12 @@ package ledger.user_interface.ui_controllers;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
+import ledger.updater.GitHubChecker;
 
 /**
  * Handles any tasks relevant for init of the Program.
@@ -38,6 +40,17 @@ public class Startup extends Application {
         primaryStage.setOnCloseRequest(e -> shutdown());
         this.stage = primaryStage;
 
+        GitHubChecker checker = new GitHubChecker();
+        if (checker.isUpdateAvaliable()) {
+            UpdateConfirmation uc = new UpdateConfirmation(checker.getNewerRelease());
+            Scene scene = new Scene(uc);
+            Stage newStage = new Stage();
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.setTitle("Update");
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.showAndWait();
+        }
         createLoginPage();
     }
 
