@@ -7,6 +7,7 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -274,6 +275,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 }
             }
         });
+
+        this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     public void updateTransactionTableView() {
@@ -343,17 +346,20 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     private void handleDeleteTransactionFromTableView() {
         int selectedIndex = this.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            TransactionModel model = (TransactionModel) this.getItems().get(selectedIndex);
-            Transaction transactionToDelete = model.getTransaction();
+            ObservableList<TransactionModel> transactionModelsToDelete = this.getSelectionModel().getSelectedItems();
 
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
-            task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
-                setupErrorPopup("Error deleting transaction.", e);
-            });
+            for (TransactionModel currentModel : transactionModelsToDelete) {
+                Transaction transactionToDelete = currentModel.getTransaction();
+
+                TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                task.RegisterFailureEvent((e) -> {
+                    updateTransactionTableView();
+                    setupErrorPopup("Error deleting transaction.", e);
+                });
 //                task.RegisterSuccessEvent(() -> updateTransactionTableView());
-            task.startTask();
-            task.waitForComplete();
+                task.startTask();
+                task.waitForComplete();
+            }
             updateTransactionTableView();
         } else {
             setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
