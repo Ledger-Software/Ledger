@@ -2,6 +2,7 @@ package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -9,20 +10,23 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.*;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 
+import java.awt.*;
+import java.awt.Color;
 import java.net.URL;
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.List;
 
 import static java.awt.Color.red;
 
@@ -278,6 +282,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void createPieChart(List<Transaction> filteredTransactions) {
         Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
+        double totalSpent = 0;
         for (Transaction t : filteredTransactions) {
             if (t.getTagList().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
@@ -286,11 +291,16 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
                 }
             }
+            if (t.getAmount() < 0) {
+                totalSpent += Math.abs(t.getAmount());
+            }
         }
         List<PieChart.Data> dataList = new ArrayList<>();
         for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
-            dataList.add(new PieChart.Data(tag, Math.abs(tagNameToAmountSpent.get(tag)) / 100));
+            double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            dataList.add(new PieChart.Data(tag + " - " + formatter.format((amountSpent / (totalSpent / 100)) * 100) + "%", amountSpent));
         }
         if (dataList.isEmpty()) {
             this.setupErrorPopup("There's no data to be displayed!", new Exception());
@@ -298,6 +308,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
+        this.expendituresPieChart.legendVisibleProperty().set(false);
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
         int i = 0;
