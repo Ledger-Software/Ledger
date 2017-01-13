@@ -282,7 +282,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void createPieChart(List<Transaction> filteredTransactions) {
         Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
-        double totalSpent = 0;
         for (Transaction t : filteredTransactions) {
             if (t.getTagList().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
@@ -291,16 +290,13 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
                 }
             }
-            if (t.getAmount() < 0) {
-                totalSpent += Math.abs(t.getAmount());
-            }
         }
         List<PieChart.Data> dataList = new ArrayList<>();
         for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
             double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
             NumberFormat formatter = new DecimalFormat("#0.00");
-            dataList.add(new PieChart.Data(tag + " - " + formatter.format((amountSpent / (totalSpent / 100)) * 100) + "%", amountSpent));
+            dataList.add(new PieChart.Data(tag + " - " + "($" + formatter.format(amountSpent) + ")", amountSpent));
         }
         if (dataList.isEmpty()) {
             this.setupErrorPopup("There's no data to be displayed!", new Exception());
