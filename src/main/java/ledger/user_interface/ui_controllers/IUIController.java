@@ -34,6 +34,23 @@ public interface IUIController {
             alert.setContentText(e.getMessage());
         }
 
+        /*
+        * The code below will allow us to change the icon in the upper left to match our application icon.
+        * We should use this if we ever get an icon for our app. In future JavaFX versions, dialogs should
+        * use the same icon as the application that its running from. This is not true currently (in 8u40)
+        * */
+
+        // Can grab the application icon like this
+        // dialog.initOwner(otherStage);
+
+        //Or use these below to use a different one.
+
+        // Get the Stage.
+        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+
+        // Add a custom icon.
+        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+
         if (e.getStackTrace() != null) {
             // Create expandable Exception.
             StringWriter sw = new StringWriter();
