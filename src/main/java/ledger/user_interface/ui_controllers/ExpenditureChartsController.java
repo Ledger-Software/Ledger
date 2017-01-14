@@ -304,15 +304,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
-        this.expendituresPieChart.legendVisibleProperty().set(false);
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
-        int i = 0;
-        List<String> pieColors = Arrays.asList("red", "orange", "green", "blue", "purple", "pink", "yellow");
-        for (PieChart.Data data : dataList) {
-            data.getNode().setStyle("-fx-pie-color: " + pieColors.get(i % pieColors.size()) + ";");
-            i++;
-        }
+
     }
 
     /**
