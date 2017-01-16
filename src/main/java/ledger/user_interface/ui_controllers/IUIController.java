@@ -25,14 +25,11 @@ public interface IUIController {
      *
      * @param s a string containing the error message
      */
-    default void setupErrorPopup(String s, Exception e) {
+    default void setupErrorPopup(String s) {
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error!");
         alert.setHeaderText(s);
-        if (e != null && e.getMessage() != null) {
-            alert.setContentText(e.getMessage());
-        }
 
         /*
         * The code below will allow us to change the icon in the upper left to match our application icon.
@@ -51,33 +48,64 @@ public interface IUIController {
         // Add a custom icon.
         //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
 
-        if (e != null && e.getStackTrace() != null) {
-            // Create expandable Exception.
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw);
+        alert.showAndWait();
+    }
 
-            e.printStackTrace(pw);
-            String exceptionText = sw.toString();
+    /**
+     * Generating code for the error popup
+     *
+     * @param s a string containing the error message
+     */
+    default void setupErrorPopup(String s, Exception e) {
 
-            Label label = new Label("The exception stacktrace was:");
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error!");
+        alert.setHeaderText(s);
+        alert.setContentText(e.getMessage());
 
-            TextArea textArea = new TextArea(exceptionText);
-            textArea.setEditable(false);
-            textArea.setWrapText(true);
+        /*
+        * The code below will allow us to change the icon in the upper left to match our application icon.
+        * We should use this if we ever get an icon for our app. In future JavaFX versions, dialogs should
+        * use the same icon as the application that its running from. This is not true currently (in 8u40)
+        * */
 
-            textArea.setMaxWidth(Double.MAX_VALUE);
-            textArea.setMaxHeight(Double.MAX_VALUE);
-            GridPane.setVgrow(textArea, Priority.ALWAYS);
-            GridPane.setHgrow(textArea, Priority.ALWAYS);
+        // Can grab the application icon like this
+        // dialog.initOwner(otherStage);
 
-            GridPane expContent = new GridPane();
-            expContent.setMaxWidth(Double.MAX_VALUE);
-            expContent.add(label, 0, 0);
-            expContent.add(textArea, 0, 1);
+        //Or use these below to use a different one.
 
-            // Set expandable Exception into the dialog pane.
-            alert.getDialogPane().setExpandableContent(expContent);
-        }
+        // Get the Stage.
+        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+
+        // Add a custom icon.
+        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+
+
+        // Create expandable Exception.
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+
+        e.printStackTrace(pw);
+        String exceptionText = sw.toString();
+
+        Label label = new Label("The exception stacktrace was:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        // Set expandable Exception into the dialog pane.
+        alert.getDialogPane().setExpandableContent(expContent);
 
         alert.showAndWait();
     }

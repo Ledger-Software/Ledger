@@ -151,7 +151,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void deleteAccount() {
         if (chooseAccount.getSelectedAccount() == null) {
             setupErrorPopup("Cannot delete the All Accounts aggregation. Please select an account " +
-                    "to delete.", null);
+                    "to delete.");
             return;
         }
 
