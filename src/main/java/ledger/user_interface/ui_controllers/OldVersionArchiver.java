@@ -44,6 +44,7 @@ public class OldVersionArchiver extends GridPane implements IUIController, Initi
         Path newPath = Paths.get(jarFile.getParent(), "Archive", jarFile.getName());
 
         try {
+            new File(newPath.getParent().toString()).mkdirs();
             Files.move(jarFile.toPath(), newPath);
         } catch (IOException e) {
             this.setupErrorPopup("Unable to move file to archive.",e);
