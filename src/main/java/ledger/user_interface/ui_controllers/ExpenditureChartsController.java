@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -17,14 +16,11 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 
 import java.net.URL;
-import java.text.DateFormatSymbols;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-
-import static java.awt.Color.red;
+import java.util.List;
 
 /**
  * Controls how the charts render with user given information.
@@ -290,7 +286,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         List<PieChart.Data> dataList = new ArrayList<>();
         for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
-            dataList.add(new PieChart.Data(tag, Math.abs(tagNameToAmountSpent.get(tag)) / 100));
+            double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            dataList.add(new PieChart.Data(tag + " - " + "($" + formatter.format(amountSpent) + ")", amountSpent));
         }
         if (dataList.isEmpty()) {
             this.setupErrorPopup("There's no data to be displayed!", new Exception());
@@ -300,12 +298,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.expendituresPieChart.setVisible(true);
-        int i = 0;
-        List<String> pieColors = Arrays.asList("red", "orange", "green", "blue", "purple", "pink", "yellow");
-        for (PieChart.Data data : dataList) {
-            data.getNode().setStyle("-fx-pie-color: " + pieColors.get(i % pieColors.size()) + ";");
-            i++;
-        }
+
     }
 
     /**
