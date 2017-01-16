@@ -8,6 +8,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.client.util.Key;
+import ledger.user_interface.utils.VersionComparer;
 
 import java.io.IOException;
 import java.util.List;
@@ -94,7 +95,7 @@ public class GitHubChecker {
             return false;
         }
 
-        if (isVersionGreater(releases[0].tag_name, currentVersion)) {
+        if (VersionComparer.isVersionGreater(releases[0].tag_name, currentVersion)) {
             this.newerRelease = releases[0];
             return true;
         }
@@ -102,22 +103,7 @@ public class GitHubChecker {
         return false;
     }
 
-    private boolean isVersionGreater(String tag_name, String currentVersion) {
-        String[] tagSplit = tag_name.split("\\.");
-        String[] currentSplit = currentVersion.split("\\.");
-        try {
-            for (int i = 0; i < tagSplit.length; i++) {
-                int tagV = Integer.parseInt(tagSplit[i]);
-                int currentV = Integer.parseInt(currentSplit[i]);
 
-                if (tagV > currentV)
-                    return true;
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     private Release[] getReleases() throws IOException {
         HttpRequestFactory requestFactory =
