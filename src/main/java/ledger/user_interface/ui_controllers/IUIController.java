@@ -30,7 +30,7 @@ public interface IUIController {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error!");
         alert.setHeaderText(s);
-        if (e.getMessage() != null) {
+        if (e != null && e.getMessage() != null) {
             alert.setContentText(e.getMessage());
         }
 
@@ -51,7 +51,7 @@ public interface IUIController {
         // Add a custom icon.
         //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
 
-        if (e.getStackTrace() != null) {
+        if (e != null && e.getStackTrace() != null) {
             // Create expandable Exception.
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
