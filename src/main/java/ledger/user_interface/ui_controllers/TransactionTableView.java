@@ -25,10 +25,7 @@ import ledger.user_interface.utils.*;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -346,9 +343,24 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     private void handleDeleteTransactionFromTableView() {
         int selectedIndex = this.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            ObservableList<TransactionModel> transactionModelsToDelete = this.getSelectionModel().getSelectedItems();
+//            ObservableList<TransactionModel> transactionModelsToDelete = this.getSelectionModel().getSelectedItems();
 
-            for (TransactionModel currentModel : transactionModelsToDelete) {
+            List<Integer> indices = this.getSelectionModel().getSelectedIndices();
+            while(indices.contains(new Integer(-1))) {
+                System.out.println("fix");
+                indices = this.getSelectionModel().getSelectedIndices();
+            }
+            System.out.println(indices.toString());
+
+            ArrayList<TransactionModel> models = new ArrayList<>();
+            for (int i : indices) {
+                models.add(this.getItems().get(i));
+            }
+            for (TransactionModel currentModel : models) {
+                if (currentModel == null) {
+                    System.err.println("Oh shit its null ");
+                    continue;
+                }
                 Transaction transactionToDelete = currentModel.getTransaction();
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
@@ -356,7 +368,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                     updateTransactionTableView();
                     setupErrorPopup("Error deleting transaction.", e);
                 });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
                 task.startTask();
                 task.waitForComplete();
             }
