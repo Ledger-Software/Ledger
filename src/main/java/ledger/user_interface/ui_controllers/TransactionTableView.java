@@ -347,7 +347,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         if (indices.size() != 0) {
 
             if(indices.contains(new Integer(-1))) {
-                System.out.println("fix");
                 indices = this.getSelectionModel().getSelectedIndices();
             }
 
