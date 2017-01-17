@@ -9,6 +9,9 @@ import ledger.controller.DbController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
 import ledger.updater.GitHubChecker;
+import ledger.updater.OldVersionFinder;
+
+import java.io.File;
 
 /**
  * Handles any tasks relevant for init of the Program.
@@ -40,17 +43,9 @@ public class Startup extends Application {
         primaryStage.setOnCloseRequest(e -> shutdown());
         this.stage = primaryStage;
 
-        GitHubChecker checker = new GitHubChecker();
-        if (checker.isUpdateAvaliable()) {
-            UpdateConfirmation uc = new UpdateConfirmation(checker.getNewerRelease());
-            Scene scene = new Scene(uc);
-            Stage newStage = new Stage();
-            newStage.setScene(scene);
-            newStage.setResizable(false);
-            newStage.setTitle("Update");
-            newStage.initModality(Modality.WINDOW_MODAL);
-            newStage.showAndWait();
-        }
+        checkForUpdates();
+        checkForOldVersions();
+
         createLoginPage();
     }
 
@@ -70,6 +65,36 @@ public class Startup extends Application {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
         switchScene(scene, "Ledger Login");
+    }
+
+    private void checkForUpdates() {
+        GitHubChecker checker = new GitHubChecker();
+        if (checker.isUpdateAvaliable()) {
+            UpdateConfirmation uc = new UpdateConfirmation(checker.getNewerRelease());
+            Scene scene = new Scene(uc);
+            Stage newStage = new Stage();
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.setTitle("Update");
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.showAndWait();
+        }
+    }
+
+    private void checkForOldVersions() {
+        OldVersionFinder finder = new OldVersionFinder();
+        File[] files = finder.oldVersions();
+
+        for(File f: files) {
+            OldVersionArchiver a = new OldVersionArchiver(f);
+            Scene scene = new Scene(a);
+            Stage newStage = new Stage();
+            newStage.setScene(scene);
+            newStage.setResizable(false);
+            newStage.setTitle("Archiver");
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.showAndWait();
+        }
     }
 
     public void switchScene(Scene scene, String title) {
