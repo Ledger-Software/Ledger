@@ -1,6 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -77,7 +78,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction amount.", e);
             });
 //                task.RegisterSuccessEvent(() -> updateTransactionTableView());
@@ -100,7 +101,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction date.", e);
             });
 
@@ -121,7 +122,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction payee.", e);
             });
 
@@ -142,7 +143,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction type.", e);
             });
 
@@ -182,7 +183,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction categories.", e);
             });
 
@@ -203,7 +204,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {
-                updateTransactionTableView();
+                asyncTableUpdate();
                 setupErrorPopup("Error editing transaction pending field.", e);
             });
 
@@ -268,7 +269,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 //Put your awesome application specific logic here
                 if (t.getCode() == KeyCode.DELETE) {
                     handleDeleteTransactionFromTableView();
-                    updateTransactionTableView();
                 }
             }
         });
@@ -341,16 +341,15 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     }
 
     private void handleDeleteTransactionFromTableView() {
-        int selectedIndex = this.getSelectionModel().getSelectedIndex();
-        if (selectedIndex >= 0) {
-//            ObservableList<TransactionModel> transactionModelsToDelete = this.getSelectionModel().getSelectedItems();
+        ObservableList<Integer> indices = this.getSelectionModel().getSelectedIndices();
+        // Add indices to new list so they aren't observable
+        //indices.addAll(this.getSelectionModel().getSelectedIndices());
+        if (indices.size() != 0) {
 
-            List<Integer> indices = this.getSelectionModel().getSelectedIndices();
             while(indices.contains(new Integer(-1))) {
                 System.out.println("fix");
                 indices = this.getSelectionModel().getSelectedIndices();
             }
-            System.out.println(indices.toString());
 
             ArrayList<TransactionModel> models = new ArrayList<>();
             for (int i : indices) {
@@ -365,7 +364,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
                 task.RegisterFailureEvent((e) -> {
-                    updateTransactionTableView();
+                    asyncTableUpdate();
                     setupErrorPopup("Error deleting transaction.", e);
                 });
                 task.startTask();
