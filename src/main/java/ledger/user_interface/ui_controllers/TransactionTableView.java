@@ -346,6 +346,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         indices.addAll(this.getSelectionModel().getSelectedIndices());
         if (indices.size() != 0) {
 
+            //TODO: Get around this scary mess
             if(indices.contains(new Integer(-1))) {
                 indices = this.getSelectionModel().getSelectedIndices();
             }
