@@ -341,26 +341,18 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     }
 
     private void handleDeleteTransactionFromTableView() {
-        ObservableList<Integer> indices = this.getSelectionModel().getSelectedIndices();
+        List<Integer> indices = new ArrayList<>();
         // Add indices to new list so they aren't observable
-        //indices.addAll(this.getSelectionModel().getSelectedIndices());
+        indices.addAll(this.getSelectionModel().getSelectedIndices());
         if (indices.size() != 0) {
 
-            while(indices.contains(new Integer(-1))) {
+            if(indices.contains(new Integer(-1))) {
                 System.out.println("fix");
                 indices = this.getSelectionModel().getSelectedIndices();
             }
 
-            ArrayList<TransactionModel> models = new ArrayList<>();
             for (int i : indices) {
-                models.add(this.getItems().get(i));
-            }
-            for (TransactionModel currentModel : models) {
-                if (currentModel == null) {
-                    System.err.println("Oh shit its null ");
-                    continue;
-                }
-                Transaction transactionToDelete = currentModel.getTransaction();
+                Transaction transactionToDelete = this.getItems().get(i).getTransaction();
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
                 task.RegisterFailureEvent((e) -> {
@@ -371,8 +363,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 task.waitForComplete();
             }
             updateTransactionTableView();
-        } else {
-            setupErrorPopup("No transactions deleted.", new NullPointerException("No transaction deleted."));
         }
     }
 
