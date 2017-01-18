@@ -70,14 +70,17 @@ public class Startup extends Application {
     private void checkForUpdates() {
         GitHubChecker checker = new GitHubChecker();
         if (checker.isUpdateAvaliable()) {
-            UpdateConfirmation uc = new UpdateConfirmation(checker.getNewerRelease());
-            Scene scene = new Scene(uc);
-            Stage newStage = new Stage();
-            newStage.setScene(scene);
-            newStage.setResizable(false);
-            newStage.setTitle("Update");
-            newStage.initModality(Modality.WINDOW_MODAL);
-            newStage.showAndWait();
+            GitHubChecker.Release release = checker.getNewerRelease();
+            if(release.getDownloadURL() != null) {
+                UpdateConfirmation uc = new UpdateConfirmation(release);
+                Scene scene = new Scene(uc);
+                Stage newStage = new Stage();
+                newStage.setScene(scene);
+                newStage.setResizable(false);
+                newStage.setTitle("Update");
+                newStage.initModality(Modality.WINDOW_MODAL);
+                newStage.showAndWait();
+            }
         }
     }
 
