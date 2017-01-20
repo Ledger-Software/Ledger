@@ -72,6 +72,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             this.typeText.setEditable(true);
         });
         typeTask.startTask();
+        this.datePicker.setValue(LocalDate.now());
     }
 
     /**
