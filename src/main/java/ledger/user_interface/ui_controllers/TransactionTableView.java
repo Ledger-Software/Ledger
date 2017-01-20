@@ -1,17 +1,14 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -268,12 +265,19 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             public void handle(KeyEvent t) {
                 //Put your awesome application specific logic here
                 if (t.getCode() == KeyCode.DELETE) {
-                    handleDeleteTransactionFromTableView();
+                    handleDeleteSelectedTransactionsFromTableView();
                 }
             }
         });
 
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        ContextMenu menu = new ContextMenu();
+        MenuItem removeMenuItem = new MenuItem("Delete Selected Transaction(s)");
+        menu.getItems().add(removeMenuItem);
+        this.setContextMenu(menu);
+        // removeMenuItem will remove the row from the table:
+        removeMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
     }
 
     public void updateTransactionTableView() {
@@ -340,14 +344,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         }
     }
 
-    private void handleDeleteTransactionFromTableView() {
+    private void handleDeleteSelectedTransactionsFromTableView() {
         List<Integer> indices = new ArrayList<>();
         // Add indices to new list so they aren't observable
         indices.addAll(this.getSelectionModel().getSelectedIndices());
         if (indices.size() != 0) {
 
             //TODO: Get around this scary mess
-            if(indices.contains(new Integer(-1))) {
+            if (indices.contains(new Integer(-1))) {
                 indices = this.getSelectionModel().getSelectedIndices();
             }
 
