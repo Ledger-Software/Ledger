@@ -102,7 +102,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void getTransactions() {
         TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
-        task.RegisterFailureEvent((e) -> {
+        task.RegisterFailureEvent(e -> {
             setupErrorPopup("Error retrieving transactions.", new Exception());
         });
         task.startTask();

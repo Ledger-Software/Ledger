@@ -5,17 +5,21 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -48,6 +52,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TransactionTableView transactionTableView;
 
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    boolean containsAccounts = false;
 
     MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -97,6 +102,24 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
             }
         });
+
+        TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
+        task.RegisterFailureEvent(e -> {
+            setupErrorPopup("Error retrieving accounts.", new Exception());
+        });
+        task.startTask();
+        List<Account> acts = task.waitForResult();
+        if (acts.isEmpty()) {
+            setUpAccountCreationHelp();
+        }
+    }
+
+    private void setUpAccountCreationHelp() {
+        Alert a = new Alert(Alert.AlertType.NONE);
+        String message = "Now that you've successfully set up a database, you must define one " +
+                "or more accounts that you can import or add transactions to. Do this by clicking " +
+                "the 'Add Accounts' button on the left.";
+        this.createIntroductionAlerts("Welcome!", message, a);
     }
 
     private void clearSearch(ActionEvent actionEvent) {

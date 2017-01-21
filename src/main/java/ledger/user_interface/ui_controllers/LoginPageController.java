@@ -87,27 +87,10 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     private void setUpIntroHelp() {
         Alert a = new Alert(Alert.AlertType.NONE);
-        a.setContentText("Hello, new user! We've noticed this is your first time using TransACT. " +
+        String message = "Hello, new user! We've noticed this is your first time using TransACT. " +
                 "To get started, please create a new database file and password by clicking the " +
-                "'New File' button.");
-        a.getButtonTypes().add(ButtonType.OK);
-        DialogPane root = a.getDialogPane();
-        Stage stage = new Stage(StageStyle.DECORATED);
-        for (ButtonType bt : root.getButtonTypes()) {
-            ButtonBase b = (ButtonBase) root.lookupButton(bt);
-            b.setOnAction(e -> {
-                stage.close();
-            });
-        }
-        root.getScene().setRoot(new Group());
-        root.setPadding(new Insets(10, 0, 10, 0));
-        Scene s = new Scene(root);
-        stage.setScene(s);
-        stage.setTitle("Hello!");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setResizable(false);
-        stage.setAlwaysOnTop(true);
-        stage.show();
+                "'New File' button.";
+        this.createIntroductionAlerts("Hello!", message, a);
     }
 
     /**
