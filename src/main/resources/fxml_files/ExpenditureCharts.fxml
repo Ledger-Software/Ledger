@@ -61,7 +61,7 @@
           <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <GridPane.margin>
-            <Insets left="20.0" top="5.0" />
+            <Insets left="20.0" right="20.0" top="5.0" />
          </GridPane.margin>
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account: " textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
