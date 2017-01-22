@@ -1,0 +1,21 @@
+<project name="LedgerSoftware" default="bundle-ledgerSoftware" basedir=".">
+    <taskdef name="bundleapp"
+             classname="com.oracle.appbundler.AppBundlerTask"
+             classpath="lib/appbundler-1.0.jar" />
+    <!-- See the lib reference here, this is why you need to use the lib directory! -->
+
+    <target name="bundle-ledgerSoftware">
+        <delete dir="appBundle" failonerror="false"/>
+        <mkdir dir="appBundle"/>
+        <bundleapp outputdirectory="appBundle"
+                   name="LedgerSoftware"
+                   displayname="Ledger Software"
+                   identifier="components.LedgerSoftware"
+                   mainclassname="components.LedgerSoftware">
+            <!-- The following is important and should point to your build -->
+            <classpath file="build/libs/Ledger-0.5.0.jar" />
+            <!-- You can have multiple instance of classpath if you 3rd party or
+                 dependent jars in different locations -->
+        </bundleapp>
+    </target>
+</project>
