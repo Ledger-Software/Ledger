@@ -128,7 +128,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
             deleteAllTagsForPayee(p);
             for(Tag t : p.getTags()) {
-                lookupAndInsertTag(t);
+                insertTagIfNew(t);
                 addTagForPayee(t, p);
             }
 
@@ -140,7 +140,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
         }
     }
 
-    default Tag lookupAndInsertTag(Tag currentTag) throws StorageException {
+    default Tag insertTagIfNew(Tag currentTag) throws StorageException {
         Tag existingTag;
         if (currentTag.getId() != -1) {
             existingTag = currentTag;
