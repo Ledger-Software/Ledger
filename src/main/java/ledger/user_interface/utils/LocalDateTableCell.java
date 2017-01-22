@@ -33,7 +33,7 @@ import static java.time.format.FormatStyle.MEDIUM;
 /**
  * Renders a localized LocalDate
  *
- * @param <T>
+ * @param <T> Generic type contained in the table cell
  * @author Michael J. Simons, 2014-10-17
  */
 public class LocalDateTableCell<T> extends TableCell<T, LocalDate> {
