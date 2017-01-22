@@ -29,7 +29,7 @@ public class Importer {
      *
      * @param database        IDatabase for putting the objects into
      * @param transactionList the list of transactions to import
-     * @return
+     * @return Returns true if all imports were successful, false if any failures occurred
      */
     public boolean importTransactions(IDatabase database, List<Transaction> transactionList) {
         this.failedImports.clear();

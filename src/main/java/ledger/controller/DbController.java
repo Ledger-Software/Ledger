@@ -58,6 +58,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert a Transaction
+     *
      * @param transaction The transaction to insert
      * @return a Task for the Async Call
      */
@@ -68,6 +70,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete a Transaction
+     *
      * @param transaction The transaction to delete
      * @return a Task for the Async Call
      */
@@ -79,6 +83,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit a Transaction
+     *
      * @param transaction The transaction to edit
      * @return a Task for the Async Call
      */
@@ -89,6 +95,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all stored Transactions
+     *
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Transaction>> getAllTransactions() {
@@ -96,6 +104,10 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all transactions
+     * associated with the given account
+     *
+     * @param account The account to retrieve all transactions assioted with
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Transaction>> getAllTransactionsForAccount(Account account) {
@@ -113,6 +125,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete an Account
+     *
      * @param account The account to delete
      * @return a Task for the Async Call
      */
@@ -123,6 +137,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit an Account
+     *
      * @param account The account to edit
      * @return a Task for the Async Call
      */
@@ -133,6 +149,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all Accounts
+     *
      * @return A task for the Async Call that returns a list of all the Accounts
      */
     public TaskWithReturn<List<Account>> getAllAccounts() {
@@ -140,6 +158,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert a Payee
+     *
      * @param payee The payee to insert
      * @return a Task for the Async Call
      */
@@ -149,6 +169,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete a Payee
+     *
      * @param payee The payee to delete
      * @return a Task for the Async Call
      */
@@ -158,6 +180,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit a Payee
+     *
      * @param payee The payee to edit
      * @return a Task for the Async Call
      */
@@ -167,6 +191,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all stored Payees
+     *
      * @return A task for the Async Call that returns a list of all the Payees
      */
     public TaskWithReturn<List<Payee>> getAllPayees() {
@@ -175,6 +201,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert a Note
+     *
      * @param note The note to insert
      * @return a Task for the Async Call
      */
@@ -184,6 +212,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete a Note
+     *
      * @param note The note to delete
      * @return a Task for the Async Call
      */
@@ -193,6 +223,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit a Note
+     *
      * @param note The note to edit
      * @return a Task for the Async Call
      */
@@ -202,6 +234,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all Notes
+     *
      * @return A task for the Async Call that returns a list of all the Notes
      */
     public TaskWithReturn<List<Note>> getAllNotes() {
@@ -210,6 +244,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert a Tag
+     *
      * @param tag the tag to insert
      * @return a Task for the Async Call
      */
@@ -219,6 +255,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete a Tag
+     *
      * @param tag the tag to delete
      * @return a Task for the Async Call
      */
@@ -228,6 +266,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit a Tag
+     *
      * @param tag the tag to edit
      * @return a Task for the Async Call
      */
@@ -237,6 +277,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all Tags
+     *
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Tag>> getAllTags() {
@@ -245,6 +287,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert a Type
+     *
      * @param type the type to insert
      * @return a Task for the Async Call
      */
@@ -254,6 +298,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete a Type
+     *
      * @param type the type to delete
      * @return a Task for the Async Call
      */
@@ -263,6 +309,8 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit a Type
+     *
      * @param type the type to edit
      * @return a Task for the Async Call
      */
@@ -272,25 +320,55 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all Types
+     *
      * @return A task for the Async Call that returns a list of all the Types
      */
     public TaskWithReturn<List<Type>> getAllTypes() {
         return new TaskWithReturn<List<Type>>(db::getAllTypes);
     }
 
-
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all Tags associated with a
+     * Payee
+     *
+     * @param payee The Payee to get all associated tags for
+     * @return A task for the Async call that returns a list of all the Tags associated with the Payee
+     */
     public TaskWithArgsReturn<Payee, List<Tag>> getTagsForPayee(final Payee payee) {
         return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsForPayee, payee);
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete all Tags associated with a
+     * Payee
+     *
+     * @param payee The Payee to get all associated tags for
+     * @return A Task for the Async call
+     */
     public TaskWithArgs<Payee> deleteAllTagsForPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::deleteAllTagsForPayee, payee);
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database add a Tag to the given Payee
+     *
+     * @param payee The Payee to get all associated tags for
+     * @param tag The Tag to associate with the Payee
+     * @return A Task for the async call
+     */
     public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
         return new TaskWithArgs<TagPayeeWrapper>(this::addTagForPayee, new TagPayeeWrapper(tag, payee));
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to remove a Tag from the given
+     * Payee
+     *
+     * @param payee The Payee to remove the Tag from
+     * @param tag The Tag to remove from the Payee
+     * @return A Task for the asynchronous call
+     */
     public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
         return new TaskWithArgs<TagPayeeWrapper>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
     }
@@ -299,7 +377,7 @@ public class DbController {
     /**
      * Closes the DB safely.
      *
-     * @throws StorageException
+     * @throws StorageException When DB could not be closed successfully
      */
     public void shutdown() throws StorageException {
         if (db != null)
@@ -310,6 +388,12 @@ public class DbController {
         return this.dbFile;
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to add transactions as a batch
+     *
+     * @param transactions List of transactions to add to the database
+     * @return A task for the asynchronous call
+     */
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {
         TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
             List<Transaction> list = new ArrayList<>();
@@ -336,7 +420,9 @@ public class DbController {
         return db;
     }
 
-
+    /**
+     * Wraps a Tag and Payee into a single class to be used by Tasks
+     */
     class TagPayeeWrapper {
         public Tag tag;
         public Payee payee;
@@ -347,10 +433,22 @@ public class DbController {
         }
     }
 
+    /**
+     * Wraps the databases addTagForPayee method so that a single argument can be given to the Task
+     *
+     * @param wrapper The wrapper class containing the Tag and Payee
+     * @throws StorageException When an SQLExeption occurs
+     */
     public void addTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.addTagForPayee(wrapper.tag, wrapper.payee);
     }
 
+    /**
+     * Wraps the databases deleteTagForPayee method so that a single argument can be given to the Task
+     *
+     * @param wrapper The wrapper class containing the Tag and Payee
+     * @throws StorageException When an SQLExeption occurs
+     */
     public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.deleteTagForPayee(wrapper.tag, wrapper.payee);
     }

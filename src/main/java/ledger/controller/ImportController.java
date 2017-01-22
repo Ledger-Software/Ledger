@@ -29,6 +29,11 @@ public class ImportController {
     /**
      * Returns a task that handles the file import with a given Converter type, file path and an account to link too.
      * It will also run duplicate detection.
+     *
+     * @param type The type of Converter to use
+     * @param path The path to the file to convert to TransACT entities
+     * @param account The account to add the transactions to
+     * @return An object wrapping two lists. One list is the list of successfully converted transactions. One list contains duplicate transactions.
      */
     public TaskWithArgsReturn<Account, ImportFailures> importTransactions(Converter type, File path, Account account) {
         return new TaskWithArgsReturn<Account, ImportFailures>((acc) -> {
