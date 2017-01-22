@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -156,46 +158,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         }
     };
 
-    private EventHandler<CellEditEvent<TransactionModel, String>> categoryEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            String tagsNamesToSet = t.getNewValue();
-            String[] tagNames = tagsNamesToSet.split(", ");
-
-
-            TaskWithReturn<List<Tag>> tagQuery = DbController.INSTANCE.getAllTags();
-            tagQuery.startTask();
-            List<Tag> allTags = tagQuery.waitForResult();
-
-            ArrayList<Tag> tagsToSet = new ArrayList<>();
-
-            for (String currentTagName : tagNames) {
-                Tag currentTagToSet = new Tag(currentTagName, "");
-                for (Tag currentTag : allTags) {
-                    if (currentTag.getName().equals(currentTagName)) {
-                        currentTagToSet = currentTag;
-                        break;
-                    }
-                }
-                tagsToSet.add(currentTagToSet);
-            }
-
-            Transaction transaction = model.getTransaction();
-            transaction.setTagList(tagsToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction categories.", e);
-            });
-
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
-
     private EventHandler<CellEditEvent<TransactionModel, Boolean>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, Boolean>>() {
         @Override
         public void handle(CellEditEvent<TransactionModel, Boolean> t) {
@@ -230,7 +192,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
         this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
         this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
-        this.categoryColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("tagNames"));
+        this.categoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TransactionModel, TransactionModel>, ObservableValue<TransactionModel>>() {
+            @Override
+            public ObservableValue<TransactionModel> call(TableColumn.CellDataFeatures<TransactionModel,TransactionModel> param) {
+                return new ReadOnlyObjectWrapper(param.getValue());
+            }
+        });
         this.clearedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Boolean>("pending"));
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -257,27 +224,19 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
 
-        this.categoryColumn.setCellFactory(new Callback<TableColumn<TransactionModel, String> , TableCell<TransactionModel, String> >() {
+        this.categoryColumn.setCellFactory(new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
                @Override
-               public TableCell<TransactionModel, String>  call(TableColumn<TransactionModel, String> param) {
-                   return new TableCell<TransactionModel, String>() {
+               public TableCell<TransactionModel, TransactionModel>  call(TableColumn<TransactionModel, TransactionModel> param) {
+                   return new TableCell<TransactionModel, TransactionModel>() {
                        @Override
-                       protected void updateItem(String item, boolean empty) {
-                           super.updateItem(item, empty);
+                       protected void updateItem(TransactionModel model, boolean empty) {
+                           super.updateItem(model, empty);
 
-
-
-                           if (item == null || empty) {
+                           if(model == null || empty) {
                                setText(null);
-                               setStyle("");
+                               setGraphic(null);
                            } else {
-                               List<Tag> tags = new ArrayList<>();
-                               tags.add(new Tag("Name1", "Desc1"));
-                               tags.add(new Tag("Name2", "Desc2"));
-                               tags.add(new Tag("Name3", "Desc3"));
-                               tags.add(new Tag("Name4", "Desc4"));
-
-                               TagFlowPane flow = new TagFlowPane(tags);
+                               TagFlowPane flow = new TagFlowPane(model);
                                setGraphic(flow);
                            }
                        }
@@ -285,8 +244,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                }
            }
         );
-
-        this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
 
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
 
@@ -340,11 +297,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                 return true; // Filter matches amount.
             } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches Payee name.
-            } else if (transactionModel.getTagNames().toLowerCase().contains(lowerCaseFilter)) {
+            } else if (transactionModel.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
                 return true; // Filter matches tags.
             } else {
                 return false; // Filter does not match.
             }
+
         });
 
         // 3. Wrap the FilteredList in a SortedList.
