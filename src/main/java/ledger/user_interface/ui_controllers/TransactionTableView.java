@@ -229,6 +229,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.amountColumn.setOnEditCommit(this.amountEditHandler);
+        this.amountColumn.setComparator(new AmountComparator());
 
         this.dateColumn.setCellFactory(column -> {
             return new LocalDateTableCell<>(dateColumn);
@@ -242,6 +243,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.observableAllPayees = FXCollections.observableList(allPayees);
         this.payeeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
         this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
+        this.payeeColumn.setComparator(new PayeeComparator());
 
         TaskWithReturn<List<Type>> getAllTypesTask = DbController.INSTANCE.getAllTypes();
         getAllTypesTask.startTask();
@@ -250,9 +252,11 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         ObservableList<Type> observableAllTypes = FXCollections.observableList(allTypes);
         this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
+        this.typeColumn.setComparator(new TypeComparator());
 
         this.categoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
+        // TODO: create and set tag comparator
 
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
 
