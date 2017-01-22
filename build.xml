@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="LedgerSoftware" default="bundle-ledgerSoftware" basedir=".">
     <taskdef name="bundleapp"
              classname="com.oracle.appbundler.AppBundlerTask"
