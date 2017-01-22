@@ -1,6 +1,7 @@
 package ledger.database.storage.SQL;
 
 import ledger.database.entity.Payee;
+import ledger.database.entity.Tag;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.PayeeTable;
 import ledger.exception.StorageException;
@@ -109,6 +110,50 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all payees", e);
         }
+    }
+
+    @Override
+    default void updatePayee(Payee p) throws StorageException{
+        try {
+            setDatabaseAutoCommit(false);
+
+            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME + " SET " +
+                    PayeeTable.PAYEE_NAME + "=?," +
+                    PayeeTable.PAYEE_DESC + "=? WHERE " +
+                    PayeeTable.PAYEE_ID + "=?");
+
+            stmt.setString(1, p.getName());
+            stmt.setString(2, p.getDescription());
+            stmt.execute();
+
+            deleteAllTagsForPayee(p);
+            for(Tag t : p.getTags()) {
+                lookupAndInsertTag(t);
+                addTagForPayee(t, p);
+            }
+
+            getDatabase().commit();
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while updating payee", e);
+        } finally {
+            setDatabaseAutoCommit(true);
+        }
+    }
+
+    default Tag lookupAndInsertTag(Tag currentTag) throws StorageException {
+        Tag existingTag;
+        if (currentTag.getId() != -1) {
+            existingTag = currentTag;
+        } else {
+            existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+        }
+        if (existingTag != null) {
+            currentTag.setId(existingTag.getId());
+        } else {
+            insertTag(currentTag);
+            currentTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+        }
+        return currentTag;
     }
 
 }

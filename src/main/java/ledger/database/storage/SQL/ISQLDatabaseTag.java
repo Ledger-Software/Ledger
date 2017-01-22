@@ -156,6 +156,19 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     }
 
     @Override
+    default void deleteAllTagsForPayee(Payee p) throws StorageException{
+        Payee payee = lookupAndInsertPayee(p);
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagToPayeeTable.TABLE_NAME + " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =?");
+            stmt.setInt(1, payee.getId());
+            stmt.execute();
+        } catch (java.sql.SQLException e) {
+            if (payee == null)  throw new StorageException("Error while deleting all tags for payee", e);
+            else throw new StorageException("Error while deleting all tags for Payee " + payee.getName(), e);
+        }
+    }
+
+    @Override
     default void addTagForPayee(Tag tag, Payee payee) throws StorageException {
         payee = lookupAndInsertPayee(payee);
         tag = lookupAndInsertTag(tag);

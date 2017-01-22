@@ -283,6 +283,19 @@ public class DbController {
         return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsForPayee, payee);
     }
 
+    public TaskWithArgs<Payee> deleteAllTagsForPayee(final Payee payee) {
+        return new TaskWithArgs<Payee>(db::deleteAllTagsForPayee, payee);
+    }
+
+    public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
+        return new TaskWithArgs<TagPayeeWrapper>(this::addTagForPayee, new TagPayeeWrapper(tag, payee));
+    }
+
+    public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
+        return new TaskWithArgs<TagPayeeWrapper>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
+    }
+
+
     /**
      * Closes the DB safely.
      *
@@ -323,4 +336,22 @@ public class DbController {
         return db;
     }
 
+
+    class TagPayeeWrapper {
+        public Tag tag;
+        public Payee payee;
+
+        TagPayeeWrapper (Tag t, Payee p) {
+            this.tag = t;
+            this.payee = p;
+        }
+    }
+
+    public void addTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
+        db.addTagForPayee(wrapper.tag, wrapper.payee);
+    }
+
+    public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
+        db.deleteTagForPayee(wrapper.tag, wrapper.payee);
+    }
 }
