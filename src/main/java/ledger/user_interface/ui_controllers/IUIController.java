@@ -56,6 +56,7 @@ public interface IUIController {
      * Generating code for the error popup
      *
      * @param s a string containing the error message
+     * @param e the exception caused be the error(s)
      */
     default void setupErrorPopup(String s, Exception e) {
 
@@ -135,6 +136,7 @@ public interface IUIController {
      * Sets the stage and the scene for the new modal
      *
      * @param s the previously initialized Scene that is set on the new Stage
+     * @param windowName The name of the window to be created
      */
     default void createModal(Scene s, String windowName) {
         createModal(null, s, windowName);
