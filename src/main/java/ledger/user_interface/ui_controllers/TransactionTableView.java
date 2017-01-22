@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -9,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -16,7 +16,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -26,7 +26,10 @@ import ledger.user_interface.utils.*;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -254,7 +257,35 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
 
-        this.categoryColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        this.categoryColumn.setCellFactory(new Callback<TableColumn<TransactionModel, String> , TableCell<TransactionModel, String> >() {
+               @Override
+               public TableCell<TransactionModel, String>  call(TableColumn<TransactionModel, String> param) {
+                   return new TableCell<TransactionModel, String>() {
+                       @Override
+                       protected void updateItem(String item, boolean empty) {
+                           super.updateItem(item, empty);
+
+
+
+                           if (item == null || empty) {
+                               setText(null);
+                               setStyle("");
+                           } else {
+                               List<Tag> tags = new ArrayList<>();
+                               tags.add(new Tag("Name1", "Desc1"));
+                               tags.add(new Tag("Name2", "Desc2"));
+                               tags.add(new Tag("Name3", "Desc3"));
+                               tags.add(new Tag("Name4", "Desc4"));
+
+                               TagFlowPane flow = new TagFlowPane(tags);
+                               setGraphic(flow);
+                           }
+                       }
+                   };
+               }
+           }
+        );
+
         this.categoryColumn.setOnEditCommit(this.categoryEditHandler);
 
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
@@ -263,13 +294,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.clearedColumn.setOnEditCommit(this.closedEditHandler);
 
         // Add ability to delete transactions form tableView
-        this.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent t) {
-                //Put your awesome application specific logic here
-                if (t.getCode() == KeyCode.DELETE) {
-                    handleDeleteTransactionFromTableView();
-                }
+        this.setOnKeyPressed(t -> {
+            //Put your awesome application specific logic here
+            if (t.getCode() == KeyCode.DELETE) {
+                handleDeleteTransactionFromTableView();
             }
         });
 
