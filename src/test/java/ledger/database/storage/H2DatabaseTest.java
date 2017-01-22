@@ -584,8 +584,6 @@ public class H2DatabaseTest {
 
     @Test
     public void deleteAllTagsForPayeeTest() throws Exception {
-        System.out.println(samplePayee2.toString());
-        System.out.println("whaaaaaaaaaat");
         database.insertPayee(samplePayee2);
         database.addTagForPayee(sampleTag, samplePayee2);
         database.addTagForPayee(sampleTag2, samplePayee2);
