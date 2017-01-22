@@ -577,6 +577,19 @@ public class H2DatabaseTest {
         assertEquals(0, tags.size());
     }
 
+    @Test
+    public void deleteAllTagsForPayeeTest() throws Exception {
+        database.insertPayee(samplePayee);
+        database.addTagForPayee(sampleTag, samplePayee);
+        database.addTagForPayee(sampleTag2, samplePayee);
+
+        database.deleteAllTagsForPayee(samplePayee);
+        int expected = 0;
+        int actual = database.getAllTagsForPayee(samplePayee).size();
+
+        assertEquals(expected, actual);
+    }
+
     @AfterClass
     public static void afterTests() throws Exception {
         database.shutdown();
