@@ -377,7 +377,7 @@ public class DbController {
     /**
      * Closes the DB safely.
      *
-     * @throws StorageException
+     * @throws StorageException When DB could not be closed successfully
      */
     public void shutdown() throws StorageException {
         if (db != null)
