@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class H2DatabaseTest {
     private static Account sampleAccount;
     private static Payee samplePayee;
     private static Payee samplePayee2;
+    private static Payee samplePayee3;
     private static Tag sampleTag;
     private static Tag sampleTag2;
     private static Note sampleNote;
@@ -46,7 +48,8 @@ public class H2DatabaseTest {
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
         samplePayee = new Payee("Meijer", "Grocery store");
-        samplePayee = new Payee("Kroger", "Grocery store");
+        samplePayee2 = new Payee("Kroger", "Grocery store");
+        samplePayee3 = new Payee("Wal-Mart", "Grocery store");
         sampleTag = new Tag("Groceries", "Money spent on groceries");
         sampleTag2 = new Tag("Electronics", "Money spent on electronics");
         sampleNote = new Note("This is a note");
@@ -581,13 +584,15 @@ public class H2DatabaseTest {
 
     @Test
     public void deleteAllTagsForPayeeTest() throws Exception {
+        System.out.println(samplePayee2.toString());
+        System.out.println("whaaaaaaaaaat");
         database.insertPayee(samplePayee2);
         database.addTagForPayee(sampleTag, samplePayee2);
         database.addTagForPayee(sampleTag2, samplePayee2);
 
-        database.deleteAllTagsForPayee(samplePayee);
+        database.deleteAllTagsForPayee(samplePayee2);
         int expected = 0;
-        int actual = database.getAllTagsForPayee(samplePayee).size();
+        int actual = database.getAllTagsForPayee(samplePayee2).size();
 
         assertEquals(expected, actual);
     }

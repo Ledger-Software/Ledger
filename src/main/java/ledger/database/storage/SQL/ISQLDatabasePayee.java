@@ -70,6 +70,8 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
     @Override
     default void editPayee(Payee payee) throws StorageException {
         try {
+            getDatabase().setAutoCommit(false);
+
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME +
                             " SET " + PayeeTable.PAYEE_NAME +
@@ -79,9 +81,21 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.setInt(3, payee.getId());
+
+            if (payee.getTags() != null) {
+                deleteAllTagsForPayee(payee);
+                for(Tag t : payee.getTags()) {
+                    insertTagIfNew(t);
+                    addTagForPayee(t, payee);
+                }
+            }
+
             stmt.executeUpdate();
+            getDatabase().commit();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
+        } finally {
+            setDatabaseAutoCommit(true);
         }
     }
 
@@ -109,34 +123,6 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             return payeeList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all payees", e);
-        }
-    }
-
-    @Override
-    default void updatePayee(Payee p) throws StorageException{
-        try {
-            setDatabaseAutoCommit(false);
-
-            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME + " SET " +
-                    PayeeTable.PAYEE_NAME + "=?," +
-                    PayeeTable.PAYEE_DESC + "=? WHERE " +
-                    PayeeTable.PAYEE_ID + "=?");
-
-            stmt.setString(1, p.getName());
-            stmt.setString(2, p.getDescription());
-            stmt.execute();
-
-            deleteAllTagsForPayee(p);
-            for(Tag t : p.getTags()) {
-                insertTagIfNew(t);
-                addTagForPayee(t, p);
-            }
-
-            getDatabase().commit();
-        } catch (java.sql.SQLException e) {
-            throw new StorageException("Error while updating payee", e);
-        } finally {
-            setDatabaseAutoCommit(true);
         }
     }
 

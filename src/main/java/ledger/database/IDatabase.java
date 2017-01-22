@@ -40,8 +40,6 @@ public interface IDatabase {
 
     void editPayee(Payee payee) throws StorageException;
 
-    void updatePayee(Payee payee) throws StorageException;
-
     List<Payee> getAllPayees() throws StorageException;
 
     void insertNote(Note note) throws StorageException;

@@ -105,6 +105,15 @@ public class Payee implements IEntity {
         this.tags.add(t);
     }
 
+    @Override
+    public String toString() {
+        return "Payee{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
     /**
      * Removes a Tag from this Payee's list of Tags
      *
