@@ -9,7 +9,7 @@
 <key>CFBundleIconFile</key>
 <string>GenericApp.icns</string>
 <key>CFBundleIdentifier</key>
-<string>components.LedgerSoftware</string>
+<string>ledger.user_interface.ui_controllers.Startup</string>
 <key>CFBundleDisplayName</key>
 <string>Ledger Software</string>
 <key>CFBundleInfoDictionaryVersion</key>
@@ -27,7 +27,7 @@
 <key>NSHumanReadableCopyright</key>
 <string></string>
 <key>JVMMainClassName</key>
-<string>components.LedgerSoftware</string>
+<string>ledger.user_interface.ui_controllers.Startup</string>
 <key>JVMOptions</key>
 <array>
 </array>

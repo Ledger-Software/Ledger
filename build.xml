@@ -10,8 +10,8 @@
         <bundleapp outputdirectory="appBundle"
                    name="LedgerSoftware"
                    displayname="Ledger Software"
-                   identifier="components.LedgerSoftware"
-                   mainclassname="components.LedgerSoftware">
+                   identifier="ledger.user_interface.ui_controllers.Startup"
+                   mainclassname="ledger.user_interface.ui_controllers.Startup">
             <!-- The following is important and should point to your build -->
             <classpath file="build/libs/Ledger-0.5.0.jar" />
             <!-- You can have multiple instance of classpath if you 3rd party or
