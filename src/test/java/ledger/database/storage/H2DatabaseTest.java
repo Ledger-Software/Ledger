@@ -28,6 +28,7 @@ public class H2DatabaseTest {
     private static Type sampleType2;
     private static Account sampleAccount;
     private static Payee samplePayee;
+    private static Payee samplePayee2;
     private static Tag sampleTag;
     private static Tag sampleTag2;
     private static Note sampleNote;
@@ -45,6 +46,7 @@ public class H2DatabaseTest {
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
         samplePayee = new Payee("Meijer", "Grocery store");
+        samplePayee = new Payee("Kroger", "Grocery store");
         sampleTag = new Tag("Groceries", "Money spent on groceries");
         sampleTag2 = new Tag("Electronics", "Money spent on electronics");
         sampleNote = new Note("This is a note");
@@ -579,9 +581,9 @@ public class H2DatabaseTest {
 
     @Test
     public void deleteAllTagsForPayeeTest() throws Exception {
-        database.insertPayee(samplePayee);
-        database.addTagForPayee(sampleTag, samplePayee);
-        database.addTagForPayee(sampleTag2, samplePayee);
+        database.insertPayee(samplePayee2);
+        database.addTagForPayee(sampleTag, samplePayee2);
+        database.addTagForPayee(sampleTag2, samplePayee2);
 
         database.deleteAllTagsForPayee(samplePayee);
         int expected = 0;
