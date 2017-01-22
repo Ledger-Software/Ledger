@@ -3,11 +3,19 @@ package ledger.user_interface.ui_controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 import ledger.user_interface.utils.InputSanitization;
@@ -38,6 +46,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private String pwd;
     private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
+    private boolean containsDbFile;
 
     LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -59,6 +68,29 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.chooseFileBtn.setOnAction((event -> selectFile()));
         this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
+
+        File initDir = new File(System.getProperty("user.home"));
+        File[] listFiles = initDir.listFiles();
+        this.containsDbFile = false;
+        for (File f : listFiles) {
+            if (f.isFile() && f.getName().endsWith(".mv.db")) {
+                this.containsDbFile = true;
+            }
+        }
+        if (!this.containsDbFile) {
+            setUpIntroHelp();
+        }
+    }
+
+    /**
+     * Upon first use of the system, opens a help dialog to assist user.
+     */
+    private void setUpIntroHelp() {
+        Alert a = new Alert(Alert.AlertType.NONE);
+        String message = "Hello, new user! We've noticed this is your first time using TransACT. " +
+                "To get started, please create a new database file and password by clicking the " +
+                "'New File' button.";
+        this.createIntroductionAlerts("Hello!", message, a);
     }
 
     /**
