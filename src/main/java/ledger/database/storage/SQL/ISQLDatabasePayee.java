@@ -1,6 +1,7 @@
 package ledger.database.storage.SQL;
 
 import ledger.database.entity.Payee;
+import ledger.database.entity.Tag;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.PayeeTable;
 import ledger.exception.StorageException;
@@ -69,6 +70,8 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
     @Override
     default void editPayee(Payee payee) throws StorageException {
         try {
+            getDatabase().setAutoCommit(false);
+
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME +
                             " SET " + PayeeTable.PAYEE_NAME +
@@ -78,9 +81,21 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             stmt.setString(1, payee.getName());
             stmt.setString(2, payee.getDescription());
             stmt.setInt(3, payee.getId());
+
+            if (payee.getTags() != null) {
+                deleteAllTagsForPayee(payee);
+                for(Tag t : payee.getTags()) {
+                    insertTagIfNew(t);
+                    addTagForPayee(t, payee);
+                }
+            }
+
             stmt.executeUpdate();
+            getDatabase().commit();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
+        } finally {
+            setDatabaseAutoCommit(true);
         }
     }
 
@@ -109,6 +124,22 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all payees", e);
         }
+    }
+
+    default Tag insertTagIfNew(Tag currentTag) throws StorageException {
+        Tag existingTag;
+        if (currentTag.getId() != -1) {
+            existingTag = currentTag;
+        } else {
+            existingTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+        }
+        if (existingTag != null) {
+            currentTag.setId(existingTag.getId());
+        } else {
+            insertTag(currentTag);
+            currentTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
+        }
+        return currentTag;
     }
 
 }
