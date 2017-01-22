@@ -49,7 +49,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
 
     private void saveLocation(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialFileName("LedgerDB");
+        fileChooser.setInitialFileName("LedgerDB.mv.db");
         fileChooser.setTitle("Select Save File");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
         fileChooser.getExtensionFilters().add(extFilter);
