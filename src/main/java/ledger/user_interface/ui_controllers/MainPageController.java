@@ -42,6 +42,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button clearButton;
     @FXML
     private TextField searchTextField;
+    @FXML
+    public Button payeeEditorButton;
 
     // Transaction table UI objects
     @FXML
@@ -97,6 +99,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
             }
         });
+
+        this.payeeEditorButton.setOnAction(this::openPayeeEditor);
+    }
+
+    private void openPayeeEditor(ActionEvent actionEvent) {
+        PayeeTableWindow window = new PayeeTableWindow();
+
+        Scene scene = new Scene(window);
+
+        this.createModal(this.getScene().getWindow(), scene, "Payee Editor");
     }
 
     private void clearSearch(ActionEvent actionEvent) {

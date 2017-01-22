@@ -38,7 +38,10 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         Button addButton = new Button();
         addButton.setText("Add Tag");
         addButton.setOnAction(event -> {
-           Transaction t = model.getTransaction();
+            Transaction t = model.getTransaction();
+
+
+
             t.getTagList().add(new Tag("NewTag", "Desc"));
             TaskWithArgs task = DbController.INSTANCE.editTransaction(t);
             task.startTask();
