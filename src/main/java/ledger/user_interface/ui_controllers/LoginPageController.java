@@ -69,6 +69,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private void selectFile() {
         FileChooser chooser = new FileChooser();
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
+        chooser.getExtensionFilters().add(extFilter);
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
             setChosenFile(selectedFile);
