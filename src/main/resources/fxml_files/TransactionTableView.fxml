@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.TagColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.PayeeColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.DateColumn?>
 <fx:root editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="TableView"
          xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columns>
-        <TableColumn fx:id="amountColumn" prefWidth="150.0" text="Amount"/>
-        <TableColumn fx:id="dateColumn" minWidth="0.0" prefWidth="150.0" text="Date"/>
-        <TableColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="150.0" text="Payee"/>
+        <AmountColumn fx:id="amountColumn" prefWidth="150.0" text="Amount"/>
+        <DateColumn fx:id="dateColumn" minWidth="0.0" prefWidth="150.0" text="Date"/>
+        <PayeeColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="150.0" text="Payee"/>
         <TableColumn fx:id="typeColumn" minWidth="0.0" prefWidth="150.0" text="Type"/>
-        <TableColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="150.0" text="Category"/>
+        <TagColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="150.0" text="Category"/>
         <TableColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="150.0" text="Cleared"/>
     </columns>
     <columnResizePolicy>

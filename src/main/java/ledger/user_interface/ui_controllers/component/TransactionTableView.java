@@ -4,32 +4,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.*;
-import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.cell.ComboBoxTableCell;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.TableView;
 import javafx.scene.input.KeyCode;
-import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.*;
+import ledger.database.entity.Account;
+import ledger.database.entity.Payee;
+import ledger.database.entity.Tag;
+import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_models.TransactionModel;
-import ledger.user_interface.utils.*;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -41,143 +34,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
-    private ObservableList<Payee> observableAllPayees;
     private Account accountFilter;
     private String searchFilterString = "";
-
-    // Transaction table UI objects
-    @FXML
-    private TableColumn payeeColumn;
-    @FXML
-    private TableColumn amountColumn;
-    @FXML
-    private TableColumn dateColumn;
-    @FXML
-    private TableColumn typeColumn;
-    @FXML
-    private TableColumn categoryColumn;
-    @FXML
-    private TableColumn clearedColumn;
-
-    // Transaction table edit event handlers
-    private EventHandler<CellEditEvent<TransactionModel, String>> amountEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, String> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            String amountToSetString = t.getNewValue();
-            if (InputSanitization.isInvalidAmount(amountToSetString)) {
-                updateTransactionTableView();
-                setupErrorPopup("Provided amount is invalid", new Exception());
-                return;
-            }
-
-            if (amountToSetString.charAt(0) == '$') {
-                amountToSetString = amountToSetString.substring(1);
-            }
-
-            double amountToSetDecimal = Double.parseDouble(amountToSetString);
-            int amountToSet = (int) Math.round(amountToSetDecimal * 100);
-
-            Transaction transaction = model.getTransaction();
-            transaction.setAmount(amountToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction amount.", e);
-            });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
-
-    private EventHandler<CellEditEvent<TransactionModel, LocalDate>> dateEditHandler = new EventHandler<CellEditEvent<TransactionModel, LocalDate>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, LocalDate> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            LocalDate localDateToSet = t.getNewValue();
-
-            java.util.Date dateToSet = java.sql.Date.valueOf(localDateToSet);
-
-            Transaction transaction = model.getTransaction();
-            transaction.setDate(dateToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction date.", e);
-            });
-
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
-
-    private EventHandler<CellEditEvent<TransactionModel, Payee>> payeeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Payee>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, Payee> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            Payee payeeToSet = t.getNewValue();
-
-            Transaction transaction = model.getTransaction();
-            transaction.setPayee(payeeToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction payee.", e);
-            });
-
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
-
-    private EventHandler<CellEditEvent<TransactionModel, Type>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Type>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, Type> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            Type typeToSet = t.getNewValue();
-
-            Transaction transaction = model.getTransaction();
-            transaction.setType(typeToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction type.", e);
-            });
-
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
-
-    private EventHandler<CellEditEvent<TransactionModel, Boolean>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, Boolean>>() {
-        @Override
-        public void handle(CellEditEvent<TransactionModel, Boolean> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            boolean pendingToSet = t.getNewValue();
-
-            Transaction transaction = model.getTransaction();
-            transaction.setPending(pendingToSet);
-
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
-            task.RegisterFailureEvent((e) -> {
-                asyncTableUpdate();
-                setupErrorPopup("Error editing transaction pending field.", e);
-            });
-
-            task.startTask();
-            task.waitForComplete();
-            updateTransactionTableView();
-        }
-    };
 
     public TransactionTableView() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -188,67 +46,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     }
 
     private void configureTransactionTableView() {
-        this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
-        this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
-        this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
-        this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
-        this.categoryColumn.setCellValueFactory(new IdenityCellValueCallback<TransactionModel>());
-        this.clearedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Boolean>("pending"));
-
-        this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        this.amountColumn.setOnEditCommit(this.amountEditHandler);
-        this.amountColumn.setComparator(new AmountComparator());
-
-        this.dateColumn.setCellFactory(column -> {
-            return new LocalDateTableCell<>(dateColumn);
-        });
-        this.dateColumn.setOnEditCommit(this.dateEditHandler);
-
-        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
-        getAllPayeesTask.startTask();
-        List<Payee> allPayees = getAllPayeesTask.waitForResult();
-
-        this.observableAllPayees = FXCollections.observableList(allPayees);
-        this.payeeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
-        this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
-        this.payeeColumn.setComparator(new PayeeComparator());
-
-        TaskWithReturn<List<Type>> getAllTypesTask = DbController.INSTANCE.getAllTypes();
-        getAllTypesTask.startTask();
-        List<Type> allTypes = getAllTypesTask.waitForResult();
-
-        ObservableList<Type> observableAllTypes = FXCollections.observableList(allTypes);
-        this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
-        this.typeColumn.setOnEditCommit(this.typeEditHandler);
-        this.typeColumn.setComparator(new TypeComparator());
-
-        this.categoryColumn.setCellFactory(
-        new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
-            @Override
-            public TableCell<TransactionModel, TransactionModel>  call(TableColumn<TransactionModel, TransactionModel> param) {
-                return new TableCell<TransactionModel, TransactionModel>() {
-                    @Override
-                    protected void updateItem(TransactionModel model, boolean empty) {
-                        super.updateItem(model, empty);
-
-                        if(model == null || empty) {
-                            setText(null);
-                            setGraphic(null);
-                        } else {
-                            TagFlowPane flow = new TagFlowPane(model.getTransaction());
-                            setGraphic(flow);
-                        }
-                    }
-                };
-            }
-        });
-        this.categoryColumn.setSortable(false);
-
-        ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
-
-        this.clearedColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PendingStringConverter(), observableAllPending));
-        this.clearedColumn.setOnEditCommit(this.closedEditHandler);
-
         // Add ability to delete transactions form tableView
         this.setOnKeyPressed(t -> {
             //Put your awesome application specific logic here
@@ -318,17 +115,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
         // 5. Add sorted (and filtered) data to the table.
         this.setItems(sortedData);
-
-        // Update Payee dropdown
-        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
-        getAllPayeesTask.startTask();
-        List<Payee> allPayees = getAllPayeesTask.waitForResult();
-
-        for (Payee currentPayee : allPayees) {
-            if (!this.observableAllPayees.contains(currentPayee)) {
-                this.observableAllPayees.add(currentPayee);
-            }
-        }
     }
 
     private void handleDeleteSelectedTransactionsFromTableView() {
