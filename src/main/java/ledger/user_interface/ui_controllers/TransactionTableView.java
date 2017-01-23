@@ -222,26 +222,26 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
         this.typeColumn.setComparator(new TypeComparator());
 
-        this.categoryColumn.setCellFactory(new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
-               @Override
-               public TableCell<TransactionModel, TransactionModel>  call(TableColumn<TransactionModel, TransactionModel> param) {
-                   return new TableCell<TransactionModel, TransactionModel>() {
-                       @Override
-                       protected void updateItem(TransactionModel model, boolean empty) {
-                           super.updateItem(model, empty);
+        this.categoryColumn.setCellFactory(
+        new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
+            @Override
+            public TableCell<TransactionModel, TransactionModel>  call(TableColumn<TransactionModel, TransactionModel> param) {
+                return new TableCell<TransactionModel, TransactionModel>() {
+                    @Override
+                    protected void updateItem(TransactionModel model, boolean empty) {
+                        super.updateItem(model, empty);
 
-                           if(model == null || empty) {
-                               setText(null);
-                               setGraphic(null);
-                           } else {
-                               TagFlowPane flow = new TagFlowPane(model.getTransaction());
-                               setGraphic(flow);
-                           }
-                       }
-                   };
-               }
-           }
-        );
+                        if(model == null || empty) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            TagFlowPane flow = new TagFlowPane(model.getTransaction());
+                            setGraphic(flow);
+                        }
+                    }
+                };
+            }
+        });
         this.categoryColumn.setSortable(false);
 
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
@@ -364,6 +364,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         updateTransactionTableView();
 
         DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
+        DbController.INSTANCE.registerPayyeeSuccessEvent(this::asyncTableUpdate);
     }
 
     public void updateAccountFilter(Account accountToFilterBy) {

@@ -11,7 +11,7 @@ import ledger.database.entity.Transaction;
  */
 public class TaggableSwitch {
 
-    public static TaskWithArgs edit(ITaggable tag) {
+    public static TaskWithArgs<ITaggable> edit(ITaggable tag) {
         TaskWithArgs task;
         if(tag instanceof Transaction) {
             task = DbController.INSTANCE.editTransaction((Transaction) tag);

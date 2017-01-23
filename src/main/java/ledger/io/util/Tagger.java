@@ -1,6 +1,9 @@
 package ledger.io.util;
 
 import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithArgsReturn;
+import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 
@@ -29,7 +32,9 @@ public class Tagger {
             Set<Tag> fullList = new HashSet<Tag>();
             fullList.addAll(originalList);
 
-            List<Tag> payeeTags = DbController.INSTANCE.getTagsForPayee(t.getPayee()).waitForResult();
+            TaskWithArgsReturn<Payee, List<Tag>> task = DbController.INSTANCE.getTagsForPayee(t.getPayee());
+            task.startTask();
+            List<Tag> payeeTags = task.waitForResult();
             if(payeeTags != null)
                 fullList.addAll(payeeTags);
 

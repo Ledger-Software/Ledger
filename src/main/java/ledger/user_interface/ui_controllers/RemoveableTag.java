@@ -45,9 +45,9 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     private void removeTag(ActionEvent actionEvent) {
         t.getTags().remove(tag);
 
-        TaskWithArgs<Transaction> task = TaggableSwitch.edit(t);
+        TaskWithArgs<ITaggable> task = TaggableSwitch.edit(t);
         task.RegisterFailureEvent((e) -> {
-            setupErrorPopup("Error editing transaction tag field.", e);
+            setupErrorPopup("Error editing tag field.", e);
         });
 
         task.startTask();

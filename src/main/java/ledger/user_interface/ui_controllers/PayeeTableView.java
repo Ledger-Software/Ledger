@@ -41,9 +41,6 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
-        task.startTask();
-
         nameColumn.setCellValueFactory(new PropertyValueFactory<Payee, String>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Payee, String>>() {
@@ -96,8 +93,19 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
         });
         tagColumn.setEditable(false);
 
+        DbController.INSTANCE.registerPayyeeSuccessEvent(this::asyncUpdateTableView);
+        updateTableView();
+    }
 
+    public void updateTableView() {
+        TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
+        task.startTask();
         List<Payee> payees = task.waitForResult();
-        this.setItems(FXCollections.observableList(payees));
+        this.getItems().clear();
+        this.getItems().addAll(payees);
+    }
+
+    public void asyncUpdateTableView() {
+        Startup.INSTANCE.runLater(this::updateTableView);
     }
 }

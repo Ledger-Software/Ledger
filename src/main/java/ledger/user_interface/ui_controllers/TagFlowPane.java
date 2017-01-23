@@ -47,7 +47,7 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
             }
             newTags = model.getTags();
 
-            newTags.add(new Tag("NewTag", "Desc"));
+            newTags.add(new Tag(Math.random() + "", Math.random() + ""));
             TaskWithArgs task = TaggableSwitch.edit(model);
             task.startTask();
             task.waitForComplete();
