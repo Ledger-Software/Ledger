@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 public class RemoveableTag extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagButton.fxml";
     private final Tag tag;
-    private final TransactionModel model;
+    private final Transaction t;
 
     @FXML
     public Text tagText;
@@ -29,8 +29,8 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     @FXML
     public Button removeButton;
 
-    public RemoveableTag(TransactionModel model, Tag tag) {
-        this.model = model;
+    public RemoveableTag(Transaction model, Tag tag) {
+        this.t = model;
         this.tag = tag;
         this.initController(pageLoc, this, "Unable to load Removeable Tag Button");
     }
@@ -42,7 +42,6 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     }
 
     private void removeTag(ActionEvent actionEvent) {
-        Transaction t = model.getTransaction();
         t.getTagList().remove(tag);
 
         TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(t);

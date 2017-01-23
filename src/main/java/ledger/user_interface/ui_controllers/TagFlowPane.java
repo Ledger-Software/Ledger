@@ -18,17 +18,17 @@ import java.util.ResourceBundle;
  */
 public class TagFlowPane extends FlowPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/FlowPane.fxml";
-    private final TransactionModel model;
+    private final Transaction model;
 
 
-    public TagFlowPane(TransactionModel model) {
+    public TagFlowPane(Transaction model) {
         this.model = model;
         this.initController(pageLoc, this, "Unable to load Tag Flow");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Tag> tags = model.getTags();
+        List<Tag> tags = model.getTagList();
         if(tags != null)
         for(Tag tag: tags) {
             RemoveableTag rTag = new RemoveableTag(model, tag);
@@ -38,12 +38,8 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         Button addButton = new Button();
         addButton.setText("Add Tag");
         addButton.setOnAction(event -> {
-            Transaction t = model.getTransaction();
-
-
-
-            t.getTagList().add(new Tag("NewTag", "Desc"));
-            TaskWithArgs task = DbController.INSTANCE.editTransaction(t);
+            model.getTagList().add(new Tag("NewTag", "Desc"));
+            TaskWithArgs task = DbController.INSTANCE.editTransaction(model);
             task.startTask();
             task.waitForComplete();
         });

@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,6 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.user_interface.ui_models.TransactionModel;
@@ -21,7 +23,7 @@ import java.util.ResourceBundle;
  * Created by CJ on 1/22/2017.
  */
 public class PayeeTableView extends TableView implements IUIController, Initializable {
-    public static final String pageLoc = "";
+    private static final String pageLoc = "/fxml_files/PayeeTableView.fxml";
 
     @FXML
     public TableColumn<Payee,String> nameColumn;
@@ -66,5 +68,12 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
                 task.waitForComplete();
             }
         });
+
+        TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
+
+        task.startTask();
+        List<Payee> payees = task.waitForResult();
+
+        this.setItems(FXCollections.observableList(payees));
     }
 }

@@ -139,10 +139,12 @@ public interface IUIController {
         createModal(null, s, windowName);
     }
 
-    default void createModal(Window parrent, Scene child, String windowName) {
+    default void createModal(Window parrent, Scene child, String windowName) { createModal(parrent,child,windowName,false);}
+
+    default void createModal(Window parrent, Scene child, String windowName, boolean resizeable) {
         Stage newStage = new Stage();
         newStage.setScene(child);
-        newStage.setResizable(false);
+        newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
         newStage.initModality(Modality.WINDOW_MODAL);
         newStage.show();

@@ -105,10 +105,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
     private void openPayeeEditor(ActionEvent actionEvent) {
         PayeeTableWindow window = new PayeeTableWindow();
-
         Scene scene = new Scene(window);
 
-        this.createModal(this.getScene().getWindow(), scene, "Payee Editor");
+        this.createModal(null, scene, "Payee Editor",true);
     }
 
     private void clearSearch(ActionEvent actionEvent) {

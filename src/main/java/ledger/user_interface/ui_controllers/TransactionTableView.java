@@ -236,7 +236,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                                setText(null);
                                setGraphic(null);
                            } else {
-                               TagFlowPane flow = new TagFlowPane(model);
+                               TagFlowPane flow = new TagFlowPane(model.getTransaction());
                                setGraphic(flow);
                            }
                        }
@@ -244,6 +244,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
                }
            }
         );
+        this.categoryColumn.setSortable(false);
 
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
 
