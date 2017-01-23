@@ -1,5 +1,6 @@
 package ledger.database.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,13 +16,14 @@ public class Payee implements IEntity {
     private List<Tag> tags;
 
     public Payee(String name, String description) {
-        this(name, description, -1);
+        this(name, description, -1, new ArrayList<Tag>());
     }
 
-    public Payee(String name, String description, int id) {
+    public Payee(String name, String description, int id, List<Tag> tags) {
         this.name = name;
         this.description = description;
         this.id = id;
+        this.tags = tags;
     }
 
     /**
