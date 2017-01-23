@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * TableColumn for Types
  */
-public class TypeColumn extends TableColumn implements IUIController{
+public class TypeColumn extends TableColumn implements IUIController {
 
     public TypeColumn() {
         this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));

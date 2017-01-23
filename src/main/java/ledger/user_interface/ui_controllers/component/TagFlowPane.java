@@ -27,11 +27,11 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<Tag> tags = model.getTags();
-        if(tags != null)
-        for(Tag tag: tags) {
-            RemoveableTag rTag = new RemoveableTag(model, tag);
-            this.getChildren().add(rTag);
-        }
+        if (tags != null)
+            for (Tag tag : tags) {
+                RemoveableTag rTag = new RemoveableTag(model, tag);
+                this.getChildren().add(rTag);
+            }
 
         Button addButton = new Button();
         addButton.getStyleClass().add("smallButton");

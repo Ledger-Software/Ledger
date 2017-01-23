@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
@@ -34,7 +33,7 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
 
     public TagBuilderControl(ITaggable model) {
         this.model = model;
-        this.initController(pageLoc,this, "Unable to load Tag Builder");
+        this.initController(pageLoc, this, "Unable to load Tag Builder");
     }
 
     @Override
@@ -44,7 +43,7 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
 
     private void addTag(ActionEvent actionEvent) {
         List<Tag> newTags = model.getTags();
-        if (newTags == null){
+        if (newTags == null) {
             newTags = new LinkedList<Tag>();
             model.setTags(newTags);
         }

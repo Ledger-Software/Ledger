@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * TableColumn for Dates
  */
-public class DateColumn extends TableColumn implements IUIController{
+public class DateColumn extends TableColumn implements IUIController {
 
     public DateColumn() {
         this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));

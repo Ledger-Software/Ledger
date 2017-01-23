@@ -14,7 +14,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
-import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;

@@ -48,13 +48,13 @@ public class OldVersionArchiver extends GridPane implements IUIController, Initi
             new File(newPath.getParent().toString()).mkdirs();
             Files.move(jarFile.toPath(), newPath);
         } catch (IOException e) {
-            this.setupErrorPopup("Unable to move file to archive.",e);
+            this.setupErrorPopup("Unable to move file to archive.", e);
         }
-        ((Stage)this.getScene().getWindow()).close();
+        ((Stage) this.getScene().getWindow()).close();
     }
 
     private void deleteFile(ActionEvent actionEvent) {
         jarFile.delete();
-        ((Stage)this.getScene().getWindow()).close();
+        ((Stage) this.getScene().getWindow()).close();
     }
 }

@@ -15,15 +15,15 @@ public class TagColumn extends TableColumn {
     public TagColumn() {
         this.setCellValueFactory(new IdenityCellValueCallback<TransactionModel>());
         this.setCellFactory(
-                new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
+                new Callback<TableColumn<TransactionModel, TransactionModel>, TableCell<TransactionModel, TransactionModel>>() {
                     @Override
-                    public TableCell<TransactionModel, TransactionModel>  call(TableColumn<TransactionModel, TransactionModel> param) {
+                    public TableCell<TransactionModel, TransactionModel> call(TableColumn<TransactionModel, TransactionModel> param) {
                         return new TableCell<TransactionModel, TransactionModel>() {
                             @Override
                             protected void updateItem(TransactionModel model, boolean empty) {
                                 super.updateItem(model, empty);
 
-                                if(model == null || empty) {
+                                if (model == null || empty) {
                                     setText(null);
                                     setGraphic(null);
                                 } else {

@@ -6,7 +6,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
@@ -16,7 +19,6 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
-import ledger.user_interface.ui_controllers.window.*;
 
 import java.net.URL;
 import java.util.List;
@@ -77,7 +79,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             createAccountPopup();
         });
 
-        this.deleteAccountBtn.setOnAction( (event) -> {
+        this.deleteAccountBtn.setOnAction((event) -> {
             deleteAccount();
         });
 
@@ -122,7 +124,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         PayeeTableWindow window = new PayeeTableWindow();
         Scene scene = new Scene(window);
 
-        this.createModal(null, scene, "Payee Editor",true);
+        this.createModal(null, scene, "Payee Editor", true);
     }
 
     private void setUpAccountCreationHelp() {
@@ -196,7 +198,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 " associated with the account. Do you wish to proceed?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             // ... user chose OK
             TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
             t.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> chooseAccount.selectDefault()));
@@ -205,7 +207,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             });
             t.startTask();
         } else {
-           return;
+            return;
         }
     }
 }

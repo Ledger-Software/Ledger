@@ -18,7 +18,6 @@ import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
 import ledger.user_interface.ui_controllers.component.ConverterDropdown;
 import ledger.user_interface.ui_controllers.component.FileSelectorButton;
-import ledger.user_interface.ui_controllers.window.DuplicateTransactionPopup;
 
 import java.io.File;
 import java.net.URL;

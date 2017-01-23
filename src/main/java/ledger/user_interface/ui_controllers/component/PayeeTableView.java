@@ -28,9 +28,9 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
     private static final String pageLoc = "/fxml_files/PayeeTableView.fxml";
 
     @FXML
-    public TableColumn<Payee,String> nameColumn;
+    public TableColumn<Payee, String> nameColumn;
     @FXML
-    public TableColumn<Payee,String> descriptionColumn;
+    public TableColumn<Payee, String> descriptionColumn;
     @FXML
     public TableColumn<Payee, Payee> tagColumn;
 
@@ -72,15 +72,15 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
         });
 
         tagColumn.setCellValueFactory(new IdenityCellValueCallback<>());
-        tagColumn.setCellFactory(new Callback<TableColumn<Payee, Payee> , TableCell<Payee, Payee> >() {
+        tagColumn.setCellFactory(new Callback<TableColumn<Payee, Payee>, TableCell<Payee, Payee>>() {
             @Override
-            public TableCell<Payee, Payee>  call(TableColumn<Payee, Payee> param) {
+            public TableCell<Payee, Payee> call(TableColumn<Payee, Payee> param) {
                 return new TableCell<Payee, Payee>() {
                     @Override
                     protected void updateItem(Payee model, boolean empty) {
                         super.updateItem(model, empty);
 
-                        if(model == null || empty) {
+                        if (model == null || empty) {
                             setText(null);
                             setGraphic(null);
                         } else {
