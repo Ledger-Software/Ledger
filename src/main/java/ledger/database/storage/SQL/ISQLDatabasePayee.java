@@ -50,6 +50,13 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
                 payee.setId(insertedPayeeID);
             }
 
+            if (payee.getTags() != null) {
+                for(Tag t : payee.getTags()) {
+                    insertTagIfNew(t);
+                    addTagForPayee(t, payee);
+                }
+            }
+
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while adding Payee", e);
         }
@@ -58,6 +65,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
     @Override
     default void deletePayee(Payee payee) throws StorageException {
         try {
+            deleteAllTagsForPayee(payee);
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + PayeeTable.TABLE_NAME +
                     " WHERE " + PayeeTable.PAYEE_ID + " = ?");
             stmt.setInt(1, payee.getId());
@@ -137,7 +145,6 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             currentTag.setId(existingTag.getId());
         } else {
             insertTag(currentTag);
-            currentTag = getTagForNameAndDescription(currentTag.getName(), currentTag.getDescription());
         }
         return currentTag;
     }
