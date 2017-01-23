@@ -14,7 +14,7 @@ import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.PendingStringConverter;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for pending
  */
 public class ClearedColumn extends TableColumn implements IUIController {
 

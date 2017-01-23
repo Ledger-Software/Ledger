@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for Dates
  */
 public class DateColumn extends TableColumn implements IUIController{
 

@@ -19,7 +19,7 @@ import ledger.user_interface.utils.TypeStringConverter;
 import java.util.List;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for Types
  */
 public class TypeColumn extends TableColumn implements IUIController{
 
@@ -34,7 +34,6 @@ public class TypeColumn extends TableColumn implements IUIController{
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.setOnEditCommit(this.typeEditHandler);
         this.setComparator(new TypeComparator());
-
     }
 
     private EventHandler<CellEditEvent<TransactionModel, Type>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Type>>() {

@@ -19,7 +19,7 @@ import ledger.user_interface.utils.PayeeStringConverter;
 import java.util.List;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for Payees
  */
 public class PayeeColumn extends TableColumn implements IUIController {
 

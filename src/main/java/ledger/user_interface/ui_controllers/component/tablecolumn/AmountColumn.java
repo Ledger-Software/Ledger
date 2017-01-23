@@ -13,7 +13,7 @@ import ledger.user_interface.utils.AmountComparator;
 import ledger.user_interface.utils.InputSanitization;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for amounts
  */
 public class AmountColumn extends TableColumn implements IUIController {
 

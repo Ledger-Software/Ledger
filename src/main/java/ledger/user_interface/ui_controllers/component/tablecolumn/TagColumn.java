@@ -8,7 +8,7 @@ import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.IdenityCellValueCallback;
 
 /**
- * Created by CJ on 1/23/2017.
+ * TableColumn for Tags
  */
 public class TagColumn extends TableColumn {
 
