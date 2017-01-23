@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 
 import javafx.event.ActionEvent;
@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.ui_controllers.IUIController;
 
 import java.io.File;
 import java.net.URL;
@@ -29,7 +30,7 @@ public class PasswordPromptController extends GridPane implements IUIController,
 
     public final static String pageLoc = "/fxml_files/PasswordPrompt.fxml";
 
-    PasswordPromptController() {
+    public PasswordPromptController() {
         this.initController(pageLoc, this, "Error displaying password prompt: ");
     }
 

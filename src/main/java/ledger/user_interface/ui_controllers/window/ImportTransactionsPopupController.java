@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +13,12 @@ import ledger.controller.ImportController;
 import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.AccountDropdown;
+import ledger.user_interface.ui_controllers.component.ConverterDropdown;
+import ledger.user_interface.ui_controllers.component.FileSelectorButton;
+import ledger.user_interface.ui_controllers.window.DuplicateTransactionPopup;
 
 import java.io.File;
 import java.net.URL;

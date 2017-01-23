@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
+import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.TaggableSwitch;
 
 import java.net.URL;

@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,6 +10,8 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
@@ -34,7 +36,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     private final static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
 
 
-    AccountPopupController() {
+    public AccountPopupController() {
         this.initController(pageLoc, this, "Add account popup startup error: ");
     }
 

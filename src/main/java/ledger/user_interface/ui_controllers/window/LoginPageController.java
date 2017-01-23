@@ -1,23 +1,16 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.io.File;
@@ -48,7 +41,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
     private boolean containsDbFile;
 
-    LoginPageController() {
+    public LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
     }
 

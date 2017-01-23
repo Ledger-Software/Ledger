@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +11,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
+import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.TaggableSwitch;
 
 import java.net.URL;
@@ -26,7 +27,6 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
 
     @FXML
     public Text tagText;
-
     @FXML
     public Button removeButton;
 

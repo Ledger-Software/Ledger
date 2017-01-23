@@ -1,9 +1,10 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import ledger.controller.ImportController;
+import ledger.user_interface.ui_controllers.IUIController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

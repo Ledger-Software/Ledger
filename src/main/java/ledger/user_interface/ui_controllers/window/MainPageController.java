@@ -1,22 +1,22 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
+import ledger.user_interface.ui_controllers.component.TransactionTableView;
+import ledger.user_interface.ui_controllers.window.*;
 
 import java.net.URL;
 import java.util.List;
@@ -56,7 +56,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
     boolean containsAccounts = false;
 
-    MainPageController() {
+    public MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
     }
 

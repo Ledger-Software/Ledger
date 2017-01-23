@@ -5,9 +5,9 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import ledger.user_interface.ui_controllers.AccountDropdown?>
-<?import ledger.user_interface.ui_controllers.ConverterDropdown?>
-<?import ledger.user_interface.ui_controllers.FileSelectorButton?>
+<?import ledger.user_interface.ui_controllers.component.AccountDropdown?>
+<?import ledger.user_interface.ui_controllers.component.ConverterDropdown?>
+<?import ledger.user_interface.ui_controllers.component.FileSelectorButton?>
 <?import java.net.URL?>
 <fx:root fx:id="addAcctGridPane" alignment="CENTER" scaleShape="false" style="-fx-background-color: #ffffff;"
          type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">

@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
@@ -6,6 +6,8 @@ import javafx.scene.control.ChoiceBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
 import java.util.List;

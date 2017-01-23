@@ -1,7 +1,8 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
+import ledger.user_interface.ui_controllers.IUIController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

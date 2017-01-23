@@ -10,6 +10,9 @@ import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
 import ledger.updater.GitHubChecker;
 import ledger.updater.OldVersionFinder;
+import ledger.user_interface.ui_controllers.window.LoginPageController;
+import ledger.user_interface.ui_controllers.window.OldVersionArchiver;
+import ledger.user_interface.ui_controllers.window.UpdateConfirmation;
 
 import java.io.File;
 
