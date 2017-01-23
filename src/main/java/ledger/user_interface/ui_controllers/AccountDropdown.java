@@ -33,6 +33,9 @@ public class AccountDropdown extends ChoiceBox<Account> implements IUIController
         List<Account> accounts = task.waitForResult();
 
         this.setItems(FXCollections.observableArrayList(accounts));
+        if(this.getItems().size()==1){
+            this.getSelectionModel().select(0);
+        }
     }
 
     public Account getSelectedAccount() {

@@ -1,6 +1,5 @@
 package ledger.io.input;
 
-
 import au.com.bytecode.opencsv.CSVReader;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;

@@ -1,14 +1,15 @@
 package ledger.user_interface.ui_controllers;
 
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 import java.io.IOException;
@@ -55,6 +56,7 @@ public interface IUIController {
      * Generating code for the error popup
      *
      * @param s a string containing the error message
+     * @param e the exception caused be the error(s)
      */
     default void setupErrorPopup(String s, Exception e) {
 
@@ -134,6 +136,7 @@ public interface IUIController {
      * Sets the stage and the scene for the new modal
      *
      * @param s the previously initialized Scene that is set on the new Stage
+     * @param windowName The name of the window to be created
      */
     default void createModal(Scene s, String windowName) {
         createModal(null, s, windowName);
@@ -165,5 +168,27 @@ public interface IUIController {
             newStage.setX(centerX - childX / 2);
             newStage.setY(centerY - childY / 2);
         }
+    }
+
+    default void createIntroductionAlerts(String title, String message, Alert a) {
+        a.setContentText(message);
+        a.getButtonTypes().add(ButtonType.OK);
+        DialogPane root = a.getDialogPane();
+        Stage stage = new Stage(StageStyle.DECORATED);
+        for (ButtonType bt : root.getButtonTypes()) {
+            ButtonBase b = (ButtonBase) root.lookupButton(bt);
+            b.setOnAction(e -> {
+                stage.close();
+            });
+        }
+        root.getScene().setRoot(new Group());
+        root.setPadding(new Insets(10, 0, 10, 0));
+        Scene s = new Scene(root);
+        stage.setScene(s);
+        stage.setTitle(title);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(false);
+        stage.setAlwaysOnTop(true);
+        stage.show();
     }
 }

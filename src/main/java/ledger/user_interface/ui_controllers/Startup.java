@@ -28,6 +28,8 @@ public class Startup extends Application {
 
     /**
      * Main entry point into the GUI for Ledger Software.
+     *
+     * @param args No args are used
      */
     public static void main(String[] args) {
         launch(args);
@@ -36,7 +38,7 @@ public class Startup extends Application {
     /**
      * Kicks off the application flow
      *
-     * @param primaryStage
+     * @param primaryStage The primary staged used to run the app
      */
     @Override
     public void start(Stage primaryStage) {

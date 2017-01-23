@@ -12,8 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -202,6 +202,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         this.amountColumn.setOnEditCommit(this.amountEditHandler);
+        this.amountColumn.setComparator(new AmountComparator());
 
         this.dateColumn.setCellFactory(column -> {
             return new LocalDateTableCell<>(dateColumn);
@@ -215,6 +216,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.observableAllPayees = FXCollections.observableList(allPayees);
         this.payeeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
         this.payeeColumn.setOnEditCommit(this.payeeEditHandler);
+        this.payeeColumn.setComparator(new PayeeComparator());
 
         TaskWithReturn<List<Type>> getAllTypesTask = DbController.INSTANCE.getAllTypes();
         getAllTypesTask.startTask();
@@ -223,6 +225,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         ObservableList<Type> observableAllTypes = FXCollections.observableList(allTypes);
         this.typeColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new TypeStringConverter(), observableAllTypes));
         this.typeColumn.setOnEditCommit(this.typeEditHandler);
+        this.typeColumn.setComparator(new TypeComparator());
 
         this.categoryColumn.setCellFactory(new Callback<TableColumn<TransactionModel, TransactionModel> , TableCell<TransactionModel, TransactionModel> >() {
                @Override
@@ -255,11 +258,18 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.setOnKeyPressed(t -> {
             //Put your awesome application specific logic here
             if (t.getCode() == KeyCode.DELETE) {
-                handleDeleteTransactionFromTableView();
+                handleDeleteSelectedTransactionsFromTableView();
             }
         });
 
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        ContextMenu menu = new ContextMenu();
+        MenuItem removeMenuItem = new MenuItem("Delete Selected Transaction(s)");
+        menu.getItems().add(removeMenuItem);
+        this.setContextMenu(menu);
+        // removeMenuItem will remove the row from the table:
+        removeMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
     }
 
     public void updateTransactionTableView() {
@@ -303,7 +313,6 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             } else {
                 return false; // Filter does not match.
             }
-
         });
 
         // 3. Wrap the FilteredList in a SortedList.
@@ -327,14 +336,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         }
     }
 
-    private void handleDeleteTransactionFromTableView() {
+    private void handleDeleteSelectedTransactionsFromTableView() {
         List<Integer> indices = new ArrayList<>();
         // Add indices to new list so they aren't observable
         indices.addAll(this.getSelectionModel().getSelectedIndices());
         if (indices.size() != 0) {
 
             //TODO: Get around this scary mess
-            if(indices.contains(new Integer(-1))) {
+            if (indices.contains(new Integer(-1))) {
                 indices = this.getSelectionModel().getSelectedIndices();
             }
 

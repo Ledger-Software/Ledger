@@ -28,6 +28,7 @@ public class SQLiteDatabaseTest {
     private static Type sampleType2;
     private static Account sampleAccount;
     private static Payee samplePayee;
+    private static Payee samplePayee2;
     private static Tag sampleTag;
     private static Tag sampleTag2;
     private static Note sampleNote;
@@ -44,6 +45,7 @@ public class SQLiteDatabaseTest {
         sampleType2 = new Type("Debit", "Purchased with a debit card");
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
         samplePayee = new Payee("Meijer", "Grocery store");
+        samplePayee2 = new Payee("Kroger", "Grocery store");
         sampleTag = new Tag("Groceries", "Money spent on groceries");
         sampleTag2 = new Tag("Electronics", "Money spent on electronics");
         sampleNote = new Note("This is a note");
@@ -539,6 +541,19 @@ public class SQLiteDatabaseTest {
 
         assertEquals(textToSet, editedTag.getDescription());
         assertEquals(tagToEdit.getId(), editedTag.getId());
+    }
+
+    @Test
+    public void deleteAllTagsForPayeeTest() throws Exception {
+        database.insertPayee(samplePayee2);
+        database.addTagForPayee(sampleTag, samplePayee2);
+        database.addTagForPayee(sampleTag2, samplePayee2);
+
+        database.deleteAllTagsForPayee(samplePayee2);
+        int expected = 0;
+        int actual = database.getAllTagsForPayee(samplePayee2).size();
+
+        assertEquals(expected, actual);
     }
 
     @AfterClass

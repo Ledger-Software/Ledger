@@ -1,5 +1,7 @@
 package ledger.database.entity;
 
+import java.util.List;
+
 /**
  * Entity that holds a single payee
  */
@@ -7,6 +9,8 @@ public class Payee implements IEntity {
     private String name;
     private String description;
     private int id;
+
+    private List<Tag> tags;
 
     public Payee(String name, String description) {
         this(name, description, -1);
@@ -70,6 +74,51 @@ public class Payee implements IEntity {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * Gets the Payee's list of Tags
+     *
+     * @return  the list of Tags
+     */
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets the Payee's list of Tags
+     *
+     * @param tags the list of Tags to assign to this Payee
+     */
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Adds a Tag to this Payee's list of Tags
+     *
+     * @param t the Tag to assign to this Payee
+     */
+    public void addTag(Tag t) {
+        this.tags.add(t);
+    }
+
+    @Override
+    public String toString() {
+        return "Payee{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
+    /**
+     * Removes a Tag from this Payee's list of Tags
+     *
+     * @param t the Tag to remove from this Payee
+     */
+    public void removeTag(Tag t) {
+        this.tags.remove(t);
     }
 
     /**

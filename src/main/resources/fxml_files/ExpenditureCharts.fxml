@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import ledger.user_interface.ui_controllers.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -17,25 +25,16 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.AccountDropdown?>
 
-<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.101" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="178.0" prefWidth="178.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="178.0" prefWidth="178.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1048.0" minWidth="10.0" prefWidth="1034.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="0.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
       <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="20.0" minHeight="0.0" prefHeight="20.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="61.0" minHeight="40.0" prefHeight="56.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="53.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="591.0" minHeight="10.0" prefHeight="198.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="516.0" minHeight="10.0" prefHeight="197.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="263.0" minHeight="10.0" prefHeight="193.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="300.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="7">
@@ -47,64 +46,53 @@
                 </Text>
             </children>
         </Pane>
-      <GridPane style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="3" GridPane.rowIndex="2" GridPane.rowSpan="2">
+      <GridPane style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="2" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" prefWidth="138.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" prefWidth="161.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="43.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="184.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" percentWidth="12.5" prefWidth="138.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" percentWidth="12.5" prefWidth="161.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="43.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <GridPane.margin>
-            <Insets left="20.0" />
+            <Insets left="20.0" right="20.0" top="5.0" />
          </GridPane.margin>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account - " textAlignment="CENTER" wrappingWidth="80.107421875" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account: " textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filter By:" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filters:" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <font>
-                  <Font name="Calibri Light" size="27.0" />
+                  <Font name="Calibri Light" size="22.0" />
                </font></Text>
-            <AccountDropdown fx:id="accountFilterDropdown" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date - " textAlignment="CENTER" wrappingWidth="54.8564453125" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
+            <AccountDropdown fx:id="accountFilterDropdown" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date: " textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <DatePicker fx:id="fromDateFilter" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <DatePicker fx:id="toDateFilter" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="to" wrappingWidth="15.3017578125" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <DatePicker fx:id="fromDateFilter" prefWidth="150.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+            <DatePicker fx:id="toDateFilter" prefWidth="150.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End Date: " GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Label fx:id="currentlyShowingLabel" prefHeight="55.0" prefWidth="404.0" textAlignment="CENTER" wrapText="true" GridPane.columnSpan="4" GridPane.halignment="LEFT" GridPane.rowIndex="3" GridPane.rowSpan="2">
-               <font>
-                  <Font name="Calibri Light" size="18.0" />
-               </font>
+            <Button fx:id="filterEnterButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
-                  <Insets left="20.0" right="10.0" />
-               </GridPane.margin>
-            </Label>
-            <Button fx:id="filterEnterButton" mnemonicParsing="false" prefHeight="33.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets bottom="15.0" left="70.0" />
+                  <Insets />
                </GridPane.margin></Button>
          </children>
-         <padding>
-            <Insets bottom="5.0" />
-         </padding>
       </GridPane>
-      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditure History" GridPane.columnSpan="3" GridPane.rowIndex="4" GridPane.rowSpan="3">
+      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditure History" GridPane.rowIndex="2">
         <xAxis>
           <CategoryAxis side="BOTTOM" />
         </xAxis>
@@ -118,7 +106,7 @@
             <Insets top="10.0" />
          </GridPane.margin>
       </LineChart>
-      <PieChart fx:id="expendituresPieChart" animated="false" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="2" GridPane.rowSpan="5">
+      <PieChart fx:id="expendituresPieChart" animated="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </GridPane.margin>
