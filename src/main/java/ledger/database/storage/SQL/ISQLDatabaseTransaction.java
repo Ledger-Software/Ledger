@@ -345,12 +345,15 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                 String newName = payeeName;
                 String description = payeeDescription;
                 int id = rs.getInt(PayeeTable.PAYEE_ID);
+                List<Tag> tags = getAllTagsForPayeeId(id);
 
-                return new Payee(newName, description, id);
+                return new Payee(newName, description, id, tags);
             } else {
                 return null;
             }
         } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+        } catch (StorageException e) {
             e.printStackTrace();
         }
         return null;
@@ -442,7 +445,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             if (rs.next()) {
                 String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
                 String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
-                return new Payee(payeeName, payeeDesc, payeeID);
+                List<Tag> tags = getAllTagsForPayeeId(payeeID);
+                return new Payee(payeeName, payeeDesc, payeeID, tags);
             } else {
                 return null;
             }
