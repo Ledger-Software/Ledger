@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/21/2017.
+ * Shows All Tags for a ITaggable object. Allows the addition there of also
  */
 public class TagFlowPane extends FlowPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/FlowPane.fxml";

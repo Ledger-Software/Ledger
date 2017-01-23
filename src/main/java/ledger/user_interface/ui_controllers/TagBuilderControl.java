@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/23/2017.
+ * Control that allows adding a Tag to an ITaggable Object.
  */
 public class TagBuilderControl extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagBuilder.fxml";
@@ -53,8 +53,5 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
         TaskWithArgs task = TaggableSwitch.edit(model);
         task.startTask();
         task.waitForComplete();
-
-        FlowPane parent = ((FlowPane)this.getParent());
-        parent.getChildren().remove(this);
     }
 }

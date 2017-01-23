@@ -17,7 +17,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/21/2017.
+ * Controller as part of a TagFlowPane that slows a Tag and allows it to be removed
  */
 public class RemoveableTag extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagButton.fxml";
