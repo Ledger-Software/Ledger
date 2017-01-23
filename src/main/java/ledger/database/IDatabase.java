@@ -68,6 +68,8 @@ public interface IDatabase {
 
     List<Tag> getAllTagsForPayee(Payee payee) throws StorageException;
 
+    List<Tag> getAllTagsForPayeeId(int payeeId) throws StorageException;
+
     void deleteTagForPayee(Tag tag, Payee payee) throws StorageException;
 
     void deleteAllTagsForPayee(Payee payee) throws StorageException;
