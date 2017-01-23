@@ -16,12 +16,12 @@
     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button fx:id="removeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="X" textAlignment="CENTER" GridPane.columnIndex="1">
+      <Button fx:id="removeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="smallButton" text="X" textAlignment="CENTER" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets left="1.0" right="1.0" />
          </GridPane.margin>
       </Button>
-      <Text fx:id="tagText" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textOrigin="CENTER">
+      <Text fx:id="tagText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="smallButton" text="Text" textOrigin="CENTER">
          <GridPane.margin>
             <Insets left="5.0" right="5.0" />
          </GridPane.margin>

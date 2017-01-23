@@ -38,19 +38,14 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         }
 
         Button addButton = new Button();
+        addButton.getStyleClass().add("smallButton");
         addButton.setText("Add Tag");
         addButton.setOnAction((ActionEvent event) -> {
-            List<Tag> newTags = model.getTags();
-            if (newTags == null){
-                newTags = new LinkedList<Tag>();
-                model.setTags(newTags);
-            }
-            newTags = model.getTags();
+            this.getChildren().remove(addButton);
 
-            newTags.add(new Tag(Math.random() + "", Math.random() + ""));
-            TaskWithArgs task = TaggableSwitch.edit(model);
-            task.startTask();
-            task.waitForComplete();
+            TagBuilderControl tagBuilder = new TagBuilderControl(model);
+
+            this.getChildren().add(tagBuilder);
         });
 
         this.getChildren().add(addButton);
