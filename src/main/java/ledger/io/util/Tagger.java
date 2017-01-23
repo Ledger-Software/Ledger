@@ -25,7 +25,7 @@ public class Tagger {
      */
     public void tagTransactions() {
         for(Transaction t: transactions) {
-            List<Tag> originalList = t.getTagList();
+            List<Tag> originalList = t.getTags();
             Set<Tag> fullList = new HashSet<Tag>();
             fullList.addAll(originalList);
 
@@ -35,7 +35,7 @@ public class Tagger {
 
             List<Tag> newList = new ArrayList<Tag>();
             newList.addAll(fullList);
-            t.setTagList(newList);
+            t.setTags(newList);
         }
     }
     

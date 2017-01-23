@@ -192,12 +192,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
         this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
         this.typeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
-        this.categoryColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<TransactionModel, TransactionModel>, ObservableValue<TransactionModel>>() {
-            @Override
-            public ObservableValue<TransactionModel> call(TableColumn.CellDataFeatures<TransactionModel,TransactionModel> param) {
-                return new ReadOnlyObjectWrapper(param.getValue());
-            }
-        });
+        this.categoryColumn.setCellValueFactory(new IdenityCellValueCallback<TransactionModel>());
         this.clearedColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Boolean>("pending"));
 
         this.amountColumn.setCellFactory(TextFieldTableCell.forTableColumn());

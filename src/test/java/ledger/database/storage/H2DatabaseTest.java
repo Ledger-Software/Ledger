@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,8 +90,8 @@ public class H2DatabaseTest {
         assertEquals(insertedTransaction.getAccount().getId(), sampleTransaction1.getAccount().getId());
         assertEquals(insertedTransaction.getPayee().getId(), sampleTransaction1.getPayee().getId());
         assertEquals(insertedTransaction.getType().getId(), sampleTransaction1.getType().getId());
-        for (int i = 0; i < insertedTransaction.getTagList().size(); i++) {
-            assertEquals(insertedTransaction.getTagList().get(i).getId(), sampleTransaction1.getTagList().get(i).getId());
+        for (int i = 0; i < insertedTransaction.getTags().size(); i++) {
+            assertEquals(insertedTransaction.getTags().get(i).getId(), sampleTransaction1.getTags().get(i).getId());
         }
     }
 

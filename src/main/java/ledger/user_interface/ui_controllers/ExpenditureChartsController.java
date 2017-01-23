@@ -275,10 +275,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private void createPieChart(List<Transaction> filteredTransactions) {
         Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
-            if (t.getTagList().isEmpty()) {
+            if (t.getTags().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
             } else {
-                for (Tag tag : t.getTagList()) {
+                for (Tag tag : t.getTags()) {
                     addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
                 }
             }

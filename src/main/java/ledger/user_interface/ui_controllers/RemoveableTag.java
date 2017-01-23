@@ -8,9 +8,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
-import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.TaggableSwitch;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -21,7 +22,7 @@ import java.util.ResourceBundle;
 public class RemoveableTag extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagButton.fxml";
     private final Tag tag;
-    private final Transaction t;
+    private final ITaggable t;
 
     @FXML
     public Text tagText;
@@ -29,7 +30,7 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     @FXML
     public Button removeButton;
 
-    public RemoveableTag(Transaction model, Tag tag) {
+    public RemoveableTag(ITaggable model, Tag tag) {
         this.t = model;
         this.tag = tag;
         this.initController(pageLoc, this, "Unable to load Removeable Tag Button");
@@ -42,9 +43,9 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     }
 
     private void removeTag(ActionEvent actionEvent) {
-        t.getTagList().remove(tag);
+        t.getTags().remove(tag);
 
-        TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(t);
+        TaskWithArgs<Transaction> task = TaggableSwitch.edit(t);
         task.RegisterFailureEvent((e) -> {
             setupErrorPopup("Error editing transaction tag field.", e);
         });

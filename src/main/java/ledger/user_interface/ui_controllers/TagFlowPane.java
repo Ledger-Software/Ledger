@@ -1,15 +1,18 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
+import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
-import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.TaggableSwitch;
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -18,17 +21,16 @@ import java.util.ResourceBundle;
  */
 public class TagFlowPane extends FlowPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/FlowPane.fxml";
-    private final Transaction model;
+    private final ITaggable model;
 
-
-    public TagFlowPane(Transaction model) {
+    public TagFlowPane(ITaggable model) {
         this.model = model;
         this.initController(pageLoc, this, "Unable to load Tag Flow");
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Tag> tags = model.getTagList();
+        List<Tag> tags = model.getTags();
         if(tags != null)
         for(Tag tag: tags) {
             RemoveableTag rTag = new RemoveableTag(model, tag);
@@ -37,9 +39,16 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
 
         Button addButton = new Button();
         addButton.setText("Add Tag");
-        addButton.setOnAction(event -> {
-            model.getTagList().add(new Tag("NewTag", "Desc"));
-            TaskWithArgs task = DbController.INSTANCE.editTransaction(model);
+        addButton.setOnAction((ActionEvent event) -> {
+            List<Tag> newTags = model.getTags();
+            if (newTags == null){
+                newTags = new LinkedList<Tag>();
+                model.setTags(newTags);
+            }
+            newTags = model.getTags();
+
+            newTags.add(new Tag("NewTag", "Desc"));
+            TaskWithArgs task = TaggableSwitch.edit(model);
             task.startTask();
             task.waitForComplete();
         });

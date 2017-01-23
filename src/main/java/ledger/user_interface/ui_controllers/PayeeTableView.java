@@ -4,16 +4,18 @@ import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
-import ledger.database.entity.Tag;
 import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.IdenityCellValueCallback;
 
 import java.net.URL;
 import java.util.List;
@@ -30,7 +32,7 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
     @FXML
     public TableColumn<Payee,String> descriptionColumn;
     @FXML
-    public TableColumn<Payee,List<Tag>> tagColumn;
+    public TableColumn<Payee, Payee> tagColumn;
 
 
     public PayeeTableView() {
@@ -39,6 +41,9 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
+        task.startTask();
+
         nameColumn.setCellValueFactory(new PropertyValueFactory<Payee, String>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Payee, String>>() {
@@ -69,11 +74,30 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
             }
         });
 
-        TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
+        tagColumn.setCellValueFactory(new IdenityCellValueCallback<>());
+        tagColumn.setCellFactory(new Callback<TableColumn<Payee, Payee> , TableCell<Payee, Payee> >() {
+            @Override
+            public TableCell<Payee, Payee>  call(TableColumn<Payee, Payee> param) {
+                return new TableCell<Payee, Payee>() {
+                    @Override
+                    protected void updateItem(Payee model, boolean empty) {
+                        super.updateItem(model, empty);
 
-        task.startTask();
+                        if(model == null || empty) {
+                            setText(null);
+                            setGraphic(null);
+                        } else {
+                            TagFlowPane flow = new TagFlowPane(model);
+                            setGraphic(flow);
+                        }
+                    }
+                };
+            }
+        });
+        tagColumn.setEditable(false);
+
+
         List<Payee> payees = task.waitForResult();
-
         this.setItems(FXCollections.observableList(payees));
     }
 }
