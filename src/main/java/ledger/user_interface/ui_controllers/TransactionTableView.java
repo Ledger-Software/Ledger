@@ -14,12 +14,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.*;
+import org.controlsfx.control.table.TableRowExpanderColumn;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -50,6 +53,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     private TableColumn categoryColumn;
     @FXML
     private TableColumn clearedColumn;
+    @FXML
+    private TableColumn noteColumn;
 
     // Transaction table edit event handlers
     private EventHandler<CellEditEvent<TransactionModel, String>> amountEditHandler = new EventHandler<CellEditEvent<TransactionModel, String>>() {
@@ -220,6 +225,22 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     }
 
     private void configureTransactionTableView() {
+        TableRowExpanderColumn<TransactionModel> expanderColumn = new TableRowExpanderColumn<TransactionModel>(param->{
+            HBox box = new HBox(10);
+            TextArea noteText = new TextArea();
+            Button save = new Button("save");
+            Note note = param.getValue().getTransaction().getNote();
+            noteText.setText(note.getNoteText());
+            save.setOnAction((event -> {
+                note.setNoteText(noteText.getText());
+                TaskWithArgs<Note> updateNoteTask = DbController.INSTANCE.editNote(note);
+                updateNoteTask.startTask();
+            }));
+            box.getChildren().addAll(noteText,save);
+            return box;
+        });
+        expanderColumn.setText("Note");
+        this.getColumns().add(expanderColumn);
         this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
         this.payeeColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
@@ -391,5 +412,24 @@ public class TransactionTableView extends TableView<TransactionModel> implements
     public void updateSearchFilterString(String searchFilterString) {
         this.searchFilterString = searchFilterString;
         this.asyncTableUpdate();
+    }
+
+    public class MyCustomToggleCell<TransactionModel> extends TableCell<TransactionModel, Boolean> {
+        private Button button = new Button();
+
+        public MyCustomToggleCell(TableRowExpanderColumn<TransactionModel> column) {
+            button.setOnAction(event -> column.toggleExpanded(getIndex()));
+
+        }
+
+        protected void updateItem(Boolean expanded, boolean empty) {
+            super.updateItem(expanded, empty);
+            if (expanded == null || empty) {
+                setGraphic(null);
+            } else {
+                button.setText(expanded ? "Collapse Note " : "Expand Note");
+                setGraphic(button);
+            }
+        }
     }
 }
