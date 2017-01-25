@@ -27,8 +27,6 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
     @FXML
     public TextField nameText;
     @FXML
-    public TextField descText;
-    @FXML
     public Button submitButton;
 
     public TagBuilderControl(ITaggable model) {
@@ -49,7 +47,7 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
         }
         newTags = model.getTags();
 
-        newTags.add(new Tag(nameText.getText(), descText.getText()));
+        newTags.add(new Tag(nameText.getText(), nameText.getText()));
         TaskWithArgs task = TaggableSwitch.edit(model);
         task.startTask();
         task.waitForComplete();

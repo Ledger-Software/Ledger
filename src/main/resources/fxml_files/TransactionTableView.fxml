@@ -15,7 +15,7 @@
         <PayeeColumn fx:id="payeeColumn" minWidth="0.0" prefWidth="150.0" text="Payee"/>
         <TypeColumn fx:id="typeColumn" minWidth="0.0" prefWidth="150.0" text="Type"/>
         <TagColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="150.0" text="Category"/>
-        <ClearedColumn fx:id="clearedColumn" minWidth="0.0" prefWidth="150.0" text="Cleared"/>
+        <ClearedColumn fx:id="clearedColumn" prefWidth="75.0" text="Cleared"/>
     </columns>
     <columnResizePolicy>
         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
