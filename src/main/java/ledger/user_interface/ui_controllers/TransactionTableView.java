@@ -226,20 +226,15 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     private void configureTransactionTableView() {
         TableRowExpanderColumn<TransactionModel> expanderColumn = new TableRowExpanderColumn<TransactionModel>(param->{
-            HBox box = new HBox(10);
-            TextArea noteText = new TextArea();
-            Button save = new Button("save");
+
             Note note = param.getValue().getTransaction().getNote();
-            noteText.setText(note.getNoteText());
-            save.setOnAction((event -> {
-                note.setNoteText(noteText.getText());
-                TaskWithArgs<Note> updateNoteTask = DbController.INSTANCE.editNote(note);
-                updateNoteTask.startTask();
-            }));
-            box.getChildren().addAll(noteText,save);
-            return box;
+
+            NoteEditInput noteEditInput = new NoteEditInput();
+            noteEditInput.setNote(note);
+            return noteEditInput;
         });
         expanderColumn.setText("Note");
+        expanderColumn.setCellFactory(param -> new MyCustomToggleCell<>(expanderColumn));
         this.getColumns().add(expanderColumn);
         this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
