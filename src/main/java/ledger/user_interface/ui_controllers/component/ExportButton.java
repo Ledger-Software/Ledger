@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.stage.DirectoryChooser;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.window.PasswordPromptController;
 
 import java.io.File;
 import java.io.IOException;

@@ -10,6 +10,9 @@ import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.exception.StorageException;
 import ledger.updater.GitHubChecker;
 import ledger.updater.OldVersionFinder;
+import ledger.user_interface.ui_controllers.window.LoginPageController;
+import ledger.user_interface.ui_controllers.window.OldVersionArchiver;
+import ledger.user_interface.ui_controllers.window.UpdateConfirmation;
 
 import java.io.File;
 
@@ -73,7 +76,7 @@ public class Startup extends Application {
         GitHubChecker checker = new GitHubChecker();
         if (checker.isUpdateAvaliable()) {
             GitHubChecker.Release release = checker.getNewerRelease();
-            if(release.getDownloadURL() != null) {
+            if (release.getDownloadURL() != null) {
                 UpdateConfirmation uc = new UpdateConfirmation(release);
                 Scene scene = new Scene(uc);
                 Stage newStage = new Stage();
@@ -90,7 +93,7 @@ public class Startup extends Application {
         OldVersionFinder finder = new OldVersionFinder();
         File[] files = finder.oldVersions();
 
-        for(File f: files) {
+        for (File f : files) {
             OldVersionArchiver a = new OldVersionArchiver(f);
             Scene scene = new Scene(a);
             Stage newStage = new Stage();

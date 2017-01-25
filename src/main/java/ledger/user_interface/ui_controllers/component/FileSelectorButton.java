@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

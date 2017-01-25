@@ -34,6 +34,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
                 payee.setId(payeeID);
                 payee.setName(payeeName);
                 payee.setDescription(payeeDescription);
+                payee.setTags(getAllTagsForPayee(payee));
                 return;
             }
 
@@ -139,6 +140,10 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
     @Override
     default List<Tag> getAllTagsForPayee(Payee payee) throws StorageException {
+        int id = payee.getId();
+        if(id == -1) {
+            insertPayee(payee);
+        }
         return getAllTagsForPayeeId(payee.getId());
     }
 
@@ -157,7 +162,6 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             ArrayList<Tag> tags = new ArrayList<>();
 
             while (rs.next()) {
-
                 int tagID = rs.getInt(TagTable.TAG_ID);
                 String tagName = rs.getString(TagTable.TAG_NAME);
                 String tagDescription = rs.getString(TagTable.TAG_DESC);

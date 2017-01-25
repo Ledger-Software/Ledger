@@ -35,6 +35,7 @@ public class DbController {
         INSTANCE = this;
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
+        payeeSuccessEvent = new LinkedList<>();
     }
 
     public void initialize(String fileName, String password) throws StorageException {
@@ -44,6 +45,7 @@ public class DbController {
 
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
     private List<CallableMethodVoidNoArgs> accountSuccessEvent;
+    private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
 
     public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
@@ -52,6 +54,8 @@ public class DbController {
     public void registerAccountSuccessEvent(CallableMethodVoidNoArgs method) {
         accountSuccessEvent.add(method);
     }
+
+    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) { payeeSuccessEvent.add(method); }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -164,7 +168,9 @@ public class DbController {
      * @return a Task for the Async Call
      */
     public TaskWithArgs<Payee> insertPayee(final Payee payee) {
-        return new TaskWithArgs<Payee>(db::insertPayee, payee);
+        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::insertPayee, payee);
+        registerSuccess(task, payeeSuccessEvent);
+        return task;
 
     }
 
@@ -175,8 +181,9 @@ public class DbController {
      * @return a Task for the Async Call
      */
     public TaskWithArgs<Payee> deletePayee(final Payee payee) {
-        return new TaskWithArgs<Payee>(db::deletePayee, payee);
-
+        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::deletePayee, payee);
+        registerSuccess(task, payeeSuccessEvent);
+        return task;
     }
 
     /**
@@ -186,8 +193,9 @@ public class DbController {
      * @return a Task for the Async Call
      */
     public TaskWithArgs<Payee> editPayee(final Payee payee) {
-        return new TaskWithArgs<Payee>(db::editPayee, payee);
-
+        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::editPayee, payee);
+        registerSuccess(task, payeeSuccessEvent);
+        return task;
     }
 
     /**

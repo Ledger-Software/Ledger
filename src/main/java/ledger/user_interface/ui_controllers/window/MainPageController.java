@@ -1,22 +1,24 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
+import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
 import java.util.List;
@@ -46,6 +48,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button clearButton;
     @FXML
     private TextField searchTextField;
+    @FXML
+    public Button payeeEditorButton;
 
     // Transaction table UI objects
     @FXML
@@ -54,7 +58,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
     boolean containsAccounts = false;
 
-    MainPageController() {
+    public MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
@@ -75,7 +79,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             createAccountPopup();
         });
 
-        this.deleteAccountBtn.setOnAction( (event) -> {
+        this.deleteAccountBtn.setOnAction((event) -> {
             deleteAccount();
         });
 
@@ -112,6 +116,15 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         if (acts.isEmpty()) {
             setUpAccountCreationHelp();
         }
+
+        this.payeeEditorButton.setOnAction(this::openPayeeEditor);
+    }
+
+    private void openPayeeEditor(ActionEvent actionEvent) {
+        PayeeTableWindow window = new PayeeTableWindow();
+        Scene scene = new Scene(window);
+
+        this.createModal(null, scene, "Payee Editor", true);
     }
 
     private void setUpAccountCreationHelp() {
@@ -185,7 +198,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 " associated with the account. Do you wish to proceed?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             // ... user chose OK
             TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
             t.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> chooseAccount.selectDefault()));
@@ -194,7 +207,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             });
             t.startTask();
         } else {
-           return;
+            return;
         }
     }
 }

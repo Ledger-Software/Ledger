@@ -135,7 +135,7 @@ public interface IUIController {
     /**
      * Sets the stage and the scene for the new modal
      *
-     * @param s the previously initialized Scene that is set on the new Stage
+     * @param s          the previously initialized Scene that is set on the new Stage
      * @param windowName The name of the window to be created
      */
     default void createModal(Scene s, String windowName) {
@@ -143,9 +143,13 @@ public interface IUIController {
     }
 
     default void createModal(Window parrent, Scene child, String windowName) {
+        createModal(parrent, child, windowName, false);
+    }
+
+    default void createModal(Window parrent, Scene child, String windowName, boolean resizeable) {
         Stage newStage = new Stage();
         newStage.setScene(child);
-        newStage.setResizable(false);
+        newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
         newStage.initModality(Modality.WINDOW_MODAL);
         newStage.show();

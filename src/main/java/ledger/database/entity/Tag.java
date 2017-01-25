@@ -71,4 +71,9 @@ public class Tag implements IEntity {
     public void setId(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s", this.name, this.description);
+    }
 }

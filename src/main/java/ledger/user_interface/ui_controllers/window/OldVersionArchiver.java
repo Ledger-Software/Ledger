@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import ledger.user_interface.ui_controllers.IUIController;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,13 +48,13 @@ public class OldVersionArchiver extends GridPane implements IUIController, Initi
             new File(newPath.getParent().toString()).mkdirs();
             Files.move(jarFile.toPath(), newPath);
         } catch (IOException e) {
-            this.setupErrorPopup("Unable to move file to archive.",e);
+            this.setupErrorPopup("Unable to move file to archive.", e);
         }
-        ((Stage)this.getScene().getWindow()).close();
+        ((Stage) this.getScene().getWindow()).close();
     }
 
     private void deleteFile(ActionEvent actionEvent) {
         jarFile.delete();
-        ((Stage)this.getScene().getWindow()).close();
+        ((Stage) this.getScene().getWindow()).close();
     }
 }

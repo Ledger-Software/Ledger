@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.UserTransactionInput;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,7 +27,7 @@ public class TransactionPopupController extends GridPane implements Initializabl
     @FXML
     private UserTransactionInput transactionInput;
 
-    TransactionPopupController() {
+    public TransactionPopupController() {
         this.initController(pageLoc, this, "Error on transaction popup startup: ");
     }
 

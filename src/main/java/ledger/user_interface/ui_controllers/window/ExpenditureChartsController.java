@@ -1,10 +1,12 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.*;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,13 +16,14 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.AccountDropdown;
 
 import java.net.URL;
 import java.text.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.List;
 
 /**
  * Controls how the charts render with user given information.
@@ -275,10 +278,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private void createPieChart(List<Transaction> filteredTransactions) {
         Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
-            if (t.getTagList().isEmpty()) {
+            if (t.getTags().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
             } else {
-                for (Tag tag : t.getTagList()) {
+                for (Tag tag : t.getTags()) {
                     addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
                 }
             }

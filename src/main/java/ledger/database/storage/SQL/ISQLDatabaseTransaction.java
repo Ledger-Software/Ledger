@@ -47,7 +47,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                 int insertedTransactionID = generatedIDs.getInt(1);
 
                 // insert tags and tag-to-trans linkings
-                for (Tag currentTag : transaction.getTagList()) {
+                for (Tag currentTag : transaction.getTags()) {
                     lookupAndInsertTag(currentTag, insertedTransactionID);
                 }
 
@@ -144,7 +144,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             // Update tag associations
             deleteAllTagToTransForTransactionID(transaction.getId());
-            for (Tag currentTag : transaction.getTagList()) {
+            for (Tag currentTag : transaction.getTags()) {
                 lookupAndInsertTag(currentTag, transaction.getId());
             }
 

@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ledger.updater.GitHubChecker;
+import ledger.user_interface.ui_controllers.IUIController;
 
 import java.io.*;
 import java.net.MalformedURLException;

@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
+import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.InputSanitization;
 import ledger.user_interface.utils.TypeStringConverter;
 
@@ -147,7 +148,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         this.payeeText.setValue(currentTrans.getPayee());
         this.pendingCheckBox.setSelected(currentTrans.isPending());
 
-        List<Tag> tags = currentTrans.getTagList();
+        List<Tag> tags = currentTrans.getTags();
 
         if (tags.size() > 0)
             this.categoryText.setText(tags.get(0).toString());

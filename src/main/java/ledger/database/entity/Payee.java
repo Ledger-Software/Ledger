@@ -6,12 +6,10 @@ import java.util.List;
 /**
  * Entity that holds a single payee
  */
-public class Payee implements IEntity {
+public class Payee implements IEntity, ITaggable{
     private String name;
     private String description;
     private int id;
-
-
 
     private List<Tag> tags;
 

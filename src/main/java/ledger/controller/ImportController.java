@@ -52,6 +52,8 @@ public class ImportController {
             task.startTask();
             List<Transaction> failedTransactions = task.waitForResult();
             List<Transaction> duplicateTransaction = result.getPossibleDuplicates();
+            Tagger taggerDupes = new Tagger(duplicateTransaction);
+            taggerDupes.tagTransactions();
 
             return new ImportFailures(failedTransactions, duplicateTransaction);
         }, account);

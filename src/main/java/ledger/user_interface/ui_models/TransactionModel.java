@@ -7,7 +7,7 @@ import ledger.database.entity.Type;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.stream.Collectors;
+import java.util.List;
 
 /**
  * Created by Tayler How on 10/26/2016.
@@ -18,7 +18,7 @@ public class TransactionModel {
     // Use TransactionModel
     private String amount;
     private LocalDate date;
-    private String tagNames;
+    private List<Tag> tags;
 
     // Use comboboxes and StringConverters
     private Type type;
@@ -40,11 +40,8 @@ public class TransactionModel {
             this.date = null;
         }
 
-        this.tagNames = "";
-        if (transaction.getTagList() != null) {
-            this.tagNames = transaction.getTagList().stream()
-                    .map(Tag::getName)
-                    .collect(Collectors.joining(", "));
+        if (transaction.getTags() != null) {
+            tags = transaction.getTags();
         }
 
         if (transaction.isPending()) {
@@ -57,7 +54,6 @@ public class TransactionModel {
 
         this.type = transaction.getType();
         this.payee = transaction.getPayee();
-
     }
 
     public int getId() {
@@ -82,14 +78,6 @@ public class TransactionModel {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public String getTagNames() {
-        return tagNames;
-    }
-
-    public void setTagNames(String tagNames) {
-        this.tagNames = tagNames;
     }
 
     public Boolean getPending() {
@@ -127,4 +115,6 @@ public class TransactionModel {
     public void setPayee(Payee payee) {
         this.payee = payee;
     }
+
+    public List<Tag> getTags() { return this.transaction.getTags(); }
 }
