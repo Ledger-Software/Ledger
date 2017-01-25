@@ -14,8 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -229,12 +227,12 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
             Note note = param.getValue().getTransaction().getNote();
 
-            NoteEditInput noteEditInput = new NoteEditInput();
-            noteEditInput.setNote(note);
-            return noteEditInput;
+            NoteEditInputController noteEditInputController = new NoteEditInputController();
+            noteEditInputController.setTableRowData(param);
+            return noteEditInputController;
         });
         expanderColumn.setText("Note");
-        expanderColumn.setCellFactory(param -> new MyCustomToggleCell<>(expanderColumn));
+        expanderColumn.setCellFactory(param -> new CollapseExpandButton<>(expanderColumn));
         this.getColumns().add(expanderColumn);
         this.amountColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, String>("amount"));
         this.dateColumn.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
@@ -409,10 +407,14 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         this.asyncTableUpdate();
     }
 
-    public class MyCustomToggleCell<TransactionModel> extends TableCell<TransactionModel, Boolean> {
+    /**
+     * Private Button TableCell that includes the logic for the expand and collapse.
+     * @param <TransactionModel>
+     */
+    private class CollapseExpandButton<TransactionModel> extends TableCell<TransactionModel, Boolean> {
         private Button button = new Button();
 
-        public MyCustomToggleCell(TableRowExpanderColumn<TransactionModel> column) {
+        CollapseExpandButton(TableRowExpanderColumn<TransactionModel> column) {
             button.setOnAction(event -> column.toggleExpanded(getIndex()));
 
         }
