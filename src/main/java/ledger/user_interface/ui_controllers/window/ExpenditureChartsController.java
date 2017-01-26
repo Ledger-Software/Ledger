@@ -8,6 +8,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -44,6 +45,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private LineChart expendituresLineChart;
     @FXML
     private Button filterEnterButton;
+    @FXML
+    private ChoiceBox chartTypeDropdown;
 
     private List<Transaction> allTransactions;
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
