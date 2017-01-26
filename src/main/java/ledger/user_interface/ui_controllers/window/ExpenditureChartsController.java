@@ -4,14 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -38,24 +39,25 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private DatePicker toDateFilter;
     @FXML
-    private PieChart expendituresPieChart;
-    @FXML
-    private Label currentlyShowingLabel;
-    @FXML
-    private LineChart expendituresLineChart;
-    @FXML
     private Button filterEnterButton;
     @FXML
     private ChoiceBox chartTypeDropdown;
+    @FXML
+    private FlowPane windowPane;
 
     private List<Transaction> allTransactions;
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
+    private PieChart expendituresPieChart = new PieChart();
+    CategoryAxis xAxis = new CategoryAxis();
+    NumberAxis yAxis = new NumberAxis();
+    private LineChart expendituresLineChart = new LineChart(xAxis, yAxis);
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
         getTransactions();
-        setupExpenditureHistoryChart();
-        setupInitialPieChart();
+        setupChartTypeDropdown();
+        setupInitCharts();
+
     }
 
     /**
@@ -81,7 +83,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 return;
             }
             if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName());
                 createBasedOnAccount(accountSelected);
             }
             if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -89,7 +90,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for the above date range.");
                 createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
             if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -97,10 +97,54 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName() + " within the above date range.");
                 createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
             }
         });
+    }
+
+    /**
+     * Sets up the options presented in the chart type chooser.
+     */
+    private void setupChartTypeDropdown() {
+        ObservableList<String> options = FXCollections.observableArrayList(
+                "Default",
+                "Pie Chart",
+                "Line Chart"
+        );
+        this.chartTypeDropdown.setValue("Default");
+        this.chartTypeDropdown.setItems(options);
+    }
+
+    /**
+     * Sets up charts seen upon initialization.
+     */
+    private void setupInitCharts(){
+        setUpLineChartOnPaneLeft();
+        setupExpenditureHistoryChart();
+
+        setUpPieChartOnPaneRight();
+        setupInitialPieChart();
+    }
+
+    /**
+     * Sets up the line chart upon initialization on a pane.
+     */
+    private void setUpLineChartOnPaneLeft() {
+        this.windowPane.getChildren().add(this.expendituresLineChart);
+        this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        this.windowPane.setVisible(true);
+    }
+
+    /**
+     * Sets up the pie chart dynamically on a pane.
+     */
+    private void setUpPieChartOnPaneRight() {
+        this.expendituresPieChart.setAnimated(false);
+        this.windowPane.getChildren().add(this.expendituresPieChart);
+        this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        this.windowPane.setVisible(true);
     }
 
     /**
@@ -158,6 +202,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         series.setName("Change in Account Balance");
         this.expendituresLineChart.getData().add(series);
+        this.expendituresLineChart.setTitle("Expenditures Over Time");
         this.expendituresLineChart.setVisible(true);
     }
 
