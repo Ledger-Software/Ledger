@@ -177,19 +177,19 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     /**
      * Builds the line chart to show trends in amount spent over the last six months
      */
-    private void setupExpenditureHistoryChart(List<Transaction> filteredTransactions) {
+    private void setupExpenditureHistoryChart(List<Transaction> transactions) {
         Calendar cal = Calendar.getInstance();
-//        Date today = cal.getTime();
-//        cal.add(Calendar.MONTH, -6);
-//        Date sixMonthsAgo = cal.getTime();
-//        List<Transaction> filteredTransactions = new ArrayList<>();
-//        for (Transaction t : this.allTransactions) {
-//            if ((t.getDate().before(today) || t.getDate().equals(today))
-//                    && (t.getDate().after(sixMonthsAgo) || t.getDate().equals(sixMonthsAgo))) {
-//                filteredTransactions.add(t);
-//            }
-//        }
-//        filteredTransactions = this.allTransactions;
+        Date today = cal.getTime();
+        // Line chart only goes back a year at max for sake of clarity
+        cal.add(Calendar.MONTH, -12);
+        Date twelveMonthsAgo = cal.getTime();
+        List<Transaction> filteredTransactions = new ArrayList<>();
+        for(Transaction t : transactions) {
+            if ((t.getDate().before(today) || t.getDate().equals(today))
+                    && (t.getDate().after(twelveMonthsAgo) || t.getDate().equals(twelveMonthsAgo))) {
+                filteredTransactions.add(t);
+            }
+        }
 
         this.expendituresLineChart.getXAxis().setLabel("Month");
         this.expendituresLineChart.getYAxis().setLabel("Net Expenditure");
