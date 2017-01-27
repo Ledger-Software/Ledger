@@ -3,7 +3,6 @@
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
@@ -13,6 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.component.AccountDropdown?>
+<?import org.controlsfx.control.CheckComboBox?>
 
 <fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
@@ -90,7 +90,7 @@
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <ChoiceBox fx:id="chartTypeDropdown" prefWidth="150.0" GridPane.columnIndex="1" />
+            <CheckComboBox fx:id="chartTypeDropdown" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
       <FlowPane fx:id="windowPane" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />

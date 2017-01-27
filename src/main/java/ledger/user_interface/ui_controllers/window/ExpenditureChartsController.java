@@ -22,6 +22,7 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
+import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
 import java.text.*;
@@ -43,7 +44,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private Button filterEnterButton;
     @FXML
-    private ChoiceBox chartTypeDropdown;
+    private CheckComboBox chartTypeDropdown;
     @FXML
     private FlowPane windowPane;
 
@@ -53,6 +54,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     CategoryAxis xAxis = new CategoryAxis();
     NumberAxis yAxis = new NumberAxis();
     private LineChart expendituresLineChart = new LineChart(xAxis, yAxis);
+    private List<String> chartTypesSelected = new ArrayList<>();
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
@@ -77,7 +79,12 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            String chartTypeSelected = (String) this.chartTypeDropdown.getValue();
+            ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
+            this.chartTypesSelected.clear();
+            for(String s : choices) {
+                this.chartTypesSelected.add(s);
+            }
+            //TODO change method params to take List of Strings instead
             Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
             LocalDate fromDateSelected = this.fromDateFilter.getValue();
             LocalDate toDateSelected = this.toDateFilter.getValue();
@@ -86,21 +93,21 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 return;
             }
             if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
-                createBasedOnAccount(accountSelected, chartTypeSelected);
+                createBasedOnAccount(accountSelected);
             }
             if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                createBasedOnDateRange(fromDateSelected, toDateSelected, chartTypeSelected);
+                createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
             if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
                 if (fromDateSelected.isAfter(toDateSelected)) {
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected, chartTypeSelected);
+                createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
             }
         });
     }
@@ -109,13 +116,12 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * Sets up the options presented in the chart type chooser.
      */
     private void setupChartTypeDropdown() {
-        ObservableList<String> options = FXCollections.observableArrayList(
+        final ObservableList<String> options = FXCollections.observableArrayList(
                 "Default",
                 "Pie Chart",
                 "Line Chart"
         );
-        this.chartTypeDropdown.setValue("Default");
-        this.chartTypeDropdown.setItems(options);
+        this.chartTypeDropdown.getItems().addAll(options);
     }
 
     /**
@@ -221,7 +227,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getData().clear();
         this.expendituresLineChart.getData().add(series);
         this.expendituresLineChart.setTitle("Expenditures Over Time");
-        if (this.chartTypeDropdown.getValue().equals("Line Chart")) {
+        if (this.chartTypesSelected.contains("Line Chart")) {
             this.windowPane.getChildren().clear();
             this.windowPane.getChildren().add(this.expendituresLineChart);
             this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
@@ -285,26 +291,25 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      *
      * @param account the account to filter the transactions by
      */
-    private void createBasedOnAccount(Account account, String chartType) {
+    private void createBasedOnAccount(Account account) {
         List<Transaction> filteredTransactions = new ArrayList<>();
         for (Transaction t : this.allTransactions) {
             if (t.getAccount().equals(account)) {
                 filteredTransactions.add(t);
             }
         }
-        makeChart(filteredTransactions, chartType);
+        makeChart(filteredTransactions);
     }
 
     /**
      * Determines how the charts will appear on the window pane
      *
      * @param filteredTransactions filtered transaction list
-     * @param chartType            type of chart to display
      */
-    private void makeChart(List<Transaction> filteredTransactions, String chartType) {
-        if (chartType.equals("Pie Chart")) {
+    private void makeChart(List<Transaction> filteredTransactions) {
+        if (this.chartTypesSelected.contains("Pie Chart")) {
             createPieChart(filteredTransactions);
-        } else if (chartType.equals("Line Chart")) {
+        } else if (this.chartTypesSelected.contains("Line Chart")) {
             setupExpenditureHistoryChart(filteredTransactions);
         } else {
             setupDefaultSyncCharts(filteredTransactions);
@@ -317,7 +322,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param fromDate starting date to filter transactions by
      * @param toDate   ending date to filter transactions by
      */
-    private void createBasedOnDateRange(LocalDate fromDate, LocalDate toDate, String chartType) {
+    private void createBasedOnDateRange(LocalDate fromDate, LocalDate toDate) {
         Date from = Date.from(fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date to = Date.from(toDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -328,7 +333,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 filteredTransactions.add(t);
             }
         }
-        makeChart(filteredTransactions, chartType);
+        makeChart(filteredTransactions);
 
     }
 
@@ -339,7 +344,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param fromDate starting date to filter transactions by
      * @param toDate   ending date to filter transactions by
      */
-    private void createBasedOnAccountAndDateRange(Account account, LocalDate fromDate, LocalDate toDate, String chartType) {
+    private void createBasedOnAccountAndDateRange(Account account, LocalDate fromDate, LocalDate toDate) {
         List<Transaction> filteredByAccountTransactions = new ArrayList<>();
         for (Transaction t : this.allTransactions) {
             if (t.getAccount().equals(account)) {
@@ -357,7 +362,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         }
 
-        makeChart(filteredTransactions, chartType);
+        makeChart(filteredTransactions);
     }
 
     /**
@@ -390,7 +395,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
-        if (this.chartTypeDropdown.getValue().equals("Pie Chart")) {
+        if (this.chartTypesSelected.contains("Pie Chart")) {
             this.windowPane.getChildren().clear();
             this.windowPane.getChildren().add(this.expendituresPieChart);
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty());
