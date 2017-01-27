@@ -51,8 +51,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private List<Transaction> allTransactions;
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
     private PieChart expendituresPieChart = new PieChart();
-    CategoryAxis xAxis = new CategoryAxis();
-    NumberAxis yAxis = new NumberAxis();
+    private CategoryAxis xAxis = new CategoryAxis();
+    private NumberAxis yAxis = new NumberAxis();
     private LineChart expendituresLineChart = new LineChart(xAxis, yAxis);
     private List<String> chartTypesSelected = new ArrayList<>();
     private int numberOfChartsSelected = 0;
@@ -412,8 +412,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
-        // TODO here is where I'll determine the size of the chart before making it
-        // TODO also should clear upon clicking enter instead of drawing
         this.windowPane.getChildren().remove(this.expendituresPieChart);
         this.windowPane.getChildren().add(this.expendituresPieChart);
         if (this.numberOfChartsSelected > 1) {
