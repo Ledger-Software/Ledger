@@ -55,6 +55,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     NumberAxis yAxis = new NumberAxis();
     private LineChart expendituresLineChart = new LineChart(xAxis, yAxis);
     private List<String> chartTypesSelected = new ArrayList<>();
+    private int numberOfChartsSelected = 0;
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
@@ -81,13 +82,18 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.filterEnterButton.setOnAction((event) -> {
             ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
             this.chartTypesSelected.clear();
-            for(String s : choices) {
+            for (String s : choices) {
                 this.chartTypesSelected.add(s);
             }
-            //TODO change method params to take List of Strings instead
+            this.numberOfChartsSelected = this.chartTypesSelected.size();
+            if (this.numberOfChartsSelected >= 4) {
+                setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
+                return;
+            }
             Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
             LocalDate fromDateSelected = this.fromDateFilter.getValue();
             LocalDate toDateSelected = this.toDateFilter.getValue();
+            this.windowPane.getChildren().clear();
             if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
                 this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
                 return;
@@ -117,9 +123,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void setupChartTypeDropdown() {
         final ObservableList<String> options = FXCollections.observableArrayList(
-                "Default",
-                "Pie Chart",
-                "Line Chart"
+                "Line Chart",
+                "Pie Chart"
         );
         this.chartTypeDropdown.getItems().addAll(options);
     }
@@ -190,7 +195,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         cal.add(Calendar.MONTH, -12);
         Date twelveMonthsAgo = cal.getTime();
         List<Transaction> filteredTransactions = new ArrayList<>();
-        for(Transaction t : transactions) {
+        for (Transaction t : transactions) {
             if ((t.getDate().before(today) || t.getDate().equals(today))
                     && (t.getDate().after(twelveMonthsAgo) || t.getDate().equals(twelveMonthsAgo))) {
                 filteredTransactions.add(t);
@@ -227,15 +232,22 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getData().clear();
         this.expendituresLineChart.getData().add(series);
         this.expendituresLineChart.setTitle("Expenditures Over Time");
-        if (this.chartTypesSelected.contains("Line Chart")) {
-            this.windowPane.getChildren().clear();
-            this.windowPane.getChildren().add(this.expendituresLineChart);
-            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
-            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
-        } else {
+        this.windowPane.getChildren().remove(this.expendituresLineChart);
+        this.windowPane.getChildren().add(this.expendituresLineChart);
+        if (this.numberOfChartsSelected > 1) {
             this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
             this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+            if (this.numberOfChartsSelected > 2) {
+                this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
+            }
+        } else if(this.numberOfChartsSelected == 0) {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        } else {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         }
+
         this.expendituresLineChart.setVisible(true);
     }
 
@@ -307,13 +319,18 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param filteredTransactions filtered transaction list
      */
     private void makeChart(List<Transaction> filteredTransactions) {
-        if (this.chartTypesSelected.contains("Pie Chart")) {
-            createPieChart(filteredTransactions);
-        } else if (this.chartTypesSelected.contains("Line Chart")) {
-            setupExpenditureHistoryChart(filteredTransactions);
-        } else {
+        for (String s : this.chartTypesSelected) {
+            if (s.equals("Pie Chart")) {
+                createPieChart(filteredTransactions);
+            }
+            if (s.equals("Line Chart")) {
+                setupExpenditureHistoryChart(filteredTransactions);
+            }
+        }
+        if (this.chartTypesSelected.isEmpty()) {
             setupDefaultSyncCharts(filteredTransactions);
         }
+
     }
 
     /**
@@ -395,13 +412,21 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
         this.expendituresPieChart.setTitle("Expenditures by Category");
-        if (this.chartTypesSelected.contains("Pie Chart")) {
-            this.windowPane.getChildren().clear();
-            this.windowPane.getChildren().add(this.expendituresPieChart);
-            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty());
+        // TODO here is where I'll determine the size of the chart before making it
+        // TODO also should clear upon clicking enter instead of drawing
+        this.windowPane.getChildren().remove(this.expendituresPieChart);
+        this.windowPane.getChildren().add(this.expendituresPieChart);
+        if (this.numberOfChartsSelected > 1) {
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+            if (this.numberOfChartsSelected > 2) {
+                this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
+            }
+        } else if(this.numberOfChartsSelected == 0) {
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         } else {
-            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty());
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         }
 
