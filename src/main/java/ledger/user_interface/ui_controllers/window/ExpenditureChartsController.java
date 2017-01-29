@@ -1,20 +1,14 @@
 package ledger.user_interface.ui_controllers.window;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -80,7 +74,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            if (setUpChartsInfo()) return;
+            if (setUpChartsInfo()) {
+                return;
+            }
             setUpFiltersAndDelegate();
         });
     }
@@ -407,12 +403,13 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresPieChart.setData(pieChartData);
         setUpPieChartProperties();
         this.expendituresPieChart.setVisible(true);
-
     }
 
     private void setUpPieChartProperties() {
         this.expendituresPieChart.setTitle("Expenditures by Category");
-        this.windowPane.getChildren().remove(this.expendituresPieChart);
+        if (this.windowPane.getChildren().contains(this.expendituresPieChart)) {
+            this.windowPane.getChildren().remove(this.expendituresPieChart);
+        }
         this.windowPane.getChildren().add(this.expendituresPieChart);
         if (this.numberOfChartsSelected > 2) {
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
@@ -428,7 +425,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
     private void setLineChartProperties() {
         this.expendituresLineChart.setTitle("Expenditures Over Time");
-        this.windowPane.getChildren().remove(this.expendituresLineChart);
+        if (this.windowPane.getChildren().contains(this.expendituresLineChart)) {
+            this.windowPane.getChildren().remove(this.expendituresLineChart);
+        }
         this.windowPane.getChildren().add(this.expendituresLineChart);
         if (this.numberOfChartsSelected > 2) {
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
