@@ -80,42 +80,51 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
-            this.chartTypesSelected.clear();
-            for (String s : choices) {
-                this.chartTypesSelected.add(s);
-            }
-            this.numberOfChartsSelected = this.chartTypesSelected.size();
-            if (this.numberOfChartsSelected >= 4) {
-                setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
-                return;
-            }
-            Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
-            LocalDate fromDateSelected = this.fromDateFilter.getValue();
-            LocalDate toDateSelected = this.toDateFilter.getValue();
-            this.windowPane.getChildren().clear();
-            if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
-                this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
-                return;
-            }
-            if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
-                createBasedOnAccount(accountSelected);
-            }
-            if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
-                if (fromDateSelected.isAfter(toDateSelected)) {
-                    this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
-                    return;
-                }
-                createBasedOnDateRange(fromDateSelected, toDateSelected);
-            }
-            if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
-                if (fromDateSelected.isAfter(toDateSelected)) {
-                    this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
-                    return;
-                }
-                createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
-            }
+            if (setUpChartsInfo()) return;
+            setUpFiltersAndDelegate();
         });
+    }
+
+    private void setUpFiltersAndDelegate() {
+        Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
+        LocalDate fromDateSelected = this.fromDateFilter.getValue();
+        LocalDate toDateSelected = this.toDateFilter.getValue();
+        this.windowPane.getChildren().clear();
+        if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
+            this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
+            return;
+        }
+        if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
+            createBasedOnAccount(accountSelected);
+        }
+        if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
+            if (fromDateSelected.isAfter(toDateSelected)) {
+                this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
+                return;
+            }
+            createBasedOnDateRange(fromDateSelected, toDateSelected);
+        }
+        if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
+            if (fromDateSelected.isAfter(toDateSelected)) {
+                this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
+                return;
+            }
+            createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
+        }
+    }
+
+    private boolean setUpChartsInfo() {
+        ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
+        this.chartTypesSelected.clear();
+        for (String s : choices) {
+            this.chartTypesSelected.add(s);
+        }
+        this.numberOfChartsSelected = this.chartTypesSelected.size();
+        if (this.numberOfChartsSelected >= 4) {
+            setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -231,22 +240,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         series.setName("Change in Account Balance");
         this.expendituresLineChart.getData().clear();
         this.expendituresLineChart.getData().add(series);
-        this.expendituresLineChart.setTitle("Expenditures Over Time");
-        this.windowPane.getChildren().remove(this.expendituresLineChart);
-        this.windowPane.getChildren().add(this.expendituresLineChart);
-        if (this.numberOfChartsSelected > 1) {
-            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
-            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
-            if (this.numberOfChartsSelected > 2) {
-                this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
-            }
-        } else if(this.numberOfChartsSelected == 0) {
-            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
-            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
-        } else {
-            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
-            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
-        }
+        setLineChartProperties();
 
         this.expendituresLineChart.setVisible(true);
     }
@@ -411,25 +405,42 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
+        setUpPieChartProperties();
+
+        this.expendituresPieChart.setVisible(true);
+
+    }
+
+    private void setUpPieChartProperties() {
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.windowPane.getChildren().remove(this.expendituresPieChart);
         this.windowPane.getChildren().add(this.expendituresPieChart);
-        if (this.numberOfChartsSelected > 1) {
+        if(this.numberOfChartsSelected > 2) {
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
-            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
-            if (this.numberOfChartsSelected > 2) {
-                this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
-            }
-        } else if(this.numberOfChartsSelected == 0) {
+        } else if(this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         } else {
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty());
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         }
+    }
 
-        this.expendituresPieChart.setVisible(true);
-
+    private void setLineChartProperties() {
+        this.expendituresLineChart.setTitle("Expenditures Over Time");
+        this.windowPane.getChildren().remove(this.expendituresLineChart);
+        this.windowPane.getChildren().add(this.expendituresLineChart);
+        if(this.numberOfChartsSelected > 2) {
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        } else if(this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        } else {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        }
     }
 
     /**
