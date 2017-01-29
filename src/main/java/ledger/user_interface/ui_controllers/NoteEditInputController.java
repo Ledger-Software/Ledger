@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
  */
 public class NoteEditInputController extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/NoteEditInput.fxml";
+    private static final int rowheight = 10;
     @FXML
     private TextArea noteText;
     @FXML
@@ -30,16 +32,18 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     /**
      * Basic Constructor
      */
-    public NoteEditInputController(){
-        this.initController(pageLoc,this,"Unable to Load Note Editor");
+    public NoteEditInputController() {
+        this.initController(pageLoc, this, "Unable to Load Note Editor");
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         saveButton.setOnAction((event -> {
             note.setNoteText(noteText.getText());
             TaskWithArgs<Note> updateNoteTask = DbController.INSTANCE.editNote(note);
-            updateNoteTask.RegisterSuccessEvent(()->{
+            updateNoteTask.RegisterSuccessEvent(() -> {
                 collapseMethod.call(false);
             });
             updateNoteTask.startTask();
@@ -48,14 +52,13 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     }
 
     /**
-     *
      * @param param this is the TableRowData that will be used to edit the Note data.
      */
-    public void setTableRowData(TableRowExpanderColumn.TableRowDataFeatures<TransactionModel> param){
-        if(param.getValue().getTransaction().getNote()!= null){
-        this.note = param.getValue().getTransaction().getNote();
-        this.noteText.setText(this.note.getNoteText());}
-        else{
+    public void setTableRowData(TableRowExpanderColumn.TableRowDataFeatures<TransactionModel> param) {
+        if (param.getValue().getTransaction().getNote() != null) {
+            this.note = param.getValue().getTransaction().getNote();
+            this.noteText.setText(this.note.getNoteText());
+        } else {
             note = new Note("");
         }
         collapseMethod = param::setExpanded;
