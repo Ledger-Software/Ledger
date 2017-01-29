@@ -85,6 +85,20 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         });
     }
 
+    private boolean setUpChartsInfo() {
+        ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
+        this.chartTypesSelected.clear();
+        for (String s : choices) {
+            this.chartTypesSelected.add(s);
+        }
+        this.numberOfChartsSelected = this.chartTypesSelected.size();
+        if (this.numberOfChartsSelected >= 4) {
+            setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
+            return true;
+        }
+        return false;
+    }
+
     private void setUpFiltersAndDelegate() {
         Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
         LocalDate fromDateSelected = this.fromDateFilter.getValue();
@@ -111,20 +125,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
             createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
         }
-    }
-
-    private boolean setUpChartsInfo() {
-        ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
-        this.chartTypesSelected.clear();
-        for (String s : choices) {
-            this.chartTypesSelected.add(s);
-        }
-        this.numberOfChartsSelected = this.chartTypesSelected.size();
-        if (this.numberOfChartsSelected >= 4) {
-            setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -406,7 +406,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
         setUpPieChartProperties();
-
         this.expendituresPieChart.setVisible(true);
 
     }
@@ -415,10 +414,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresPieChart.setTitle("Expenditures by Category");
         this.windowPane.getChildren().remove(this.expendituresPieChart);
         this.windowPane.getChildren().add(this.expendituresPieChart);
-        if(this.numberOfChartsSelected > 2) {
+        if (this.numberOfChartsSelected > 2) {
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
-        } else if(this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
+        } else if (this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         } else {
@@ -431,10 +430,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.setTitle("Expenditures Over Time");
         this.windowPane.getChildren().remove(this.expendituresLineChart);
         this.windowPane.getChildren().add(this.expendituresLineChart);
-        if(this.numberOfChartsSelected > 2) {
+        if (this.numberOfChartsSelected > 2) {
             this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
             this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
-        } else if(this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
+        } else if (this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
             this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
             this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
         } else {
