@@ -160,7 +160,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         ExpenditureChartsController chartController = new ExpenditureChartsController();
         Scene scene = new Scene(chartController);
-        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts");
+        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts", true);
     }
 
     /**
