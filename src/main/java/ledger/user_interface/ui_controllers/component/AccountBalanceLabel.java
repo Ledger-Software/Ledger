@@ -35,6 +35,10 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
     }
 
     public void recalculateBalance() {
+        if (this.currentAccount == null) {
+            Startup.INSTANCE.runLater(this::calculateBalanceForAllAccounts);
+            return;
+        }
         Startup.INSTANCE.runLater(this::calculateBalanceForAccount);
     }
 
