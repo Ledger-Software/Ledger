@@ -12,7 +12,6 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.TypeComparator;
 import ledger.user_interface.utils.TypeStringConverter;
 
@@ -24,7 +23,7 @@ import java.util.List;
 public class TypeColumn extends TableColumn implements IUIController {
 
     public TypeColumn() {
-        this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Type>("type"));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Type>("type"));
 
         TaskWithReturn<List<Type>> getAllTypesTask = DbController.INSTANCE.getAllTypes();
         getAllTypesTask.startTask();
@@ -36,13 +35,12 @@ public class TypeColumn extends TableColumn implements IUIController {
         this.setComparator(new TypeComparator());
     }
 
-    private EventHandler<CellEditEvent<TransactionModel, Type>> typeEditHandler = new EventHandler<CellEditEvent<TransactionModel, Type>>() {
+    private EventHandler<CellEditEvent<Transaction, Type>> typeEditHandler = new EventHandler<CellEditEvent<Transaction, Type>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, Type> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+        public void handle(CellEditEvent<Transaction, Type> t) {
+            Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
             Type typeToSet = t.getNewValue();
 
-            Transaction transaction = model.getTransaction();
             transaction.setType(typeToSet);
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);

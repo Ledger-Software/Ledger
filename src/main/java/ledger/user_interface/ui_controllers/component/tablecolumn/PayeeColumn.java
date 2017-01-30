@@ -12,7 +12,6 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.PayeeComparator;
 import ledger.user_interface.utils.PayeeStringConverter;
 
@@ -29,7 +28,7 @@ public class PayeeColumn extends TableColumn implements IUIController {
         List<Payee> allPayees = getAllPayeesTask.waitForResult();
         ObservableList observableAllPayees = FXCollections.observableList(allPayees);
 
-        this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Payee>("payee"));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
         this.setOnEditCommit(this.payeeEditHandler);
         this.setComparator(new PayeeComparator());
@@ -41,13 +40,12 @@ public class PayeeColumn extends TableColumn implements IUIController {
         }
     }
 
-    private EventHandler<javafx.scene.control.TableColumn.CellEditEvent<TransactionModel, Payee>> payeeEditHandler = new EventHandler<javafx.scene.control.TableColumn.CellEditEvent<TransactionModel, Payee>>() {
+    private EventHandler<javafx.scene.control.TableColumn.CellEditEvent<Transaction, Payee>> payeeEditHandler = new EventHandler<javafx.scene.control.TableColumn.CellEditEvent<Transaction, Payee>>() {
         @Override
-        public void handle(javafx.scene.control.TableColumn.CellEditEvent<TransactionModel, Payee> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+        public void handle(javafx.scene.control.TableColumn.CellEditEvent<Transaction, Payee> t) {
+            Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
             Payee payeeToSet = t.getNewValue();
 
-            Transaction transaction = model.getTransaction();
             transaction.setPayee(payeeToSet);
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
