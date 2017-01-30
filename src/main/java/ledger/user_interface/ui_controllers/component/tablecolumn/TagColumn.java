@@ -42,11 +42,9 @@ public class TagColumn extends TableColumn {
                     if (newValue) {
                         TagFlowPane flow = new TagFlowPane(cell.getItem().getTransaction());
                         cell.setGraphic(flow);
-                        System.out.println("Edit on");
                     } else {
                         cell.setGraphic(null);
                         cell.setText(tagsToString(cell.getItem().getTags()));
-                        System.out.println("Edit off");
                     }
                 }
             });
