@@ -378,7 +378,7 @@ public class DbController {
      * @return A Task for the asynchronous call
      */
     public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
-        return new TaskWithArgs<TagPayeeWrapper>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
+        return new TaskWithArgs<>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
     }
 
 
@@ -424,6 +424,27 @@ public class DbController {
         return task;
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get the balance for a given account
+     *
+     * @param account The account to get the AccountBalance for
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgsReturn<Account, AccountBalance> getBalanceForAccount(Account account) {
+        return new TaskWithArgsReturn<>(db::getBalanceForAccount, account);
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to add an account balance for a given
+     * account
+     *
+     * @param balance AccountBalance to add to the database
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgs<AccountBalance> addBalanceForAccount(AccountBalance balance) {
+        return new TaskWithArgs<>(db::addBalanceForAccount, balance);
+    }
+
     protected IDatabase getDb() {
         return db;
     }
@@ -460,4 +481,5 @@ public class DbController {
     public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.deleteTagForPayee(wrapper.tag, wrapper.payee);
     }
+
 }
