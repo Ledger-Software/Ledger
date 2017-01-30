@@ -77,7 +77,9 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
         int net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
 
-        this.setText(this.currentAccount.getName() + ": $" + String.format("%.2f", (float) net / 100.0));
+        String accountName = this.currentAccount.getName();
+        if (accountName.length() > 20) accountName = accountName.substring(0, 17) + "...";
+        this.setText(accountName + ": $" + String.format("%.2f", (float) net / 100.0));
     }
 
     private void calculateBalanceForAllAccounts() {
