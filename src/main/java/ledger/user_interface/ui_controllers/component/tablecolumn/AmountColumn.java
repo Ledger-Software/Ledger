@@ -8,6 +8,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.TransactionTableView;
 import ledger.user_interface.utils.AmountStringConverter;
 
 /**
@@ -19,6 +20,7 @@ public class AmountColumn extends TableColumn implements IUIController {
         this.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("amount"));
         this.setCellFactory(TextFieldTableCell.forTableColumn(new AmountStringConverter()));
         this.setOnEditCommit(this.amountEditHandler);
+        this.getTableView();
     }
 
     // Transaction table edit event handlers
@@ -29,6 +31,8 @@ public class AmountColumn extends TableColumn implements IUIController {
             Integer amountToSet = t.getNewValue();
             if (amountToSet == null) {
                 setupErrorPopup("Provided amount is invalid", new Exception());
+                TransactionTableView transactionTableView = (TransactionTableView) getTableView();
+                transactionTableView.updateTransactionTableView();
                 return;
             }
 
