@@ -48,7 +48,6 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                     AccountBalanceTable.ABAL_DATETIME +
                     " FROM " + AccountBalanceTable.TABLE_NAME +
                     " WHERE " + AccountBalanceTable.ABAL_ACCOUNT_ID + " =?");
-            stmt.setInt(1, account.getId());
             ResultSet rs = stmt.executeQuery();
 
             //Store info so we can query for accounts only once
@@ -63,15 +62,10 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
 
                     balanceID = rs.getInt(AccountBalanceTable.ABAL_ID);
                     amount = rs.getInt(AccountBalanceTable.ABAL_AMOUNT);
-                    accountID = rs.getInt(AccountBalanceTable.ABAL_ACCOUNT_ID);
                 }
             }
 
-            List<Account> accounts = getAllAccounts();
-            AccountBalance balance = null;
-            for (Account a : accounts) {
-                if (a.getId() == accountID) balance = new AccountBalance(a, new Date(mostRecentDate), amount, balanceID);
-            }
+            AccountBalance  balance = new AccountBalance(account, new Date(mostRecentDate), amount, balanceID);
 
             return balance;
 

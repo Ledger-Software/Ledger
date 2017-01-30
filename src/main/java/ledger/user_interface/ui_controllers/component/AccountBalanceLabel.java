@@ -48,7 +48,6 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
     }
 
     private void calculateBalanceForAccount() {
-
         TaskWithReturn<List<Transaction>> task =  DbController.INSTANCE.getAllTransactionsForAccount(this.currentAccount);
         task.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch transactions from the database.", e));
         task.startTask();
@@ -64,10 +63,34 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         balanceTask.startTask();
         AccountBalance balance = balanceTask.waitForResult();
 
-        this.setText(this.currentAccount.getName() + ": $" + (balance.getAmount() + amountSpent)/100.0);
+        int net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
+        this.setText(this.currentAccount.getName() + ": $" + String.format("%.2f", (float) net/100.0));
     }
 
     private void calculateBalanceForAllAccounts() {
-        this.setText("All Accounts Balance: ");
+        TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
+        accountsTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch accounts from database.", e));
+        accountsTask.startTask();
+        List<Account> accounts = accountsTask.waitForResult();
+
+        int sum = 0;
+        for(Account account : accounts) {
+            TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(account);
+            balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
+            balanceTask.startTask();
+            AccountBalance balance = balanceTask.waitForResult();
+            sum += balance == null ? 0 : balance.getAmount();
+        }
+
+        TaskWithReturn<List<Transaction>> transactionTask = DbController.INSTANCE.getAllTransactions();
+        transactionTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch transaction list form database.", e));
+        transactionTask.startTask();
+        List<Transaction> transactions = transactionTask.waitForResult();
+
+        for (Transaction transaction : transactions) {
+            sum += transaction.getAmount();
+        }
+
+        this.setText("All Accounts Balance: $" + String.format("%.2f", (float) sum/100));
     }
 }

@@ -65,13 +65,15 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 return;
             }
             TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
-            task.RegisterSuccessEvent(this::insertDone);
             task.RegisterFailureEvent(this::insertFail);
             task.startTask();
+            task.waitForComplete();
 
             TaskWithArgs<AccountBalance> balanceTask = DbController.INSTANCE.addBalanceForAccount(balance);
+            balanceTask.RegisterSuccessEvent(this::insertDone);
             balanceTask.RegisterFailureEvent(this::insertFail);
             balanceTask.startTask();
+            balanceTask.waitForComplete();
         });
     }
 
