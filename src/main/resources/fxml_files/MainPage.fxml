@@ -12,12 +12,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import ledger.user_interface.ui_controllers.component.AccountBalanceLabel?>
 <?import ledger.user_interface.ui_controllers.component.ExportButton?>
 <?import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown?>
 <?import ledger.user_interface.ui_controllers.component.LogoutButton?>
 <?import ledger.user_interface.ui_controllers.component.TransactionTableView?>
 
-<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
@@ -39,6 +40,9 @@
         </Text>
         <VBox fx:id="buttonsVBox" alignment="TOP_CENTER" spacing="10.0" GridPane.rowIndex="1">
             <children>
+                <AccountBalanceLabel fx:id="accountBalanceLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+
+                </AccountBalanceLabel>
                 <Text fx:id="chooseActText" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter by Account:" textAlignment="CENTER">
                 </Text>
                 <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
