@@ -20,8 +20,12 @@ public class DatePropertyValueFactory implements Callback<TableColumn.CellDataFe
         LocalDate localDate = null;
         if (transactionDate != null) {
             // FIXME: This line throws an exception if you edit a dat and immediately try to sort by date, but the DB write persists (no functionality lost)
-            LocalDate date = transactionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            localDate = date;
+            try {
+                LocalDate date = transactionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                localDate = date;
+            } catch (UnsupportedOperationException e) {
+                // TODO: Investigate further & handle this
+            }
         }
         return new ReadOnlyObjectWrapper(localDate);
     }
