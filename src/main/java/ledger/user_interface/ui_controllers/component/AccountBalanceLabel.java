@@ -24,14 +24,14 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     private Account currentAccount;
 
+    public AccountBalanceLabel() {
+        this.initController(pageLoc, this, "Unable to load Account Balance Label");
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         DbController.INSTANCE.registerTransationSuccessEvent(this::recalculateBalance);
         calculateBalanceForAllAccounts();
-    }
-
-    public AccountBalanceLabel() {
-        this.initController(pageLoc, this, "Unable to load Account Balance Label");
     }
 
     public void recalculateBalance() {
@@ -40,7 +40,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     public void calculateBalance(Account account) {
         this.currentAccount = account;
-        if(this.currentAccount == null) {
+        if (this.currentAccount == null) {
             calculateBalanceForAllAccounts();
             return;
         }
@@ -48,13 +48,13 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
     }
 
     private void calculateBalanceForAccount() {
-        TaskWithReturn<List<Transaction>> task =  DbController.INSTANCE.getAllTransactionsForAccount(this.currentAccount);
+        TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactionsForAccount(this.currentAccount);
         task.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch transactions from the database.", e));
         task.startTask();
         List<Transaction> transactions = task.waitForResult();
 
         int amountSpent = 0;
-        for(Transaction t : transactions) {
+        for (Transaction t : transactions) {
             amountSpent += t.getAmount();
         }
 
@@ -64,7 +64,8 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         AccountBalance balance = balanceTask.waitForResult();
 
         int net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
-        this.setText(this.currentAccount.getName() + ": $" + String.format("%.2f", (float) net/100.0));
+
+        this.setText(this.currentAccount.getName() + ": $" + String.format("%.2f", (float) net / 100.0));
     }
 
     private void calculateBalanceForAllAccounts() {
@@ -73,13 +74,13 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         accountsTask.startTask();
         List<Account> accounts = accountsTask.waitForResult();
 
-        int sum = 0;
-        for(Account account : accounts) {
+        int net = 0;
+        for (Account account : accounts) {
             TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(account);
             balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
             balanceTask.startTask();
             AccountBalance balance = balanceTask.waitForResult();
-            sum += balance == null ? 0 : balance.getAmount();
+            net += balance == null ? 0 : balance.getAmount();
         }
 
         TaskWithReturn<List<Transaction>> transactionTask = DbController.INSTANCE.getAllTransactions();
@@ -88,9 +89,9 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         List<Transaction> transactions = transactionTask.waitForResult();
 
         for (Transaction transaction : transactions) {
-            sum += transaction.getAmount();
+            net += transaction.getAmount();
         }
 
-        this.setText("All Accounts Balance: $" + String.format("%.2f", (float) sum/100));
+        this.setText("All Accounts Balance: $" + String.format("%.2f", (float) net / 100));
     }
 }

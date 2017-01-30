@@ -31,6 +31,10 @@ import java.util.ResourceBundle;
  */
 
 public class MainPageController extends GridPane implements Initializable, IUIController {
+    private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    @FXML
+    public Button payeeEditorButton;
+    boolean containsAccounts = false;
     @FXML
     private Button addAccountBtn;
     @FXML
@@ -51,15 +55,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button clearButton;
     @FXML
     private TextField searchTextField;
-    @FXML
-    public Button payeeEditorButton;
-
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
-
-    private final static String pageLoc = "/fxml_files/MainPage.fxml";
-    boolean containsAccounts = false;
 
     public MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");

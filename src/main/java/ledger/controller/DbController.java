@@ -21,13 +21,16 @@ import java.util.List;
 public class DbController {
 
     public static DbController INSTANCE;
-    private IDatabase db;
-    private File dbFile;
 
     static {
         new DbController();
     }
 
+    private IDatabase db;
+    private File dbFile;
+    private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
+    private List<CallableMethodVoidNoArgs> accountSuccessEvent;
+    private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
     /**
      * Constructor for the DBcontroller
      */
@@ -43,10 +46,6 @@ public class DbController {
         this.dbFile = new File(fileName);
     }
 
-    private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
-    private List<CallableMethodVoidNoArgs> accountSuccessEvent;
-    private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
-
     public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
     }
@@ -55,7 +54,9 @@ public class DbController {
         accountSuccessEvent.add(method);
     }
 
-    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) { payeeSuccessEvent.add(method); }
+    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) {
+        payeeSuccessEvent.add(method);
+    }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -362,7 +363,7 @@ public class DbController {
      * Creates a Task that can be used to make an asynchronous call to the database add a Tag to the given Payee
      *
      * @param payee The Payee to get all associated tags for
-     * @param tag The Tag to associate with the Payee
+     * @param tag   The Tag to associate with the Payee
      * @return A Task for the async call
      */
     public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
@@ -374,7 +375,7 @@ public class DbController {
      * Payee
      *
      * @param payee The Payee to remove the Tag from
-     * @param tag The Tag to remove from the Payee
+     * @param tag   The Tag to remove from the Payee
      * @return A Task for the asynchronous call
      */
     public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
@@ -450,19 +451,6 @@ public class DbController {
     }
 
     /**
-     * Wraps a Tag and Payee into a single class to be used by Tasks
-     */
-    class TagPayeeWrapper {
-        public Tag tag;
-        public Payee payee;
-
-        TagPayeeWrapper (Tag t, Payee p) {
-            this.tag = t;
-            this.payee = p;
-        }
-    }
-
-    /**
      * Wraps the databases addTagForPayee method so that a single argument can be given to the Task
      *
      * @param wrapper The wrapper class containing the Tag and Payee
@@ -480,6 +468,19 @@ public class DbController {
      */
     public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.deleteTagForPayee(wrapper.tag, wrapper.payee);
+    }
+
+    /**
+     * Wraps a Tag and Payee into a single class to be used by Tasks
+     */
+    class TagPayeeWrapper {
+        public Tag tag;
+        public Payee payee;
+
+        TagPayeeWrapper(Tag t, Payee p) {
+            this.tag = t;
+            this.payee = p;
+        }
     }
 
 }

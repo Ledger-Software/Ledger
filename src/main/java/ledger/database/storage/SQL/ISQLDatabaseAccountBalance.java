@@ -10,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
 
@@ -30,7 +29,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
             stmt.executeUpdate();
 
             ResultSet rs = stmt.getGeneratedKeys();
-            if(rs.next()) {
+            if (rs.next()) {
                 balance.setId(rs.getInt(1));
             }
         } catch (SQLException e) {
@@ -39,7 +38,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
     }
 
     @Override
-    default AccountBalance getBalanceForAccount(Account account) throws StorageException{
+    default AccountBalance getBalanceForAccount(Account account) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " +
                     AccountBalanceTable.ABAL_ID + ", " +
@@ -48,14 +47,14 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                     AccountBalanceTable.ABAL_DATETIME +
                     " FROM " + AccountBalanceTable.TABLE_NAME +
                     " WHERE " + AccountBalanceTable.ABAL_ACCOUNT_ID + " =?");
+            stmt.setInt(1, account.getId());
             ResultSet rs = stmt.executeQuery();
 
             //Store info so we can query for accounts only once
             int balanceID = -1;
             int amount = -1;
-            int accountID = -1;
             long mostRecentDate = -1L;
-            while(rs.next()) {
+            while (rs.next()) {
                 long currentDate = rs.getLong(AccountBalanceTable.ABAL_DATETIME);
                 if (currentDate > mostRecentDate) {
                     mostRecentDate = currentDate;
@@ -65,7 +64,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                 }
             }
 
-            AccountBalance  balance = new AccountBalance(account, new Date(mostRecentDate), amount, balanceID);
+            AccountBalance balance = new AccountBalance(account, new Date(mostRecentDate), amount, balanceID);
 
             return balance;
 

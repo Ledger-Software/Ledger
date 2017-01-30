@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
  */
 public class AccountPopupController extends GridPane implements Initializable, IUIController {
 
+    private final static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
     @FXML
     private Button submitAccountInfo;
     @FXML
@@ -31,9 +32,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     private TextField accountDescription;
     @FXML
     private TextField accountNameText;
-
     private Account act = null;
-    private final static String pageLoc = "/fxml_files/AddAccountPopup.fxml";
 
 
     public AccountPopupController() {
