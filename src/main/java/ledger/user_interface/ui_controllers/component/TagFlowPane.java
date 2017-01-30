@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers.component;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -45,5 +47,27 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         });
 
         this.getChildren().add(addButton);
+
+
+//        this.setMinWidth(USE_PREF_SIZE);
+//        this.setMaxWidth(USE_PREF_SIZE);
+//
+//        this.setWidths(500);
+//
+//        this.widthProperty().addListener(new ChangeListener<Number>() {
+//            @Override
+//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+//                setWidths(newValue.doubleValue());
+//                System.out.println("Changed to " + newValue.doubleValue());
+//            }
+//        });
+//
+//        this.
+    }
+
+    private void setWidths(double value) {
+
+        this.setPrefWidth(value);
+
     }
 }

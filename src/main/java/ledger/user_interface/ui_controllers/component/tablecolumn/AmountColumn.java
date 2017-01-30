@@ -35,6 +35,7 @@ public class AmountColumn extends TableColumn implements IUIController {
                 return;
             }
 
+
             if (amountToSetString.charAt(0) == '$') {
                 amountToSetString = amountToSetString.substring(1);
             }
