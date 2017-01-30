@@ -7,35 +7,36 @@ import ledger.database.entity.Type;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by Tayler How on 10/26/2016.
  */
 public class TransactionModel {
+    // Unused
     private int id;
 
-    // Use TransactionModel
+    // Use DatePropertyValueFactory
+    private Date date;
+
+    // Use StringConverters
     private int amount;
-    private LocalDate date;
-    private List<Tag> tags;
 
     // Use comboboxes and StringConverters
     private Type type;
     private Payee payee;
     private boolean pending;
 
+    // Use Transaction object
+    private List<Tag> tags;
+
     private Transaction transaction;
 
     public TransactionModel(Transaction transaction) {
         this.id = transaction.getId();
         this.amount = transaction.getAmount();
-        if (transaction.getDate() != null) {
-            LocalDate date = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            this.date = date;
-        } else {
-            this.date = null;
-        }
+        this.date = transaction.getDate();
 
         if (transaction.getTags() != null) {
             tags = transaction.getTags();
@@ -69,11 +70,11 @@ public class TransactionModel {
         this.amount = amount;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

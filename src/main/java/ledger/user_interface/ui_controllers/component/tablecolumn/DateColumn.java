@@ -8,6 +8,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.DatePropertyValueFactory;
 import ledger.user_interface.utils.LocalDateTableCell;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ import java.util.Date;
 public class DateColumn extends TableColumn implements IUIController {
 
     public DateColumn() {
-        this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Date>("date"));
+        this.setCellValueFactory(new DatePropertyValueFactory());
         this.setCellFactory(column -> new LocalDateTableCell<>(this));
         this.setOnEditCommit(this.dateEditHandler);
     }

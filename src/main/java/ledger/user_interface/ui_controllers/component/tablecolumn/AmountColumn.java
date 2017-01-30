@@ -42,7 +42,6 @@ public class AmountColumn extends TableColumn implements IUIController {
             task.RegisterFailureEvent((e) -> {
                 setupErrorPopup("Error editing transaction amount.", e);
             });
-//                task.RegisterSuccessEvent(() -> updateTransactionTableView());
             task.startTask();
             task.waitForComplete();
         }
