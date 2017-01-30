@@ -28,6 +28,11 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateTags();
+    }
+
+    public void updateTags() {
+        this.getChildren().clear();
         List<Tag> tags = model.getTags();
         if (tags != null)
             for (Tag tag : tags) {
@@ -47,27 +52,5 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         });
 
         this.getChildren().add(addButton);
-
-
-//        this.setMinWidth(USE_PREF_SIZE);
-//        this.setMaxWidth(USE_PREF_SIZE);
-//
-//        this.setWidths(500);
-//
-//        this.widthProperty().addListener(new ChangeListener<Number>() {
-//            @Override
-//            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//                setWidths(newValue.doubleValue());
-//                System.out.println("Changed to " + newValue.doubleValue());
-//            }
-//        });
-//
-//        this.
-    }
-
-    private void setWidths(double value) {
-
-        this.setPrefWidth(value);
-
     }
 }

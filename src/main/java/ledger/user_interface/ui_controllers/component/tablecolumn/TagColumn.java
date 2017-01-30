@@ -24,11 +24,10 @@ public class TagColumn extends TableColumn {
     private Callback normalCallback = new Callback<TableColumn<TransactionModel, TransactionModel>, TableCell<TransactionModel, TransactionModel>>() {
         @Override
         public TableCell<TransactionModel, TransactionModel> call(TableColumn<TransactionModel, TransactionModel> param) {
-            return new TableCell<TransactionModel, TransactionModel>() {
+            TableCell<TransactionModel, TransactionModel> cell = new TableCell<TransactionModel, TransactionModel>() {
                 @Override
                 protected void updateItem(TransactionModel model, boolean empty) {
                     super.updateItem(model, empty);
-
                     if (model == null || empty) {
                         setText(null);
                         setGraphic(null);
@@ -37,41 +36,27 @@ public class TagColumn extends TableColumn {
                     }
                 }
             };
+            cell.editingProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    if (newValue) {
+                        TagFlowPane flow = new TagFlowPane(cell.getItem().getTransaction());
+                        cell.setGraphic(flow);
+                        System.out.println("Edit on");
+                    } else {
+                        cell.setGraphic(null);
+                        cell.setText(tagsToString(cell.getItem().getTags()));
+                        System.out.println("Edit off");
+                    }
+                }
+            });
+            return cell;
         }
     };
 
     public TagColumn() {
         this.setCellValueFactory(new IdenityCellValueCallback<TransactionModel>());
         this.setCellFactory(normalCallback);
-        this.setOnEditStart(new EventHandler<CellEditEvent>() {
-            @Override
-            public void handle(CellEditEvent event) {
-                setCellFactory(
-                    new Callback<TableColumn<TransactionModel, TransactionModel>, TableCell<TransactionModel, TransactionModel>>() {
-                        @Override
-                        public TableCell<TransactionModel, TransactionModel> call(TableColumn<TransactionModel, TransactionModel> param) {
-                            return new TableCell<TransactionModel, TransactionModel>() {
-                                @Override
-                                protected void updateItem(TransactionModel model, boolean empty) {
-                                    super.updateItem(model, empty);
-                                    if (model == null || empty) {
-                                        setText(null);
-                                        setGraphic(null);
-                                    } else if(this.getTableRow().getIndex() == event.getTablePosition().getRow()) {
-                                        TagFlowPane flow = new TagFlowPane(model.getTransaction());
-                                        setGraphic(flow);
-                                    } else {
-                                        setText(tagsToString(model.getTags()));
-                                    }
-                                }
-                            };
-                        }
-                    });
-            }
-        });
-        this.setOnEditCancel(event -> setCellFactory(normalCallback));
-        this.setOnEditCommit(event -> setCellFactory(normalCallback));
-
         this.setSortable(false);
     }
 

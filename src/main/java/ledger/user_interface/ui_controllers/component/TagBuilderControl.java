@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
@@ -46,10 +47,11 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
             model.setTags(newTags);
         }
         newTags = model.getTags();
-
         newTags.add(new Tag(nameText.getText(), nameText.getText()));
         TaskWithArgs task = TaggableSwitch.edit(model);
         task.startTask();
         task.waitForComplete();
+
+        ((TagFlowPane)this.getParent()).updateTags();
     }
 }
