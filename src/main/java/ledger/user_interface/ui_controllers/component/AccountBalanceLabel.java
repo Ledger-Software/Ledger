@@ -3,10 +3,13 @@ package ledger.user_interface.ui_controllers.component;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import ledger.controller.DbController;
+import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.database.entity.AccountBalance;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
 import java.util.List;
@@ -23,11 +26,16 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        DbController.INSTANCE.registerTransationSuccessEvent(this::recalculateBalance);
         calculateBalanceForAllAccounts();
     }
 
     public AccountBalanceLabel() {
         this.initController(pageLoc, this, "Unable to load Account Balance Label");
+    }
+
+    public void recalculateBalance() {
+        Startup.INSTANCE.runLater(this::calculateBalanceForAccount);
     }
 
     public void calculateBalance(Account account) {
@@ -51,7 +59,12 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
             amountSpent += t.getAmount();
         }
 
-        this.setText(this.currentAccount.getName() + ": $" + amountSpent/100.0);
+        TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(this.currentAccount);
+        balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
+        balanceTask.startTask();
+        AccountBalance balance = balanceTask.waitForResult();
+
+        this.setText(this.currentAccount.getName() + ": $" + (balance.getAmount() + amountSpent)/100.0);
     }
 
     private void calculateBalanceForAllAccounts() {
