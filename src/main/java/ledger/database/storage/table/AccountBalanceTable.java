@@ -17,7 +17,7 @@ public class AccountBalanceTable {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "(%s INT NOT NULL, " +
-                "%s REAL NOT NULL, " +
+                "%s LONG NOT NULL, " +
                 "%s INT NOT NULL" +
                 ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }
@@ -31,7 +31,7 @@ public class AccountBalanceTable {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                 "%s INT NOT NULL, " +
-                "%s REAL NOT NULL, " +
+                "%s LONG NOT NULL, " +
                 "%s INT NOT NULL" +
                 ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }

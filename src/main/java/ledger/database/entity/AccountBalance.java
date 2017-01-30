@@ -97,5 +97,23 @@ public class AccountBalance implements IEntity {
         this.amount = amount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
+        AccountBalance that = (AccountBalance) o;
+
+        if (amount != that.amount) return false;
+        if (!account.equals(that.account)) return false;
+        return date.equals(that.date);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = account.hashCode();
+        result = 31 * result + date.hashCode();
+        result = 31 * result + amount;
+        return result;
+    }
 }

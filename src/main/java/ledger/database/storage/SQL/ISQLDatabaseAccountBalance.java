@@ -17,7 +17,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
     @Override
     default void addBalanceForAccount(AccountBalance balance) throws StorageException {
         try {
-            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO" + AccountBalanceTable.TABLE_NAME +
+            PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + AccountBalanceTable.TABLE_NAME +
                     " (" + AccountBalanceTable.ABAL_ACCOUNT_ID +
                     ", " + AccountBalanceTable.ABAL_AMOUNT +
                     ", " + AccountBalanceTable.ABAL_DATETIME +
@@ -42,11 +42,14 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
     default AccountBalance getBalanceForAccount(Account account) throws StorageException{
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " +
-                AccountBalanceTable.ABAL_AMOUNT + ", " +
-                AccountBalanceTable.ABAL_DATETIME +
-                " FROM " + AccountBalanceTable.TABLE_NAME +
-                " WHERE " + AccountBalanceTable.ABAL_ACCOUNT_ID + " =?", account.getId());
-            ResultSet rs = stmt.getGeneratedKeys();
+                    AccountBalanceTable.ABAL_ID + ", " +
+                    AccountBalanceTable.ABAL_ACCOUNT_ID + ", " +
+                    AccountBalanceTable.ABAL_AMOUNT + ", " +
+                    AccountBalanceTable.ABAL_DATETIME +
+                    " FROM " + AccountBalanceTable.TABLE_NAME +
+                    " WHERE " + AccountBalanceTable.ABAL_ACCOUNT_ID + " =?");
+            stmt.setInt(1, account.getId());
+            ResultSet rs = stmt.executeQuery();
 
             //Store info so we can query for accounts only once
             int balanceID = -1;
@@ -60,8 +63,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
 
                     balanceID = rs.getInt(AccountBalanceTable.ABAL_ID);
                     amount = rs.getInt(AccountBalanceTable.ABAL_AMOUNT);
-                    accountID = rs.getInt(AccountBalanceTable.ABAL_AMOUNT);
-
+                    accountID = rs.getInt(AccountBalanceTable.ABAL_ACCOUNT_ID);
                 }
             }
 
