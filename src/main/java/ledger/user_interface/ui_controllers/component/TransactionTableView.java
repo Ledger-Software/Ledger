@@ -18,7 +18,7 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import java.util.ResourceBundle;
  * Controls all input and interaction with the Main Page of the application
  */
 
-public class TransactionTableView extends TableView<TransactionModel> implements IUIController, Initializable {
+public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -74,16 +74,10 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         task.startTask();
         List<Transaction> transactions = task.waitForResult();
 
-        ArrayList<TransactionModel> models = new ArrayList<>();
-        for (Transaction trans : transactions) {
-            models.add(new TransactionModel(trans));
-        }
-        ObservableList<TransactionModel> observableTransactionModels = FXCollections.observableList(models);
-
-//        this.setItems(observableTransactionModels);
+        ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-        FilteredList<TransactionModel> filteredData = new FilteredList<>(observableTransactionModels, p -> true);
+        FilteredList<Transaction> filteredData = new FilteredList<>(observableTransactions, p -> true);
 
         // 2. Set the filter Predicate.
         filteredData.setPredicate(transactionModel -> {
@@ -95,7 +89,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             // Compare first name and last name of every person with filter text.
             String lowerCaseFilter = searchFilterString.toLowerCase();
 
-            if (transactionModel.getAmount().toLowerCase().contains(lowerCaseFilter)) {
+            AmountStringConverter asc = new AmountStringConverter();
+            if (asc.toString(transactionModel.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches amount.
             } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches Payee name.
@@ -107,7 +102,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
         });
 
         // 3. Wrap the FilteredList in a SortedList.
-        SortedList<TransactionModel> sortedData = new SortedList<>(filteredData);
+        SortedList<Transaction> sortedData = new SortedList<>(filteredData);
 
         // 4. Bind the SortedList comparator to the TableView comparator.
         sortedData.comparatorProperty().bind(this.comparatorProperty());
@@ -128,7 +123,7 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             }
 
             for (int i : indices) {
-                Transaction transactionToDelete = this.getItems().get(i).getTransaction();
+                Transaction transactionToDelete = this.getItems().get(i);
 
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
                 task.RegisterFailureEvent((e) -> {

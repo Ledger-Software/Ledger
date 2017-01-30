@@ -10,7 +10,6 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_models.TransactionModel;
 import ledger.user_interface.utils.PendingStringConverter;
 
 /**
@@ -19,20 +18,19 @@ import ledger.user_interface.utils.PendingStringConverter;
 public class ClearedColumn extends TableColumn implements IUIController {
 
     public ClearedColumn() {
-        this.setCellValueFactory(new PropertyValueFactory<TransactionModel, Boolean>("pending"));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Boolean>("pending"));
         ObservableList<Boolean> observableAllPending = FXCollections.observableArrayList(true, false);
 
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new PendingStringConverter(), observableAllPending));
         this.setOnEditCommit(this.closedEditHandler);
     }
 
-    private EventHandler<CellEditEvent<TransactionModel, Boolean>> closedEditHandler = new EventHandler<CellEditEvent<TransactionModel, Boolean>>() {
+    private EventHandler<CellEditEvent<Transaction, Boolean>> closedEditHandler = new EventHandler<CellEditEvent<Transaction, Boolean>>() {
         @Override
-        public void handle(CellEditEvent<TransactionModel, Boolean> t) {
-            TransactionModel model = t.getTableView().getItems().get(t.getTablePosition().getRow());
+        public void handle(CellEditEvent<Transaction, Boolean> t) {
+            Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
             boolean pendingToSet = t.getNewValue();
 
-            Transaction transaction = model.getTransaction();
             transaction.setPending(pendingToSet);
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
