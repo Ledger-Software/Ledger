@@ -16,7 +16,7 @@ public class TransactionModel {
     private int id;
 
     // Use TransactionModel
-    private String amount;
+    private int amount;
     private LocalDate date;
     private List<Tag> tags;
 
@@ -29,10 +29,7 @@ public class TransactionModel {
 
     public TransactionModel(Transaction transaction) {
         this.id = transaction.getId();
-        String amountInCents = String.valueOf(transaction.getAmount());
-        String dollars = amountInCents.substring(0, amountInCents.length() - 2);
-        String cents = amountInCents.substring(amountInCents.length() - 2, amountInCents.length());
-        this.amount = "$" + dollars + "." + cents;
+        this.amount = transaction.getAmount();
         if (transaction.getDate() != null) {
             LocalDate date = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             this.date = date;
@@ -64,11 +61,11 @@ public class TransactionModel {
         this.id = id;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

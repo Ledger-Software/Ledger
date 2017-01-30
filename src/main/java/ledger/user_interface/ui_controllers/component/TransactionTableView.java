@@ -19,6 +19,7 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_models.TransactionModel;
+import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -95,7 +96,8 @@ public class TransactionTableView extends TableView<TransactionModel> implements
             // Compare first name and last name of every person with filter text.
             String lowerCaseFilter = searchFilterString.toLowerCase();
 
-            if (transactionModel.getAmount().toLowerCase().contains(lowerCaseFilter)) {
+            AmountStringConverter asc = new AmountStringConverter();
+            if (asc.toString(transactionModel.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches amount.
             } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches Payee name.
