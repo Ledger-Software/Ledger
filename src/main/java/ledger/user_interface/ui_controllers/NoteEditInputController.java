@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.CallableMethod;
+import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Note;
 import ledger.user_interface.ui_models.TransactionModel;
@@ -28,6 +29,8 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     private Button saveButton;
     private Note note;
     private CallableMethod<Boolean> collapseMethod;
+    private boolean wasNull;
+    private CallableMethodVoidNoArgs update;
 
     /**
      * Basic Constructor
@@ -42,9 +45,17 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
         saveButton.setOnAction((event -> {
             note.setNoteText(noteText.getText());
-            TaskWithArgs<Note> updateNoteTask = DbController.INSTANCE.editNote(note);
+            TaskWithArgs<Note> updateNoteTask;
+            if(wasNull) {
+                updateNoteTask = DbController.INSTANCE.insertNote(note);
+            } else
+            {
+                updateNoteTask = DbController.INSTANCE.editNote(note);
+            }
             updateNoteTask.RegisterSuccessEvent(() -> {
                 collapseMethod.call(false);
+                this.update.call();
+
             });
             updateNoteTask.startTask();
             updateNoteTask.waitForComplete();
@@ -59,8 +70,13 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             this.note = param.getValue().getTransaction().getNote();
             this.noteText.setText(this.note.getNoteText());
         } else {
-            note = new Note("");
+            note = new Note(param.getValue().getTransaction().getId(),"");
+            wasNull = true;
         }
         collapseMethod = param::setExpanded;
+    }
+
+    public void setUpdate(CallableMethodVoidNoArgs updateTransactionTableView) {
+        this.update = updateTransactionTableView;
     }
 }

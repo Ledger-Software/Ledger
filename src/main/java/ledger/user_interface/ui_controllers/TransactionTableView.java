@@ -224,11 +224,9 @@ public class TransactionTableView extends TableView<TransactionModel> implements
 
     private void configureTransactionTableView() {
         TableRowExpanderColumn<TransactionModel> expanderColumn = new TableRowExpanderColumn<TransactionModel>(param->{
-
-            Note note = param.getValue().getTransaction().getNote();
-
             NoteEditInputController noteEditInputController = new NoteEditInputController();
             noteEditInputController.setTableRowData(param);
+            noteEditInputController.setUpdate(this::updateTransactionTableView);
             return noteEditInputController;
         });
         expanderColumn.setText("Note");

@@ -62,7 +62,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.typeText.setDisable(true);
-
+        this.notesText.setText("");
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
         typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
         typeTask.RegisterSuccessEvent((list) -> {
