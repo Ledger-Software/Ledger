@@ -2,7 +2,6 @@ package ledger.user_interface.ui_controllers.component.tablecolumn;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -13,8 +12,6 @@ import ledger.user_interface.utils.IdenityCellValueCallback;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * TableColumn for Tags
@@ -36,16 +33,13 @@ public class TagColumn extends TableColumn {
                     }
                 }
             };
-            cell.editingProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    if (newValue) {
-                        TagFlowPane flow = new TagFlowPane(cell.getItem().getTransaction());
-                        cell.setGraphic(flow);
-                    } else {
-                        cell.setGraphic(null);
-                        cell.setText(tagsToString(cell.getItem().getTags()));
-                    }
+            cell.editingProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    TagFlowPane flow = new TagFlowPane(cell.getItem().getTransaction());
+                    cell.setGraphic(flow);
+                } else {
+                    cell.setGraphic(null);
+                    cell.setText(tagsToString(cell.getItem().getTags()));
                 }
             });
             return cell;
