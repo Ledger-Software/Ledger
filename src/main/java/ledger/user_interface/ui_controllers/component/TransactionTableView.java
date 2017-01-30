@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -18,6 +19,7 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -30,6 +32,9 @@ import java.util.ResourceBundle;
  */
 
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
+
+    @FXML
+    public AccountColumn accountColumn;
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -56,11 +61,19 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         ContextMenu menu = new ContextMenu();
-        MenuItem removeMenuItem = new MenuItem("Delete Selected Transaction(s)");
-        menu.getItems().add(removeMenuItem);
+
+        MenuItem deleteTransactionsMenuItem = new MenuItem("Delete Selected Transaction(s)");
+        menu.getItems().add(deleteTransactionsMenuItem);
+        deleteTransactionsMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
+
+        MenuItem showHideAccountColumnMenuItem = new MenuItem("Show/Hide Account Column");
+        menu.getItems().add(showHideAccountColumnMenuItem);
+        showHideAccountColumnMenuItem.setOnAction(event -> {
+            this.accountColumn.setVisible(!this.accountColumn.isVisible());
+        });
+
         this.setContextMenu(menu);
-        // removeMenuItem will remove the row from the table:
-        removeMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
+
     }
 
     public void updateTransactionTableView() {
