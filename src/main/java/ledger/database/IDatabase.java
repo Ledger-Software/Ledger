@@ -79,5 +79,9 @@ public interface IDatabase {
     Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription);
 
     Tag getTagForNameAndDescription(String tagName, String tagDescription);
+
+    AccountBalance getBalanceForAccount(Account account) throws StorageException;
+
+    void addBalanceForAccount(AccountBalance balance) throws StorageException;
 }
 

@@ -3,6 +3,7 @@ package ledger.database.storage;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
+import ledger.database.storage.table.AccountBalanceTable;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -11,9 +12,7 @@ import org.junit.Test;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -35,6 +34,7 @@ public class H2DatabaseTest {
     private static Note sampleNote;
     private static Note sampleNote2;
     private static Note sampleNote3;
+    private static AccountBalance sampleBalance;
 
     @BeforeClass
     public static void setupDatabase() throws Exception {
@@ -61,6 +61,13 @@ public class H2DatabaseTest {
         sampleTransaction1 = new Transaction(new Date(), sampleType, 4201, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
         sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote2);
         sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote3);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+        calendar.set(2011, Calendar.OCTOBER, 1);
+        long secondsSinceEpoch = calendar.getTimeInMillis() / 1000L;
+
+        sampleBalance = new AccountBalance(sampleAccount, new Date(secondsSinceEpoch), 1000);
 
         database.insertType(sampleType);
         database.insertType(sampleType2);
@@ -592,6 +599,15 @@ public class H2DatabaseTest {
         int actual = database.getAllTagsForPayee(samplePayee2).size();
 
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void accountBalanceTest() throws Exception {
+        database.insertAccount(sampleAccount);
+        database.addBalanceForAccount(sampleBalance);
+
+        AccountBalance returned = database.getBalanceForAccount(sampleAccount);
+        assertEquals(sampleBalance, returned);
     }
 
     @AfterClass
