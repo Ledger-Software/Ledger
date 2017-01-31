@@ -1,15 +1,20 @@
 package ledger.user_interface.ui_controllers.component;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
+import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.TypeComparator;
 import ledger.user_interface.utils.TypeStringConverter;
 
 import java.net.URL;
@@ -27,6 +32,7 @@ import java.util.ResourceBundle;
  */
 public class UserTransactionInput extends GridPane implements IUIController, Initializable {
     private static final String pageLog = "/fxml_files/UserTransactionInput.fxml";
+    private ChangeListener<Type> checkListener;
 
     @FXML
     private DatePicker datePicker;
@@ -44,6 +50,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     private TextArea notesText;
     @FXML
     private ComboBox<Type> typeText;
+    @FXML
+    private Text checkLabel;
+    @FXML
+    private TextField checkField;
+
 
     public UserTransactionInput() {
         this.initController(pageLog, this, "Unable to load User Transaction Input");
@@ -63,6 +74,16 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.typeText.setDisable(true);
+        this.checkListener = (observable, oldValue, newValue) -> {
+            if( new TypeComparator().compare(TypeConversion.CHECK, newValue) ==0){
+                checkLabel.setVisible(true);
+                checkField.setVisible(true);
+            } else {
+                checkField.setText("");
+                checkLabel.setVisible(false);
+                checkField.setVisible(false);
+            }
+        };
 
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
         typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
@@ -74,6 +95,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         });
         typeTask.startTask();
         this.datePicker.setValue(LocalDate.now());
+        this.typeText.valueProperty().addListener(this.checkListener);
     }
 
     /**
@@ -82,6 +104,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
      * @return a new Transaction object consisting of user input
      */
     public Transaction getTransactionSubmission() {
+
 
         LocalDate localDate = this.datePicker.getValue();
         if (localDate == null) {
@@ -123,6 +146,14 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         Note notes = new Note(this.notesText.getText());
 
+        if(checkField.visibleProperty().get()){
+            String checkNo = checkField.getText();
+            if(checkNo==null||checkNo.isEmpty()||InputSanitization.isInvalidCheckNumber(checkNo)){
+                this.setupErrorPopup("Please Enter a Check Number", new Exception());
+                return null;
+            }
+            notes.setNoteText(notes.getNoteText() + " Check #: " + checkNo);
+        }
         Type type = this.typeText.getValue();
         if (type == null) {
             this.setupErrorPopup("No type selected.", new Exception());
@@ -141,6 +172,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
      * @param currentTrans non-null Transaction to set the data in this control too
      */
     public void setTransaction(Transaction currentTrans) {
+        this.typeText.valueProperty();
         this.datePicker.setValue(currentTrans.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.typeText.setValue(currentTrans.getType());
         this.amountText.setText(Double.toString(currentTrans.getAmount() / 100.0));
