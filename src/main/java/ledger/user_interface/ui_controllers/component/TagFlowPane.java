@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers.component;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -26,6 +28,11 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        updateTags();
+    }
+
+    public void updateTags() {
+        this.getChildren().clear();
         List<Tag> tags = model.getTags();
         if (tags != null)
             for (Tag tag : tags) {
