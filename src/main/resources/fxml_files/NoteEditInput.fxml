@@ -8,21 +8,21 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="889.0" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
-      <ColumnConstraints hgrow="ALWAYS" maxWidth="817.0" minWidth="10.0" prefWidth="796.0" />
-      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="94.0" minWidth="10.0" prefWidth="93.0" />
+      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="-Infinity" />
+      <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="-Infinity" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
       <RowConstraints maxHeight="44.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TextArea fx:id="noteText" minHeight="-Infinity" prefHeight="28.0" prefWidth="790.0" GridPane.rowIndex="1">
+      <TextArea fx:id="noteText" minHeight="-Infinity" prefHeight="28.0" prefWidth="790.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </GridPane.margin></TextArea>
-      <Button fx:id="saveButton" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="24.0" prefWidth="64.0" text="Save" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+      <Button fx:id="saveButton" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Save" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1">
          <font>
             <Font size="10.0" />
          </font>
