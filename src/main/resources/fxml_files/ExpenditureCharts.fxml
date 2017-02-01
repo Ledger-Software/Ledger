@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import ledger.user_interface.ui_controllers.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
-<?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.component.AccountDropdown?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="0.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
       <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="300.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="300.0" prefHeight="660.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="7">
@@ -48,7 +41,9 @@
         </Pane>
       <GridPane style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="2" GridPane.rowIndex="1">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" percentWidth="12.5" prefWidth="138.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" percentWidth="15.0" prefWidth="138.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" percentWidth="13.0" prefWidth="43.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="183.0" minWidth="10.0" percentWidth="9.5" prefWidth="138.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="305.0" minWidth="10.0" percentWidth="12.5" prefWidth="161.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="43.0" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" percentWidth="12.5" prefWidth="184.0" />
@@ -61,56 +56,44 @@
           <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <GridPane.margin>
-            <Insets left="20.0" right="20.0" top="5.0" />
+            <Insets left="10.0" right="10.0" top="5.0" />
          </GridPane.margin>
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account: " textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="RIGHT">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Account: " textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filters:" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filters:" textAlignment="RIGHT" underline="true" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <font>
-                  <Font name="Calibri Light" size="22.0" />
+                  <Font name="Calibri Light" size="18.0" />
                </font></Text>
-            <AccountDropdown fx:id="accountFilterDropdown" prefWidth="150.0" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date: " textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
+            <AccountDropdown fx:id="accountFilterDropdown" prefWidth="150.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start Date: " textAlignment="CENTER" GridPane.columnIndex="5" GridPane.halignment="RIGHT">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <DatePicker fx:id="fromDateFilter" prefWidth="150.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" />
-            <DatePicker fx:id="toDateFilter" prefWidth="150.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End Date: " GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
+            <DatePicker fx:id="fromDateFilter" prefWidth="150.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" />
+            <DatePicker fx:id="toDateFilter" prefWidth="150.0" GridPane.columnIndex="8" GridPane.halignment="CENTER" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End Date: " GridPane.columnIndex="7" GridPane.halignment="RIGHT" GridPane.valignment="CENTER">
                <font>
                   <Font name="Calibri Light" size="18.0" />
                </font>
             </Text>
-            <Button fx:id="filterEnterButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <Button fx:id="filterEnterButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" mnemonicParsing="false" prefHeight="30.0" prefWidth="84.0" text="Enter" textAlignment="CENTER" GridPane.columnIndex="9" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin></Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Select Chart Type: " textAlignment="CENTER" wrappingWidth="149.876953125" GridPane.halignment="RIGHT">
+               <font>
+                  <Font name="Calibri Light" size="18.0" />
+               </font>
+            </Text>
+            <CheckComboBox fx:id="chartTypeDropdown" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
          </children>
       </GridPane>
-      <LineChart fx:id="expendituresLineChart" prefHeight="156.0" prefWidth="135.0" title="Expenditure History" GridPane.rowIndex="2">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-         <padding>
-            <Insets bottom="25.0" />
-         </padding>
-         <GridPane.margin>
-            <Insets top="10.0" />
-         </GridPane.margin>
-      </LineChart>
-      <PieChart fx:id="expendituresPieChart" animated="false" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </GridPane.margin>
-      </PieChart>
+      <FlowPane fx:id="windowPane" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2" GridPane.rowIndex="2" />
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />

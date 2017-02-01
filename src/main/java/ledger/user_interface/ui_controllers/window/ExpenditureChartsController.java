@@ -4,12 +4,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
@@ -18,6 +16,7 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
+import org.controlsfx.control.CheckComboBox;
 
 import java.net.URL;
 import java.text.*;
@@ -37,22 +36,27 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private DatePicker toDateFilter;
     @FXML
-    private PieChart expendituresPieChart;
-    @FXML
-    private Label currentlyShowingLabel;
-    @FXML
-    private LineChart expendituresLineChart;
-    @FXML
     private Button filterEnterButton;
+    @FXML
+    private CheckComboBox chartTypeDropdown;
+    @FXML
+    private FlowPane windowPane;
 
     private List<Transaction> allTransactions;
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
+    private PieChart expendituresPieChart = new PieChart();
+    private CategoryAxis xAxis = new CategoryAxis();
+    private NumberAxis yAxis = new NumberAxis();
+    private LineChart expendituresLineChart = new LineChart(xAxis, yAxis);
+    private List<String> chartTypesSelected = new ArrayList<>();
+    private int numberOfChartsSelected = 0;
 
     ExpenditureChartsController() {
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");
         getTransactions();
-        setupExpenditureHistoryChart();
-        setupInitialPieChart();
+        setupChartTypeDropdown();
+        setupInitCharts();
+
     }
 
     /**
@@ -70,34 +74,108 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
 
         this.filterEnterButton.setOnAction((event) -> {
-            Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
-            LocalDate fromDateSelected = this.fromDateFilter.getValue();
-            LocalDate toDateSelected = this.toDateFilter.getValue();
-            if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
-                this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
+            if (setUpChartsInfo()) {
                 return;
             }
-            if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName());
-                createBasedOnAccount(accountSelected);
-            }
-            if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
-                if (fromDateSelected.isAfter(toDateSelected)) {
-                    this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
-                    return;
-                }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for the above date range.");
-                createBasedOnDateRange(fromDateSelected, toDateSelected);
-            }
-            if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
-                if (fromDateSelected.isAfter(toDateSelected)) {
-                    this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
-                    return;
-                }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName() + " within the above date range.");
-                createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
-            }
+            setUpFiltersAndDelegate();
         });
+    }
+
+    private boolean setUpChartsInfo() {
+        ObservableList<String> choices = this.chartTypeDropdown.getCheckModel().getCheckedItems();
+        this.chartTypesSelected.clear();
+        for (String s : choices) {
+            this.chartTypesSelected.add(s);
+        }
+        this.numberOfChartsSelected = this.chartTypesSelected.size();
+        if (this.numberOfChartsSelected >= 4) {
+            setupErrorPopup("Please ensure that no more than 4 types of charts are selected!");
+            return true;
+        }
+        return false;
+    }
+
+    private void setUpFiltersAndDelegate() {
+        Account accountSelected = this.accountFilterDropdown.getSelectedAccount();
+        LocalDate fromDateSelected = this.fromDateFilter.getValue();
+        LocalDate toDateSelected = this.toDateFilter.getValue();
+        this.windowPane.getChildren().clear();
+        if (accountSelected == null && fromDateSelected == null && toDateSelected == null) {
+            this.setupErrorPopup("You must either select an account or a date range to continue!", new Exception());
+            return;
+        }
+        if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
+            createBasedOnAccount(accountSelected);
+        }
+        if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
+            if (fromDateSelected.isAfter(toDateSelected)) {
+                this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
+                return;
+            }
+            createBasedOnDateRange(fromDateSelected, toDateSelected);
+        }
+        if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
+            if (fromDateSelected.isAfter(toDateSelected)) {
+                this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
+                return;
+            }
+            createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
+        }
+    }
+
+    /**
+     * Sets up the options presented in the chart type chooser.
+     */
+    private void setupChartTypeDropdown() {
+        final ObservableList<String> options = FXCollections.observableArrayList(
+                "Line Chart",
+                "Pie Chart"
+        );
+        this.chartTypeDropdown.getItems().addAll(options);
+    }
+
+    /**
+     * Sets up charts seen upon initialization.
+     */
+    private void setupInitCharts() {
+        setUpLineChartOnPaneLeft();
+        setupExpenditureHistoryChart(this.allTransactions);
+
+        setUpPieChartOnPaneRight();
+        setupInitialPieChart();
+    }
+
+    /**
+     * Sets up charts seen upon initialization.
+     */
+    private void setupDefaultSyncCharts(List<Transaction> filteredTransactions) {
+        this.windowPane.getChildren().clear();
+        setUpLineChartOnPaneLeft();
+        setupExpenditureHistoryChart(filteredTransactions);
+
+        setUpPieChartOnPaneRight();
+        createPieChart(filteredTransactions);
+    }
+
+    /**
+     * Sets up the line chart upon initialization on a pane.
+     */
+    private void setUpLineChartOnPaneLeft() {
+        this.windowPane.getChildren().add(this.expendituresLineChart);
+        this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        this.windowPane.setVisible(true);
+    }
+
+    /**
+     * Sets up the pie chart dynamically on a pane.
+     */
+    private void setUpPieChartOnPaneRight() {
+        this.expendituresPieChart.setAnimated(false);
+        this.windowPane.getChildren().add(this.expendituresPieChart);
+        this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        this.windowPane.setVisible(true);
     }
 
     /**
@@ -115,15 +193,16 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     /**
      * Builds the line chart to show trends in amount spent over the last six months
      */
-    private void setupExpenditureHistoryChart() {
+    private void setupExpenditureHistoryChart(List<Transaction> transactions) {
         Calendar cal = Calendar.getInstance();
         Date today = cal.getTime();
-        cal.add(Calendar.MONTH, -6);
-        Date sixMonthsAgo = cal.getTime();
+        // Line chart only goes back a year at max for sake of clarity
+        cal.add(Calendar.MONTH, -12);
+        Date twelveMonthsAgo = cal.getTime();
         List<Transaction> filteredTransactions = new ArrayList<>();
-        for (Transaction t : this.allTransactions) {
+        for (Transaction t : transactions) {
             if ((t.getDate().before(today) || t.getDate().equals(today))
-                    && (t.getDate().after(sixMonthsAgo) || t.getDate().equals(sixMonthsAgo))) {
+                    && (t.getDate().after(twelveMonthsAgo) || t.getDate().equals(twelveMonthsAgo))) {
                 filteredTransactions.add(t);
             }
         }
@@ -132,6 +211,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getYAxis().setLabel("Net Expenditure");
         this.expendituresLineChart.getXAxis().setAutoRanging(true);
         this.expendituresLineChart.getYAxis().setAutoRanging(true);
+        this.expendituresLineChart.setAnimated(false);
 
         Map<String, Integer> monthToAmountSpent = new HashMap<>();
         Map<String, Integer> monthToYear = new HashMap<>();
@@ -154,7 +234,10 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             series.getData().add(new XYChart.Data(m, monthToAmountSpent.get(m) / 100));
         }
         series.setName("Change in Account Balance");
+        this.expendituresLineChart.getData().clear();
         this.expendituresLineChart.getData().add(series);
+        setLineChartProperties();
+
         this.expendituresLineChart.setVisible(true);
     }
 
@@ -217,8 +300,27 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 filteredTransactions.add(t);
             }
         }
+        makeChart(filteredTransactions);
+    }
 
-        createPieChart(filteredTransactions);
+    /**
+     * Determines how the charts will appear on the window pane
+     *
+     * @param filteredTransactions filtered transaction list
+     */
+    private void makeChart(List<Transaction> filteredTransactions) {
+        for (String s : this.chartTypesSelected) {
+            if (s.equals("Pie Chart")) {
+                createPieChart(filteredTransactions);
+            }
+            if (s.equals("Line Chart")) {
+                setupExpenditureHistoryChart(filteredTransactions);
+            }
+        }
+        if (this.chartTypesSelected.isEmpty()) {
+            setupDefaultSyncCharts(filteredTransactions);
+        }
+
     }
 
     /**
@@ -238,8 +340,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 filteredTransactions.add(t);
             }
         }
+        makeChart(filteredTransactions);
 
-        createPieChart(filteredTransactions);
     }
 
     /**
@@ -267,7 +369,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         }
 
-        createPieChart(filteredTransactions);
+        makeChart(filteredTransactions);
     }
 
     /**
@@ -299,9 +401,44 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         }
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.expendituresPieChart.setData(pieChartData);
-        this.expendituresPieChart.setTitle("Expenditures by Category");
+        setUpPieChartProperties();
         this.expendituresPieChart.setVisible(true);
+    }
 
+    private void setUpPieChartProperties() {
+        this.expendituresPieChart.setTitle("Expenditures by Category");
+        if (this.windowPane.getChildren().contains(this.expendituresPieChart)) {
+            this.windowPane.getChildren().remove(this.expendituresPieChart);
+        }
+        this.windowPane.getChildren().add(this.expendituresPieChart);
+        if (this.numberOfChartsSelected > 2) {
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        } else if (this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        } else {
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty());
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        }
+    }
+
+    private void setLineChartProperties() {
+        this.expendituresLineChart.setTitle("Expenditures Over Time");
+        if (this.windowPane.getChildren().contains(this.expendituresLineChart)) {
+            this.windowPane.getChildren().remove(this.expendituresLineChart);
+        }
+        this.windowPane.getChildren().add(this.expendituresLineChart);
+        if (this.numberOfChartsSelected > 2) {
+            this.expendituresPieChart.prefHeightProperty().bind(this.windowPane.heightProperty().divide(2));
+            this.expendituresPieChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+        } else if (this.numberOfChartsSelected == 0 || this.numberOfChartsSelected == 2) {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty().divide(2));
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        } else {
+            this.expendituresLineChart.prefWidthProperty().bind(this.windowPane.widthProperty());
+            this.expendituresLineChart.prefHeightProperty().bind(this.windowPane.heightProperty());
+        }
     }
 
     /**

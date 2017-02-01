@@ -129,9 +129,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             return null;
         }
 
-        List<Tag> category = new ArrayList<Tag>() {{
-            add(new Tag(categoryText.getText(), ""));
-        }};
+        List<Tag> category = new ArrayList<Tag>();
+        if(!categoryText.getText().trim().isEmpty()) {
+            category.add(new Tag(categoryText.getText(), categoryText.getText()));
+        }
 
         if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
             this.setupErrorPopup("Invalid amount entry.", new Exception());
