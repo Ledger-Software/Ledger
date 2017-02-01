@@ -56,6 +56,7 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
 
         tableSQL.add(TagToTransTable.CreateStatementH2());
         tableSQL.add(TagToPayeeTable.CreateStatementH2());
+        tableSQL.add((IgnoredTransactionTable.CreateStatementH2()));
 
         try {
             for (String statement : tableSQL) {
