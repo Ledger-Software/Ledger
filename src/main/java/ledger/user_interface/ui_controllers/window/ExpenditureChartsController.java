@@ -39,8 +39,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     @FXML
     private PieChart expendituresPieChart;
     @FXML
-    private Label currentlyShowingLabel;
-    @FXML
     private LineChart expendituresLineChart;
     @FXML
     private Button filterEnterButton;
@@ -78,7 +76,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 return;
             }
             if ((accountSelected != null) && ((fromDateSelected == null) || (toDateSelected == null))) {
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName());
                 createBasedOnAccount(accountSelected);
             }
             if ((accountSelected == null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -86,7 +83,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for the above date range.");
                 createBasedOnDateRange(fromDateSelected, toDateSelected);
             }
             if ((accountSelected != null) && (fromDateSelected != null) && (toDateSelected != null)) {
@@ -94,7 +90,6 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                     this.setupErrorPopup("Ensure your dates are in chronological order!", new Exception());
                     return;
                 }
-                this.currentlyShowingLabel.setText("Currently showing expenditures for account: " + accountSelected.getName() + " within the above date range.");
                 createBasedOnAccountAndDateRange(accountSelected, fromDateSelected, toDateSelected);
             }
         });
