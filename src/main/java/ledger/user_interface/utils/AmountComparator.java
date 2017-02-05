@@ -18,10 +18,6 @@ public class AmountComparator implements Comparator<String> {
     }
 
     private int parseAmountString(String amount) {
-        if (amount.charAt(0) == '$') {
-            amount = amount.substring(1);
-        }
-
         double amountDecimal = Double.parseDouble(amount);
         int amountValue = (int) Math.round(amountDecimal * 100);
         return amountValue;

@@ -16,10 +16,6 @@ public class AmountStringConverter extends StringConverter<Integer> {
             return null;
         }
 
-        if (amountString.charAt(0) == '$') {
-            amountString = amountString.substring(1);
-        }
-
         double amountToSetDecimal = Double.parseDouble(amountString);
         int amount = (int) Math.round(amountToSetDecimal * 100);
         return amount;
@@ -29,7 +25,7 @@ public class AmountStringConverter extends StringConverter<Integer> {
         String amountInCents = String.valueOf(amount);
         String dollars = amountInCents.substring(0, amountInCents.length() - 2);
         String cents = amountInCents.substring(amountInCents.length() - 2, amountInCents.length());
-        String amountString = "$" + dollars + "." + cents;
+        String amountString = dollars + "." + cents;
 
         return amountString;
     }
