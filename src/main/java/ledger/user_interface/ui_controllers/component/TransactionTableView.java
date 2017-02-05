@@ -20,6 +20,7 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.CheckNumberColumn;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -35,6 +36,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @FXML
     public AccountColumn accountColumn;
+
+    @FXML
+    public CheckNumberColumn checkNumberColumn;
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -52,14 +56,15 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     private void configureTransactionTableView() {
         // Add ability to delete transactions form tableView
         this.setOnKeyPressed(t -> {
-            //Put your awesome application specific logic here
             if (t.getCode() == KeyCode.DELETE) {
                 handleDeleteSelectedTransactionsFromTableView();
             }
         });
 
+        // Allow multiple row selection
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        // Configure right-click context menu
         ContextMenu menu = new ContextMenu();
 
         MenuItem deleteTransactionsMenuItem = new MenuItem("Delete Selected Transaction(s)");
@@ -70,6 +75,12 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         menu.getItems().add(showHideAccountColumnMenuItem);
         showHideAccountColumnMenuItem.setOnAction(event -> {
             this.accountColumn.setVisible(!this.accountColumn.isVisible());
+        });
+
+        MenuItem showHideCheckNumberColumnMenuItem = new MenuItem("Show/Hide Check Number Column");
+        menu.getItems().add(showHideCheckNumberColumnMenuItem);
+        showHideCheckNumberColumnMenuItem.setOnAction(event -> {
+            this.checkNumberColumn.setVisible(!this.checkNumberColumn.isVisible());
         });
 
         this.setContextMenu(menu);
