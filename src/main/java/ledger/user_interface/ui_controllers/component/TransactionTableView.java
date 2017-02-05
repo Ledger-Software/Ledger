@@ -20,6 +20,9 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountCreditColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountDebitColumn;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -32,6 +35,15 @@ import java.util.ResourceBundle;
  */
 
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
+
+    @FXML
+    public AmountColumn amountColumn;
+
+    @FXML
+    public AmountDebitColumn amountDebitColumn;
+
+    @FXML
+    public AmountCreditColumn amountCreditColumn;
 
     @FXML
     public AccountColumn accountColumn;
@@ -60,6 +72,11 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        // Initially show amount column & hide debit/credit columns
+        this.amountColumn.setVisible(true);
+        this.amountDebitColumn.setVisible(false);
+        this.amountCreditColumn.setVisible(false);
+
         ContextMenu menu = new ContextMenu();
 
         MenuItem deleteTransactionsMenuItem = new MenuItem("Delete Selected Transaction(s)");
@@ -70,6 +87,14 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         menu.getItems().add(showHideAccountColumnMenuItem);
         showHideAccountColumnMenuItem.setOnAction(event -> {
             this.accountColumn.setVisible(!this.accountColumn.isVisible());
+        });
+
+        MenuItem toggleDebitCreditView = new MenuItem("Toggle Debit/Credit View");
+        menu.getItems().add(toggleDebitCreditView);
+        toggleDebitCreditView.setOnAction(event -> {
+            this.amountColumn.setVisible(!this.amountColumn.isVisible());
+            this.amountDebitColumn.setVisible(!this.amountDebitColumn.isVisible());
+            this.amountCreditColumn.setVisible(!this.amountCreditColumn.isVisible());
         });
 
         this.setContextMenu(menu);
