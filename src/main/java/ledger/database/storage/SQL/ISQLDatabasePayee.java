@@ -80,8 +80,10 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
     @Override
     default void editPayee(Payee payee) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
-            getDatabase().setAutoCommit(false);
+            originalAutoCommit = getDatabase().getAutoCommit();
+            setDatabaseAutoCommit(false);
 
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME +
@@ -102,11 +104,10 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             }
 
             stmt.executeUpdate();
-            getDatabase().commit();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 

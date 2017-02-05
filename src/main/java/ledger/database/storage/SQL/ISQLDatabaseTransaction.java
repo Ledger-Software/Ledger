@@ -18,7 +18,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
     // Basic CRUD functionality
     @Override
     default void insertTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TransactionTable.TABLE_NAME +
@@ -63,10 +65,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
                 transaction.setId(insertedTransactionID);
             }
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction", e);
@@ -74,13 +72,15 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction. Not all necessary fields were given.", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
     @Override
     default void deleteTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
 
             //First delete the corresponding Note
@@ -102,23 +102,20 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             deleteNoteForTransactionID(transaction.getId());
             deleteAllTagToTransForTransactionID(transaction.getId());
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while deleting transaction", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
     @Override
     default void editTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
-
             PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + TransactionTable.TABLE_NAME + " SET " +
                     TransactionTable.TRANS_DATETIME + "=?," +
                     TransactionTable.TRANS_AMOUNT + "=?," +
@@ -159,15 +156,11 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             } else {
                 deleteNoteForTransactionID(transaction.getId());
             }
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while editing transaction", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
