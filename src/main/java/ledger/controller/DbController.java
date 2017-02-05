@@ -1,9 +1,6 @@
 package ledger.controller;
 
-import ledger.controller.register.CallableMethodVoidNoArgs;
-import ledger.controller.register.TaskWithArgs;
-import ledger.controller.register.TaskWithArgsReturn;
-import ledger.controller.register.TaskWithReturn;
+import ledger.controller.register.*;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
@@ -13,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 
 /**
@@ -31,6 +29,9 @@ public class DbController {
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
     private List<CallableMethodVoidNoArgs> accountSuccessEvent;
     private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
+
+    private Stack<UndoAction> undoStack;
+
     /**
      * Constructor for the DBcontroller
      */
@@ -39,6 +40,7 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
         payeeSuccessEvent = new LinkedList<>();
+        undoStack = new Stack<UndoAction>();
     }
 
     public void initialize(String fileName, String password) throws StorageException {
@@ -63,44 +65,49 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to insert a Transaction
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Transaction
      *
      * @param transaction The transaction to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+
+        undoStack.push(new UndoAction(deleteTransaction(transaction), "Undo Insert Transaction", null));
         return task;
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete a Transaction
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Transaction
      *
      * @param transaction The transaction to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+
+        undoStack.push(new UndoAction(insertTransaction(transaction), "Undo Delete Transaction", null));
         return task;
 
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit a Transaction
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Transaction
      *
      * @param transaction The transaction to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+
         return task;
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all stored Transactions
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all stored Transactions
      *
      * @return A task for the Async Call that returns a list of all the Transactions
      */
@@ -109,7 +116,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all transactions
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all transactions
      * associated with the given account
      *
      * @param account The account to retrieve all transactions assioted with
@@ -121,7 +128,7 @@ public class DbController {
 
     /**
      * @param account The account to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> insertAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::insertAccount, account);
@@ -130,10 +137,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete an Account
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete an Account
      *
      * @param account The account to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> deleteAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::deleteAccount, account);
@@ -142,10 +149,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit an Account
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit an Account
      *
      * @param account The account to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> editAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::editAccount, account);
@@ -154,7 +161,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all Accounts
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all Accounts
      *
      * @return A task for the Async Call that returns a list of all the Accounts
      */
@@ -163,10 +170,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to insert a Payee
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Payee
      *
      * @param payee The payee to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> insertPayee(final Payee payee) {
         TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::insertPayee, payee);
@@ -176,10 +183,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete a Payee
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Payee
      *
      * @param payee The payee to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> deletePayee(final Payee payee) {
         TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::deletePayee, payee);
@@ -188,10 +195,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit a Payee
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Payee
      *
      * @param payee The payee to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> editPayee(final Payee payee) {
         TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::editPayee, payee);
@@ -200,7 +207,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all stored Payees
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all stored Payees
      *
      * @return A task for the Async Call that returns a list of all the Payees
      */
@@ -210,10 +217,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to insert a Note
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Note
      *
      * @param note The note to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Note> insertNote(final Note note) {
         return new TaskWithArgs<Note>(db::insertNote, note);
@@ -221,10 +228,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete a Note
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Note
      *
      * @param note The note to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Note> deleteNote(final Note note) {
         return new TaskWithArgs<Note>(db::deleteNote, note);
@@ -232,10 +239,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit a Note
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Note
      *
      * @param note The note to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Note> editNote(final Note note) {
         return new TaskWithArgs<Note>(db::editNote, note);
@@ -243,7 +250,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all Notes
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all Notes
      *
      * @return A task for the Async Call that returns a list of all the Notes
      */
@@ -253,10 +260,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to insert a Tag
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Tag
      *
      * @param tag the tag to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Tag> insertTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::insertTag, tag);
@@ -264,10 +271,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete a Tag
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Tag
      *
      * @param tag the tag to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Tag> deleteTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::deleteTag, tag);
@@ -275,10 +282,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit a Tag
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Tag
      *
      * @param tag the tag to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Tag> editTag(final Tag tag) {
         return new TaskWithArgs<Tag>(db::editTag, tag);
@@ -286,7 +293,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all Tags
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all Tags
      *
      * @return A task for the Async Call that returns a list of all the Transactions
      */
@@ -296,10 +303,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to insert a Type
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Type
      *
      * @param type the type to insert
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Type> insertType(final Type type) {
         return new TaskWithArgs<Type>(db::insertType, type);
@@ -307,10 +314,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete a Type
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Type
      *
      * @param type the type to delete
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Type> deleteType(final Type type) {
         return new TaskWithArgs<Type>(db::deleteType, type);
@@ -318,10 +325,10 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to edit a Type
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Type
      *
      * @param type the type to edit
-     * @return a Task for the Async Call
+     * @return a ITask for the Async Call
      */
     public TaskWithArgs<Type> editType(final Type type) {
         return new TaskWithArgs<Type>(db::editType, type);
@@ -329,7 +336,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all Types
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all Types
      *
      * @return A task for the Async Call that returns a list of all the Types
      */
@@ -338,7 +345,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get all Tags associated with a
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all Tags associated with a
      * Payee
      *
      * @param payee The Payee to get all associated tags for
@@ -349,34 +356,34 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to delete all Tags associated with a
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete all Tags associated with a
      * Payee
      *
      * @param payee The Payee to get all associated tags for
-     * @return A Task for the Async call
+     * @return A ITask for the Async call
      */
     public TaskWithArgs<Payee> deleteAllTagsForPayee(final Payee payee) {
         return new TaskWithArgs<Payee>(db::deleteAllTagsForPayee, payee);
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database add a Tag to the given Payee
+     * Creates a ITask that can be used to make an asynchronous call to the database add a Tag to the given Payee
      *
      * @param payee The Payee to get all associated tags for
      * @param tag   The Tag to associate with the Payee
-     * @return A Task for the async call
+     * @return A ITask for the async call
      */
     public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
         return new TaskWithArgs<TagPayeeWrapper>(this::addTagForPayee, new TagPayeeWrapper(tag, payee));
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to remove a Tag from the given
+     * Creates a ITask that can be used to make an asynchronous call to the database to remove a Tag from the given
      * Payee
      *
      * @param payee The Payee to remove the Tag from
      * @param tag   The Tag to remove from the Payee
-     * @return A Task for the asynchronous call
+     * @return A ITask for the asynchronous call
      */
     public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
         return new TaskWithArgs<>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
@@ -398,7 +405,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to add transactions as a batch
+     * Creates a ITask that can be used to make an asynchronous call to the database to add transactions as a batch
      *
      * @param transactions List of transactions to add to the database
      * @return A task for the asynchronous call
@@ -426,7 +433,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to get the balance for a given account
+     * Creates a ITask that can be used to make an asynchronous call to the database to get the balance for a given account
      *
      * @param account The account to get the AccountBalance for
      * @return A task for the asynchronous call
@@ -436,7 +443,7 @@ public class DbController {
     }
 
     /**
-     * Creates a Task that can be used to make an asynchronous call to the database to add an account balance for a given
+     * Creates a ITask that can be used to make an asynchronous call to the database to add an account balance for a given
      * account
      *
      * @param balance AccountBalance to add to the database
@@ -451,7 +458,7 @@ public class DbController {
     }
 
     /**
-     * Wraps the databases addTagForPayee method so that a single argument can be given to the Task
+     * Wraps the databases addTagForPayee method so that a single argument can be given to the ITask
      *
      * @param wrapper The wrapper class containing the Tag and Payee
      * @throws StorageException When an SQLExeption occurs
@@ -461,7 +468,7 @@ public class DbController {
     }
 
     /**
-     * Wraps the databases deleteTagForPayee method so that a single argument can be given to the Task
+     * Wraps the databases deleteTagForPayee method so that a single argument can be given to the ITask
      *
      * @param wrapper The wrapper class containing the Tag and Payee
      * @throws StorageException When an SQLExeption occurs
