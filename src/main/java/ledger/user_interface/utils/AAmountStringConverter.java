@@ -13,10 +13,6 @@ public abstract class AAmountStringConverter extends StringConverter<Integer> {
             return null;
         }
 
-        if (amountString.charAt(0) == '$') {
-            amountString = amountString.substring(1);
-        }
-
         double amountToSetDecimal = Double.parseDouble(amountString);
         int amount = (int) Math.round(amountToSetDecimal * 100);
         return amount;

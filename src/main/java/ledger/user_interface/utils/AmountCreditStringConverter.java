@@ -12,7 +12,7 @@ public class AmountCreditStringConverter extends AAmountStringConverter {
             String amountInCents = String.valueOf(amount);
             String dollars = amountInCents.substring(0, amountInCents.length() - 2);
             String cents = amountInCents.substring(amountInCents.length() - 2, amountInCents.length());
-            amountString = "$" + dollars + "." + cents;
+            amountString = dollars + "." + cents;
         }
 
         return amountString;

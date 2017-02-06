@@ -12,8 +12,8 @@ public class InputSanitization {
     private static final String Digits = "(\\p{Digit}+)";
     private static final String HexDigits = "(\\p{XDigit}+)";
     private static final String Exp = "[eE][+-]?" + Digits;
-    private static final String fpRegex =
-            ("[$]?[\\x00-\\x20]*" + // Optional leading "whitespace"
+    private static final String amountRegex =
+            ("[\\x00-\\x20]*" + // Optional leading "whitespace"
                     "[+-]?(" +         // Optional sign character
 
                     // A decimal floating-point string representing a finite positive
@@ -62,7 +62,7 @@ public class InputSanitization {
      * @return True if the string is invalid, false otherwise.
      */
     public static boolean isInvalidAmount(String str) {
-        return !Pattern.matches(fpRegex, str);
+        return !Pattern.matches(amountRegex, str);
     }
     public static boolean isInvalidCheckNumber(String str) { return !Pattern.matches(Digits,str);}
     public static boolean isInvalidPayee(Object o) {
