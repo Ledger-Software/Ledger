@@ -8,6 +8,7 @@
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.TypeColumn?>
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.ClearedColumn?>
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.CheckNumberColumn?>
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.AmountDebitColumn?>
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.AmountCreditColumn?>
 <fx:root editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" type="TableView"
@@ -18,6 +19,8 @@
         <TagColumn fx:id="categoryColumn" minWidth="0.0" prefWidth="150.0" text="Category"/>
         <AccountColumn fx:id="accountColumn" minWidth="0.0" prefWidth="150.0" text="Account"/>
         <TypeColumn fx:id="typeColumn" minWidth="0.0" prefWidth="150.0" text="Type"/>
+        <CheckNumberColumn fx:id="checkNumberColumn" minWidth="0.0" prefWidth="150.0" text="Check Number"/>
+        <TagColumn fx:id="tagColumn" minWidth="0.0" prefWidth="150.0" text="Tags"/>
         <ClearedColumn fx:id="clearedColumn" prefWidth="75.0" text="Cleared"/>
         <AmountColumn fx:id="amountColumn" prefWidth="150.0" text="Amount"/>
         <AmountDebitColumn fx:id="amountDebitColumn" minWidth="0.0" prefWidth="150.0" text="Debit"/>

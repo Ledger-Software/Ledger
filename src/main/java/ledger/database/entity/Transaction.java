@@ -17,14 +17,20 @@ public class Transaction implements IEntity, ITaggable {
     private int id;
     private List<Tag> tagList;
     private Note note;
+    private int checkNumber;
 
     public Transaction(Date date, Type type, int amount, Account account,
-                       Payee payee, boolean pending, List<Tag> tagList, Note note) {
-        this(date, type, amount, account, payee, pending, tagList, note, -1);
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber) {
+        this(date, type, amount, account, payee, pending, tagList, note, checkNumber, -1);
     }
 
     public Transaction(Date date, Type type, int amount, Account account,
-                       Payee payee, boolean pending, List<Tag> tagList, Note note, int id) {
+                       Payee payee, boolean pending, List<Tag> tagList, Note note) {
+        this(date, type, amount, account, payee, pending, tagList, note, -1, -1);
+    }
+
+    public Transaction(Date date, Type type, int amount, Account account,
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id) {
         this.tagList = new ArrayList<Tag>();
 
         this.date = date;
@@ -37,6 +43,7 @@ public class Transaction implements IEntity, ITaggable {
             this.tagList.addAll(tagList);
         this.note = note;
         this.id = id;
+        this.checkNumber = checkNumber;
     }
 
     /**
@@ -100,6 +107,24 @@ public class Transaction implements IEntity, ITaggable {
      */
     public Account getAccount() {
         return account;
+    }
+
+    /**
+     * Gets the check number
+     *
+     * @return check number
+     */
+    public int getCheckNumber() {
+        return checkNumber;
+    }
+
+    /**
+     * Sets the check number
+     *
+     * @param checkNumber check number
+     */
+    public void setCheckNumber(int checkNumber) {
+        this.checkNumber = checkNumber;
     }
 
     /**
@@ -201,8 +226,54 @@ public class Transaction implements IEntity, ITaggable {
         this.note = note;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Transaction that = (Transaction) o;
+
+        if (amount != that.amount) return false;
+        if (pending != that.pending) return false;
+        if (id != that.id) return false;
+        if (checkNumber != that.checkNumber) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (account != null ? !account.equals(that.account) : that.account != null) return false;
+        if (payee != null ? !payee.equals(that.payee) : that.payee != null) return false;
+        if (tagList != null ? !tagList.equals(that.tagList) : that.tagList != null) return false;
+        return note != null ? note.equals(that.note) : that.note == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = date != null ? date.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + amount;
+        result = 31 * result + (account != null ? account.hashCode() : 0);
+        result = 31 * result + (payee != null ? payee.hashCode() : 0);
+        result = 31 * result + (pending ? 1 : 0);
+        result = 31 * result + id;
+        result = 31 * result + (tagList != null ? tagList.hashCode() : 0);
+        result = 31 * result + (note != null ? note.hashCode() : 0);
+        result = 31 * result + checkNumber;
+        return result;
+    }
+
     @Override
     public String toString() {
-        return String.format("[%s : %s : %s] %s for $%s (Pending? %s)", date.toString(), account.getName(), type.getName(), payee.getName(), amount / 100.0, pending);
+        return "Transaction{" +
+                "date=" + date +
+                ", type=" + type +
+                ", amount=" + amount +
+                ", account=" + account +
+                ", payee=" + payee +
+                ", pending=" + pending +
+                ", id=" + id +
+                ", tagList=" + tagList +
+                ", note=" + note +
+                ", checkNumber=" + checkNumber +
+                '}';
     }
 }
