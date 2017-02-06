@@ -146,13 +146,13 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         Note notes = new Note(this.notesText.getText());
 
+        String checkNo = "";
         if(checkField.visibleProperty().get()){
-            String checkNo = checkField.getText();
+            checkNo = checkField.getText();
             if(checkNo==null||checkNo.isEmpty()||InputSanitization.isInvalidCheckNumber(checkNo)){
                 this.setupErrorPopup("Please Enter a Check Number", new Exception());
                 return null;
             }
-            notes.setNoteText(notes.getNoteText() + " Check #: " + checkNo);
         }
         Type type = this.typeText.getValue();
         if (type == null) {
@@ -161,7 +161,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         }
 
         Transaction t = new Transaction(date, type, amount, account,
-                payee, pending, category, notes);
+                payee, pending, category, notes, Integer.parseInt(checkNo));
 
         return t;
     }

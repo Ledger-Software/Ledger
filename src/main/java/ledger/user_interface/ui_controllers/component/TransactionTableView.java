@@ -20,6 +20,10 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.CheckNumberColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountCreditColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.AmountDebitColumn;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -34,7 +38,19 @@ import java.util.ResourceBundle;
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
     @FXML
+    public AmountColumn amountColumn;
+
+    @FXML
+    public AmountDebitColumn amountDebitColumn;
+
+    @FXML
+    public AmountCreditColumn amountCreditColumn;
+
+    @FXML
     public AccountColumn accountColumn;
+
+    @FXML
+    public CheckNumberColumn checkNumberColumn;
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -52,14 +68,20 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     private void configureTransactionTableView() {
         // Add ability to delete transactions form tableView
         this.setOnKeyPressed(t -> {
-            //Put your awesome application specific logic here
             if (t.getCode() == KeyCode.DELETE) {
                 handleDeleteSelectedTransactionsFromTableView();
             }
         });
 
+        // Allow multiple row selection
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        // Initially show amount column & hide debit/credit columns
+        this.amountColumn.setVisible(true);
+        this.amountDebitColumn.setVisible(false);
+        this.amountCreditColumn.setVisible(false);
+
+        // Configure right-click context menu
         ContextMenu menu = new ContextMenu();
 
         MenuItem deleteTransactionsMenuItem = new MenuItem("Delete Selected Transaction(s)");
@@ -70,6 +92,20 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         menu.getItems().add(showHideAccountColumnMenuItem);
         showHideAccountColumnMenuItem.setOnAction(event -> {
             this.accountColumn.setVisible(!this.accountColumn.isVisible());
+        });
+
+        MenuItem showHideCheckNumberColumnMenuItem = new MenuItem("Show/Hide Check Number Column");
+        menu.getItems().add(showHideCheckNumberColumnMenuItem);
+        showHideCheckNumberColumnMenuItem.setOnAction(event -> {
+            this.checkNumberColumn.setVisible(!this.checkNumberColumn.isVisible());
+        });
+
+        MenuItem toggleDebitCreditView = new MenuItem("Toggle Debit/Credit View");
+        menu.getItems().add(toggleDebitCreditView);
+        toggleDebitCreditView.setOnAction(event -> {
+            this.amountColumn.setVisible(!this.amountColumn.isVisible());
+            this.amountDebitColumn.setVisible(!this.amountDebitColumn.isVisible());
+            this.amountCreditColumn.setVisible(!this.amountCreditColumn.isVisible());
         });
 
         this.setContextMenu(menu);
