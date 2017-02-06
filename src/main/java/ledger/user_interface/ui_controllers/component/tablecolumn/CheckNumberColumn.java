@@ -10,6 +10,7 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 import ledger.user_interface.utils.AmountStringConverter;
+import ledger.user_interface.utils.CheckNumberStringConverter;
 
 /**
  * TableColumn for amounts
@@ -18,10 +19,8 @@ public class CheckNumberColumn extends TableColumn implements IUIController {
 
     public CheckNumberColumn() {
 
-        // TODO: change this to fill with Transaction's check # property
-        this.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("amount"));
-        // TODO: implement CheckNumberStringConverter if necessary
-//        this.setCellFactory(TextFieldTableCell.forTableColumn(new AmountStringConverter()));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("checkNumber"));
+        this.setCellFactory(TextFieldTableCell.forTableColumn(new CheckNumberStringConverter()));
         this.setOnEditCommit(this.checkNumberEditHandler);
     }
 
@@ -32,18 +31,14 @@ public class CheckNumberColumn extends TableColumn implements IUIController {
             Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
             Integer checkNumberToSet = t.getNewValue();
 
-            System.out.println(checkNumberToSet);
+            if (checkNumberToSet == null) {
+                setupErrorPopup("Provided check number is invalid", new Exception());
+                TransactionTableView transactionTableView = (TransactionTableView) getTableView();
+                transactionTableView.updateTransactionTableView();
+                return;
+            }
 
-            // TODO: Null check may be necessary if a String converter is used. What happens if the number is invalid
-//            if (checkNumberToSet == null) {
-//                setupErrorPopup("Provided check number is invalid", new Exception());
-//                TransactionTableView transactionTableView = (TransactionTableView) getTableView();
-//                transactionTableView.updateTransactionTableView();
-//                return;
-//            }
-
-            // TODO: update with transaction.setCheckNumber()
-//            transaction.setAmount(checkNumberToSet);
+            transaction.setCheckNumber(checkNumberToSet);
 
             TaskWithArgs<Transaction> task = DbController.INSTANCE.editTransaction(transaction);
             task.RegisterFailureEvent((e) -> {

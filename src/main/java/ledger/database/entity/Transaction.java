@@ -25,6 +25,11 @@ public class Transaction implements IEntity, ITaggable {
     }
 
     public Transaction(Date date, Type type, int amount, Account account,
+                       Payee payee, boolean pending, List<Tag> tagList, Note note) {
+        this(date, type, amount, account, payee, pending, tagList, note, -1, -1);
+    }
+
+    public Transaction(Date date, Type type, int amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id) {
         this.tagList = new ArrayList<Tag>();
 
