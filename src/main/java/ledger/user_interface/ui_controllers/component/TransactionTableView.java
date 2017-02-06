@@ -81,6 +81,10 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         this.amountDebitColumn.setVisible(false);
         this.amountCreditColumn.setVisible(false);
 
+        this.setUpContextMenu();
+    }
+
+    private void setUpContextMenu() {
         // Configure right-click context menu
         ContextMenu menu = new ContextMenu();
 
@@ -109,7 +113,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         });
 
         this.setContextMenu(menu);
-
     }
 
     public void updateTransactionTableView() {
