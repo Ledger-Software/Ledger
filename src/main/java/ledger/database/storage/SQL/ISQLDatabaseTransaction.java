@@ -28,7 +28,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     "," + TransactionTable.TRANS_PENDING +
                     "," + TransactionTable.TRANS_ACCOUNT_ID +
                     "," + TransactionTable.TRANS_PAYEE_ID +
-                    ") VALUES (?, ?, ?, ?, ?, ?)");
+                    "," + TransactionTable.TRANS_CHECK_NUMBER +
+                    ") VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
 
@@ -39,6 +40,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             lookupAndSetAccountForSQLStatement(transaction, stmt, 5);
 
             lookupAndSetPayeeForSQLStatement(transaction, stmt, 6);
+
+            stmt.setInt(7, transaction.getCheckNumber());
 
             stmt.executeUpdate();
 
@@ -125,7 +128,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     TransactionTable.TRANS_TYPE_ID + "=?," +
                     TransactionTable.TRANS_PENDING + "=?," +
                     TransactionTable.TRANS_ACCOUNT_ID + "=?," +
-                    TransactionTable.TRANS_PAYEE_ID + "=? WHERE " +
+                    TransactionTable.TRANS_PAYEE_ID + "=?, " +
+                    TransactionTable.TRANS_CHECK_NUMBER + "=? " + "WHERE " +
                     TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setInt(2, transaction.getAmount());
@@ -182,6 +186,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_PENDING +
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
+                    " ," + TransactionTable.TRANS_CHECK_NUMBER +
                     " FROM " + TransactionTable.TABLE_NAME +
                     ";");
 
@@ -202,6 +207,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_PENDING +
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
+                    ", " + TransactionTable.TRANS_CHECK_NUMBER +
                     " FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ACCOUNT_ID + "=?;");
             stmt.setInt(1, account.getId());
@@ -225,6 +231,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
             int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
             int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
+            int checkNumber = rs.getInt(TransactionTable.TRANS_CHECK_NUMBER);
 
             Type type = getTypeForID(typeID);
             Account transAccount = getAccountForID(accountID);
@@ -232,7 +239,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             List<Tag> tags = getTagsForTransactionID(transactionID);
             Note note = getNoteForTransactionID(transactionID);
 
-            Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, transactionID);
+            Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, checkNumber, transactionID);
 
             transactionList.add(currentTransaction);
         }
