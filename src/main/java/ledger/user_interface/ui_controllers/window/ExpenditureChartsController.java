@@ -291,7 +291,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             // use absolute value here so it's not negative
             double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
             NumberFormat formatter = new DecimalFormat("#0.00");
-            dataList.add(new PieChart.Data(tag + " - " + "($" + formatter.format(amountSpent) + ")", amountSpent));
+            dataList.add(new PieChart.Data(tag + " - " + "(" + formatter.format(amountSpent) + ")", amountSpent));
         }
         if (dataList.isEmpty()) {
             this.setupErrorPopup("There's no data to be displayed!", new Exception());
