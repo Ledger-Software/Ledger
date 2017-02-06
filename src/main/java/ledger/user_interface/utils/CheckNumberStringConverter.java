@@ -10,7 +10,7 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
     @Override
     public String toString(Integer checkNum) {
         String checkNumString;
-        if (checkNum.equals(new Integer(-1)))
+        if (checkNum == null || checkNum.equals(new Integer(-1)))
             checkNumString = "";
         else {
             checkNumString = checkNum.toString();
@@ -25,7 +25,7 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
 
     @Override
     public Integer fromString(String checkNumString) {
-        if (InputSanitization.isInvalidAmount(checkNumString) || checkNumString.length() > 4) {
+        if (InputSanitization.isInvalidCheckNumber(checkNumString) || checkNumString.length() > 4) {
             // invalid check number
             return null;
         }
