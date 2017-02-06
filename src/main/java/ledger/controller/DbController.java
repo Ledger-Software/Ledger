@@ -114,11 +114,21 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) {
+        TaskWithArgs<Transaction> task = generateEditTransaction(transaction);
+
+        Transaction oldTrans = null;
+        try {
+            oldTrans = db.getTransactionById(transaction);
+        } catch (StorageException e) { }
+
+        undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
+
+        return task;
+    }
+
+    private TaskWithArgs<Transaction> generateEditTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::editTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
-
-        // TODO: Undo Edit
-
         return task;
     }
 
@@ -187,13 +197,24 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> editAccount(final Account account) {
-        TaskWithArgs<Account> task = new TaskWithArgs<>(db::editAccount, account);
-        registerSuccess(task, accountSuccessEvent);
+        TaskWithArgs<Account> task = generateEditAccount(account);
 
-        // TODO: Undo edit
+        Account oldAccount = null;
+        try {
+            oldAccount = db.getAccountById(account);
+        } catch (StorageException e) { }
+
+        undoStack.push(new UndoAction(generateEditAccount(oldAccount),"Undo Edit Transaction"));
 
         return task;
     }
+
+    public TaskWithArgs<Account> generateEditAccount(final Account account) {
+        TaskWithArgs<Account> task = new TaskWithArgs<>(db::editAccount, account);
+        registerSuccess(task, accountSuccessEvent);
+        return task;
+    }
+
 
     /**
      * Creates a ITask that can be used to make an asynchronous call to the database to get all Accounts
@@ -252,7 +273,19 @@ public class DbController {
         TaskWithArgs<Payee> task = new TaskWithArgs<>(db::editPayee, payee);
         registerSuccess(task, payeeSuccessEvent);
 
-        //TODO: Undo Edit
+        Payee oldPayee = null;
+        try {
+            oldPayee = db.getPayeeById(payee);
+        } catch (StorageException e) { }
+
+        undoStack.push(new UndoAction(generateEditPayee(oldPayee), "Undo Edit Payee"));
+
+        return task;
+    }
+
+    private TaskWithArgs<Payee> generateEditPayee(final Payee payee) {
+        TaskWithArgs<Payee> task = new TaskWithArgs<>(db::editPayee, payee);
+        registerSuccess(task, payeeSuccessEvent);
 
         return task;
     }

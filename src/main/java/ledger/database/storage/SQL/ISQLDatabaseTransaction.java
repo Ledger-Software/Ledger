@@ -207,6 +207,31 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
+    @Override
+    default Transaction getTransactionById(Transaction transaction) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TransactionTable.TRANS_DATETIME +
+                    ", " + TransactionTable.TRANS_ID +
+                    ", " + TransactionTable.TRANS_TYPE_ID +
+                    ", " + TransactionTable.TRANS_AMOUNT +
+                    ", " + TransactionTable.TRANS_PENDING +
+                    ", " + TransactionTable.TRANS_ACCOUNT_ID +
+                    ", " + TransactionTable.TRANS_PAYEE_ID +
+                    " FROM " + TransactionTable.TABLE_NAME +
+                    " WHERE " + TransactionTable.TRANS_ID+ "=?;");
+            stmt.setInt(1, transaction.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            List<Transaction> transactions = extractTransactions(rs);
+
+            if(transactions.size() == 0)
+                return null;
+            return transactions.get(0);
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all transactions", e);
+        }
+    }
+
     default List<Transaction> extractTransactions(ResultSet rs) throws SQLException, StorageException {
         List<Transaction> transactionList = new ArrayList<>();
 
@@ -289,7 +314,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            return extractAccount(rs);
+            if(rs.next())
+                return extractAccount(rs);
+            else
+                return null;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting Account by Name", e);
         }
@@ -460,7 +488,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            return extractAccount(rs);
+            if(rs.next())
+                return extractAccount(rs);
+            else
+                return null;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting Account by ID", e);
         }
@@ -491,17 +522,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             int id = resultSet.getInt(TypeTable.TYPE_ID);
 
             return new Type(newName, description, id);
-        } else {
-            return null;
-        }
-    }
-
-    default Account extractAccount(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            String newName = rs.getString(AccountTable.ACCOUNT_NAME);
-            String description = rs.getString(AccountTable.ACCOUNT_DESC);
-            int id = rs.getInt(AccountTable.ACCOUNT_ID);
-            return new Account(newName, description, id);
         } else {
             return null;
         }

@@ -26,6 +26,8 @@ public interface IDatabase {
 
     List<Transaction> getAllTransactionsForAccount(Account account) throws StorageException;
 
+    Transaction getTransactionById(Transaction transaction) throws StorageException;
+
     void insertAccount(Account account) throws StorageException;
 
     void deleteAccount(Account account) throws StorageException;
@@ -34,6 +36,8 @@ public interface IDatabase {
 
     List<Account> getAllAccounts() throws StorageException;
 
+    Account getAccountById(Account account) throws StorageException;
+
     void insertPayee(Payee payee) throws StorageException;
 
     void deletePayee(Payee payee) throws StorageException;
@@ -41,6 +45,8 @@ public interface IDatabase {
     void editPayee(Payee payee) throws StorageException;
 
     List<Payee> getAllPayees() throws StorageException;
+
+    Payee getPayeeById(Payee payee) throws StorageException;
 
     void insertNote(Note note) throws StorageException;
 
