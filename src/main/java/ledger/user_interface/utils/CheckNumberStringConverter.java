@@ -25,8 +25,8 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
 
     @Override
     public Integer fromString(String checkNumString) {
-        if (InputSanitization.isInvalidAmount(checkNumString)) {
-            // invalid amount
+        if (InputSanitization.isInvalidAmount(checkNumString) || checkNumString.length() > 4) {
+            // invalid check number
             return null;
         }
         int checkNum;
