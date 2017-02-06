@@ -14,20 +14,16 @@ import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Account;
-import ledger.database.entity.Tag;
-import ledger.database.entity.Transaction;
+import ledger.database.entity.*;
+import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.CheckNumberColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountCreditColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountDebitColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -110,6 +106,20 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             this.amountColumn.setVisible(!this.amountColumn.isVisible());
             this.amountDebitColumn.setVisible(!this.amountDebitColumn.isVisible());
             this.amountCreditColumn.setVisible(!this.amountCreditColumn.isVisible());
+        });
+
+        MenuItem addTransactionMenuItem = new MenuItem("Add Transaction");
+        menu.getItems().add(addTransactionMenuItem);
+        addTransactionMenuItem.setOnAction(event -> {
+            TaskWithReturn<List<Account>> accountTask = DbController.INSTANCE.getAllAccounts();
+            accountTask.startTask();
+            List<Account> accountList = accountTask.waitForResult();
+            if (accountList.isEmpty()) return;
+            Account acc = accountList.get(0);
+
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<Tag>(), new Note("")));
+            task.startTask();
+
         });
 
         this.setContextMenu(menu);
