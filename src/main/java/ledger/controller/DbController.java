@@ -340,9 +340,9 @@ public class DbController {
      * @return A task for the asynchronous call
      */
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {
-        List<Transaction> list = new ArrayList<>();
         TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<>((transactionList) -> {
             try {
+                List<Transaction> list = new ArrayList<>();
                 db.setDatabaseAutoCommit(false);
 
                 for (Transaction currentTransaction : transactionList) {
@@ -363,7 +363,7 @@ public class DbController {
             task.RegisterSuccessEvent((t) -> method.call());
         }
 
-        List<Transaction> copyList = Lists.newArrayList(list);
+        List<Transaction> copyList = Lists.newArrayList(transactions);
 
         TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((transactionList) -> {
             try {
