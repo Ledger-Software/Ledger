@@ -410,10 +410,22 @@ public class DbController {
         return db;
     }
 
-    public void undo() {
-        UndoAction undo = undoStack.pop();
 
-        undo.undo();
+    /**
+     * Shows the message from the action on top of the stack.
+     * @return
+     */
+    public String undoPeekMessage() {
+        if(undoStack.isEmpty())
+            return null;
+        return undoStack.peek().getMessage();
+    }
+
+    /**
+     * Undoes the top Action on the stack.
+     */
+    public void undo() {
+        undoStack.pop().undo();
     }
 
 }

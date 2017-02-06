@@ -1,6 +1,5 @@
 package ledger.controller;
 
-import ledger.controller.register.CallableMethod;
 import ledger.controller.register.ITask;
 
 /**
@@ -21,5 +20,9 @@ public class UndoAction {
 //        task.RegisterFailureEvent(failureMethod);
         task.startTask();
         task.waitForComplete();
+    }
+
+    public String getMessage() {
+        return message;
     }
 }
