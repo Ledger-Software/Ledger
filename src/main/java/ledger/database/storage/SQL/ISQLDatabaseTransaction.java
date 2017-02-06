@@ -142,7 +142,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             lookupAndSetPayeeForSQLStatement(transaction, stmt, 6);
 
-            stmt.setInt(7, transaction.getId());
+            stmt.setInt(7, transaction.getCheckNumber());
+
+            stmt.setInt(8, transaction.getId());
 
             stmt.executeUpdate();
 
