@@ -179,7 +179,29 @@ public class DbController {
      */
     public TaskWithArgs<Account> deleteAccount(final Account account) {
         TaskWithArgs<Account> task = generateDeleteAccount(account);
-        undoStack.push(new UndoAction(generateInsertAccount(account), "Undo Delete Account"));
+
+        List<Transaction> trans;
+        try {
+            trans = db.getAllTransactionsForAccount(account);
+        } catch (StorageException e) {
+            trans = new ArrayList<>();
+        }
+
+        if(trans.size() != 0) {
+            TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<List<Transaction>>((toAddTrans)-> {
+                db.insertAccount(account);
+                for(Transaction t: toAddTrans) {
+                    t.setAccount(account);
+                    db.insertTransaction(t);
+                }
+            }, trans);
+            registerSuccess(undoTask, transactionSuccessEvent);
+            registerSuccess(undoTask, accountSuccessEvent);
+            undoStack.push(new UndoAction(undoTask, "Undo Delete Account and Transactions"));
+        } else {
+            undoStack.push(new UndoAction(generateInsertAccount(account), "Undo Delete Account"));
+        }
+
         return task;
     }
 
@@ -340,6 +362,31 @@ public class DbController {
      * @return A task for the asynchronous call
      */
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = generateBatchInsertTransaction(transactions);
+
+        List<Transaction> copyList = Lists.newArrayList(transactions);
+
+        TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((transactionList) -> {
+            try {
+                db.setDatabaseAutoCommit(false);
+
+                for (Transaction currentTransaction : transactionList) {
+                    try {
+                        db.deleteTransaction(currentTransaction);
+                    } catch (StorageException e) { }
+                }
+            } finally {
+                db.setDatabaseAutoCommit(true);
+            }
+        }, copyList);
+        registerSuccess(undoTask, transactionSuccessEvent);
+
+        undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
+
+        return task;
+    }
+
+    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> generateBatchInsertTransaction(List<Transaction> transactions) {
         TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<>((transactionList) -> {
             try {
                 List<Transaction> list = new ArrayList<>();
@@ -362,25 +409,6 @@ public class DbController {
         for (CallableMethodVoidNoArgs method : transactionSuccessEvent) {
             task.RegisterSuccessEvent((t) -> method.call());
         }
-
-        List<Transaction> copyList = Lists.newArrayList(transactions);
-
-        TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((transactionList) -> {
-            try {
-                db.setDatabaseAutoCommit(false);
-
-                for (Transaction currentTransaction : transactionList) {
-                    try {
-                        db.deleteTransaction(currentTransaction);
-                    } catch (StorageException e) { }
-                }
-            } finally {
-                db.setDatabaseAutoCommit(true);
-            }
-        }, copyList);
-        registerSuccess(undoTask, transactionSuccessEvent);
-
-        undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
 
         return task;
     }
