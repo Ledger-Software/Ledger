@@ -270,8 +270,7 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> editPayee(final Payee payee) {
-        TaskWithArgs<Payee> task = new TaskWithArgs<>(db::editPayee, payee);
-        registerSuccess(task, payeeSuccessEvent);
+        TaskWithArgs<Payee> task = generateEditPayee(payee);
 
         Payee oldPayee = null;
         try {
@@ -379,6 +378,7 @@ public class DbController {
                 db.setDatabaseAutoCommit(true);
             }
         }, copyList);
+        registerSuccess(undoTask, transactionSuccessEvent);
 
         undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
 
