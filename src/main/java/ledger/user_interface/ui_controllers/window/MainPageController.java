@@ -3,6 +3,7 @@ package ledger.user_interface.ui_controllers.window;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -10,6 +11,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
@@ -120,6 +123,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
 
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
+
+        this.setOnKeyPressed(event -> {
+            if(!event.isControlDown())
+                return;
+
+            if(! (event.getCode() == KeyCode.Z))
+                return;
+
+            DbController.INSTANCE.undo();
+        });
     }
 
     private void openPayeeEditor(ActionEvent actionEvent) {

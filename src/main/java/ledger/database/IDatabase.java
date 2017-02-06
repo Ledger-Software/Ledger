@@ -83,5 +83,7 @@ public interface IDatabase {
     AccountBalance getBalanceForAccount(Account account) throws StorageException;
 
     void addBalanceForAccount(AccountBalance balance) throws StorageException;
+
+    void setDatabaseAutoCommit(boolean commit) throws StorageException;
 }
 

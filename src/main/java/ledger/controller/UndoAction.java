@@ -8,19 +8,17 @@ import ledger.controller.register.ITask;
  */
 public class UndoAction {
 
-    private final CallableMethod<Exception> failureMethod;
     private ITask task;
     private String message;
 
-    public UndoAction(ITask task, String message, CallableMethod<Exception> failureMethod) {
+    public UndoAction(ITask task, String message) {
         this.task = task;
         this.message = message;
-        this.failureMethod = failureMethod;
     }
 
     public void undo() {
-        if(failureMethod!= null)
-            task.RegisterFailureEvent(failureMethod);
+        // TODO Raise PopUP or do we want to throw an exception?
+//        task.RegisterFailureEvent(failureMethod);
         task.startTask();
         task.waitForComplete();
     }

@@ -1,5 +1,6 @@
 package ledger.controller;
 
+import com.google.api.client.util.Lists;
 import ledger.controller.register.*;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
@@ -40,7 +41,7 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
         payeeSuccessEvent = new LinkedList<>();
-        undoStack = new Stack<UndoAction>();
+        undoStack = new Stack<>();
     }
 
     public void initialize(String fileName, String password) throws StorageException {
@@ -71,10 +72,16 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) {
-        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
+        TaskWithArgs<Transaction> task = generateInsertTransaction(transaction);
+
+        undoStack.push(new UndoAction(generateDeleteTransaction(transaction), "Undo Insert Transaction"));
+        return task;
+    }
+
+    private TaskWithArgs<Transaction> generateInsertTransaction(final Transaction transaction) {
+        TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
 
-        undoStack.push(new UndoAction(deleteTransaction(transaction), "Undo Insert Transaction", null));
         return task;
     }
 
@@ -85,10 +92,17 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> deleteTransaction(final Transaction transaction) {
-        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::deleteTransaction, transaction);
+        TaskWithArgs<Transaction> task = generateDeleteTransaction(transaction);
+
+        undoStack.push(new UndoAction(generateInsertTransaction(transaction), "Undo Delete Transaction"));
+        return task;
+
+    }
+
+    private TaskWithArgs<Transaction> generateDeleteTransaction(final Transaction transaction) {
+        TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::deleteTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
 
-        undoStack.push(new UndoAction(insertTransaction(transaction), "Undo Delete Transaction", null));
         return task;
 
     }
@@ -100,8 +114,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Transaction> editTransaction(final Transaction transaction) {
-        TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::editTransaction, transaction);
+        TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::editTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+
+        // TODO: Undo Edit
 
         return task;
     }
@@ -112,7 +128,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Transaction>> getAllTransactions() {
-        return new TaskWithReturn<List<Transaction>>(db::getAllTransactions);
+        return new TaskWithReturn<>(db::getAllTransactions);
     }
 
     /**
@@ -123,7 +139,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Transaction>> getAllTransactionsForAccount(Account account) {
-        return new TaskWithReturn<List<Transaction>>(() -> db.getAllTransactionsForAccount(account));
+        return new TaskWithReturn<>(() -> db.getAllTransactionsForAccount(account));
     }
 
     /**
@@ -131,8 +147,17 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> insertAccount(final Account account) {
-        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::insertAccount, account);
+        TaskWithArgs<Account> task = generateInsertAccount(account);
+
+        undoStack.push(new UndoAction(generateDeleteAccount(account), "Undo Insert Account"));
+
+        return task;
+    }
+
+    private TaskWithArgs<Account> generateInsertAccount(final Account account) {
+        TaskWithArgs<Account> task = new TaskWithArgs<>(db::insertAccount, account);
         registerSuccess(task, accountSuccessEvent);
+
         return task;
     }
 
@@ -143,8 +168,15 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> deleteAccount(final Account account) {
-        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::deleteAccount, account);
+        TaskWithArgs<Account> task = generateDeleteAccount(account);
+        undoStack.push(new UndoAction(generateInsertAccount(account), "Undo Delete Account"));
+        return task;
+    }
+
+    private TaskWithArgs<Account> generateDeleteAccount(final Account account) {
+        TaskWithArgs<Account> task = new TaskWithArgs<>(db::deleteAccount, account);
         registerSuccess(task, accountSuccessEvent);
+
         return task;
     }
 
@@ -155,8 +187,11 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Account> editAccount(final Account account) {
-        TaskWithArgs<Account> task = new TaskWithArgs<Account>(db::editAccount, account);
+        TaskWithArgs<Account> task = new TaskWithArgs<>(db::editAccount, account);
         registerSuccess(task, accountSuccessEvent);
+
+        // TODO: Undo edit
+
         return task;
     }
 
@@ -166,7 +201,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Accounts
      */
     public TaskWithReturn<List<Account>> getAllAccounts() {
-        return new TaskWithReturn<List<Account>>(db::getAllAccounts);
+        return new TaskWithReturn<>(db::getAllAccounts);
     }
 
     /**
@@ -176,10 +211,17 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> insertPayee(final Payee payee) {
-        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::insertPayee, payee);
-        registerSuccess(task, payeeSuccessEvent);
+        TaskWithArgs<Payee> task = generateInsertPayee(payee);
+        undoStack.push(new UndoAction(generateDeletePayee(payee), "Undo Insert Payee"));
         return task;
 
+    }
+
+    private TaskWithArgs<Payee> generateInsertPayee(final Payee payee) {
+        TaskWithArgs<Payee> task = new TaskWithArgs<>(db::insertPayee, payee);
+        registerSuccess(task, payeeSuccessEvent);
+
+        return task;
     }
 
     /**
@@ -189,7 +231,13 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> deletePayee(final Payee payee) {
-        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::deletePayee, payee);
+        TaskWithArgs<Payee> task = generateDeletePayee(payee);
+        undoStack.push(new UndoAction(generateInsertPayee(payee), "Undo Delete Payee"));
+        return task;
+    }
+
+    private TaskWithArgs<Payee> generateDeletePayee(final Payee payee) {
+        TaskWithArgs<Payee> task = new TaskWithArgs<>(db::deletePayee, payee);
         registerSuccess(task, payeeSuccessEvent);
         return task;
     }
@@ -201,8 +249,11 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskWithArgs<Payee> editPayee(final Payee payee) {
-        TaskWithArgs<Payee> task = new TaskWithArgs<Payee>(db::editPayee, payee);
+        TaskWithArgs<Payee> task = new TaskWithArgs<>(db::editPayee, payee);
         registerSuccess(task, payeeSuccessEvent);
+
+        //TODO: Undo Edit
+
         return task;
     }
 
@@ -212,126 +263,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Payees
      */
     public TaskWithReturn<List<Payee>> getAllPayees() {
-        return new TaskWithReturn<List<Payee>>(db::getAllPayees);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Note
-     *
-     * @param note The note to insert
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Note> insertNote(final Note note) {
-        return new TaskWithArgs<Note>(db::insertNote, note);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Note
-     *
-     * @param note The note to delete
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Note> deleteNote(final Note note) {
-        return new TaskWithArgs<Note>(db::deleteNote, note);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Note
-     *
-     * @param note The note to edit
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Note> editNote(final Note note) {
-        return new TaskWithArgs<Note>(db::editNote, note);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to get all Notes
-     *
-     * @return A task for the Async Call that returns a list of all the Notes
-     */
-    public TaskWithReturn<List<Note>> getAllNotes() {
-        return new TaskWithReturn<List<Note>>(db::getAllNotes);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Tag
-     *
-     * @param tag the tag to insert
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Tag> insertTag(final Tag tag) {
-        return new TaskWithArgs<Tag>(db::insertTag, tag);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Tag
-     *
-     * @param tag the tag to delete
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Tag> deleteTag(final Tag tag) {
-        return new TaskWithArgs<Tag>(db::deleteTag, tag);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Tag
-     *
-     * @param tag the tag to edit
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Tag> editTag(final Tag tag) {
-        return new TaskWithArgs<Tag>(db::editTag, tag);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to get all Tags
-     *
-     * @return A task for the Async Call that returns a list of all the Transactions
-     */
-    public TaskWithReturn<List<Tag>> getAllTags() {
-        return new TaskWithReturn<List<Tag>>(db::getAllTags);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Type
-     *
-     * @param type the type to insert
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Type> insertType(final Type type) {
-        return new TaskWithArgs<Type>(db::insertType, type);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Type
-     *
-     * @param type the type to delete
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Type> deleteType(final Type type) {
-        return new TaskWithArgs<Type>(db::deleteType, type);
-
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Type
-     *
-     * @param type the type to edit
-     * @return a ITask for the Async Call
-     */
-    public TaskWithArgs<Type> editType(final Type type) {
-        return new TaskWithArgs<Type>(db::editType, type);
+        return new TaskWithReturn<>(db::getAllPayees);
 
     }
 
@@ -341,7 +273,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the Types
      */
     public TaskWithReturn<List<Type>> getAllTypes() {
-        return new TaskWithReturn<List<Type>>(db::getAllTypes);
+        return new TaskWithReturn<>(db::getAllTypes);
     }
 
     /**
@@ -352,43 +284,8 @@ public class DbController {
      * @return A task for the Async call that returns a list of all the Tags associated with the Payee
      */
     public TaskWithArgsReturn<Payee, List<Tag>> getTagsForPayee(final Payee payee) {
-        return new TaskWithArgsReturn<Payee, List<Tag>>(db::getAllTagsForPayee, payee);
+        return new TaskWithArgsReturn<>(db::getAllTagsForPayee, payee);
     }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to delete all Tags associated with a
-     * Payee
-     *
-     * @param payee The Payee to get all associated tags for
-     * @return A ITask for the Async call
-     */
-    public TaskWithArgs<Payee> deleteAllTagsForPayee(final Payee payee) {
-        return new TaskWithArgs<Payee>(db::deleteAllTagsForPayee, payee);
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database add a Tag to the given Payee
-     *
-     * @param payee The Payee to get all associated tags for
-     * @param tag   The Tag to associate with the Payee
-     * @return A ITask for the async call
-     */
-    public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
-        return new TaskWithArgs<TagPayeeWrapper>(this::addTagForPayee, new TagPayeeWrapper(tag, payee));
-    }
-
-    /**
-     * Creates a ITask that can be used to make an asynchronous call to the database to remove a Tag from the given
-     * Payee
-     *
-     * @param payee The Payee to remove the Tag from
-     * @param tag   The Tag to remove from the Payee
-     * @return A ITask for the asynchronous call
-     */
-    public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
-        return new TaskWithArgs<>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
-    }
-
 
     /**
      * Closes the DB safely.
@@ -411,23 +308,46 @@ public class DbController {
      * @return A task for the asynchronous call
      */
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransaction(List<Transaction> transactions) {
-        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
-            List<Transaction> list = new ArrayList<>();
-            for (Transaction currentTransaction : transactionList) {
+        List<Transaction> list = new ArrayList<>();
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<>((transactionList) -> {
+            try {
+                db.setDatabaseAutoCommit(false);
 
-                try {
-                    db.insertTransaction(currentTransaction);
-                } catch (StorageException e) {
-                    System.out.println("ERROR - DbContoller.batchInsertTransaction: Adding transaction failed \n" + e.getMessage());
-                    list.add(currentTransaction);
+                for (Transaction currentTransaction : transactionList) {
+                    try {
+                        db.insertTransaction(currentTransaction);
+                    } catch (StorageException e) {
+                        System.out.println("ERROR - DbContoller.batchInsertTransaction: Adding transaction failed \n" + e.getMessage());
+                        list.add(currentTransaction);
+                    }
                 }
+                return list;
+            } finally {
+                db.setDatabaseAutoCommit(true);
             }
-            return list;
         }, transactions);
 
         for (CallableMethodVoidNoArgs method : transactionSuccessEvent) {
             task.RegisterSuccessEvent((t) -> method.call());
         }
+
+        List<Transaction> copyList = Lists.newArrayList(list);
+
+        TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((transactionList) -> {
+            try {
+                db.setDatabaseAutoCommit(false);
+
+                for (Transaction currentTransaction : transactionList) {
+                    try {
+                        db.deleteTransaction(currentTransaction);
+                    } catch (StorageException e) { }
+                }
+            } finally {
+                db.setDatabaseAutoCommit(true);
+            }
+        }, copyList);
+
+        undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
 
         return task;
     }
@@ -457,37 +377,10 @@ public class DbController {
         return db;
     }
 
-    /**
-     * Wraps the databases addTagForPayee method so that a single argument can be given to the ITask
-     *
-     * @param wrapper The wrapper class containing the Tag and Payee
-     * @throws StorageException When an SQLExeption occurs
-     */
-    public void addTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
-        db.addTagForPayee(wrapper.tag, wrapper.payee);
-    }
+    public void undo() {
+        UndoAction undo = undoStack.pop();
 
-    /**
-     * Wraps the databases deleteTagForPayee method so that a single argument can be given to the ITask
-     *
-     * @param wrapper The wrapper class containing the Tag and Payee
-     * @throws StorageException When an SQLExeption occurs
-     */
-    public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
-        db.deleteTagForPayee(wrapper.tag, wrapper.payee);
-    }
-
-    /**
-     * Wraps a Tag and Payee into a single class to be used by Tasks
-     */
-    class TagPayeeWrapper {
-        public Tag tag;
-        public Payee payee;
-
-        TagPayeeWrapper(Tag t, Payee p) {
-            this.tag = t;
-            this.payee = p;
-        }
+        undo.undo();
     }
 
 }
