@@ -32,18 +32,28 @@ public class AccountColumn extends TableColumn implements IUIController, Initial
         this.initController(pageLoc, this, "Unable to load AccountColumn");
     }
 
+    ObservableList<Account> observableAllAccounts;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TaskWithReturn<List<Account>> getAllAccountTask = DbController.INSTANCE.getAllAccounts();
         getAllAccountTask.startTask();
         List<Account> allAccounts = getAllAccountTask.waitForResult();
-        ObservableList observableAllAccounts = FXCollections.observableList(allAccounts);
+        this.observableAllAccounts = FXCollections.observableList(allAccounts);
 
 
         this.setCellValueFactory(new PropertyValueFactory<Transaction, Account>("account"));
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new AccountStringConverter(), observableAllAccounts));
         this.setOnEditCommit(this.accountEditHandler);
         this.setComparator(new AccountComparator());
+
+        DbController.INSTANCE.registerAccountSuccessEvent(this::updateAccountList);
+    }
+
+    private void updateAccountList() {
+        TaskWithReturn<List<Account>> getAllAccountTask = DbController.INSTANCE.getAllAccounts();
+        getAllAccountTask.startTask();
+        List<Account> allAccounts = getAllAccountTask.waitForResult();
 
         for (Account currentAccount : allAccounts) {
             if (!observableAllAccounts.contains(currentAccount)) {
