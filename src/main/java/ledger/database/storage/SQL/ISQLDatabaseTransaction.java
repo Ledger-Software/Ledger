@@ -155,6 +155,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                 if (existingNote != null) {
                     existingNote.setNoteText(updatedNote.getNoteText());
                     editNote(existingNote);
+                } else {
+                    insertNote(updatedNote);
                 }
             } else {
                 deleteNoteForTransactionID(transaction.getId());
