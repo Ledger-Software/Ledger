@@ -7,22 +7,17 @@ import javafx.util.StringConverter;
  */
 public class MatchOrContainsStringConverter extends StringConverter<Boolean> {
 
-    public Boolean fromString(String pendingString) {
-        if (pendingString.equals("Matches")) {
-            return Boolean.TRUE;
-        } else if(pendingString.isEmpty()) {
-            return null;
+    public Boolean fromString(String matchorcontiainsString) {
+        if (matchorcontiainsString.equals("Matches")) {
+            return true;
         } else {
-            return Boolean.FALSE;
+            return false;
         }
     }
 
-    public String toString(Boolean pending) {
+    public String toString(Boolean matchorcontiains) {
         // convert a Type instance to the text displayed in the choice box
-        if (pending==null){
-            return "";
-        }
-        else if (pending.equals(Boolean.TRUE)) {
+        if (matchorcontiains) {
             return "Matches";
         } else {
             return "Contains";

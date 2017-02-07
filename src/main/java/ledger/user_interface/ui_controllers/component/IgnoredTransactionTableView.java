@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers.component.tablecolumn;
+package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,7 +40,7 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        expressionColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, String>("Expression"));
+        expressionColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, String>("expression"));
         expressionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         expressionColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, String>>() {
             @Override
@@ -55,8 +55,8 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
             }
         });
 
-        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("Rule"));
-        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new MatchOrContainsStringConverter(), FXCollections.observableArrayList(Boolean.FALSE, Boolean.TRUE)));
+        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("matchOrContain"));
+        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new MatchOrContainsStringConverter(), FXCollections.observableArrayList(true,false)));
         matchOrContainColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, Boolean>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<IgnoredExpression, Boolean> event) {

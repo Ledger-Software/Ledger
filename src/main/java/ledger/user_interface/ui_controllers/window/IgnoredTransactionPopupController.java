@@ -38,7 +38,7 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.newExpRule.setEditable(false);
-        this.newExpRule.setItems(FXCollections.observableArrayList(Boolean.FALSE, Boolean.TRUE));
+        this.newExpRule.setItems(FXCollections.observableArrayList(true,false));
         this.newExpRule.setConverter(new MatchOrContainsStringConverter());
         this.addExpButton.setOnAction(event -> addExpression());
 
