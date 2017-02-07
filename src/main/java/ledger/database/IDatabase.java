@@ -80,6 +80,10 @@ public interface IDatabase {
 
     Tag getTagForNameAndDescription(String tagName, String tagDescription);
 
+    AccountBalance getBalanceForAccount(Account account) throws StorageException;
+
+    void addBalanceForAccount(AccountBalance balance) throws StorageException;
+
     void insertIgnoredExpression(IgnoredExpression igEx) throws StorageException;
 
     void deleteIgnoredExpression(IgnoredExpression igEx) throws StorageException;

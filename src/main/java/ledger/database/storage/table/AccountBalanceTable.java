@@ -3,6 +3,7 @@ package ledger.database.storage.table;
 public class AccountBalanceTable {
 
     public static String TABLE_NAME = "ACCOUNT_BALANCE";
+    public static String ABAL_ID = "ABAL_ID";
     public static String ABAL_ACCOUNT_ID = "ABAL_ACCOUNT_ID";
     public static String ABAL_DATETIME = "ABAL_DATETIME";
     public static String ABAL_AMOUNT = "ABAL_AMOUNT";
@@ -15,9 +16,10 @@ public class AccountBalanceTable {
     public static String CreateStatementSQLite() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "%s REAL NOT NULL, " +
+                "%s INT NOT NULL, " +
+                "%s LONG NOT NULL, " +
                 "%s INT NOT NULL" +
-                ")", TABLE_NAME, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
+                ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }
 
     /**
@@ -28,8 +30,9 @@ public class AccountBalanceTable {
     public static String CreateStatementH2() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                 "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-                "%s REAL NOT NULL, " +
+                "%s INT NOT NULL, " +
+                "%s LONG NOT NULL, " +
                 "%s INT NOT NULL" +
-                ")", TABLE_NAME, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
+                ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }
 }

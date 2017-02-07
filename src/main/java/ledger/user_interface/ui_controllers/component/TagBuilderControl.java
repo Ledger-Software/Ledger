@@ -1,11 +1,15 @@
 package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
@@ -37,19 +41,26 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         submitButton.setOnAction(this::addTag);
+        nameText.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER)
+                addTag(null);
+        });
     }
 
     private void addTag(ActionEvent actionEvent) {
+        if(nameText.getText() == null || nameText.getText().isEmpty())
+            return;
         List<Tag> newTags = model.getTags();
         if (newTags == null) {
             newTags = new LinkedList<Tag>();
             model.setTags(newTags);
         }
         newTags = model.getTags();
-
         newTags.add(new Tag(nameText.getText(), nameText.getText()));
         TaskWithArgs task = TaggableSwitch.edit(model);
         task.startTask();
         task.waitForComplete();
+
+        ((TagFlowPane)this.getParent()).updateTags();
     }
 }

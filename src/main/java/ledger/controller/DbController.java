@@ -1,6 +1,9 @@
 package ledger.controller;
 
-import ledger.controller.register.*;
+import ledger.controller.register.CallableMethodVoidNoArgs;
+import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskWithArgsReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
@@ -18,13 +21,17 @@ import java.util.List;
 public class DbController {
 
     public static DbController INSTANCE;
-    private IDatabase db;
-    private File dbFile;
 
     static {
         new DbController();
     }
 
+    private IDatabase db;
+    private File dbFile;
+    private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
+    private List<CallableMethodVoidNoArgs> accountSuccessEvent;
+    private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
+    private List<CallableMethodVoidNoArgs> ignoredExpSuccessEvent;
     /**
      * Constructor for the DBcontroller
      */
@@ -41,11 +48,6 @@ public class DbController {
         this.dbFile = new File(fileName);
     }
 
-    private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
-    private List<CallableMethodVoidNoArgs> accountSuccessEvent;
-    private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
-    private List<CallableMethodVoidNoArgs> ignoredExpSuccessEvent;
-
     public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
     }
@@ -54,7 +56,9 @@ public class DbController {
         accountSuccessEvent.add(method);
     }
 
-    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) { payeeSuccessEvent.add(method); }
+    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) {
+        payeeSuccessEvent.add(method);
+    }
 
     public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) { ignoredExpSuccessEvent.add(method); }
 
@@ -363,7 +367,7 @@ public class DbController {
      * Creates a Task that can be used to make an asynchronous call to the database add a Tag to the given Payee
      *
      * @param payee The Payee to get all associated tags for
-     * @param tag The Tag to associate with the Payee
+     * @param tag   The Tag to associate with the Payee
      * @return A Task for the async call
      */
     public TaskWithArgs<TagPayeeWrapper> addTagForPayee(final Payee payee, final Tag tag) {
@@ -375,11 +379,11 @@ public class DbController {
      * Payee
      *
      * @param payee The Payee to remove the Tag from
-     * @param tag The Tag to remove from the Payee
+     * @param tag   The Tag to remove from the Payee
      * @return A Task for the asynchronous call
      */
     public TaskWithArgs<TagPayeeWrapper> deleteTagForPayee(final Payee payee, final Tag tag) {
-        return new TaskWithArgs<TagPayeeWrapper>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
+        return new TaskWithArgs<>(this::deleteTagForPayee, new TagPayeeWrapper(tag, payee));
     }
 
 
@@ -426,6 +430,27 @@ public class DbController {
     }
 
     /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get the balance for a given account
+     *
+     * @param account The account to get the AccountBalance for
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgsReturn<Account, AccountBalance> getBalanceForAccount(Account account) {
+        return new TaskWithArgsReturn<>(db::getBalanceForAccount, account);
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to add an account balance for a given
+     * account
+     *
+     * @param balance AccountBalance to add to the database
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgs<AccountBalance> addBalanceForAccount(AccountBalance balance) {
+        return new TaskWithArgs<>(db::addBalanceForAccount, balance);
+    }
+
+    /**
      * Creates a Task that can be used to make an asynchronous call to the database to add transactions as a batch with Ignore checks
      *
      * @param transactions List of transactions to add to the database
@@ -457,19 +482,6 @@ public class DbController {
     }
 
     /**
-     * Wraps a Tag and Payee into a single class to be used by Tasks
-     */
-    class TagPayeeWrapper {
-        public Tag tag;
-        public Payee payee;
-
-        TagPayeeWrapper (Tag t, Payee p) {
-            this.tag = t;
-            this.payee = p;
-        }
-    }
-
-    /**
      * Wraps the databases addTagForPayee method so that a single argument can be given to the Task
      *
      * @param wrapper The wrapper class containing the Tag and Payee
@@ -488,6 +500,20 @@ public class DbController {
     public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.deleteTagForPayee(wrapper.tag, wrapper.payee);
     }
+
+    /**
+     * Wraps a Tag and Payee into a single class to be used by Tasks
+     */
+    class TagPayeeWrapper {
+        public Tag tag;
+        public Payee payee;
+
+        TagPayeeWrapper(Tag t, Payee p) {
+            this.tag = t;
+            this.payee = p;
+        }
+    }
+
 
     /**
      * Creates a Task that can be used to make an asynchronous call to the database to insert an Ignored Expression

@@ -17,6 +17,7 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.AccountBalanceLabel;
 import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
@@ -30,6 +31,10 @@ import java.util.ResourceBundle;
  */
 
 public class MainPageController extends GridPane implements Initializable, IUIController {
+    private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    @FXML
+    public Button payeeEditorButton;
+    boolean containsAccounts = false;
     @FXML
     private Button addAccountBtn;
     @FXML
@@ -41,6 +46,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
+    private AccountBalanceLabel accountBalanceLabel;
+    @FXML
     private FilteringAccountDropdown chooseAccount;
     @FXML
     private Button searchButton;
@@ -48,15 +55,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button clearButton;
     @FXML
     private TextField searchTextField;
-    @FXML
-    public Button payeeEditorButton;
-
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
-
-    private final static String pageLoc = "/fxml_files/MainPage.fxml";
-    boolean containsAccounts = false;
 
     public MainPageController() {
         this.initController(pageLoc, this, "Error on main page startup: ");
@@ -104,6 +105,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             @Override
             public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
                 transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
+                accountBalanceLabel.calculateBalance(chooseAccount.getSelectedAccount());
             }
         });
 
