@@ -30,17 +30,27 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
         this.initController(pageLoc, this, "Unable to load PayeeColumn");
     }
 
+    ObservableList observableAllPayees;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
         getAllPayeesTask.startTask();
         List<Payee> allPayees = getAllPayeesTask.waitForResult();
-        ObservableList observableAllPayees = FXCollections.observableList(allPayees);
+        this.observableAllPayees = FXCollections.observableList(allPayees);
 
-        this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setOnEditCommit(this.payeeEditHandler);
         this.setComparator(new PayeeComparator());
+
+        DbController.INSTANCE.registerPayyeeSuccessEvent(this::updatePayeeList);
+    }
+
+    private void updatePayeeList() {
+        TaskWithReturn<List<Payee>> getAllPayeesTask = DbController.INSTANCE.getAllPayees();
+        getAllPayeesTask.startTask();
+        List<Payee> allPayees = getAllPayeesTask.waitForResult();
 
         for (Payee currentPayee : allPayees) {
             if (!observableAllPayees.contains(currentPayee)) {
