@@ -6,9 +6,12 @@ package ledger.user_interface.utils;
 public class AmountCreditStringConverter extends AAmountStringConverter {
 
     public String toString(Integer amount) {
+        if (amount == null) {
+            return "";
+        }
+
         String amountString = "";
         if (amount >= 0) {
-            boolean positiveValue = amount >= 0 ? true : false;
             Integer absoluteAmount = Math.abs(amount);
             String absoluteAmountInCents = String.valueOf(absoluteAmount);
 
@@ -25,7 +28,7 @@ public class AmountCreditStringConverter extends AAmountStringConverter {
                 cents = "0" + absoluteAmountInCents;
             }
 
-            amountString = (positiveValue ? "" : "-") + dollars + "." + cents;
+            amountString = dollars + "." + cents;
         }
 
         return amountString;

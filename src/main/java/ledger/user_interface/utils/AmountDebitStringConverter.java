@@ -19,6 +19,10 @@ public class AmountDebitStringConverter extends AAmountStringConverter {
     }
 
     public String toString(Integer amount) {
+        if (amount == null) {
+            return "";
+        }
+
         String amountString = "";
         if (amount < 0) {
             Integer absoluteAmount = Math.abs(amount);
