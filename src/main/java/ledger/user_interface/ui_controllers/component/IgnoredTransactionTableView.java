@@ -5,11 +5,13 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -18,6 +20,7 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.MatchOrContainsStringConverter;
 
+import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,6 +43,13 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.setOnKeyPressed(t -> {
+            //Put your awesome application specific logic here
+            if (t.getCode() == KeyCode.DELETE) {
+                handleDelete();
+            }
+        });
         expressionColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, String>("expression"));
         expressionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         expressionColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, String>>() {
@@ -72,6 +82,18 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
 
         DbController.INSTANCE.registerIgnoredExpressionSuccessEvent(this::asyncUpdateTableView);
         updateTableView();
+    }
+
+    private void handleDelete() {
+        IgnoredExpression item = (IgnoredExpression)this.getSelectionModel().getSelectedItem();
+        TaskWithArgs<IgnoredExpression> deleteTask = DbController.INSTANCE.deleteIgnoredExpression(item);
+        deleteTask.RegisterFailureEvent((e)->{
+            asyncUpdateTableView();
+            setupErrorPopup("Error deleting transaction.", e);
+        });
+        deleteTask.startTask();
+        deleteTask.waitForComplete();
+
     }
 
     public void updateTableView() {

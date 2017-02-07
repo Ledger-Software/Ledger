@@ -47,10 +47,12 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
     private void addExpression(){
         if(InputSanitization.isStringInvalid(newExpText.getText())){
             this.setupErrorPopup("Invalid Expression", new Exception());
+            return;
         }
         String exp = newExpText.getText();
         if(this.newExpRule.getValue()==null){
             this.setupErrorPopup("Please select a rule", new Exception());
+            return;
         }
         Boolean rule = newExpRule.getValue();
         TaskWithArgs<IgnoredExpression> insertIgExpTask

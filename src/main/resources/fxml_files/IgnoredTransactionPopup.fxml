@@ -14,18 +14,17 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.component.IgnoredTransactionTableView?>
 
-<fx:root fx:id="ignoredTransGridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="558.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="ignoredTransGridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="125.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="187.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="246.0" />
-      <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+        <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="130.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="300.0" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints maxHeight="40.0" minHeight="3.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -36,6 +35,9 @@
                     </font>
                 </Text>
             </children>
+         <GridPane.margin>
+            <Insets top="1.0" />
+         </GridPane.margin>
         </Pane>
         <Text fx:id="accountNameLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Expression" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
             <font>
@@ -52,7 +54,7 @@
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Button fx:id="addExpButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Add Expression" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+        <Button fx:id="addExpButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Add" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="15.0" right="15.0" />
             </GridPane.margin>
@@ -68,7 +70,10 @@
             <Insets left="15.0" right="15.0" />
          </GridPane.margin>
       </ComboBox>
-      <IgnoredTransactionTableView prefHeight="215.0" prefWidth="256.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="3" />
+      <IgnoredTransactionTableView editable="true" prefHeight="200.0" prefWidth="300.0" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.valignment="BASELINE">
+         <GridPane.margin>
+            <Insets />
+         </GridPane.margin></IgnoredTransactionTableView>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
