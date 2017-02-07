@@ -39,8 +39,8 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
         List<Payee> allPayees = getAllPayeesTask.waitForResult();
         this.observableAllPayees = FXCollections.observableList(allPayees);
 
-        this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setOnEditCommit(this.payeeEditHandler);
         this.setComparator(new PayeeComparator());
 
@@ -57,7 +57,6 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
                 observableAllPayees.add(currentPayee);
             }
         }
-
     }
 
     private EventHandler<javafx.scene.control.TableColumn.CellEditEvent<Transaction, Payee>> payeeEditHandler = new EventHandler<javafx.scene.control.TableColumn.CellEditEvent<Transaction, Payee>>() {
