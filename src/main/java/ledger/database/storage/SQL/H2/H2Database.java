@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * Database handler for h2 storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType {
+public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression {
 
     private Connection databaseObject;
 
@@ -56,7 +56,7 @@ public class H2Database implements ISQLDatabaseTransaction, ISQLDatabaseNote, IS
 
         tableSQL.add(TagToTransTable.CreateStatementH2());
         tableSQL.add(TagToPayeeTable.CreateStatementH2());
-        tableSQL.add((IgnoredTransactionTable.CreateStatementH2()));
+        tableSQL.add((IgnoredExpressionTable.CreateStatementH2()));
 
         try {
             for (String statement : tableSQL) {

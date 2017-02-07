@@ -1,9 +1,6 @@
 package ledger.controller;
 
-import ledger.controller.register.CallableMethodVoidNoArgs;
-import ledger.controller.register.TaskWithArgs;
-import ledger.controller.register.TaskWithArgsReturn;
-import ledger.controller.register.TaskWithReturn;
+import ledger.controller.register.*;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
@@ -36,6 +33,7 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
         payeeSuccessEvent = new LinkedList<>();
+        ignoredExpSuccessEvent = new LinkedList<>();
     }
 
     public void initialize(String fileName, String password) throws StorageException {
@@ -46,6 +44,7 @@ public class DbController {
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
     private List<CallableMethodVoidNoArgs> accountSuccessEvent;
     private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
+    private List<CallableMethodVoidNoArgs> ignoredExpSuccessEvent;
 
     public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
@@ -56,6 +55,8 @@ public class DbController {
     }
 
     public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) { payeeSuccessEvent.add(method); }
+
+    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) { ignoredExpSuccessEvent.add(method); }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -460,4 +461,51 @@ public class DbController {
     public void deleteTagForPayee(TagPayeeWrapper wrapper) throws StorageException {
         db.deleteTagForPayee(wrapper.tag, wrapper.payee);
     }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to insert
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::insertIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to edit
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::editIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to delete
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::deleteIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all IgnoredExpressions
+     *
+     * @return A task for the Async Call that returns a list of all the IgnoredExpressions
+     */
+    public TaskWithReturn<List<IgnoredExpression>> getAllIgnoredExpressions() {
+        return new TaskWithReturn<List<IgnoredExpression>>(db::getAllIgnoredExpressions);
+    }
+
+
 }

@@ -79,5 +79,23 @@ public interface IDatabase {
     Payee getPayeeForNameAndDescription(String payeeName, String payeeDescription);
 
     Tag getTagForNameAndDescription(String tagName, String tagDescription);
+
+    void insertIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    void deleteIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    void editIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    List<IgnoredExpression> getAllIgnoredExpressions() throws StorageException;
+
+    boolean checkTransactionIgnored(Transaction transaction) throws StorageException;
+
+    boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException;
+
+    boolean checkContains(String exp) throws StorageException;
+
+    boolean checkMatches(String exp) throws StorageException;
+
+
 }
 

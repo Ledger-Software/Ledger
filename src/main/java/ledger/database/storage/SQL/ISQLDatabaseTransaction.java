@@ -596,4 +596,20 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             insertTagToTrans(currentTag.getId(), insertedTransactionID);
         }
     }
+    @Override
+    default boolean checkTransactionIgnored(Transaction transaction) throws StorageException{
+        String payeeName = transaction.getPayee().getName();
+        return checkContains(payeeName)&&checkMatches(payeeName);
+    }
+
+    @Override
+    default boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException{
+        if (checkTransactionIgnored(transaction)){
+            return false;
+        } else {
+            insertTransaction(transaction);
+            return true;
+        }
+    }
+
 }
