@@ -20,7 +20,6 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.NoteColumn;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -34,11 +33,9 @@ import java.util.ResourceBundle;
 
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
+    private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
     @FXML
     public AccountColumn accountColumn;
-
-    private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
-
     private Account accountFilter;
     private String searchFilterString = "";
 
@@ -153,7 +150,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.getColumns().add(NoteColumn.noteColumn());
         // Populate listView w/ transactions from DB
         configureTransactionTableView();
         updateTransactionTableView();

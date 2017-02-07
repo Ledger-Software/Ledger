@@ -1,45 +1,42 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.util.Callback;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.NoteEditInputController;
-import org.controlsfx.control.table.TableRowExpanderColumn;
+import ledger.user_interface.utils.IdenityCellValueCallback;
 
 /**
  * Created by gert on 2/7/17.
  */
-public class NoteColumn extends TableColumn implements IUIController {
+public class NoteColumn extends TableColumn<Transaction, Transaction> implements IUIController {
+    public NoteColumn() {
 
-    public static TableRowExpanderColumn  noteColumn(){
-        TableRowExpanderColumn<Transaction> expanderColumn = new TableRowExpanderColumn<>(param->{
-            NoteEditInputController noteEditInputController = new NoteEditInputController();
-            noteEditInputController.setTableRowData(param);
-            return noteEditInputController;
-        });
-        expanderColumn.setText("Note");
-        expanderColumn.setCellFactory(param -> new CollapseExpandButton<>(expanderColumn));
-        return expanderColumn;
 
+        this.setCellValueFactory(new IdenityCellValueCallback<Transaction>());
+        this.setCellFactory(
+                new Callback<TableColumn<Transaction, Transaction>, TableCell<Transaction, Transaction>>() {
+                    @Override
+                    public TableCell<Transaction, Transaction> call(TableColumn<Transaction, Transaction> param) {
+                        return new TableCell<Transaction, Transaction>() {
+                            @Override
+                            protected void updateItem(Transaction transaction, boolean empty) {
+                                super.updateItem(transaction, empty);
+
+                                if (transaction == null || empty) {
+                                    setText(null);
+                                    setGraphic(null);
+                                } else {
+                                    NoteEditInputController noteController = new NoteEditInputController(transaction);
+                                    setGraphic(noteController);
+                                }
+                            }
+                        };
+                    }
+                });
+        this.setSortable(false);
     }
-    private static class CollapseExpandButton<Transaction> extends TableCell<Transaction, Boolean> {
-        private Button button = new Button();
 
-        CollapseExpandButton(TableRowExpanderColumn<Transaction> column) {
-            button.setOnAction(event -> column.toggleExpanded(getIndex()));
-
-        }
-
-        protected void updateItem(Boolean expanded, boolean empty) {
-            super.updateItem(expanded, empty);
-            if (expanded == null || empty) {
-                setGraphic(null);
-            } else {
-                button.setText(expanded ? "Collapse Note " : "Expand Note");
-                setGraphic(button);
-            }
-        }
-    }
 }
