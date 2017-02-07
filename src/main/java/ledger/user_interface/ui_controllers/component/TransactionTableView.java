@@ -20,8 +20,6 @@ import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -206,28 +204,38 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     }
 
     private void handleDeleteSelectedTransactionsFromTableView() {
-        List<Integer> indices = new ArrayList<>();
-        // Add indices to new list so they aren't observable
-        indices.addAll(this.getSelectionModel().getSelectedIndices());
-        if (indices.size() != 0) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Transaction(s)");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
 
-            //TODO: Get around this scary mess
-            if (indices.contains(new Integer(-1))) {
-                indices = this.getSelectionModel().getSelectedIndices();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            List<Integer> indices = new ArrayList<>();
+            // Add indices to new list so they aren't observable
+            indices.addAll(this.getSelectionModel().getSelectedIndices());
+            if (indices.size() != 0) {
+
+                //TODO: Get around this scary mess
+                if (indices.contains(new Integer(-1))) {
+                    indices = this.getSelectionModel().getSelectedIndices();
+                }
+
+                for (int i : indices) {
+                    Transaction transactionToDelete = this.getItems().get(i);
+
+                    TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                    task.RegisterFailureEvent((e) -> {
+                        asyncTableUpdate();
+                        setupErrorPopup("Error deleting transaction.", e);
+                    });
+                    task.startTask();
+                    task.waitForComplete();
+                }
+                updateTransactionTableView();
             }
-
-            for (int i : indices) {
-                Transaction transactionToDelete = this.getItems().get(i);
-
-                TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
-                task.RegisterFailureEvent((e) -> {
-                    asyncTableUpdate();
-                    setupErrorPopup("Error deleting transaction.", e);
-                });
-                task.startTask();
-                task.waitForComplete();
-            }
-            updateTransactionTableView();
+        } else {
+            return;
         }
     }
 
