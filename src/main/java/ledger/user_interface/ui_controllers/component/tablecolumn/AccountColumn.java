@@ -7,7 +7,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
@@ -16,7 +15,6 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.AccountComparator;
 import ledger.user_interface.utils.AccountStringConverter;
-import ledger.user_interface.utils.PayeeStringConverter;
 
 import java.net.URL;
 import java.util.List;
