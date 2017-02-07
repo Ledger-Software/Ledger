@@ -6,10 +6,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
@@ -23,9 +20,9 @@ import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -50,6 +47,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @FXML
     public TagColumn tagColumn;
+
+    @FXML
+    public DateColumn dateColumn;
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -156,13 +156,21 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         task.startTask();
         List<Transaction> transactions = task.waitForResult();
 
+        // 0. Manually sort the list based on Date to force a default sorted order
+        transactions.sort(new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                return transaction1.getDate().compareTo(transaction2.getDate());
+            }
+        });
+
         ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Transaction> filteredData = new FilteredList<>(observableTransactions, p -> true);
 
         // 2. Set the filter Predicate.
-        filteredData.setPredicate(transactionModel -> {
+        filteredData.setPredicate(transaction -> {
             // If filter text is empty, display all persons.
             if (searchFilterString == null || searchFilterString.isEmpty()) {
                 return true;
@@ -172,13 +180,17 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             String lowerCaseFilter = searchFilterString.toLowerCase();
 
             AmountStringConverter asc = new AmountStringConverter();
-            if (asc.toString(transactionModel.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+            if (asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches amount.
-            } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
+            } else if (transaction.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches Payee name.
-            } else if (transactionModel.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
+            } else if (transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
                 return true; // Filter matches tags.
-            } else {
+            } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches check number.
+            } else if (transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches account name.
+            }else {
                 return false; // Filter does not match.
             }
         });
