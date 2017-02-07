@@ -19,11 +19,7 @@ import ledger.database.entity.Tag;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.CheckNumberColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountCreditColumn;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AmountDebitColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -51,6 +47,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @FXML
     public CheckNumberColumn checkNumberColumn;
+
+    @FXML
+    public TagColumn tagColumn;
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -92,24 +91,55 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         menu.getItems().add(deleteTransactionsMenuItem);
         deleteTransactionsMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
 
-        MenuItem showHideAccountColumnMenuItem = new MenuItem("Show/Hide Account Column");
+        // Upon initialization, Tag column is displayed
+        MenuItem showHideTagColumnMenuItem = new MenuItem("Hide Tag Column");
+        menu.getItems().add(showHideTagColumnMenuItem);
+        showHideTagColumnMenuItem.setOnAction(event -> {
+            this.tagColumn.setVisible(!this.tagColumn.isVisible());
+            if (this.tagColumn.isVisible()) {
+                showHideTagColumnMenuItem.setText("Hide Tag Column");
+            } else {
+                showHideTagColumnMenuItem.setText("Show Tag Column");
+            }
+        });
+
+        // Upon initialization, Account column is displayed
+        MenuItem showHideAccountColumnMenuItem = new MenuItem("Hide Account Column");
         menu.getItems().add(showHideAccountColumnMenuItem);
         showHideAccountColumnMenuItem.setOnAction(event -> {
             this.accountColumn.setVisible(!this.accountColumn.isVisible());
+            if (this.accountColumn.isVisible()) {
+                showHideAccountColumnMenuItem.setText("Hide Account Column");
+            } else {
+                showHideAccountColumnMenuItem.setText("Show Account Column");
+            }
         });
 
-        MenuItem showHideCheckNumberColumnMenuItem = new MenuItem("Show/Hide Check Number Column");
+        // Upon initialization, Check Number column is displayed
+        MenuItem showHideCheckNumberColumnMenuItem = new MenuItem("Hide Check Number Column");
         menu.getItems().add(showHideCheckNumberColumnMenuItem);
         showHideCheckNumberColumnMenuItem.setOnAction(event -> {
             this.checkNumberColumn.setVisible(!this.checkNumberColumn.isVisible());
+            if (this.checkNumberColumn.isVisible()) {
+                showHideCheckNumberColumnMenuItem.setText("Hide Check Number Column");
+            } else {
+                showHideCheckNumberColumnMenuItem.setText("Show Check Number Column");
+            }
         });
 
-        MenuItem toggleDebitCreditView = new MenuItem("Toggle Debit/Credit View");
+        // Upon initialization, Debit/Credit perspective is disabled
+        MenuItem toggleDebitCreditView = new MenuItem("Enable Debit/Credit Perspective");
         menu.getItems().add(toggleDebitCreditView);
         toggleDebitCreditView.setOnAction(event -> {
             this.amountColumn.setVisible(!this.amountColumn.isVisible());
             this.amountDebitColumn.setVisible(!this.amountDebitColumn.isVisible());
             this.amountCreditColumn.setVisible(!this.amountCreditColumn.isVisible());
+
+            if (this.amountColumn.isVisible()) {
+                toggleDebitCreditView.setText("Enable Debit/Credit Perspective");
+            } else {
+                toggleDebitCreditView.setText("Disable Debit/Credit Perspective");
+            }
         });
 
         this.setContextMenu(menu);
