@@ -77,9 +77,9 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
     public void updateTableView() {
         TaskWithReturn<List<IgnoredExpression>> task = DbController.INSTANCE.getAllIgnoredExpressions();
         task.startTask();
-        List<IgnoredExpression> payees = task.waitForResult();
+        List<IgnoredExpression> ignoredExpressions = task.waitForResult();
         this.getItems().clear();
-        this.getItems().addAll(payees);
+        this.getItems().addAll(ignoredExpressions);
     }
 
     public void asyncUpdateTableView() {

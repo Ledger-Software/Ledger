@@ -425,6 +425,33 @@ public class DbController {
         return task;
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to add transactions as a batch with Ignore checks
+     *
+     * @param transactions List of transactions to add to the database
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchInsertTransactionIgnoreCheck(List<Transaction> transactions) {
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
+            List<Transaction> list = new ArrayList<>();
+            for (Transaction currentTransaction : transactionList) {
+
+                try {
+                    db.insertTransactionWithIgnoreCheck(currentTransaction);
+                } catch (StorageException e) {
+                    System.out.println("ERROR - DbContoller.batchInsertTransaction: Adding transaction failed \n" + e.getMessage());
+                    list.add(currentTransaction);
+                }
+            }
+            return list;
+        }, transactions);
+
+        for (CallableMethodVoidNoArgs method : transactionSuccessEvent) {
+            task.RegisterSuccessEvent((t) -> method.call());
+        }
+
+        return task;
+    }
     protected IDatabase getDb() {
         return db;
     }

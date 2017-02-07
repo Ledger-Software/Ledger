@@ -110,7 +110,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
                     " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
                     IgnoredExpressionTable.MATCH_OR_CONTAIN + "= FALSE");
             while(rs.next()){
-                String resultExp = rs.getString(IgnoredExpressionTable.IGNORE_ID);
+                String resultExp = rs.getString(IgnoredExpressionTable.IGNORE_STRING);
                 if(exp.contains(resultExp)){
                     return false;
                 }

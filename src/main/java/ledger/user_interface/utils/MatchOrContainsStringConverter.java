@@ -9,11 +9,11 @@ public class MatchOrContainsStringConverter extends StringConverter<Boolean> {
 
     public Boolean fromString(String pendingString) {
         if (pendingString.equals("Matches")) {
-            return true;
+            return Boolean.TRUE;
         } else if(pendingString.isEmpty()) {
             return null;
         } else {
-            return false;
+            return Boolean.FALSE;
         }
     }
 
@@ -22,7 +22,7 @@ public class MatchOrContainsStringConverter extends StringConverter<Boolean> {
         if (pending==null){
             return "";
         }
-        else if (pending) {
+        else if (pending.equals(Boolean.TRUE)) {
             return "Matches";
         } else {
             return "Contains";

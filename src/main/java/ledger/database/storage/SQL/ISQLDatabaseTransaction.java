@@ -604,7 +604,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
     @Override
     default boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException{
-        if (checkTransactionIgnored(transaction)){
+        if (!checkTransactionIgnored(transaction)){
             return false;
         } else {
             insertTransaction(transaction);

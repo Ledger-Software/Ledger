@@ -48,7 +48,7 @@ public class ImportController {
             Tagger tagger = new Tagger(transactions);
             tagger.tagTransactions();
 
-            TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(transactions);
+            TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = DbController.INSTANCE.batchInsertTransactionIgnoreCheck(transactions);
             task.startTask();
             List<Transaction> failedTransactions = task.waitForResult();
             List<Transaction> duplicateTransaction = result.getPossibleDuplicates();

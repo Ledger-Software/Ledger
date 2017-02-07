@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers.window;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,6 +13,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.IgnoredExpression;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
 import ledger.user_interface.utils.MatchOrContainsStringConverter;
 
@@ -36,7 +38,7 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.newExpRule.setEditable(false);
-        this.newExpRule.setItems(FXCollections.observableArrayList(true, false));
+        this.newExpRule.setItems(FXCollections.observableArrayList(Boolean.FALSE, Boolean.TRUE));
         this.newExpRule.setConverter(new MatchOrContainsStringConverter());
         this.addExpButton.setOnAction(event -> addExpression());
 
@@ -47,13 +49,16 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
             this.setupErrorPopup("Invalid Expression", new Exception());
         }
         String exp = newExpText.getText();
+        if(this.newExpRule.getValue()==null){
+            this.setupErrorPopup("Please select a rule", new Exception());
+        }
         Boolean rule = newExpRule.getValue();
         TaskWithArgs<IgnoredExpression> insertIgExpTask
                 = DbController.INSTANCE.insertIgnoredExpression(new IgnoredExpression(exp, rule));
-        insertIgExpTask.RegisterSuccessEvent(()->{
+        insertIgExpTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() ->{
             this.newExpText.clear();
-            this.newExpRule.setValue(true);
-        });
+            this.newExpRule.setValue(Boolean.TRUE);
+        }));
         insertIgExpTask.startTask();
         insertIgExpTask.waitForComplete();
     }
