@@ -5,7 +5,7 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.NoteEditInputController;
+import ledger.user_interface.ui_controllers.component.NoteEditInputController;
 import ledger.user_interface.utils.IdenityCellValueCallback;
 
 /**

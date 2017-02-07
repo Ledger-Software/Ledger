@@ -1,4 +1,4 @@
-package ledger.user_interface.ui_controllers;
+package ledger.user_interface.ui_controllers.component;
 
 
 import javafx.event.EventHandler;
@@ -14,6 +14,8 @@ import ledger.controller.register.CallableMethod;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Note;
 import ledger.database.entity.Transaction;
+import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
 import java.util.ResourceBundle;
