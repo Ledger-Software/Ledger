@@ -180,6 +180,11 @@ public class DbController {
     public TaskWithArgs<Account> deleteAccount(final Account account) {
         TaskWithArgs<Account> task = generateDeleteAccount(account);
 
+        AccountBalance ab = null;
+        try {
+            ab = db.getBalanceForAccount(account);
+        } catch (StorageException e) { }
+
         List<Transaction> trans;
         try {
             trans = db.getAllTransactionsForAccount(account);
@@ -188,18 +193,30 @@ public class DbController {
         }
 
         if(trans.size() != 0) {
+            final AccountBalance finalAb = ab;
             TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<List<Transaction>>((toAddTrans)-> {
                 db.insertAccount(account);
                 for(Transaction t: toAddTrans) {
                     t.setAccount(account);
                     db.insertTransaction(t);
                 }
+                finalAb.setAccount(account);
+                if(finalAb != null)
+                    db.addBalanceForAccount(finalAb);
             }, trans);
             registerSuccess(undoTask, transactionSuccessEvent);
             registerSuccess(undoTask, accountSuccessEvent);
             undoStack.push(new UndoAction(undoTask, "Undo Delete Account and Transactions"));
         } else {
-            undoStack.push(new UndoAction(generateInsertAccount(account), "Undo Delete Account"));
+            TaskWithArgs<AccountBalance> undoTask = new TaskWithArgs<AccountBalance>((finalAb)-> {
+                db.insertAccount(account);
+                finalAb.setAccount(account);
+                if(finalAb != null)
+                    db.addBalanceForAccount(finalAb);
+            }, ab);
+            registerSuccess(undoTask, transactionSuccessEvent);
+            registerSuccess(undoTask, accountSuccessEvent);
+            undoStack.push(new UndoAction(undoTask, "Undo Delete Account"));
         }
 
         return task;
