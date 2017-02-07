@@ -609,6 +609,27 @@ public class H2DatabaseTest {
         AccountBalance returned = database.getBalanceForAccount(sampleAccount);
         assertEquals(sampleBalance, returned);
     }
+    @Test
+    public void insertIgnoreTest() throws Exception{
+
+    }
+    @Test
+    public void editIgnoreTest() throws Exception{
+
+    }
+    @Test
+    public void deleteIgnoreTest() throws Exception{
+
+    }
+    @Test
+    public void checkIgnoreTransactionTest() throws Exception{
+
+    }
+    
+    @Test
+    public void insertIgnoreTransactionTest() throws Exception{
+
+    }
 
     @AfterClass
     public static void afterTests() throws Exception {
