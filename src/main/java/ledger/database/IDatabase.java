@@ -96,9 +96,6 @@ public interface IDatabase {
 
     boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException;
 
-    boolean checkContains(String exp) throws StorageException;
-
-    boolean checkMatches(String exp) throws StorageException;
 
 
 }

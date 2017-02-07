@@ -44,7 +44,7 @@ public class IgnoredExpressionPopupController extends GridPane implements Initia
 
     private void addExpression(){
         if(InputSanitization.isStringInvalid(newExpText.getText())){
-            this.setupErrorPopup("Invalid Expression", new Exception());
+            this.setupErrorPopup("Invalid Expression, Please input a non-empty String", new Exception());
             return;
         }
         String exp = newExpText.getText();

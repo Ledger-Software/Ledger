@@ -63,7 +63,7 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
             }
         });
 
-        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("matchOrContain"));
+        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("match"));
         matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true,false)));
         matchOrContainColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, Boolean>>() {
             @Override
