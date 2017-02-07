@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
@@ -50,5 +51,7 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
 
         task.startTask();
         task.waitForComplete();
+
+        ((TagFlowPane)this.getParent()).updateTags();
     }
 }
