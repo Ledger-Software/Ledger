@@ -63,8 +63,8 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.ignoreEditorButton.setOnAction(event -> {
-            IgnoredTransactionPopupController ignoredTransactionPopupController = new IgnoredTransactionPopupController();
-            Scene scene = new Scene(ignoredTransactionPopupController);
+            IgnoredExpressionPopupController ignoredExpressionPopupController = new IgnoredExpressionPopupController();
+            Scene scene = new Scene(ignoredExpressionPopupController);
             this.createModal(this.getScene().getWindow(), scene, "Ignored Transactions");
         });
         fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));

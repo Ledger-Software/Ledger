@@ -1,8 +1,6 @@
 package ledger.user_interface.ui_controllers.window;
 
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,15 +13,15 @@ import ledger.database.entity.IgnoredExpression;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
-import ledger.user_interface.utils.MatchOrContainsStringConverter;
+import ledger.user_interface.utils.IsMatchConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by gert on 2/7/17.
+ * Controls the input gathered from the IgnoredExpression UI -> add, delete, and edit
  */
-public class IgnoredTransactionPopupController  extends GridPane implements Initializable, IUIController {
+public class IgnoredExpressionPopupController extends GridPane implements Initializable, IUIController {
     private static final String pageLoc = "/fxml_files/IgnoredTransactionPopup.fxml";
     @FXML
     private TextField newExpText;
@@ -31,7 +29,7 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
     private ComboBox<Boolean> newExpRule;
     @FXML
     private Button addExpButton;
-    public IgnoredTransactionPopupController(){
+    public IgnoredExpressionPopupController(){
 
         this.initController(pageLoc, this, "Unable to load Ignored Transaction window");
     }
@@ -39,7 +37,7 @@ public class IgnoredTransactionPopupController  extends GridPane implements Init
     public void initialize(URL location, ResourceBundle resources) {
         this.newExpRule.setEditable(false);
         this.newExpRule.setItems(FXCollections.observableArrayList(true,false));
-        this.newExpRule.setConverter(new MatchOrContainsStringConverter());
+        this.newExpRule.setConverter(new IsMatchConverter());
         this.addExpButton.setOnAction(event -> addExpression());
 
     }

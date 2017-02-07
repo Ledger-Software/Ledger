@@ -1,14 +1,11 @@
 package ledger.database.storage.table;
 
-/**
- * Created by gert on 1/30/17.
- */
 public class IgnoredExpressionTable {
 
     public static final String TABLE_NAME = "IGNORE_EXPRESSIONS";
-    public static final String IGNORE_ID = "KEY";
-    public static final String IGNORE_STRING = "IGNORE_STRING";
-    public static final String MATCH_OR_CONTAIN = "MATCH_OR_CONTAIN";
+    public static final String IGNORE_ID = "IGNORE_ID";
+    public static final String IGNORE_EXPRESSION = "IGNORE_STRING";
+    public static final String MATCH_OR_CONTAIN = "IS_MATCH";
 
     /**
      * Creates the String command to create the table for this object.
@@ -20,7 +17,7 @@ public class IgnoredExpressionTable {
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s TEXT NOT NULL, " +
                 "%s BOOL NOT NULL" +
-                ")", TABLE_NAME, IGNORE_ID, IGNORE_STRING, MATCH_OR_CONTAIN);
+                ")", TABLE_NAME, IGNORE_ID, IGNORE_EXPRESSION, MATCH_OR_CONTAIN);
     }
 
     /**
@@ -33,6 +30,6 @@ public class IgnoredExpressionTable {
                 "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                 "%s TEXT NOT NULL, " +
                 "%s BOOL NOT NULL" +
-                ")", TABLE_NAME, IGNORE_ID, IGNORE_STRING, MATCH_OR_CONTAIN);
+                ")", TABLE_NAME, IGNORE_ID, IGNORE_EXPRESSION, MATCH_OR_CONTAIN);
     }
 }

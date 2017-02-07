@@ -464,7 +464,6 @@ public class DbController {
                 try {
                     db.insertTransactionWithIgnoreCheck(currentTransaction);
                 } catch (StorageException e) {
-                    System.out.println("ERROR - DbContoller.batchInsertTransaction: Adding transaction failed \n" + e.getMessage());
                     list.add(currentTransaction);
                 }
             }

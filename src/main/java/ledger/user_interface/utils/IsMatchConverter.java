@@ -3,21 +3,21 @@ package ledger.user_interface.utils;
 import javafx.util.StringConverter;
 
 /**
- * Created by gert on 2/7/17.
+ * Converter from String to boolean for the isMatch of an ignoreExpression
  */
-public class MatchOrContainsStringConverter extends StringConverter<Boolean> {
+public class IsMatchConverter extends StringConverter<Boolean> {
 
-    public Boolean fromString(String matchorcontiainsString) {
-        if (matchorcontiainsString.equals("Matches")) {
+    public Boolean fromString(String matchString) {
+        if (matchString.equals("Matches")) {
             return true;
         } else {
             return false;
         }
     }
 
-    public String toString(Boolean matchorcontiains) {
+    public String toString(Boolean match) {
         // convert a Type instance to the text displayed in the choice box
-        if (matchorcontiains) {
+        if (match) {
             return "Matches";
         } else {
             return "Contains";

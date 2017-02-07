@@ -1,44 +1,104 @@
 package ledger.database.entity;
 
+import ledger.user_interface.utils.IsMatchConverter;
+
 /**
- * Created by gert on 2/7/17.
+ * Entity that holds a single Ignored Expression
  */
 public class IgnoredExpression implements IEntity {
     private int expressionId;
     private String expression;
-    private Boolean matchOrContain;
+    private Boolean match;
 
+    /**
+     * Full constructor for IgnoredExpression
+     * @param id
+     * @param exp
+     * @param mOR
+     */
     public IgnoredExpression(int id, String exp, Boolean mOR){
         this.expressionId = id;
         this.expression = exp;
-        this.matchOrContain = mOR;
+        this.match = mOR;
     }
 
+    /**
+     * Constructor for when there is not database ID yet
+     * @param exp
+     * @param mOR
+     */
     public IgnoredExpression( String exp, Boolean mOR){
         this(-1, exp, mOR);
     }
 
+    /**
+     * Getter for ExpressionID
+     * @return The expression ID
+     */
     public int getExpressionId() {
         return expressionId;
     }
 
+    /**
+     * Setter for the ExpressionID
+     * @param expressionId
+     */
     public void setExpressionId(int expressionId) {
         this.expressionId = expressionId;
     }
 
+    /**
+     * Getter for the Expression String
+     * @return the expression String
+     */
     public String getExpression() {
         return expression;
     }
-
+    /**
+     * Setter for the Expression
+     * @param expression
+     */
     public void setExpression(String expression) {
         this.expression = expression;
     }
 
-    public Boolean getMatchOrContain() {
-        return matchOrContain;
+    /**
+     * Getter for the boolean that represents Match(true) or Contains(false)
+     * @return the match/contain boolean
+     */
+    public Boolean isMatch() {
+        return match;
     }
 
-    public void setMatchOrContain(Boolean matchOrContain) {
-        this.matchOrContain = matchOrContain;
+    /**
+     * Setter for the boolean that represents Match(true) or Contains(false)
+     * @param match
+     */
+    public void setMatch(Boolean match) {
+        this.match = match;
+    }
+
+    /**
+     * Generates the String representation of this object
+     * @return the string representation of this object
+     */
+    @Override
+    public String toString(){
+        return String.format("[ Expression : %s, Rule : %s ]", this.expression, new IsMatchConverter().toString(this.isMatch()));
+    }
+    /**
+     * Determines equality between this IgnoredExpression and another object
+     *
+     * @param o The object to compare to this IgnoredExpression
+     * @return True if this IgnoredExpression is equal to the provided object. False otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof IgnoredExpression)) return false;
+
+        IgnoredExpression igEx = (IgnoredExpression) o;
+
+        return this.getExpression().equals(igEx.getExpression()) && this.isMatch() == igEx.isMatch();
+
     }
 }

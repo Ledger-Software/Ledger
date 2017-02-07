@@ -24,7 +24,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
                     ", " + IgnoredExpressionTable.MATCH_OR_CONTAIN +
                     ") VALUES (?,?)");
             stmt.setString(1, igEx.getExpression());
-            stmt.setBoolean(2, igEx.getMatchOrContain());
+            stmt.setBoolean(2, igEx.getMatch());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while inserting an Ignored Expression");
@@ -51,7 +51,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
                             IgnoredExpressionTable.MATCH_OR_CONTAIN +"=? WHERE " + IgnoredExpressionTable.IGNORE_ID + " = ?");
 
             stmt.setString(1, igEx.getExpression());
-            stmt.setBoolean(2, igEx.getMatchOrContain());
+            stmt.setBoolean(2, igEx.getMatch());
             stmt.setInt(3,igEx.getExpressionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {

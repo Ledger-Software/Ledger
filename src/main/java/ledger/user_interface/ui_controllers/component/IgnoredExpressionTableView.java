@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,17 +17,16 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.IgnoredExpression;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.utils.MatchOrContainsStringConverter;
+import ledger.user_interface.utils.IsMatchConverter;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by gert on 2/7/17.
+ * Tableview for editing and deleting IgnoredExpressions
  */
-public class IgnoredTransactionTableView extends TableView implements IUIController, Initializable {
+public class IgnoredExpressionTableView extends TableView implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/IgnoredTransactionTableView.fxml";
     @FXML
     public TableColumn<IgnoredExpression, String> expressionColumn;
@@ -37,7 +35,7 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
 
 
 
-    public IgnoredTransactionTableView() {
+    public IgnoredExpressionTableView() {
         this.initController(pageLoc, this, "Error creating Payee Editor");
     }
 
@@ -66,13 +64,13 @@ public class IgnoredTransactionTableView extends TableView implements IUIControl
         });
 
         matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("matchOrContain"));
-        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new MatchOrContainsStringConverter(), FXCollections.observableArrayList(true,false)));
+        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true,false)));
         matchOrContainColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, Boolean>>() {
             @Override
             public void handle(TableColumn.CellEditEvent<IgnoredExpression, Boolean> event) {
                 Boolean value = event.getNewValue();
                 IgnoredExpression igEx = event.getRowValue();
-                igEx.setMatchOrContain(value);
+                igEx.setMatch(value);
 
                 TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
                 task.startTask();
