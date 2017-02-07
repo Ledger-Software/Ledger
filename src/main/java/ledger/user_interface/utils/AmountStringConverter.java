@@ -7,10 +7,24 @@ package ledger.user_interface.utils;
 public class AmountStringConverter extends AAmountStringConverter {
 
     public String toString(Integer amount) {
-        String amountInCents = String.valueOf(amount);
-        String dollars = amountInCents.substring(0, amountInCents.length() - 2);
-        String cents = amountInCents.substring(amountInCents.length() - 2, amountInCents.length());
-        String amountString = dollars + "." + cents;
+        boolean positiveValue = amount >= 0 ? true : false;
+        Integer absoluteAmount = Math.abs(amount);
+        String absoluteAmountInCents = String.valueOf(absoluteAmount);
+
+        String dollars;
+        String cents;
+        if (absoluteAmountInCents.length() > 2) {
+            dollars = absoluteAmountInCents.substring(0, absoluteAmountInCents.length() - 2);
+            cents = absoluteAmountInCents.substring(absoluteAmountInCents.length() - 2, absoluteAmountInCents.length());
+        } else if (absoluteAmountInCents.length() == 2) {
+            dollars = "0";
+            cents = absoluteAmountInCents;
+        } else {
+            dollars = "0";
+            cents = "0" + absoluteAmountInCents;
+        }
+
+        String amountString = (positiveValue ? "" : "-") + dollars + "." + cents;
 
         return amountString;
     }
