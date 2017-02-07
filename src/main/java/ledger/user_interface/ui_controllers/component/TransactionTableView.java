@@ -46,9 +46,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     @FXML
     public TagColumn tagColumn;
 
-    @FXML
-    public DateColumn dateColumn;
-
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
     private Account accountFilter;
