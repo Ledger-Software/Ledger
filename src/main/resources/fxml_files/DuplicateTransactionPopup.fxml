@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import ledger.user_interface.ui_controllers.UserTransactionInput?>
+<?import ledger.user_interface.ui_controllers.component.UserTransactionInput?>
 <?import java.net.URL?>
 <fx:root style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea"
          xmlns:fx="http://javafx.com/fxml/1">

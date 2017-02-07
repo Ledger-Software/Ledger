@@ -86,8 +86,8 @@ public class SQLiteDatabaseTest {
         assertEquals(insertedTransaction.getAccount().getId(), sampleTransaction1.getAccount().getId());
         assertEquals(insertedTransaction.getPayee().getId(), sampleTransaction1.getPayee().getId());
         assertEquals(insertedTransaction.getType().getId(), sampleTransaction1.getType().getId());
-        for (int i = 0; i < insertedTransaction.getTagList().size(); i++) {
-            assertEquals(insertedTransaction.getTagList().get(i).getId(), sampleTransaction1.getTagList().get(i).getId());
+        for (int i = 0; i < insertedTransaction.getTags().size(); i++) {
+            assertEquals(insertedTransaction.getTags().get(i).getId(), sampleTransaction1.getTags().get(i).getId());
         }
     }
 

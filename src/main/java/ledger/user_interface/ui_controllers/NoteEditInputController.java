@@ -8,10 +8,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.CallableMethod;
-import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Note;
-import ledger.user_interface.ui_models.TransactionModel;
+import ledger.database.entity.Transaction;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
 import java.net.URL;
@@ -22,15 +21,13 @@ import java.util.ResourceBundle;
  */
 public class NoteEditInputController extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/NoteEditInput.fxml";
-    private static final int rowheight = 10;
     @FXML
     private TextArea noteText;
     @FXML
     private Button saveButton;
     private Note note;
+    private Transaction transaction;
     private CallableMethod<Boolean> collapseMethod;
-    private boolean wasNull;
-    private CallableMethodVoidNoArgs update;
 
     /**
      * Basic Constructor
@@ -45,16 +42,13 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
         saveButton.setOnAction((event -> {
             note.setNoteText(noteText.getText());
-            TaskWithArgs<Note> updateNoteTask;
-            if(wasNull) {
-                updateNoteTask = DbController.INSTANCE.insertNote(note);
-            } else
-            {
-                updateNoteTask = DbController.INSTANCE.editNote(note);
-            }
+            TaskWithArgs<Transaction> updateNoteTask;
+            this.transaction.setNote(this.note);
+            updateNoteTask = DbController.INSTANCE.editTransaction(this.transaction);
+
+
             updateNoteTask.RegisterSuccessEvent(() -> {
                 collapseMethod.call(false);
-                this.update.call();
 
             });
             updateNoteTask.startTask();
@@ -65,18 +59,16 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     /**
      * @param param this is the TableRowData that will be used to edit the Note data.
      */
-    public void setTableRowData(TableRowExpanderColumn.TableRowDataFeatures<TransactionModel> param) {
-        if (param.getValue().getTransaction().getNote() != null) {
-            this.note = param.getValue().getTransaction().getNote();
+    public void setTableRowData(TableRowExpanderColumn.TableRowDataFeatures<Transaction> param) {
+        this.transaction = param.getValue();
+        if (this.transaction.getNote() != null) {
+            this.note = this.transaction.getNote();
             this.noteText.setText(this.note.getNoteText());
         } else {
-            note = new Note(param.getValue().getTransaction().getId(),"");
-            wasNull = true;
+            note = new Note(this.transaction.getId(),"");
+
         }
         collapseMethod = param::setExpanded;
     }
 
-    public void setUpdate(CallableMethodVoidNoArgs updateTransactionTableView) {
-        this.update = updateTransactionTableView;
-    }
 }

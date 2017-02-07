@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Entity that holds a single Transaction
  */
-public class Transaction implements IEntity {
+public class Transaction implements IEntity, ITaggable {
     private Date date;
     private Type type;
     private int amount;
@@ -170,7 +170,7 @@ public class Transaction implements IEntity {
      *
      * @return tagList
      */
-    public List<Tag> getTagList() {
+    public List<Tag> getTags() {
         return tagList;
     }
 
@@ -179,7 +179,7 @@ public class Transaction implements IEntity {
      *
      * @param tagList The new List of tags
      */
-    public void setTagList(List<Tag> tagList) {
+    public void setTags(List<Tag> tagList) {
         this.tagList = tagList;
     }
 

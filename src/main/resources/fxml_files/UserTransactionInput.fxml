@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
-<?import ledger.user_interface.ui_controllers.AccountDropdown?>
-<?import ledger.user_interface.ui_controllers.PayeeDropdown?>
+<?import ledger.user_interface.ui_controllers.component.AccountDropdown?>
+<?import ledger.user_interface.ui_controllers.component.PayeeDropdown?>
 <fx:root maxHeight="470.0" maxWidth="700.0" minHeight="320.0" minWidth="700.0" prefHeight="320.0" prefWidth="700.0"
          style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.76-ea"
          xmlns:fx="http://javafx.com/fxml/1">
