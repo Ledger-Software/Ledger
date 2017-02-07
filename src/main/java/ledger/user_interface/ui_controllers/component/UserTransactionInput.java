@@ -108,7 +108,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         LocalDate localDate = this.datePicker.getValue();
         if (localDate == null) {
-            this.setupErrorPopup("No Date selected", new Exception());
+            this.setupErrorPopup("No Date selected");
             return null;
         }
 
@@ -119,13 +119,13 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         Payee payee = this.payeeText.getSelectedPayee();
         if (InputSanitization.isInvalidPayee(payee)) {
-            this.setupErrorPopup("Invalid Payee entry.", new Exception());
+            this.setupErrorPopup("Invalid Payee entry.");
             return null;
         }
 
         Account account = this.accountText.getSelectedAccount();
         if (account == null) {
-            this.setupErrorPopup("No account selected.", new Exception());
+            this.setupErrorPopup("No account selected.");
             return null;
         }
 
@@ -134,7 +134,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         }};
 
         if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
-            this.setupErrorPopup("Invalid amount entry.", new Exception());
+            this.setupErrorPopup("Invalid amount entry.");
             return null;
         }
         String amountString = this.amountText.getText();
@@ -143,6 +143,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         }
         double amountToSetDecimal = Double.parseDouble(amountString);
         int amount = (int) Math.round(amountToSetDecimal * 100);
+
 
         Note notes = new Note(this.notesText.getText());
 
@@ -160,10 +161,17 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             return null;
         }
 
-        Transaction t = new Transaction(date, type, amount, account,
-                payee, pending, category, notes, Integer.parseInt(checkNo));
+        if (checkNo.equals("")) {
+            Transaction t = new Transaction(date, type, amount, account,
+                    payee, pending, category, notes);
+            return t;
+        } else {
+            Transaction t = new Transaction(date, type, amount, account,
+                    payee, pending, category, notes, Integer.parseInt(checkNo));
+            return t;
+        }
 
-        return t;
+
     }
 
     /**
