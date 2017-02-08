@@ -49,7 +49,7 @@ public class DbController {
         this.dbFile = new File(fileName);
     }
 
-    public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
+    public void registerTransactionSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
     }
 
@@ -57,7 +57,7 @@ public class DbController {
         accountSuccessEvent.add(method);
     }
 
-    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) {
+    public void registerPayeeSuccessEvent(CallableMethodVoidNoArgs method) {
         payeeSuccessEvent.add(method);
     }
 
