@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
 
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
+    private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
+  
     @FXML
     public AmountColumn amountColumn;
 
@@ -48,8 +50,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @FXML
     public TagColumn tagColumn;
-
-    private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
     private Account accountFilter;
     private String searchFilterString = "";

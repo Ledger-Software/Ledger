@@ -85,6 +85,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             }
         };
 
+        this.notesText.setText("");
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
         typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
         typeTask.RegisterSuccessEvent((list) -> {
