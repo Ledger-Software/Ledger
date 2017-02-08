@@ -6,24 +6,22 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Account;
-import ledger.database.entity.Tag;
-import ledger.database.entity.Transaction;
+import ledger.database.entity.*;
+import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.ui_controllers.component.tablecolumn.AccountColumn;
+import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
+import java.util.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,8 +32,25 @@ import java.util.ResourceBundle;
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
+  
+    @FXML
+    public AmountColumn amountColumn;
+
+    @FXML
+    public AmountDebitColumn amountDebitColumn;
+
+    @FXML
+    public AmountCreditColumn amountCreditColumn;
+
     @FXML
     public AccountColumn accountColumn;
+
+    @FXML
+    public CheckNumberColumn checkNumberColumn;
+
+    @FXML
+    public TagColumn tagColumn;
+
     private Account accountFilter;
     private String searchFilterString = "";
 
@@ -50,28 +65,96 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     private void configureTransactionTableView() {
         // Add ability to delete transactions form tableView
         this.setOnKeyPressed(t -> {
-            //Put your awesome application specific logic here
             if (t.getCode() == KeyCode.DELETE) {
                 handleDeleteSelectedTransactionsFromTableView();
             }
         });
 
+        // Allow multiple row selection
         this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
+        // Initially show amount column & hide debit/credit columns
+        this.amountColumn.setVisible(true);
+        this.amountDebitColumn.setVisible(false);
+        this.amountCreditColumn.setVisible(false);
+
+        this.setUpContextMenu();
+    }
+
+    private void setUpContextMenu() {
+        // Configure right-click context menu
         ContextMenu menu = new ContextMenu();
 
         MenuItem deleteTransactionsMenuItem = new MenuItem("Delete Selected Transaction(s)");
         menu.getItems().add(deleteTransactionsMenuItem);
         deleteTransactionsMenuItem.setOnAction(event -> handleDeleteSelectedTransactionsFromTableView());
 
-        MenuItem showHideAccountColumnMenuItem = new MenuItem("Show/Hide Account Column");
+        // Upon initialization, Tag column is displayed
+        MenuItem showHideTagColumnMenuItem = new MenuItem("Hide Tag Column");
+        menu.getItems().add(showHideTagColumnMenuItem);
+        showHideTagColumnMenuItem.setOnAction(event -> {
+            this.tagColumn.setVisible(!this.tagColumn.isVisible());
+            if (this.tagColumn.isVisible()) {
+                showHideTagColumnMenuItem.setText("Hide Tag Column");
+            } else {
+                showHideTagColumnMenuItem.setText("Show Tag Column");
+            }
+        });
+
+        // Upon initialization, Account column is displayed
+        MenuItem showHideAccountColumnMenuItem = new MenuItem("Hide Account Column");
         menu.getItems().add(showHideAccountColumnMenuItem);
         showHideAccountColumnMenuItem.setOnAction(event -> {
             this.accountColumn.setVisible(!this.accountColumn.isVisible());
+            if (this.accountColumn.isVisible()) {
+                showHideAccountColumnMenuItem.setText("Hide Account Column");
+            } else {
+                showHideAccountColumnMenuItem.setText("Show Account Column");
+            }
+        });
+
+        // Upon initialization, Check Number column is displayed
+        MenuItem showHideCheckNumberColumnMenuItem = new MenuItem("Hide Check Number Column");
+        menu.getItems().add(showHideCheckNumberColumnMenuItem);
+        showHideCheckNumberColumnMenuItem.setOnAction(event -> {
+            this.checkNumberColumn.setVisible(!this.checkNumberColumn.isVisible());
+            if (this.checkNumberColumn.isVisible()) {
+                showHideCheckNumberColumnMenuItem.setText("Hide Check Number Column");
+            } else {
+                showHideCheckNumberColumnMenuItem.setText("Show Check Number Column");
+            }
+        });
+
+        // Upon initialization, Debit/Credit perspective is disabled
+        MenuItem toggleDebitCreditView = new MenuItem("Enable Debit/Credit Perspective");
+        menu.getItems().add(toggleDebitCreditView);
+        toggleDebitCreditView.setOnAction(event -> {
+            this.amountColumn.setVisible(!this.amountColumn.isVisible());
+            this.amountDebitColumn.setVisible(!this.amountDebitColumn.isVisible());
+            this.amountCreditColumn.setVisible(!this.amountCreditColumn.isVisible());
+
+            if (this.amountColumn.isVisible()) {
+                toggleDebitCreditView.setText("Enable Debit/Credit Perspective");
+            } else {
+                toggleDebitCreditView.setText("Disable Debit/Credit Perspective");
+            }
+        });
+
+        MenuItem addTransactionMenuItem = new MenuItem("Add Transaction");
+        menu.getItems().add(addTransactionMenuItem);
+        addTransactionMenuItem.setOnAction(event -> {
+            TaskWithReturn<List<Account>> accountTask = DbController.INSTANCE.getAllAccounts();
+            accountTask.startTask();
+            List<Account> accountList = accountTask.waitForResult();
+            if (accountList.isEmpty()) return;
+            Account acc = accountList.get(0);
+
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<Tag>(), new Note("")));
+            task.startTask();
+
         });
 
         this.setContextMenu(menu);
-
     }
 
     public void updateTransactionTableView() {
@@ -85,13 +168,21 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         task.startTask();
         List<Transaction> transactions = task.waitForResult();
 
+        // 0. Manually sort the list based on Date to force a default sorted order
+        transactions.sort(new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction transaction1, Transaction transaction2) {
+                return transaction1.getDate().compareTo(transaction2.getDate());
+            }
+        });
+
         ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
 
         // 1. Wrap the ObservableList in a FilteredList (initially display all data).
         FilteredList<Transaction> filteredData = new FilteredList<>(observableTransactions, p -> true);
 
         // 2. Set the filter Predicate.
-        filteredData.setPredicate(transactionModel -> {
+        filteredData.setPredicate(transaction -> {
             // If filter text is empty, display all persons.
             if (searchFilterString == null || searchFilterString.isEmpty()) {
                 return true;
@@ -101,13 +192,17 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             String lowerCaseFilter = searchFilterString.toLowerCase();
 
             AmountStringConverter asc = new AmountStringConverter();
-            if (asc.toString(transactionModel.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+            if (asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches amount.
-            } else if (transactionModel.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
+            } else if (transaction.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches Payee name.
-            } else if (transactionModel.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
+            } else if (transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
                 return true; // Filter matches tags.
-            } else {
+            } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches check number.
+            } else if (transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter)) {
+                return true; // Filter matches account name.
+            }else {
                 return false; // Filter does not match.
             }
         });
@@ -123,28 +218,38 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     }
 
     private void handleDeleteSelectedTransactionsFromTableView() {
-        List<Integer> indices = new ArrayList<>();
-        // Add indices to new list so they aren't observable
-        indices.addAll(this.getSelectionModel().getSelectedIndices());
-        if (indices.size() != 0) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Transaction(s)");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
 
-            //TODO: Get around this scary mess
-            if (indices.contains(new Integer(-1))) {
-                indices = this.getSelectionModel().getSelectedIndices();
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            List<Integer> indices = new ArrayList<>();
+            // Add indices to new list so they aren't observable
+            indices.addAll(this.getSelectionModel().getSelectedIndices());
+            if (indices.size() != 0) {
+
+                //TODO: Get around this scary mess
+                if (indices.contains(new Integer(-1))) {
+                    indices = this.getSelectionModel().getSelectedIndices();
+                }
+
+                for (int i : indices) {
+                    Transaction transactionToDelete = this.getItems().get(i);
+
+                    TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                    task.RegisterFailureEvent((e) -> {
+                        asyncTableUpdate();
+                        setupErrorPopup("Error deleting transaction.", e);
+                    });
+                    task.startTask();
+                    task.waitForComplete();
+                }
+                updateTransactionTableView();
             }
-
-            for (int i : indices) {
-                Transaction transactionToDelete = this.getItems().get(i);
-
-                TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
-                task.RegisterFailureEvent((e) -> {
-                    asyncTableUpdate();
-                    setupErrorPopup("Error deleting transaction.", e);
-                });
-                task.startTask();
-                task.waitForComplete();
-            }
-            updateTransactionTableView();
+        } else {
+            return;
         }
     }
 

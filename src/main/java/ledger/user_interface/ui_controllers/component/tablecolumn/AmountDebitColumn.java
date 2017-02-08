@@ -9,6 +9,7 @@ import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
+import ledger.user_interface.utils.AmountDebitStringConverter;
 import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
@@ -17,16 +18,16 @@ import java.util.ResourceBundle;
 /**
  * TableColumn for amounts
  */
-public class AmountColumn extends AAmountColumn {
+public class AmountDebitColumn extends AAmountColumn {
 
-    public AmountColumn() {
+    public AmountDebitColumn() {
         super();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("amount"));
-        this.setCellFactory(TextFieldTableCell.forTableColumn(new AmountStringConverter()));
+        this.setCellFactory(TextFieldTableCell.forTableColumn(new AmountDebitStringConverter()));
         this.setOnEditCommit(this.amountEditHandler);
     }
 }

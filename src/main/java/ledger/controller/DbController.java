@@ -71,6 +71,7 @@ public class DbController {
     public TaskWithArgs<Transaction> insertTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<Transaction>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+        registerSuccess(task, payeeSuccessEvent);
         return task;
     }
 
