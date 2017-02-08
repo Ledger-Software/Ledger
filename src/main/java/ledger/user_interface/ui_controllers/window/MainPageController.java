@@ -203,7 +203,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         if (result.get() == ButtonType.OK) {
             // ... user chose OK
             TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
-            t.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> chooseAccount.selectDefault()));
             t.RegisterFailureEvent((e) -> {
                 e.printStackTrace();
             });
