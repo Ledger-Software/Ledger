@@ -14,7 +14,7 @@ import java.util.List;
 public interface ISQLDatabaseNote extends ISQLiteDatabase {
 
     @Override
-    default void insertNote(Note note) {
+    default void insertNote(Note note) throws StorageException {
         try {
             PreparedStatement stmt =
                     getDatabase().prepareStatement("INSERT INTO " + NoteTable.TABLE_NAME +
@@ -24,24 +24,24 @@ public interface ISQLDatabaseNote extends ISQLiteDatabase {
             stmt.setInt(2, note.getTransactionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Unable to insert note.", e);
         }
     }
 
     @Override
-    default void deleteNote(Note note) {
+    default void deleteNote(Note note) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME +
                     " WHERE " + NoteTable.NOTE_TRANS_ID + " = ?");
             stmt.setInt(1, note.getTransactionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Unable to delete note.", e);
         }
     }
 
     @Override
-    default void editNote(Note note) {
+    default void editNote(Note note) throws StorageException {
 
         try {
             PreparedStatement stmt =
@@ -52,7 +52,7 @@ public interface ISQLDatabaseNote extends ISQLiteDatabase {
             stmt.setInt(2, note.getTransactionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
-            e.printStackTrace();
+            throw new StorageException("Unable to edit note.", e);
         }
     }
 

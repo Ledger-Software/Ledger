@@ -18,7 +18,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
     // Basic CRUD functionality
     @Override
     default void insertTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
 
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TransactionTable.TABLE_NAME +
@@ -66,10 +68,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
                 transaction.setId(insertedTransactionID);
             }
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction", e);
@@ -77,13 +75,15 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             rollbackDatabase();
             throw new StorageException("Error while adding transaction. Not all necessary fields were given.", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
     @Override
     default void deleteTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
 
             //First delete the corresponding Note
@@ -105,23 +105,20 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             deleteNoteForTransactionID(transaction.getId());
             deleteAllTagToTransForTransactionID(transaction.getId());
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while deleting transaction", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
     @Override
     default void editTransaction(Transaction transaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
-
             PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + TransactionTable.TABLE_NAME + " SET " +
                     TransactionTable.TRANS_DATETIME + "=?," +
                     TransactionTable.TRANS_AMOUNT + "=?," +
@@ -167,15 +164,11 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             } else {
                 deleteNoteForTransactionID(transaction.getId());
             }
-
-            // Commit to DB
-            getDatabase().commit();
-
         } catch (java.sql.SQLException e) {
             rollbackDatabase();
             throw new StorageException("Error while editing transaction", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
@@ -219,6 +212,31 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             return extractTransactions(rs);
 
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all transactions", e);
+        }
+    }
+
+    @Override
+    default Transaction getTransactionById(Transaction transaction) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TransactionTable.TRANS_DATETIME +
+                    ", " + TransactionTable.TRANS_ID +
+                    ", " + TransactionTable.TRANS_TYPE_ID +
+                    ", " + TransactionTable.TRANS_AMOUNT +
+                    ", " + TransactionTable.TRANS_PENDING +
+                    ", " + TransactionTable.TRANS_ACCOUNT_ID +
+                    ", " + TransactionTable.TRANS_PAYEE_ID +
+                    " FROM " + TransactionTable.TABLE_NAME +
+                    " WHERE " + TransactionTable.TRANS_ID+ "=?;");
+            stmt.setInt(1, transaction.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            List<Transaction> transactions = extractTransactions(rs);
+
+            if(transactions.size() == 0)
+                return null;
+            return transactions.get(0);
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all transactions", e);
         }
@@ -307,7 +325,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            return extractAccount(rs);
+            if(rs.next())
+                return extractAccount(rs);
+            else
+                return null;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting Account by Name", e);
         }
@@ -478,7 +499,10 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            return extractAccount(rs);
+            if(rs.next())
+                return extractAccount(rs);
+            else
+                return null;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting Account by ID", e);
         }
@@ -509,17 +533,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             int id = resultSet.getInt(TypeTable.TYPE_ID);
 
             return new Type(newName, description, id);
-        } else {
-            return null;
-        }
-    }
-
-    default Account extractAccount(ResultSet rs) throws SQLException {
-        if (rs.next()) {
-            String newName = rs.getString(AccountTable.ACCOUNT_NAME);
-            String description = rs.getString(AccountTable.ACCOUNT_DESC);
-            int id = rs.getInt(AccountTable.ACCOUNT_ID);
-            return new Account(newName, description, id);
         } else {
             return null;
         }

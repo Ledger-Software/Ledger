@@ -10,6 +10,7 @@ import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,8 +81,10 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
     @Override
     default void editPayee(Payee payee) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
-            getDatabase().setAutoCommit(false);
+            originalAutoCommit = getDatabase().getAutoCommit();
+            setDatabaseAutoCommit(false);
 
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + PayeeTable.TABLE_NAME +
@@ -102,11 +105,10 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             }
 
             stmt.executeUpdate();
-            getDatabase().commit();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Payee", e);
         } finally {
-            setDatabaseAutoCommit(true);
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 
@@ -122,20 +124,42 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             ArrayList<Payee> payeeList = new ArrayList<>();
 
             while (rs.next()) {
-
-                int payeeID = rs.getInt(PayeeTable.PAYEE_ID);
-                String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
-                String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
-                List<Tag> tags = getAllTagsForPayeeId(payeeID);
-
-                Payee currentPayee = new Payee(payeeName, payeeDesc, payeeID, tags);
-
-                payeeList.add(currentPayee);
+                payeeList.add(extractPayee(rs));
             }
             return payeeList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all payees", e);
         }
+    }
+
+    @Override
+    default Payee getPayeeById(Payee payee) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + PayeeTable.PAYEE_ID +
+                    ", " + PayeeTable.PAYEE_NAME +
+                    ", " + PayeeTable.PAYEE_DESC +
+                    " FROM " + PayeeTable.TABLE_NAME +
+                    " WHERE " + PayeeTable.PAYEE_ID + "=?");
+
+            stmt.setInt(1,payee.getId());
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+               return extractPayee(rs);
+            }
+            return null;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getting all payees", e);
+        }
+    }
+
+    default Payee extractPayee(ResultSet rs) throws SQLException,StorageException {
+        int payeeID = rs.getInt(PayeeTable.PAYEE_ID);
+        String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
+        String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
+        List<Tag> tags = getAllTagsForPayeeId(payeeID);
+
+        return new Payee(payeeName, payeeDesc, payeeID, tags);
     }
 
     @Override
