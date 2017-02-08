@@ -24,7 +24,7 @@ public class IgnoredDetector {
     public IgnoredDetectionResult detectIgnoreTransactions(IDatabase database){
         for (Transaction currentTransaction:transactions) {
             try {
-                if(database.checkTransactionIgnored(currentTransaction))
+                if(database.isTransactionIgnored(currentTransaction))
                     this.verifiedTransactions.add(currentTransaction);
                 else
                     this.ignoredTransactions.add(currentTransaction);

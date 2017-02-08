@@ -653,28 +653,14 @@ public class H2DatabaseTest {
         assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 1);
         database.insertIgnoredExpression(sampleIgnoreMatchMejer);
         assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 2);
-        assertEquals(database.checkTransactionIgnored(sampleTransaction1), false);
+        assertEquals(database.isTransactionIgnored(sampleTransaction1), false);
         sampleTransaction1.setPayee(samplePayee2);
-        assertEquals(database.checkTransactionIgnored(sampleTransaction1), false);
+        assertEquals(database.isTransactionIgnored(sampleTransaction1), false);
         sampleTransaction1.setPayee(samplePayee3);
-        assertEquals(database.checkTransactionIgnored(sampleTransaction1), true);
+        assertEquals(database.isTransactionIgnored(sampleTransaction1), true);
 
     }
 
-    @Test
-    public void insertIgnoreTransactionTest() throws Exception {
-        int sizebefore = database.getAllTransactions().size();
-        database.insertIgnoredExpression(sampleIgnoreContainEr);
-        database.insertIgnoredExpression(sampleIgnoreMatchMejer);
-        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
-        assertEquals(database.getAllTransactions().size(), sizebefore);
-        sampleTransaction1.setPayee(samplePayee2);
-        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
-        assertEquals(database.getAllTransactions().size(), sizebefore);
-        sampleTransaction1.setPayee(samplePayee3);
-        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
-        assertEquals(database.getAllTransactions().size(), sizebefore + 1);
-    }
 
     @AfterClass
     public static void afterTests() throws Exception {

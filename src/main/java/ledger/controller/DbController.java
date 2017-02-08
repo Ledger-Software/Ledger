@@ -462,7 +462,7 @@ public class DbController {
             for (Transaction currentTransaction : transactionList) {
 
                 try {
-                    if(db.checkTransactionIgnored(currentTransaction))
+                    if(db.isTransactionIgnored(currentTransaction))
                         list.add(currentTransaction);
                 } catch (StorageException e) {
                 }

@@ -597,22 +597,13 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
     }
     @Override
-    default boolean checkTransactionIgnored(Transaction transaction) throws StorageException{
+    default boolean isTransactionIgnored(Transaction transaction) throws StorageException{
         String payeeName = transaction.getPayee().getName();
-        return checkContains(payeeName)&&checkMatches(payeeName);
+        return isContains(payeeName)&& isMatches(payeeName);
     }
 
-    @Override
-    default boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException{
-        if (!checkTransactionIgnored(transaction)){
-            return false;
-        } else {
-            insertTransaction(transaction);
-            return true;
-        }
-    }
 
-    default boolean checkMatches(String exp) throws StorageException {
+    default boolean isMatches(String exp) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + IgnoredExpressionTable.IGNORE_ID +
                     " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
@@ -629,7 +620,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
     }
 
-    default boolean checkContains(String exp) throws StorageException {
+    default boolean isContains(String exp) throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + IgnoredExpressionTable.IGNORE_EXPRESSION +

@@ -92,9 +92,7 @@ public interface IDatabase {
 
     List<IgnoredExpression> getAllIgnoredExpressions() throws StorageException;
 
-    boolean checkTransactionIgnored(Transaction transaction) throws StorageException;
-
-    boolean insertTransactionWithIgnoreCheck(Transaction transaction) throws StorageException;
+    boolean isTransactionIgnored(Transaction transaction) throws StorageException;
 
 
 
