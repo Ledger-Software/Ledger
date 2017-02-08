@@ -30,7 +30,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbController.INSTANCE.registerTransationSuccessEvent(this::recalculateBalance);
+        DbController.INSTANCE.registerTransactionSuccessEvent(this::recalculateBalance);
         calculateBalanceForAllAccounts();
     }
 

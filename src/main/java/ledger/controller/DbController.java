@@ -49,7 +49,7 @@ public class DbController {
         this.dbFile = new File(fileName);
     }
 
-    public void registerTransationSuccessEvent(CallableMethodVoidNoArgs method) {
+    public void registerTransactionSuccessEvent(CallableMethodVoidNoArgs method) {
         transactionSuccessEvent.add(method);
     }
 
@@ -57,7 +57,7 @@ public class DbController {
         accountSuccessEvent.add(method);
     }
 
-    public void registerPayyeeSuccessEvent(CallableMethodVoidNoArgs method) {
+    public void registerPayeeSuccessEvent(CallableMethodVoidNoArgs method) {
         payeeSuccessEvent.add(method);
     }
 
@@ -81,6 +81,7 @@ public class DbController {
     private TaskWithArgs<Transaction> generateInsertTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::insertTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+        registerSuccess(task, payeeSuccessEvent);
 
         return task;
     }
@@ -129,6 +130,7 @@ public class DbController {
     private TaskWithArgs<Transaction> generateEditTransaction(final Transaction transaction) {
         TaskWithArgs<Transaction> task = new TaskWithArgs<>(db::editTransaction, transaction);
         registerSuccess(task, transactionSuccessEvent);
+        registerSuccess(task, payeeSuccessEvent);
         return task;
     }
 

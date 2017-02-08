@@ -259,8 +259,8 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         configureTransactionTableView();
         updateTransactionTableView();
 
-        DbController.INSTANCE.registerTransationSuccessEvent(this::asyncTableUpdate);
-        DbController.INSTANCE.registerPayyeeSuccessEvent(this::asyncTableUpdate);
+        DbController.INSTANCE.registerTransactionSuccessEvent(this::asyncTableUpdate);
+        DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncTableUpdate);
     }
 
     public void updateAccountFilter(Account accountToFilterBy) {
