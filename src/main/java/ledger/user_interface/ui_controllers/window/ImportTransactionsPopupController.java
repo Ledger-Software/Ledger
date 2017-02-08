@@ -5,7 +5,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
@@ -25,6 +27,7 @@ import ledger.user_interface.ui_controllers.component.FileSelectorButton;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -112,8 +115,8 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         for (Transaction fail : importFailures.failedTransactions) {
             // Todo: Do we even want to show the user?
         }
-        genericTransactionsWindow(importFailures.ignoredTransactions,
-                ()-> genericTransactionsWindow(importFailures.duplicateTransactions,()->{}, "Duplicate Transactions", "Duplicate!"), "Ignored Transactions", "Ignored!");
+        ignoredTransacionDialog(importFailures.ignoredTransactions,
+                ()-> genericTransactionsWindow(importFailures.duplicateTransactions,()->{}, "Duplicate Transactions", "Duplicate!"));
 
 
 
@@ -144,7 +147,36 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
             });
     }
-
+    private void ignoredTransacionDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method){
+        if (transactionList.size() > 0)
+            Startup.INSTANCE.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Ignored Transactions");
+                alert.setHeaderText("There were " + transactionList.size() + " automatically ignored transactions .");
+                alert.setContentText("Would you like to review them?");
+                ButtonType reviewIgnored = new ButtonType("Review Transactions");
+                ButtonType discardIgnored = new ButtonType("Discard Transactions");
+                alert.getButtonTypes().setAll(reviewIgnored, discardIgnored);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == reviewIgnored) {
+                    genericTransactionsWindow(transactionList,
+                            method, "Ignored Transactions", "Ignored!");
+                } else {
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        setupErrorPopup("Failed to run method", e);
+                    }
+                }
+            });
+            else {
+            try {
+                method.call();
+            } catch (Exception e) {
+                setupErrorPopup("Failed to run method", e);
+            }
+        }
+    }
 
     private void closeWindow() {
         Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).fireEvent(new WindowEvent(((Stage) this.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST)));
