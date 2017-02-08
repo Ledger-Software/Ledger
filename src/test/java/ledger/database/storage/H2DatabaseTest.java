@@ -3,7 +3,6 @@ package ledger.database.storage;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
-import ledger.database.storage.table.AccountBalanceTable;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -35,6 +34,8 @@ public class H2DatabaseTest {
     private static Note sampleNote2;
     private static Note sampleNote3;
     private static AccountBalance sampleBalance;
+    private static IgnoredExpression sampleIgnoreMatchMejer;
+    private static IgnoredExpression sampleIgnoreContainEr;
 
     @BeforeClass
     public static void setupDatabase() throws Exception {
@@ -54,7 +55,8 @@ public class H2DatabaseTest {
         sampleNote = new Note("This is a note");
         sampleNote2 = new Note("This is also a note");
         sampleNote3 = new Note("This is also a note, ditto");
-
+        sampleIgnoreMatchMejer = new IgnoredExpression("Meijer", true);
+        sampleIgnoreContainEr = new IgnoredExpression("er", false);
         ArrayList<Tag> sampleTagList = new ArrayList<>();
         sampleTagList.add(sampleTag);
 
@@ -609,26 +611,69 @@ public class H2DatabaseTest {
         AccountBalance returned = database.getBalanceForAccount(sampleAccount);
         assertEquals(sampleBalance, returned);
     }
+
     @Test
-    public void insertIgnoreTest() throws Exception{
+    public void insertIgnoreTest() throws Exception {
+        int sizebefore = database.getAllIgnoredExpressions().size();
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore);
+        database.insertIgnoredExpression(sampleIgnoreContainEr);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 1);
+        database.insertIgnoredExpression(sampleIgnoreMatchMejer);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 2);
+    }
+
+    @Test
+    public void editIgnoreTest() throws Exception {
+        database.insertIgnoredExpression(sampleIgnoreContainEr);
+        assertEquals(database.getAllIgnoredExpressions().get(0).isMatch(), false);
+        sampleIgnoreContainEr.setExpressionId(database.getAllIgnoredExpressions().get(0).getExpressionId());
+        sampleIgnoreContainEr.setMatch(true);
+        database.editIgnoredExpression(sampleIgnoreContainEr);
+        assertEquals(database.getAllIgnoredExpressions().get(0).isMatch(), true);
 
     }
+
     @Test
-    public void editIgnoreTest() throws Exception{
+    public void deleteIgnoreTest() throws Exception {
+        int sizebefore = database.getAllIgnoredExpressions().size();
+        database.insertIgnoredExpression(sampleIgnoreContainEr);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 1);
+        database.insertIgnoredExpression(sampleIgnoreMatchMejer);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 2);
+        database.deleteIgnoredExpression(database.getAllIgnoredExpressions().get(0));
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 1);
+        database.deleteIgnoredExpression(database.getAllIgnoredExpressions().get(0));
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore);
+    }
+
+    @Test
+    public void checkIgnoreTransactionTest() throws Exception {
+        int sizebefore = database.getAllIgnoredExpressions().size();
+        database.insertIgnoredExpression(sampleIgnoreContainEr);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 1);
+        database.insertIgnoredExpression(sampleIgnoreMatchMejer);
+        assertEquals(database.getAllIgnoredExpressions().size(), sizebefore + 2);
+        assertEquals(database.checkTransactionIgnored(sampleTransaction1), false);
+        sampleTransaction1.setPayee(samplePayee2);
+        assertEquals(database.checkTransactionIgnored(sampleTransaction1), false);
+        sampleTransaction1.setPayee(samplePayee3);
+        assertEquals(database.checkTransactionIgnored(sampleTransaction1), true);
 
     }
-    @Test
-    public void deleteIgnoreTest() throws Exception{
 
-    }
     @Test
-    public void checkIgnoreTransactionTest() throws Exception{
-
-    }
-    
-    @Test
-    public void insertIgnoreTransactionTest() throws Exception{
-
+    public void insertIgnoreTransactionTest() throws Exception {
+        int sizebefore = database.getAllTransactions().size();
+        database.insertIgnoredExpression(sampleIgnoreContainEr);
+        database.insertIgnoredExpression(sampleIgnoreMatchMejer);
+        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
+        assertEquals(database.getAllTransactions().size(), sizebefore);
+        sampleTransaction1.setPayee(samplePayee2);
+        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
+        assertEquals(database.getAllTransactions().size(), sizebefore);
+        sampleTransaction1.setPayee(samplePayee3);
+        database.insertTransactionWithIgnoreCheck(sampleTransaction1);
+        assertEquals(database.getAllTransactions().size(), sizebefore + 1);
     }
 
     @AfterClass

@@ -47,7 +47,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
         try {
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + IgnoredExpressionTable.TABLE_NAME +
-                            " SET " + IgnoredExpressionTable.MATCH_OR_CONTAIN + "=?, " +
+                            " SET " + IgnoredExpressionTable.IGNORE_EXPRESSION + "=?, " +
                             IgnoredExpressionTable.MATCH_OR_CONTAIN +"=? WHERE " + IgnoredExpressionTable.IGNORE_ID + " = ?");
 
             stmt.setString(1, igEx.getExpression());
