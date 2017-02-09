@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -8,11 +9,22 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.NoteEditInputController;
 import ledger.user_interface.utils.IdenityCellValueCallback;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 /**
  * Created by gert on 2/7/17.
  */
-public class NoteColumn extends TableColumn<Transaction, Transaction> implements IUIController {
+public class NoteColumn extends TableColumn<Transaction, Transaction> implements IUIController, Initializable {
+    private static final String pageLoc = "/fxml_files/TableColumn.fxml";
+
+
     public NoteColumn() {
+        this.initController(pageLoc, this, "Unable to load NoteColumn");
+
+    }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
 
 
         this.setCellValueFactory(new IdenityCellValueCallback<Transaction>());
