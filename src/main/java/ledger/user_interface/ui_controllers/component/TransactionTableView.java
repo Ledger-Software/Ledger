@@ -146,9 +146,12 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             TaskWithReturn<List<Account>> accountTask = DbController.INSTANCE.getAllAccounts();
             accountTask.startTask();
             List<Account> accountList = accountTask.waitForResult();
-            if (accountList.isEmpty()) return;
+            if (accountList.isEmpty()) {
+                this.setupErrorPopup("Please create an account before adding transactions.");
+                return;
+            }
             Account acc = accountList.get(0);
-
+            
             TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<Tag>(), new Note("")));
             task.startTask();
 
