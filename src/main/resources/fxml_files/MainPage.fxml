@@ -63,7 +63,7 @@
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                      <TitledPane animated="false" text="Account Operations">
+                      <TitledPane animated="false" text="Account Operations" expanded="false">
                         <content>
                           <AnchorPane>
                                  <children>
@@ -100,7 +100,7 @@
                               <Insets />
                            </VBox.margin>
                       </TitledPane>
-                      <TitledPane animated="false" text="Transaction Operations">
+                      <TitledPane animated="false" text="Transaction Operations" expanded="false">
                         <content>
                           <AnchorPane>
                                  <children>
