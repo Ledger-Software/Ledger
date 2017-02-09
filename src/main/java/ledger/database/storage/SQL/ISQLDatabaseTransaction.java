@@ -33,7 +33,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     "," + TransactionTable.TRANS_CHECK_NUMBER +
                     ") VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
-            stmt.setInt(2, transaction.getAmount());
+            stmt.setLong(2, transaction.getAmount());
 
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
@@ -129,7 +129,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     TransactionTable.TRANS_CHECK_NUMBER + "=? " + "WHERE " +
                     TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
-            stmt.setInt(2, transaction.getAmount());
+            stmt.setLong(2, transaction.getAmount());
 
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
