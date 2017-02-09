@@ -69,6 +69,7 @@ public class Startup extends Application {
     public void createLoginPage() {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
+        this.stage.setResizable(false);
         switchScene(scene, "Ledger Login");
     }
 
@@ -116,6 +117,7 @@ public class Startup extends Application {
     public void newStage(Scene scene, String title) {
         this.stage.close();
         this.stage = new Stage();
+        this.stage.setResizable(false);
         this.switchScene(scene, title);
     }
 
