@@ -36,6 +36,6 @@ public class LogoutButton extends Button implements IUIController, Initializable
         }
         LoginPageController login = new LoginPageController();
         Scene scene = new Scene(login);
-        Startup.INSTANCE.newStage(scene, "Ledger Login");
+        Startup.INSTANCE.newStage(scene, "Ledger Login", false);
     }
 }
