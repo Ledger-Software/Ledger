@@ -7,6 +7,7 @@ import ledger.exception.StorageException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,19 +73,42 @@ public interface ISQLDatabaseAccount extends ISQLiteDatabase {
             List<Account> accountList = new ArrayList<>();
 
             while (rs.next()) {
-
-                int accountID = rs.getInt(AccountTable.ACCOUNT_ID);
-                String accountName = rs.getString(AccountTable.ACCOUNT_NAME);
-                String accountDesc = rs.getString(AccountTable.ACCOUNT_DESC);
-
-                Account currentAccount = new Account(accountName, accountDesc, accountID);
-                accountList.add(currentAccount);
+                accountList.add(extractAccount(rs));
             }
 
             return accountList;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getting all payees", e);
         }
+    }
+
+    @Override
+    default Account getAccountById(Account account) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + AccountTable.ACCOUNT_ID +
+                    ", " + AccountTable.ACCOUNT_NAME +
+                    ", " + AccountTable.ACCOUNT_DESC +
+                    " FROM " + AccountTable.TABLE_NAME +
+                    " WHERE " + AccountTable.ACCOUNT_ID + "=?");
+            stmt.setInt(1, account.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                return extractAccount(rs);
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new StorageException("Error while getting all payees", e);
+        }
+    }
+
+    default Account extractAccount(ResultSet rs) throws SQLException {
+        int accountID = rs.getInt(AccountTable.ACCOUNT_ID);
+        String accountName = rs.getString(AccountTable.ACCOUNT_NAME);
+        String accountDesc = rs.getString(AccountTable.ACCOUNT_DESC);
+
+        return new Account(accountName, accountDesc, accountID);
     }
 
 }

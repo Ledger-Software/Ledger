@@ -95,6 +95,9 @@ public class H2Database implements ISQLDatabaseAccountBalance, ISQLDatabaseTrans
     public void setDatabaseAutoCommit(boolean autoCommit) throws StorageException {
         try {
             getDatabase().setAutoCommit(autoCommit);
+
+            if(autoCommit)
+                getDatabase().commit();
         } catch (SQLException e) {
             throw new StorageException("Error while setting database autocommit to " + autoCommit, e);
         }

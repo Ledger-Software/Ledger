@@ -30,7 +30,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbController.INSTANCE.registerTransationSuccessEvent(this::recalculateBalance);
+        DbController.INSTANCE.registerTransactionSuccessEvent(this::recalculateBalance);
         calculateBalanceForAllAccounts();
     }
 
@@ -79,7 +79,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
         String accountName = this.currentAccount.getName();
         if (accountName.length() > 20) accountName = accountName.substring(0, 17) + "...";
-        this.setText(accountName + ": $" + String.format("%.2f", (float) net / 100.0));
+        this.setText(accountName + ": " + String.format("%.2f", (float) net / 100.0));
     }
 
     private void calculateBalanceForAllAccounts() {
@@ -106,6 +106,6 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
             net += transaction.getAmount();
         }
 
-        this.setText("All Accounts Balance: $" + String.format("%.2f", (float) net / 100));
+        this.setText("All Accounts Balance: " + String.format("%.2f", (float) net / 100));
     }
 }

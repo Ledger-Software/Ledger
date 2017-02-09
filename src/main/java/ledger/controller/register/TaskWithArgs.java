@@ -6,14 +6,13 @@ import java.util.List;
 /**
  * Created by gert on 10/19/16.
  */
-public class TaskWithArgs<A> implements Task {
+public class TaskWithArgs<A> extends Task {
     private List<CallableMethodVoidNoArgs> SuccessEvents;
-    private List<CallableMethod<Exception>> FailureEvents;
+
     private Thread t;
 
     public TaskWithArgs(final CallableMethod<A> task, final A args) {
         SuccessEvents = new ArrayList<CallableMethodVoidNoArgs>();
-        FailureEvents = new ArrayList<CallableMethod<Exception>>();
         t = new Thread(new Runnable() {
             public void run() {
                 try {
@@ -26,7 +25,7 @@ public class TaskWithArgs<A> implements Task {
 
                 } catch (Exception e) {
                     for (CallableMethod<Exception> method :
-                            FailureEvents) {
+                            getFailureEvents()) {
                         try {
                             method.call(e);
                         } catch (Exception e2) {
@@ -44,21 +43,8 @@ public class TaskWithArgs<A> implements Task {
 
     }
 
-    public void RegisterFailureEvent(CallableMethod<Exception> func) {
-        FailureEvents.add(func);
-
-    }
-
-    public void startTask() {
-        t.start();
-    }
-
-    public void waitForComplete() {
-        try {
-            t.join();
-
-        } catch (InterruptedException e) {
-
-        }
+    @Override
+    Thread getThread() {
+        return t;
     }
 }
