@@ -29,7 +29,6 @@
     <rowConstraints>
         <RowConstraints maxHeight="45.0" minHeight="45.0" prefHeight="45.0" />
         <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
-        <RowConstraints maxHeight="45.0" minHeight="45.0" prefHeight="45.0" />
     </rowConstraints>
     <children>
         <Pane fx:id="header" GridPane.columnSpan="2" />
@@ -124,12 +123,13 @@
                   <content>
                     <AnchorPane>
                            <children>
-                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                         
                         
                                         <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
                 </ExportButton>
+                                      <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" />
                                  </children>
                                  <opaqueInsets>
                                     <Insets />
@@ -172,11 +172,6 @@
                 <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" GridPane.columnSpan="3" GridPane.rowIndex="1" />
             </children>
         </GridPane>
-        <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
-            <GridPane.margin>
-                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-            </GridPane.margin>
-        </LogoutButton>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />
