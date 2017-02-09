@@ -21,7 +21,7 @@
 <?import ledger.user_interface.ui_controllers.component.LogoutButton?>
 <?import ledger.user_interface.ui_controllers.component.TransactionTableView?>
 
-<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" />
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" />
@@ -41,30 +41,32 @@
                 <Insets left="15.0" top="5.0" />
             </GridPane.margin>
         </Text>
-        <VBox fx:id="buttonsVBox" alignment="TOP_CENTER" spacing="10.0" GridPane.rowIndex="1">
+        <VBox fx:id="buttonsVBox" alignment="TOP_CENTER" GridPane.rowIndex="1">
             <children>
 
                 <Text fx:id="chooseActText" strokeType="OUTSIDE" strokeWidth="0.0" text="Filter by Account:" textAlignment="CENTER">
-                </Text>
+               <VBox.margin>
+                  <Insets bottom="5.0" />
+               </VBox.margin></Text>
                 <FilteringAccountDropdown fx:id="chooseAccount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <cursor>
                         <Cursor fx:constant="HAND" />
                     </cursor>
                <VBox.margin>
-                  <Insets left="10.0" right="10.0" />
+                  <Insets bottom="10.0" left="10.0" right="10.0" />
                </VBox.margin>
                 </FilteringAccountDropdown>
                 <AccountBalanceLabel fx:id="accountBalanceLabel" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <VBox.margin>
-                  <Insets left="10.0" />
+                  <Insets bottom="10.0" left="10.0" />
                </VBox.margin></AccountBalanceLabel>
             <Accordion>
                <panes>
                 <TitledPane animated="false" text="Account Operations">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                    <AnchorPane>
                            <children>
-                              <VBox >
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                         <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Account" textAlignment="CENTER">
                                             <font>
@@ -100,9 +102,9 @@
                <panes>
                 <TitledPane animated="false" text="Transaction Operations">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <AnchorPane>
                            <children>
-                              <VBox>
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                         <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER">
                 </Button>
@@ -120,15 +122,18 @@
               <panes>
                 <TitledPane animated="false" text="Miscellaneous">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0">
+                    <AnchorPane>
                            <children>
-                              <VBox >
+                              <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                         
                         
                                         <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
                 </ExportButton>
                                  </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
                               </VBox>
                            </children></AnchorPane>
                   </content>
