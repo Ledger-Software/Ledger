@@ -42,6 +42,7 @@ public class NoteColumn extends TableColumn<Transaction, Transaction> implements
                                     setGraphic(null);
                                 } else {
                                     NoteEditInputController noteController = new NoteEditInputController(transaction);
+
                                     setGraphic(noteController);
                                 }
                             }
