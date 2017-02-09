@@ -55,8 +55,8 @@ public class NoteEditInputController extends GridPane implements IUIController, 
         this.noteText.focusedProperty().addListener(new NoteFocusChangeListener());
     }
 
-    private void toggleEditors(boolean val) {
-        if(val) {
+    private void toggleEditors(boolean isToggleOpen) {
+        if(isToggleOpen) {
             this.noteText.setMinHeight(90);
         } else{
             if(this.saveButton.isFocused()) {
@@ -73,18 +73,14 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             }
             this.noteText.setMinHeight(30);
         }
-        this.saveButton.setManaged(val);
+        this.saveButton.setManaged(isToggleOpen);
     }
     private class NoteFocusChangeListener implements ChangeListener<Boolean> {
 
 
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            if(newValue){
-                toggleEditors(true);
-            }else{
-                toggleEditors(false);
-            }
+            toggleEditors(newValue);
         }
     }
 
