@@ -5,6 +5,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -44,10 +48,10 @@ public interface IUIController {
         //Or use these below to use a different one.
 
         // Get the Stage.
-        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 
         // Add a custom icon.
-        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+        stage.getIcons().add(new Image(this.getClass().getResource("/images/favicon.ico").toString()));
 
         alert.showAndWait();
     }
@@ -77,11 +81,14 @@ public interface IUIController {
         //Or use these below to use a different one.
 
         // Get the Stage.
-        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
 
         // Add a custom icon.
-        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+        stage.getIcons().add(new Image(this.getClass().getResource("/images/favicon.ico").toString()));
 
+        //
+        //
+        //
 
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
