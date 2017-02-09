@@ -108,7 +108,6 @@
                                         <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER">
                 </Button>
                                         <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER" />
-                                        <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Track Spending" textAlignment="CENTER" />
                                         <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Payee Editor" />
                                  </children>
                               </VBox>
@@ -116,17 +115,19 @@
                         </AnchorPane>
                   </content>
                 </TitledPane>
-               </panes></Accordion>
+               </panes>
+            </Accordion>
             <Accordion>
-              <panes>
+               <panes>
                 <TitledPane animated="false" text="Miscellaneous">
                   <content>
                     <AnchorPane>
                            <children>
                               <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
+                                        <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Track Spending" textAlignment="CENTER" />
                         
-                        
+                                                
                                         <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
                 </ExportButton>
                                       <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" />
@@ -135,10 +136,11 @@
                                     <Insets />
                                  </opaqueInsets>
                               </VBox>
-                           </children></AnchorPane>
+                           </children>
+                        </AnchorPane>
                   </content>
                 </TitledPane>
-              </panes>
+               </panes>
             </Accordion>
             </children>
             <GridPane.margin>
