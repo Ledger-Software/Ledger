@@ -34,7 +34,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ") VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setLong(2, transaction.getAmount());
-
+            System.out.println(transaction.getAmount());
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
             stmt.setBoolean(4, transaction.isPending());

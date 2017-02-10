@@ -68,6 +68,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         long amountSpent = 0;
         for (Transaction t : transactions) {
             amountSpent += t.getAmount();
+            System.out.println(t.getAmount());
         }
 
         TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(this.currentAccount);
