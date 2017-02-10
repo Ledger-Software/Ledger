@@ -34,7 +34,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ") VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setLong(2, transaction.getAmount());
-            System.out.println(transaction.getAmount());
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
             stmt.setBoolean(4, transaction.isPending());
@@ -190,7 +189,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             return extractTransactions(rs);
 
         } catch (java.sql.SQLException e) {
-            System.out.println("Oh shit ya'll, an exception in get all transactions");
             throw new StorageException("Error while getting all transactions", e);
         }
     }
