@@ -620,4 +620,46 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             insertTagToTrans(currentTag.getId(), insertedTransactionID);
         }
     }
+    @Override
+    default boolean isTransactionIgnored(Transaction transaction) throws StorageException{
+        String payeeName = transaction.getPayee().getName();
+        return isContains(payeeName)&& isMatches(payeeName);
+    }
+
+
+    default boolean isMatches(String exp) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + IgnoredExpressionTable.IGNORE_ID +
+                    " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
+                    IgnoredExpressionTable.IGNORE_EXPRESSION+ "=? ");
+            stmt.setString(1, exp);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                return false;
+            }
+            return true;
+        } catch (java.sql.SQLException e){
+            throw new StorageException("Error while comparing a match Ignored Expression");
+        }
+
+    }
+
+    default boolean isContains(String exp) throws StorageException {
+        try {
+            Statement stmt = getDatabase().createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT " + IgnoredExpressionTable.IGNORE_EXPRESSION +
+                    " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
+                    IgnoredExpressionTable.MATCH_OR_CONTAIN + "= FALSE");
+            while(rs.next()){
+                String resultExp = rs.getString(IgnoredExpressionTable.IGNORE_EXPRESSION);
+                if(exp.contains(resultExp)){
+                    return false;
+                }
+            }
+            return true;
+        } catch (java.sql.SQLException e){
+            throw new StorageException("Error while comparing a contains Ignored Expression");
+        }
+    }
+
 }

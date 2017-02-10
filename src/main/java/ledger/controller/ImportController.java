@@ -40,8 +40,10 @@ public class ImportController {
             IInAdapter<Transaction> converter = type.method.create(path, acc);
 
             List<Transaction> trans = converter.convert();
-
-            DuplicateDetector dups = new DuplicateDetector(trans);
+            IgnoredDetector igs = new IgnoredDetector(trans);
+            IgnoredDetectionResult ignoredDetectionResult = igs.detectIgnoreTransactions(DbController.INSTANCE.getDb());
+            List<Transaction> ignoredTransactions = ignoredDetectionResult.getIgnoredTransactions();
+            DuplicateDetector dups = new DuplicateDetector(ignoredDetectionResult.getVerifiedTransactions());
             DetectionResult result = dups.detectDuplicates(DbController.INSTANCE.getDb());
 
             List<Transaction> transactions = result.getVerifiedTransactions();
@@ -55,17 +57,19 @@ public class ImportController {
             Tagger taggerDupes = new Tagger(duplicateTransaction);
             taggerDupes.tagTransactions();
 
-            return new ImportFailures(failedTransactions, duplicateTransaction);
+            return new ImportFailures(failedTransactions, duplicateTransaction, ignoredTransactions);
         }, account);
     }
 
     public class ImportFailures {
         public List<Transaction> failedTransactions;
         public List<Transaction> duplicateTransactions;
+        public List<Transaction> ignoredTransactions;
 
-        public ImportFailures(List<Transaction> failedTransactions, List<Transaction> duplicateTransactions) {
+        public ImportFailures(List<Transaction> failedTransactions, List<Transaction> duplicateTransactions, List<Transaction> ignoredTransactions) {
             this.failedTransactions = failedTransactions;
             this.duplicateTransactions = duplicateTransactions;
+            this.ignoredTransactions = ignoredTransactions;
         }
     }
 
