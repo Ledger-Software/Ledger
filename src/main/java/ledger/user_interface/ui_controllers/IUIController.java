@@ -151,7 +151,7 @@ public interface IUIController {
         newStage.setScene(child);
         newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
-        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initModality(Modality.APPLICATION_MODAL);
         newStage.show();
 
         if (parrent != null) {
