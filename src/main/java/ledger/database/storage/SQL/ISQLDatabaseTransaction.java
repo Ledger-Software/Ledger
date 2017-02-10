@@ -190,6 +190,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             return extractTransactions(rs);
 
         } catch (java.sql.SQLException e) {
+            System.out.println("Oh shit ya'll, an exception in get all transactions");
             throw new StorageException("Error while getting all transactions", e);
         }
     }
@@ -249,7 +250,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
             int transactionID = rs.getInt(TransactionTable.TRANS_ID);
             int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
-            int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
+            long amount = rs.getLong(TransactionTable.TRANS_AMOUNT);
             boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
             int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
             int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
