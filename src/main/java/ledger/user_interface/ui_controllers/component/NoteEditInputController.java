@@ -1,6 +1,7 @@
 package ledger.user_interface.ui_controllers.component;
 
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -9,6 +10,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
@@ -30,8 +33,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
     @FXML
     private TextArea noteText;
-    @FXML
-    private Button saveButton;
+
 
     private Transaction transaction;
 
@@ -53,27 +55,17 @@ public class NoteEditInputController extends GridPane implements IUIController, 
         this.toggleEditors(false);
         this.noteText.setText(this.transaction.getNote().getNoteText());
         this.noteText.focusedProperty().addListener(new NoteFocusChangeListener());
+        this.noteText.setOnKeyPressed(new NoteKeyEventHandler());
     }
 
     private void toggleEditors(boolean isToggleOpen) {
         if(isToggleOpen) {
             this.noteText.setMinHeight(90);
         } else{
-            if(this.saveButton.isFocused()) {
-                this.transaction.getNote().setNoteText(noteText.getText());
-                TaskWithArgs<Transaction> updateNoteTask;
-                updateNoteTask = DbController.INSTANCE.editTransaction(this.transaction);
-                updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> {
-                    this.toggleEditors(false);
-                }));
-                updateNoteTask.startTask();
-                updateNoteTask.waitForComplete();
-            } else{
-                this.noteText.setText(transaction.getNote().getNoteText());
-            }
+            this.noteText.setText(transaction.getNote().getNoteText());
             this.noteText.setMinHeight(30);
         }
-        this.saveButton.setManaged(isToggleOpen);
+
     }
     private class NoteFocusChangeListener implements ChangeListener<Boolean> {
 
@@ -81,6 +73,25 @@ public class NoteEditInputController extends GridPane implements IUIController, 
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
             toggleEditors(newValue);
+        }
+    }
+    private class NoteKeyEventHandler implements EventHandler<KeyEvent> {
+
+
+        @Override
+        public void handle(KeyEvent event) {
+            if(event.isShiftDown()&&event.getCode()== KeyCode.ENTER){
+                noteText.appendText(System.lineSeparator());
+            } else if (event.getCode()== KeyCode.ENTER){
+                transaction.getNote().setNoteText(noteText.getText());
+                TaskWithArgs<Transaction> updateNoteTask;
+                updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
+                updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> {
+                    toggleEditors(false);
+                }));
+                updateNoteTask.startTask();
+                updateNoteTask.waitForComplete();
+            }
         }
     }
 
