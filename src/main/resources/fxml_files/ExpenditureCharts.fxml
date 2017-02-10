@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import ledger.user_interface.ui_controllers.*?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.CategoryAxis?>
@@ -16,7 +8,6 @@
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
@@ -25,10 +16,14 @@
 <?import javafx.scene.text.Text?>
 <?import ledger.user_interface.ui_controllers.component.AccountDropdown?>
 
-<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="mainBackground" maxHeight="800.0" maxWidth="1280.0" minHeight="800.0" minWidth="1280.0" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="0.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="178.0" percentWidth="50.0" prefWidth="178.0" />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
       <ColumnConstraints />
     </columnConstraints>
     <rowConstraints>
@@ -39,11 +34,7 @@
     <children>
         <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="7">
             <children>
-                <Text fx:id="title" fill="#ffa81f" layoutX="21.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TransACT">
-                    <font>
-                        <Font name="Calibri Bold" size="34.0" />
-                    </font>
-                </Text>
+                <Text fx:id="title" fill="#ffa81f" layoutX="21.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Expenditures"></Text>
             </children>
         </Pane>
       <GridPane style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="2" GridPane.rowIndex="1">
