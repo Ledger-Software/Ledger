@@ -128,7 +128,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getXAxis().setAutoRanging(true);
         this.expendituresLineChart.getYAxis().setAutoRanging(true);
 
-        Map<String, Integer> monthToAmountSpent = new HashMap<>();
+        Map<String, Long> monthToAmountSpent = new HashMap<>();
         Map<String, Integer> monthToYear = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             cal.setTime(t.getDate());
@@ -271,7 +271,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param filteredTransactions transactions fitting the criteria of the filter
      */
     private void createPieChart(List<Transaction> filteredTransactions) {
-        Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
+        Map<String, Long> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             if (t.getTags().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
