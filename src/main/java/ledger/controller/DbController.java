@@ -49,6 +49,7 @@ public class DbController {
     public void initialize(String fileName, String password) throws StorageException {
         this.db = new H2Database(fileName, password);
         this.dbFile = new File(fileName);
+        undoStack.clear();
     }
 
     public void registerTransactionSuccessEvent(CallableMethodVoidNoArgs method) {
@@ -372,6 +373,7 @@ public class DbController {
     public void shutdown() throws StorageException {
         if (db != null)
             db.shutdown();
+        undoStack.clear();
     }
 
     public File getDbFile() {
