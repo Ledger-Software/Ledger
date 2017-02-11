@@ -3,6 +3,7 @@ package ledger.user_interface.ui_controllers;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -22,11 +23,12 @@ import java.io.File;
 public class Startup extends Application {
 
     public static Startup INSTANCE;
-
+    private static Image image;
     private Stage stage;
 
     public Startup() {
         INSTANCE = this;
+        image = new Image("/images/Letter-T-blue-icon.png");
     }
 
     /**
@@ -47,6 +49,7 @@ public class Startup extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setOnCloseRequest(e -> shutdown());
         this.stage = primaryStage;
+        this.stage.getIcons().add(image);
 
         checkForUpdates();
         checkForOldVersions();
@@ -84,6 +87,7 @@ public class Startup extends Application {
                 newStage.setResizable(false);
                 newStage.setTitle("Update");
                 newStage.initModality(Modality.WINDOW_MODAL);
+                newStage.getIcons().addAll(image);
                 newStage.showAndWait();
             }
         }
@@ -108,6 +112,7 @@ public class Startup extends Application {
     public void switchScene(Scene scene, String title) {
         this.stage.setScene(scene);
         this.stage.setTitle(title);
+        this.stage.getIcons().addAll(image);
         this.stage.show();
         this.stage.setMinHeight(stage.getHeight());
         this.stage.setMinWidth(stage.getWidth());
@@ -116,6 +121,7 @@ public class Startup extends Application {
     public void newStage(Scene scene, String title) {
         this.stage.close();
         this.stage = new Stage();
+        this.stage.getIcons().add(image);
         this.switchScene(scene, title);
     }
 
