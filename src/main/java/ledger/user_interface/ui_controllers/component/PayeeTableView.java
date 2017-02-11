@@ -84,7 +84,7 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
                             setText(null);
                             setGraphic(null);
                         } else {
-                            TagFlowPane flow = new TagFlowPane(model);
+                            TagFlowPane flow = new TagFlowPane(model, this);
                             setGraphic(flow);
                         }
                     }

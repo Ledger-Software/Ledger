@@ -35,13 +35,14 @@ public class TagColumn extends TableColumn {
             };
             cell.editingProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    TagFlowPane flow = new TagFlowPane(cell.getItem());
+                    TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
                     cell.setText(null);
                     cell.setGraphic(flow);
                 } else {
                     cell.setGraphic(null);
                     cell.setText(tagsToString(cell.getItem().getTags()));
                 }
+
             });
             return cell;
         }
