@@ -38,11 +38,12 @@ public class TagColumn extends TableColumn {
                     TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
                     cell.setText(null);
                     cell.setGraphic(flow);
+                    cell.setPrefHeight(flow.heightProperty().doubleValue());
                 } else {
                     cell.setGraphic(null);
                     cell.setText(tagsToString(cell.getItem().getTags()));
+                    cell.requestLayout();
                 }
-
             });
             return cell;
         }
