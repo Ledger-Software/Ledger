@@ -27,13 +27,16 @@ public class TagColumn extends TableColumn {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        setText(tagsToString(model.getTags()));
+                        if (getGraphic() == null) {
+                            setText(tagsToString(model.getTags()));
+                        }
                     }
                 }
             };
             cell.editingProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
                     TagFlowPane flow = new TagFlowPane(cell.getItem());
+                    cell.setText(null);
                     cell.setGraphic(flow);
                 } else {
                     cell.setGraphic(null);

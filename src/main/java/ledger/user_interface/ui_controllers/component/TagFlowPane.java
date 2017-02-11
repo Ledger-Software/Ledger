@@ -28,7 +28,10 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //this.setMaxHeight(100);
+        //this.setMaxWidth(200);
         updateTags();
+
     }
 
     public void updateTags() {
