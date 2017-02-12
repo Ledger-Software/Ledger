@@ -7,10 +7,10 @@ import java.util.Comparator;
 /**
  * Created by Tayler How on 1/19/2017.
  */
-public class AmountCreditComparator implements Comparator<Integer> {
+public class AmountCreditComparator implements Comparator<Long> {
 
     @Override
-    public int compare(Integer amount1, Integer amount2) {
+    public int compare(Long amount1, Long amount2) {
         return (amount1 < amount2) ? 1 : (amount1 > amount2) ? -1 : 0;
     }
 }

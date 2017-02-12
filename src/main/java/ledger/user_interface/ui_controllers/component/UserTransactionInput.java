@@ -143,7 +143,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             amountString = amountString.substring(1);
         }
         double amountToSetDecimal = Double.parseDouble(amountString);
-        int amount = (int) Math.round(amountToSetDecimal * 100);
+        long amount = (long) Math.round(amountToSetDecimal * 100);
 
 
         Note notes = new Note(this.notesText.getText());

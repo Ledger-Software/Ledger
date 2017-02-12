@@ -20,11 +20,11 @@ public abstract class AAmountColumn extends TableColumn implements IUIController
     }
 
     // Transaction table edit event handler
-    protected EventHandler<CellEditEvent<Transaction, Integer>> amountEditHandler = new EventHandler<CellEditEvent<Transaction, Integer>>() {
+    protected EventHandler<CellEditEvent<Transaction, Long>> amountEditHandler = new EventHandler<CellEditEvent<Transaction, Long>>() {
         @Override
-        public void handle(CellEditEvent<Transaction, Integer> t) {
+        public void handle(CellEditEvent<Transaction, Long> t) {
             Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
-            Integer amountToSet = t.getNewValue();
+            Long amountToSet = t.getNewValue();
             if (amountToSet == null) {
                 setupErrorPopup("Provided amount is invalid", new Exception());
                 TransactionTableView transactionTableView = (TransactionTableView) getTableView();

@@ -10,7 +10,7 @@ import java.util.List;
 public class Transaction implements IEntity, ITaggable {
     private Date date;
     private Type type;
-    private int amount;
+    private long amount;
     private Account account;
     private Payee payee;
     private boolean pending;
@@ -19,17 +19,17 @@ public class Transaction implements IEntity, ITaggable {
     private Note note;
     private int checkNumber;
 
-    public Transaction(Date date, Type type, int amount, Account account,
+    public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber) {
         this(date, type, amount, account, payee, pending, tagList, note, checkNumber, -1);
     }
 
-    public Transaction(Date date, Type type, int amount, Account account,
+    public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note) {
         this(date, type, amount, account, payee, pending, tagList, note, -1, -1);
     }
 
-    public Transaction(Date date, Type type, int amount, Account account,
+    public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id) {
         this.tagList = new ArrayList<Tag>();
 
@@ -70,7 +70,7 @@ public class Transaction implements IEntity, ITaggable {
      * @return type
      */
     public Type getType() {
-        return type;
+        return this.type;
     }
 
     /**
@@ -87,8 +87,8 @@ public class Transaction implements IEntity, ITaggable {
      *
      * @return amount
      */
-    public int getAmount() {
-        return amount;
+    public long getAmount() {
+        return this.amount;
     }
 
     /**
@@ -96,7 +96,7 @@ public class Transaction implements IEntity, ITaggable {
      *
      * @param amount The new amount
      */
-    public void setAmount(int amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -196,7 +196,7 @@ public class Transaction implements IEntity, ITaggable {
      * @return tagList
      */
     public List<Tag> getTags() {
-        return tagList;
+        return this.tagList;
     }
 
     /**
@@ -214,7 +214,7 @@ public class Transaction implements IEntity, ITaggable {
      * @return note
      */
     public Note getNote() {
-        return note;
+        return this.note;
     }
 
     /**
@@ -248,11 +248,11 @@ public class Transaction implements IEntity, ITaggable {
 
     @Override
     public int hashCode() {
-        int result = date != null ? date.hashCode() : 0;
+        int result = date.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + amount;
-        result = 31 * result + (account != null ? account.hashCode() : 0);
-        result = 31 * result + (payee != null ? payee.hashCode() : 0);
+        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        result = 31 * result + account.hashCode();
+        result = 31 * result + payee.hashCode();
         result = 31 * result + (pending ? 1 : 0);
         result = 31 * result + id;
         result = 31 * result + (tagList != null ? tagList.hashCode() : 0);

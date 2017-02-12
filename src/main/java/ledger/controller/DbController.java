@@ -409,7 +409,6 @@ public class DbController {
         registerSuccess(undoTask, transactionSuccessEvent);
 
         undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
-
         return task;
     }
 

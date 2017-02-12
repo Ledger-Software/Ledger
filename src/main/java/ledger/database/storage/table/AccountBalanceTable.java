@@ -18,7 +18,7 @@ public class AccountBalanceTable {
                 "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "%s INT NOT NULL, " +
                 "%s LONG NOT NULL, " +
-                "%s INT NOT NULL" +
+                "%s LONG NOT NULL" +
                 ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }
 
@@ -32,7 +32,7 @@ public class AccountBalanceTable {
                 "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
                 "%s INT NOT NULL, " +
                 "%s LONG NOT NULL, " +
-                "%s INT NOT NULL" +
+                "%s LONG NOT NULL" +
                 ")", TABLE_NAME, ABAL_ID, ABAL_ACCOUNT_ID, ABAL_DATETIME, ABAL_AMOUNT);
     }
 }

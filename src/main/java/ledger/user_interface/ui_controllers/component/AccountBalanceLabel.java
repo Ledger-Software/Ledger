@@ -65,7 +65,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         task.startTask();
         List<Transaction> transactions = task.waitForResult();
 
-        int amountSpent = 0;
+        long amountSpent = 0;
         for (Transaction t : transactions) {
             amountSpent += t.getAmount();
         }
@@ -75,11 +75,11 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         balanceTask.startTask();
         AccountBalance balance = balanceTask.waitForResult();
 
-        int net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
+        long net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
 
         String accountName = this.currentAccount.getName();
         if (accountName.length() > 20) accountName = accountName.substring(0, 17) + "...";
-        this.setText(accountName + ": " + String.format("%.2f", (float) net / 100.0));
+        this.setText(accountName + ": " + String.format("%.2f", (double) net / 100.0));
     }
 
     private void calculateBalanceForAllAccounts() {
@@ -88,7 +88,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
         accountsTask.startTask();
         List<Account> accounts = accountsTask.waitForResult();
 
-        int net = 0;
+        long net = 0;
         for (Account account : accounts) {
             TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(account);
             balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
@@ -106,6 +106,6 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
             net += transaction.getAmount();
         }
 
-        this.setText("All Accounts Balance: " + String.format("%.2f", (float) net / 100));
+        this.setText("All Accounts Balance: " + String.format("%.2f", (double) net / 100));
     }
 }

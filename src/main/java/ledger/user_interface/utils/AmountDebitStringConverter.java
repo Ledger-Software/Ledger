@@ -6,26 +6,26 @@ package ledger.user_interface.utils;
 public class AmountDebitStringConverter extends AAmountStringConverter {
 
     @Override
-    public Integer fromString(String amountString) {
+    public Long fromString(String amountString) {
         if (InputSanitization.isInvalidAmount(amountString)) {
             // invalid amount
             return null;
         }
 
         double amountToSetDecimal = Double.parseDouble(amountString);
-        int amount = (int) Math.round(amountToSetDecimal * 100);
+        long amount = (long) Math.round(amountToSetDecimal * 100);
         amount = -amount;
         return amount;
     }
 
-    public String toString(Integer amount) {
+    public String toString(Long amount) {
         if (amount == null) {
             return "";
         }
 
         String amountString = "";
         if (amount < 0) {
-            Integer absoluteAmount = Math.abs(amount);
+            Long absoluteAmount = Math.abs(amount);
             String absoluteAmountInCents = String.valueOf(absoluteAmount);
 
             String dollars;
