@@ -106,9 +106,13 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private void login() {
         this.pwd = this.password.getText();
-        if (InputSanitization.isStringInvalid(this.filePath) || InputSanitization.isStringInvalid(this.pwd))
+        if (InputSanitization.isStringInvalid(this.filePath)) {
+            this.setupErrorPopup("Please select a file or create a new one.");
             return;
-
+        } else if (InputSanitization.isStringInvalid(this.pwd)) {
+            this.setupErrorPopup("Please enter a password.");
+            return;
+        }
         try {
             DbController.INSTANCE.initialize(this.filePath, this.pwd);
 
