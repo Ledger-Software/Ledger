@@ -120,7 +120,7 @@
                               <Insets />
                            </VBox.margin>
                       </TitledPane>
-                      <TitledPane animated="false" text="Miscellaneous">
+                      <TitledPane animated="false" text="Miscellaneous" expanded="false">
                         <content>
                           <AnchorPane>
                                  <children>
