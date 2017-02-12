@@ -227,6 +227,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_PENDING +
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
+                    ", " + TransactionTable.TRANS_CHECK_NUMBER + 
                     " FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ID+ "=?;");
             stmt.setInt(1, transaction.getId());
