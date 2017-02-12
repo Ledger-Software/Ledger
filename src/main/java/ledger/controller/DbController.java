@@ -435,6 +435,10 @@ public class DbController {
             task.RegisterSuccessEvent((t) -> method.call());
         }
 
+        for (CallableMethodVoidNoArgs method : payeeSuccessEvent) {
+            task.RegisterSuccessEvent((t) -> method.call());
+        }
+
         return task;
     }
 
