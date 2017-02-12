@@ -119,10 +119,10 @@ public class AccountPopupController extends GridPane implements Initializable, I
         Double tmpAmt = Double.parseDouble(accountAmtText.getText()) * 100;
         amount = tmpAmt.longValue();
         if (amount == Long.MAX_VALUE) {
-            this.setupErrorPopup("An account can have a maximum balance of " + Long.MAX_VALUE/100);
+            this.setupErrorPopup("An account cannot have a balance over " + Long.MAX_VALUE/100);
             return null;
         } else if (amount == Long.MIN_VALUE) {
-            this.setupErrorPopup("An account can have a minimum balance of " + Long.MIN_VALUE/100);
+            this.setupErrorPopup("An account cannot have a balance over " + Long.MIN_VALUE/100);
             return null;
         }
         ab = new AccountBalance(this.act, new Date(), amount);
