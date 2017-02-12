@@ -25,16 +25,24 @@ public class TaskWithArgsReturn<A, R> extends Task {
 
                     for (CallableMethod<R> method :
                             SuccessEvents) {
-                        method.call(result);
+                        try {
+                            method.call(result);
+                        } catch (Exception e) {
+                            System.err.println("Post Task Success Event Handler Failed");
+                            e.printStackTrace();
+                        }
                     }
 
                 } catch (Exception e) {
-                    for (CallableMethod method :
+                    System.err.println("Task Failed");
+                    e.printStackTrace();
+                    for (CallableMethod<Exception> method :
                             getFailureEvents()) {
                         try {
                             method.call(e);
                         } catch (Exception e2) {
-                            //TODO: Log this
+                            System.err.println("Task Failed");
+                            e2.printStackTrace();
                         }
                     }
                 }

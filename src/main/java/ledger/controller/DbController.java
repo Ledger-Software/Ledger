@@ -30,6 +30,7 @@ public class DbController {
     private List<CallableMethodVoidNoArgs> transactionSuccessEvent;
     private List<CallableMethodVoidNoArgs> accountSuccessEvent;
     private List<CallableMethodVoidNoArgs> payeeSuccessEvent;
+    private List<CallableMethodVoidNoArgs> ignoredExpSuccessEvent;
 
     private Stack<UndoAction> undoStack;
 
@@ -41,6 +42,7 @@ public class DbController {
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
         payeeSuccessEvent = new LinkedList<>();
+        ignoredExpSuccessEvent = new LinkedList<>();
         undoStack = new Stack<>();
     }
 
@@ -60,6 +62,8 @@ public class DbController {
     public void registerPayeeSuccessEvent(CallableMethodVoidNoArgs method) {
         payeeSuccessEvent.add(method);
     }
+
+    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) { ignoredExpSuccessEvent.add(method); }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -120,7 +124,9 @@ public class DbController {
         Transaction oldTrans = null;
         try {
             oldTrans = db.getTransactionById(transaction);
-        } catch (StorageException e) { }
+        } catch (StorageException e) {
+            System.err.println("Error on getTransactionById");
+        }
 
         undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
 
@@ -453,6 +459,29 @@ public class DbController {
         return new TaskWithArgs<>(db::addBalanceForAccount, balance);
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to check transactions as a batch with Ignore checks
+     *
+     * @param transactions List of transactions to add to the database
+     * @return A task for the asynchronous call
+     */
+    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchTransactionIgnoreCheck(List<Transaction> transactions) {
+        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
+            List<Transaction> list =  new ArrayList<>();
+            for (Transaction currentTransaction : transactionList) {
+
+                try {
+                    if(db.isTransactionIgnored(currentTransaction))
+                        list.add(currentTransaction);
+                } catch (StorageException e) {
+                }
+            }
+            return list;
+        }, transactions);
+
+
+        return task;
+    }
     protected IDatabase getDb() {
         return db;
     }
@@ -474,5 +503,52 @@ public class DbController {
     public void undo() {
         undoStack.pop().undo();
     }
+
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to insert an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to insert
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::insertIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to edit an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to edit
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::editIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to delete an Ignored Expression
+     *
+     * @param igEx the IgnoredExpression to delete
+     * @return a Task for the Async Call
+     */
+    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx){
+        TaskWithArgs task =  new TaskWithArgs<>(db::deleteIgnoredExpression,igEx);
+        registerSuccess(task, ignoredExpSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all IgnoredExpressions
+     *
+     * @return A task for the Async Call that returns a list of all the IgnoredExpressions
+     */
+    public TaskWithReturn<List<IgnoredExpression>> getAllIgnoredExpressions() {
+        return new TaskWithReturn<List<IgnoredExpression>>(db::getAllIgnoredExpressions);
+    }
+
 
 }

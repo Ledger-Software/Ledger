@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<fx:root editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" stylesheets="@../css/colorStyle.css" type="TableView" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+  <columns>
+    <TableColumn fx:id="expressionColumn" prefWidth="150.0" text="Expression" />
+    <TableColumn fx:id="matchOrContainColumn" prefWidth="150.0" text="Rule" />
+  </columns>
+</fx:root>
