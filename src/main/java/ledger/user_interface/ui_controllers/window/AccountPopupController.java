@@ -60,7 +60,6 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 return;
             }
             if (balance == null) {
-                this.setupErrorPopup("Account starting amount must have a value.", new Exception());
                 return;
             }
             TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
@@ -114,10 +113,18 @@ public class AccountPopupController extends GridPane implements Initializable, I
         AccountBalance ab;
         long amount;
         if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
+            this.setupErrorPopup("Account starting amount must have a value.", new Exception());
             return null;
         }
         Double tmpAmt = Double.parseDouble(accountAmtText.getText()) * 100;
         amount = tmpAmt.longValue();
+        if (amount == Long.MAX_VALUE) {
+            this.setupErrorPopup("A maximum of " + Long.MAX_VALUE/100 + " dollars may be inserted an account");
+            return null;
+        } else if (amount == Long.MIN_VALUE) {
+            this.setupErrorPopup("A minimum of " + Long.MIN_VALUE/100 + " dollars may be inserted an account");
+            return null;
+        }
         ab = new AccountBalance(this.act, new Date(), amount);
         return ab;
     }
