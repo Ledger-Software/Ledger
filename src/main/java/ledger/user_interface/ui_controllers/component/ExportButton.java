@@ -50,6 +50,7 @@ public class ExportButton extends Button implements IUIController, Initializable
         while (newDbFile.exists()) {
             fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
             newDbFile = new File(saveLocation.toPath().toString(), fileName);
+            numFiles++;
         }
 
         try {

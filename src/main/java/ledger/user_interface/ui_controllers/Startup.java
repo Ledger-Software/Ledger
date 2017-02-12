@@ -115,9 +115,13 @@ public class Startup extends Application {
     }
 
     public void newStage(Scene scene, String title) {
+        newStage(scene, title, true);
+    }
+
+    public void newStage(Scene scene, String title, boolean resizable) {
         this.stage.close();
         this.stage = new Stage();
-        this.stage.setResizable(false);
+        this.stage.setResizable(resizable);
         this.switchScene(scene, title);
     }
 
