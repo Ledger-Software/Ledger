@@ -124,7 +124,9 @@ public class DbController {
         Transaction oldTrans = null;
         try {
             oldTrans = db.getTransactionById(transaction);
-        } catch (StorageException e) { }
+        } catch (StorageException e) {
+            System.err.println("Error on getTransactionById");
+        }
 
         undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
 
