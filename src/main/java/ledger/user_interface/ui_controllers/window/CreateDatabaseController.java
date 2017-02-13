@@ -85,7 +85,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
 
             DbController.INSTANCE.initialize(saveLocation.getAbsolutePath(), this.password.getText());
 
-            Startup.INSTANCE.switchScene(new Scene(new MainPageController()), "Ledger");
+            Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
             Startup.INSTANCE.runLater(() -> {
                 ((Stage) this.getScene().getWindow()).close();
