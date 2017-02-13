@@ -81,7 +81,7 @@ public class GitHubChecker {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Unable to reach Github to check for updates.");
         }
         return false;
     }
