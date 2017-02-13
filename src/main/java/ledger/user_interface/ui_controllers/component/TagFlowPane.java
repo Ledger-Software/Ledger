@@ -12,6 +12,7 @@ import ledger.controller.DbController;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
 import java.util.List;
@@ -41,7 +42,10 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
             }
         });
 
-        DbController.INSTANCE.registerTransactionSuccessEvent(this::updateTags);
+        DbController.INSTANCE.registerTransactionSuccessEvent(() -> {
+                Startup.INSTANCE.runLater(this::updateTags);
+            }
+         );
     }
 
     public void updateTags() {
