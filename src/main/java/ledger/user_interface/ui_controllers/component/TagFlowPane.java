@@ -35,7 +35,6 @@ public class TagFlowPane extends FlowPane implements IUIController {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 localParent.setPrefHeight(newValue.doubleValue());
-                System.out.println(newValue.doubleValue());
             }
         });
 //        this.setMaxHeight(this.getHeight());\

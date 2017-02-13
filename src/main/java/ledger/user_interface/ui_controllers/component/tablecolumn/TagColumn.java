@@ -39,7 +39,6 @@ public class TagColumn extends TableColumn {
                 }
             };
             cell.editingProperty().addListener((observable, oldValue, newValue) -> {
-                System.out.println("Edit Triggered:" +  newValue.booleanValue());
                 if (newValue) {
                     TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
                     cell.setText(null);
