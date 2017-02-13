@@ -18,7 +18,7 @@
    <children>
       <Button fx:id="removeButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="smallButton" text="X" textAlignment="CENTER" GridPane.columnIndex="1">
          <GridPane.margin>
-            <Insets left="1.0" right="1.0" />
+            <Insets left="0" right="0" />
          </GridPane.margin>
       </Button>
       <Text fx:id="tagText" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="smallButton" text="Text" textOrigin="CENTER">
