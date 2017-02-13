@@ -61,6 +61,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
         if (file != null) {
             this.saveLocationButton.setText(file.getName());
             this.saveLocation = file;
+            this.password.requestFocus();
         }
     }
 

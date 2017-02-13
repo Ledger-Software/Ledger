@@ -49,6 +49,7 @@ public class DbController {
     public void initialize(String fileName, String password) throws StorageException {
         this.db = new H2Database(fileName, password);
         this.dbFile = new File(fileName);
+        undoStack.clear();
     }
 
     public void registerTransactionSuccessEvent(CallableMethodVoidNoArgs method) {
@@ -124,7 +125,9 @@ public class DbController {
         Transaction oldTrans = null;
         try {
             oldTrans = db.getTransactionById(transaction);
-        } catch (StorageException e) { }
+        } catch (StorageException e) {
+            System.err.println("Error on getTransactionById");
+        }
 
         undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
 
@@ -372,6 +375,7 @@ public class DbController {
     public void shutdown() throws StorageException {
         if (db != null)
             db.shutdown();
+        undoStack.clear();
     }
 
     public File getDbFile() {
@@ -405,7 +409,6 @@ public class DbController {
         registerSuccess(undoTask, transactionSuccessEvent);
 
         undoStack.push(new UndoAction(undoTask, "Undo Batch Insert"));
-
         return task;
     }
 
@@ -430,6 +433,10 @@ public class DbController {
         }, transactions);
 
         for (CallableMethodVoidNoArgs method : transactionSuccessEvent) {
+            task.RegisterSuccessEvent((t) -> method.call());
+        }
+
+        for (CallableMethodVoidNoArgs method : payeeSuccessEvent) {
             task.RegisterSuccessEvent((t) -> method.call());
         }
 

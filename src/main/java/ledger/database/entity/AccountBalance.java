@@ -8,16 +8,16 @@ import java.util.Date;
 public class AccountBalance implements IEntity {
     private Account account;
     private Date date;
-    private int amount;
+    private long amount;
     private int id;
 
-    public AccountBalance(Account account, Date date, int amount) {
+    public AccountBalance(Account account, Date date, long amount) {
         this.account = account;
         this.date = date;
         this.amount = amount;
     }
 
-    public AccountBalance(Account account, Date date, int amount, int id) {
+    public AccountBalance(Account account, Date date, long amount, int id) {
         this.account = account;
 
         this.date = date;
@@ -84,7 +84,7 @@ public class AccountBalance implements IEntity {
      *
      * @return amount the ammount of the current balance
      */
-    public int getAmount() {
+    public long getAmount() {
         return amount;
     }
 
@@ -93,7 +93,7 @@ public class AccountBalance implements IEntity {
      *
      * @param amount the new amount
      */
-    public void setAmount(int amount) {
+    public void setAmount(long amount) {
         this.amount = amount;
     }
 
@@ -111,9 +111,10 @@ public class AccountBalance implements IEntity {
 
     @Override
     public int hashCode() {
-        int result = account.hashCode();
-        result = 31 * result + date.hashCode();
-        result = 31 * result + amount;
+        int result = account != null ? account.hashCode() : 0;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (int) (amount ^ (amount >>> 32));
+        result = 31 * result + id;
         return result;
     }
 }

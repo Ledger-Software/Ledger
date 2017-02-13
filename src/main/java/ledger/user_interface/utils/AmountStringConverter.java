@@ -6,13 +6,13 @@ package ledger.user_interface.utils;
 
 public class AmountStringConverter extends AAmountStringConverter {
 
-    public String toString(Integer amount) {
+    public String toString(Long amount) {
         if (amount == null) {
             return "";
         }
 
         boolean positiveValue = amount >= 0 ? true : false;
-        Integer absoluteAmount = Math.abs(amount);
+        Long absoluteAmount = Math.abs(amount);
         String absoluteAmountInCents = String.valueOf(absoluteAmount);
 
         String dollars;

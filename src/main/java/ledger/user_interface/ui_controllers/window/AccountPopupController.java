@@ -60,7 +60,6 @@ public class AccountPopupController extends GridPane implements Initializable, I
                 return;
             }
             if (balance == null) {
-                this.setupErrorPopup("Account starting amount must have a value.", new Exception());
                 return;
             }
             TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
@@ -112,12 +111,20 @@ public class AccountPopupController extends GridPane implements Initializable, I
      */
     public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
         AccountBalance ab;
-        int amount;
+        long amount;
         if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
+            this.setupErrorPopup("Account starting amount must have a value.", new Exception());
             return null;
         }
         Double tmpAmt = Double.parseDouble(accountAmtText.getText()) * 100;
-        amount = tmpAmt.intValue();
+        amount = tmpAmt.longValue();
+        if (amount == Long.MAX_VALUE) {
+            this.setupErrorPopup("An account cannot have a balance over " + Long.MAX_VALUE/100);
+            return null;
+        } else if (amount == Long.MIN_VALUE) {
+            this.setupErrorPopup("An account cannot have a balance under " + Long.MIN_VALUE/100);
+            return null;
+        }
         ab = new AccountBalance(this.act, new Date(), amount);
         return ab;
     }

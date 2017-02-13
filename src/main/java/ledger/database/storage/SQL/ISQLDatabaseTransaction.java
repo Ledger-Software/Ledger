@@ -33,8 +33,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     "," + TransactionTable.TRANS_CHECK_NUMBER +
                     ") VALUES (?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
-            stmt.setInt(2, transaction.getAmount());
-
+            stmt.setLong(2, transaction.getAmount());
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
             stmt.setBoolean(4, transaction.isPending());
@@ -129,7 +128,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     TransactionTable.TRANS_CHECK_NUMBER + "=? " + "WHERE " +
                     TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
-            stmt.setInt(2, transaction.getAmount());
+            stmt.setLong(2, transaction.getAmount());
 
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
 
@@ -227,6 +226,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_PENDING +
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
+                    ", " + TransactionTable.TRANS_CHECK_NUMBER + 
                     " FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ID+ "=?;");
             stmt.setInt(1, transaction.getId());
@@ -249,7 +249,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             Date date = new Date(rs.getLong(TransactionTable.TRANS_DATETIME));
             int transactionID = rs.getInt(TransactionTable.TRANS_ID);
             int typeID = rs.getInt(TransactionTable.TRANS_TYPE_ID);
-            int amount = rs.getInt(TransactionTable.TRANS_AMOUNT);
+            long amount = rs.getLong(TransactionTable.TRANS_AMOUNT);
             boolean pending = rs.getBoolean(TransactionTable.TRANS_PENDING);
             int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
             int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);

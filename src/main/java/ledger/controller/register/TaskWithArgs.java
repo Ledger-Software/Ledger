@@ -20,16 +20,24 @@ public class TaskWithArgs<A> extends Task {
 
                     for (CallableMethodVoidNoArgs method :
                             SuccessEvents) {
-                        method.call();
+                        try {
+                            method.call();
+                        } catch (Exception e) {
+                            System.err.println("Post Task Success Event Handler Failed");
+                            e.printStackTrace();
+                        }
                     }
 
                 } catch (Exception e) {
+                    System.err.println("Task Failed");
+                    e.printStackTrace();
                     for (CallableMethod<Exception> method :
                             getFailureEvents()) {
                         try {
                             method.call(e);
                         } catch (Exception e2) {
-                            //TODO: Log this
+                            System.err.println("Task Error Event Handler Failed");
+                            e2.printStackTrace();
                         }
                     }
                 }

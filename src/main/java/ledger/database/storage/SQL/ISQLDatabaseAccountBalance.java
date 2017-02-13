@@ -23,7 +23,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                     ") VALUES (?, ?, ?)");
 
             stmt.setInt(1, balance.getAccount().getId());
-            stmt.setInt(2, balance.getAmount());
+            stmt.setLong(2, balance.getAmount());
             stmt.setLong(3, balance.getDate().getTime());
 
             stmt.executeUpdate();
@@ -52,7 +52,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
 
             //Store info so we can query for accounts only once
             int balanceID = -1;
-            int amount = -1;
+            long amount = -1;
             long mostRecentDate = -1L;
             while (rs.next()) {
                 long currentDate = rs.getLong(AccountBalanceTable.ABAL_DATETIME);
@@ -60,7 +60,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                     mostRecentDate = currentDate;
 
                     balanceID = rs.getInt(AccountBalanceTable.ABAL_ID);
-                    amount = rs.getInt(AccountBalanceTable.ABAL_AMOUNT);
+                    amount = rs.getLong(AccountBalanceTable.ABAL_AMOUNT);
                 }
             }
 

@@ -128,7 +128,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         this.expendituresLineChart.getXAxis().setAutoRanging(true);
         this.expendituresLineChart.getYAxis().setAutoRanging(true);
 
-        Map<String, Integer> monthToAmountSpent = new HashMap<>();
+        Map<String, Long> monthToAmountSpent = new HashMap<>();
         Map<String, Integer> monthToYear = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             cal.setTime(t.getDate());
@@ -271,7 +271,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param filteredTransactions transactions fitting the criteria of the filter
      */
     private void createPieChart(List<Transaction> filteredTransactions) {
-        Map<String, Integer> tagNameToAmountSpent = new HashMap<>();
+        Map<String, Long> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : filteredTransactions) {
             if (t.getTags().isEmpty()) {
                 addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
@@ -307,7 +307,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
-    private void addToMapForPieChart(Map map, String key, Integer value) {
+    private void addToMapForPieChart(Map map, String key, Long value) {
         if (value <= 0) {
             if (key.equals("")) {
                 key = "Uncategorized";
@@ -324,7 +324,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
-    private void addToMapForLineChart(Map map, String key, Integer value) {
+    private void addToMapForLineChart(Map map, String key, Long value) {
         populateMap(map, key, value);
     }
 
@@ -335,12 +335,12 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      * @param key   map key to check value
      * @param value value to add to existing value or empty map
      */
-    private void populateMap(Map map, String key, Integer value) {
+    private void populateMap(Map map, String key, Long value) {
         if (!map.keySet().contains(key)) {
             map.put(key, value);
         } else {
-            Integer existingAmount = (Integer) map.get(key);
-            Integer newAmount = existingAmount;
+            Long existingAmount = (Long) map.get(key);
+            Long newAmount = existingAmount;
             newAmount += value;
 
             map.put(key, newAmount);
