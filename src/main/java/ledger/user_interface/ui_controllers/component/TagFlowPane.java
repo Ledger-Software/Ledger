@@ -41,11 +41,6 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
                 localParent.setPrefHeight(newValue.doubleValue());
             }
         });
-
-        DbController.INSTANCE.registerTransactionSuccessEvent(() -> {
-                Startup.INSTANCE.runLater(this::updateTags);
-            }
-         );
     }
 
     public void updateTags() {
