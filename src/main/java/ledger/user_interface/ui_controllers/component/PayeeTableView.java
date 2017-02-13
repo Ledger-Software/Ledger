@@ -71,27 +71,7 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
             }
         });
 
-        tagColumn.setCellValueFactory(new IdenityCellValueCallback<>());
-        tagColumn.setCellFactory(new Callback<TableColumn<Payee, Payee>, TableCell<Payee, Payee>>() {
-            @Override
-            public TableCell<Payee, Payee> call(TableColumn<Payee, Payee> param) {
-                return new TableCell<Payee, Payee>() {
-                    @Override
-                    protected void updateItem(Payee model, boolean empty) {
-                        super.updateItem(model, empty);
 
-                        if (model == null || empty) {
-                            setText(null);
-                            setGraphic(null);
-                        } else {
-                            TagFlowPane flow = new TagFlowPane(model, this);
-                            setGraphic(flow);
-                        }
-                    }
-                };
-            }
-        });
-        tagColumn.setEditable(false);
 
         DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncUpdateTableView);
         updateTableView();
