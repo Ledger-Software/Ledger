@@ -52,27 +52,31 @@ public class AccountPopupController extends GridPane implements Initializable, I
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.submitAccountInfo.setOnAction((event) -> {
-            Account account = getAccountSubmission();
-            AccountBalance balance = getAccountBalance();
-            if (account == null) {
-                this.setupErrorPopup("Required Account field is null.", new Exception());
-                return;
-            }
-            if (balance == null) {
-                return;
-            }
-            TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
-            task.RegisterFailureEvent(this::insertFail);
-            task.startTask();
-            task.waitForComplete();
+        this.submitAccountInfo.setOnAction((event) -> this.handleSubmit());
+        this.accountAmtText.setOnAction((event) -> this.handleSubmit());
+        this.accountDescription.setOnAction((event) -> this.handleSubmit());
+        this.accountNameText.setOnAction((event) -> this.handleSubmit());
+    }
 
-            TaskWithArgs<AccountBalance> balanceTask = DbController.INSTANCE.addBalanceForAccount(balance);
-            balanceTask.RegisterSuccessEvent(this::insertDone);
-            balanceTask.RegisterFailureEvent(this::insertFail);
-            balanceTask.startTask();
-            balanceTask.waitForComplete();
-        });
+    private void handleSubmit() {
+        Account account = getAccountSubmission();
+        AccountBalance balance = getAccountBalance();
+        if (balance == null) {
+            return;
+        } else if (account == null) {
+            this.setupErrorPopup("Required Account field(s) are invalid.", new Exception());
+            return;
+        }
+        TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
+        task.RegisterFailureEvent(this::insertFail);
+        task.startTask();
+        task.waitForComplete();
+
+        TaskWithArgs<AccountBalance> balanceTask = DbController.INSTANCE.addBalanceForAccount(balance);
+        balanceTask.RegisterSuccessEvent(this::insertDone);
+        balanceTask.RegisterFailureEvent(this::insertFail);
+        balanceTask.startTask();
+        balanceTask.waitForComplete();
     }
 
     private void insertDone() {
@@ -113,16 +117,16 @@ public class AccountPopupController extends GridPane implements Initializable, I
         AccountBalance ab;
         long amount;
         if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {
-            this.setupErrorPopup("Account starting amount must have a value.", new Exception());
+            this.setupErrorPopup("Account starting amount must have a numerical value.", new Exception());
             return null;
         }
         Double tmpAmt = Double.parseDouble(accountAmtText.getText()) * 100;
         amount = tmpAmt.longValue();
         if (amount == Long.MAX_VALUE) {
-            this.setupErrorPopup("An account cannot have a balance over " + Long.MAX_VALUE/100);
+            this.setupErrorPopup("An account cannot have a balance over " + Long.MAX_VALUE / 100);
             return null;
         } else if (amount == Long.MIN_VALUE) {
-            this.setupErrorPopup("An account cannot have a balance under " + Long.MIN_VALUE/100);
+            this.setupErrorPopup("An account cannot have a balance under " + Long.MIN_VALUE / 100);
             return null;
         }
         ab = new AccountBalance(this.act, new Date(), amount);
