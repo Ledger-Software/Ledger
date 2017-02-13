@@ -81,7 +81,7 @@ public class GitHubChecker {
                 return true;
             }
         } catch (IOException e) {
-            System.err.println("Unable to retch Github to check for updates.");
+            System.err.println("Unable to reach Github to check for updates.");
         }
         return false;
     }
