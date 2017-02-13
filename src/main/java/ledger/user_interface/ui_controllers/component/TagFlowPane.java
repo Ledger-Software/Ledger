@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
@@ -37,7 +38,8 @@ public class TagFlowPane extends FlowPane implements IUIController {
                 System.out.println(newValue.doubleValue());
             }
         });
-        this.setMaxHeight(100);
+//        this.setMaxHeight(this.getHeight());\
+        this.setPadding(new Insets(0,0,35,0));
     }
 
     public void updateTags() {
