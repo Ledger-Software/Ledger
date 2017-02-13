@@ -26,6 +26,9 @@ public class TagColumn extends TableColumn {
                     if (model == null || empty) {
                         setText(null);
                         setGraphic(null);
+                    } else if (isEditing() && getGraphic() != null) {
+                        setGraphic(new TagFlowPane(model, this));
+                        setText(null);
                     } else {
                         setGraphic(null);
                         setText(tagsToString(model.getTags()));
@@ -42,7 +45,6 @@ public class TagColumn extends TableColumn {
                     cell.setText(tagsToString(cell.getItem().getTags()));
                 }
             });
-
             return cell;
         }
     };
