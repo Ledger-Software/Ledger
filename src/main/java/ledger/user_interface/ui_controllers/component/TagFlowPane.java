@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.FlowPane;
+import ledger.controller.DbController;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -40,7 +41,7 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
             }
         });
 
-
+        DbController.INSTANCE.registerTransactionSuccessEvent(this::updateTags);
     }
 
     public void updateTags() {
