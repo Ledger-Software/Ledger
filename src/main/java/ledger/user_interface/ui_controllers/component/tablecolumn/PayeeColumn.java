@@ -13,6 +13,7 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.PayeeComparator;
 import ledger.user_interface.utils.PayeeStringConverter;
 
@@ -39,12 +40,12 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
         List<Payee> allPayees = getAllPayeesTask.waitForResult();
         this.observableAllPayees = FXCollections.observableList(allPayees);
 
-        this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
+        this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), this.observableAllPayees));
         this.setCellValueFactory(new PropertyValueFactory<Transaction, Payee>("payee"));
         this.setOnEditCommit(this.payeeEditHandler);
         this.setComparator(new PayeeComparator());
 
-        DbController.INSTANCE.registerPayeeSuccessEvent(this::updatePayeeList);
+        DbController.INSTANCE.registerPayeeSuccessEvent(() -> Startup.INSTANCE.runLater(this::updatePayeeList));
     }
 
     private void updatePayeeList() {
