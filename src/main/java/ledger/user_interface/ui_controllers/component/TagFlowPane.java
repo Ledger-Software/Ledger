@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.TableCell;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.TilePane;
 import ledger.controller.DbController;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
@@ -21,26 +22,22 @@ import java.util.ResourceBundle;
 /**
  * Shows All Tags for a ITaggable object. Allows the addition there of also
  */
-public class TagFlowPane extends FlowPane implements IUIController, Initializable {
-    private static final String pageLoc = "/fxml_files/FlowPane.fxml";
+public class TagFlowPane extends FlowPane implements IUIController {
     private final ITaggable model;
     private final Control localParent;
 
     public TagFlowPane(ITaggable model, Control parent) {
         this.model = model;
         this.localParent = parent;
-        this.initController(pageLoc, this, "Unable to load Tag Flow");
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
         updateTags();
         this.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 localParent.setPrefHeight(newValue.doubleValue());
+                System.out.println(newValue.doubleValue());
             }
         });
+        this.setMaxHeight(100);
     }
 
     public void updateTags() {
@@ -65,7 +62,5 @@ public class TagFlowPane extends FlowPane implements IUIController, Initializabl
         });
 
         this.getChildren().add(addButton);
-
-        this.updateBounds();
     }
 }

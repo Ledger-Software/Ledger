@@ -1,5 +1,7 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -27,9 +29,8 @@ public class TagColumn extends TableColumn {
                         setText(null);
                         setGraphic(null);
                     } else {
-                        if (getGraphic() == null) {
-                            setText(tagsToString(model.getTags()));
-                        }
+                        setGraphic(null);
+                        setText(tagsToString(model.getTags()));
                     }
                 }
             };
@@ -38,11 +39,9 @@ public class TagColumn extends TableColumn {
                     TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
                     cell.setText(null);
                     cell.setGraphic(flow);
-                    cell.setPrefHeight(flow.heightProperty().doubleValue());
                 } else {
                     cell.setGraphic(null);
                     cell.setText(tagsToString(cell.getItem().getTags()));
-                    cell.requestLayout();
                 }
             });
             return cell;
