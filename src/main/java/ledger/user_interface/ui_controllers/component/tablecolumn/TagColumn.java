@@ -1,7 +1,5 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.util.Callback;
@@ -44,6 +42,7 @@ public class TagColumn extends TableColumn {
                     cell.setText(tagsToString(cell.getItem().getTags()));
                 }
             });
+
             return cell;
         }
     };
