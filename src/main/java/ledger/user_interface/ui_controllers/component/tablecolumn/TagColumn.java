@@ -26,18 +26,28 @@ public class TagColumn extends TableColumn {
                     if (model == null || empty) {
                         setText(null);
                         setGraphic(null);
+                        setHeight(30);
+                    } else if (isEditing() && getGraphic() != null) {
+                        TagFlowPane pane = new TagFlowPane(model, this);
+                        setGraphic(pane);
+                        setText(null);
                     } else {
+                        setGraphic(null);
                         setText(tagsToString(model.getTags()));
+                        setHeight(30);
                     }
                 }
             };
             cell.editingProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
-                    TagFlowPane flow = new TagFlowPane(cell.getItem());
+                    TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
+                    cell.setText(null);
                     cell.setGraphic(flow);
+                    cell.setPrefHeight(flow.prefHeight(flow.getWidth())/2);
                 } else {
                     cell.setGraphic(null);
                     cell.setText(tagsToString(cell.getItem().getTags()));
+                    cell.setPrefHeight(30);
                 }
             });
             return cell;

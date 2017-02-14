@@ -17,7 +17,7 @@
     <columns>
         <DateColumn fx:id="dateColumn" minWidth="100.0" prefWidth="150.0" text="Date" />
         <PayeeColumn fx:id="payeeColumn" minWidth="100.0" prefWidth="150.0" text="Payee" />
-        <TagColumn fx:id="tagColumn" minWidth="100.0" prefWidth="150.0" text="Tags" />
+        <TagColumn fx:id="tagColumn" minWidth="75.0" prefWidth="150.0" text="Tags" />
         <AccountColumn fx:id="accountColumn" minWidth="100.0" prefWidth="150.0" text="Account" />
         <TypeColumn fx:id="typeColumn" minWidth="100.0" prefWidth="150.0" text="Type" />
         <CheckNumberColumn fx:id="checkNumberColumn" minWidth="100.0" prefWidth="150.0" text="Check Number" />

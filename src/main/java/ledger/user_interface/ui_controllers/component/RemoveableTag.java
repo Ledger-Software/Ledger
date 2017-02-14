@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -25,7 +26,7 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
     private final ITaggable t;
 
     @FXML
-    public Text tagText;
+    public Label tagText;
     @FXML
     public Button removeButton;
 
