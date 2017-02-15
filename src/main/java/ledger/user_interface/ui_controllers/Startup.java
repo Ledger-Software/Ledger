@@ -108,6 +108,7 @@ public class Startup extends Application {
 
     public void switchScene(Scene scene, String title) {
         this.stage.setScene(scene);
+        this.stage.setOnCloseRequest(e -> shutdown());
         this.stage.setTitle(title);
         this.stage.show();
         this.stage.setMinHeight(stage.getHeight());
