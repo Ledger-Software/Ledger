@@ -129,6 +129,8 @@ public interface IUIController {
         newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
         newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initStyle(StageStyle.UTILITY);
+        newStage.setAlwaysOnTop(true);
         newStage.getIcons().add(image);
         newStage.show();
 
