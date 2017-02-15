@@ -19,7 +19,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Controls the input gathered from the IgnoredExpression UI -> add, delete, and edit
+ * Controls the input gathered from the IgnoredExpression UI: add, delete, and edit
  */
 public class IgnoredExpressionPopupController extends GridPane implements Initializable, IUIController {
     private static final String pageLoc = "/fxml_files/IgnoredTransactionPopup.fxml";
