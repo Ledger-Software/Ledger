@@ -1,49 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 
-<fx:root alignment="CENTER" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
-      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="168.0" minWidth="-Infinity" percentWidth="50.0" prefWidth="86.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" percentWidth="50.0" />
-      <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="-Infinity" />
+      <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="125.0" percentWidth="100.0" />
    </columnConstraints>
    <rowConstraints>
-      <RowConstraints fillHeight="false" vgrow="ALWAYS" />
-      <RowConstraints fillHeight="false" vgrow="ALWAYS" />
-      <RowConstraints fillHeight="false" vgrow="ALWAYS" />
+      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="13.0" valignment="TOP" vgrow="ALWAYS" />
    </rowConstraints>
    <children>
-      <TextArea fx:id="noteText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="100.0" wrapText="true" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1">
+      <TextArea fx:id="noteText" maxHeight="30.0" minHeight="30.0" minWidth="125.0" prefHeight="30.0" prefWidth="135.0" wrapText="true" GridPane.halignment="LEFT" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
          <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="3.0" />
          </GridPane.margin></TextArea>
-      <Button fx:id="saveButton" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Save" textAlignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
-         <font>
-            <Font size="10.0" />
-         </font>
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-      </Button>
-      <TextField fx:id="compactNoteText" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS">
-         <GridPane.margin>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-         </GridPane.margin></TextField>
-      <Button fx:id="cancelButton" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Cancel" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2">
-         <GridPane.margin>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </GridPane.margin>
-         <font>
-            <Font size="10.0" />
-         </font>
-      </Button>
    </children>
 </fx:root>

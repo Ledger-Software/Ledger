@@ -5,6 +5,10 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -21,6 +25,8 @@ import java.io.StringWriter;
  */
 public interface IUIController {
 
+    Image image = new Image("/images/Letter-T-blue-icon.png");
+
     /**
      * Generating code for the error popup
      *
@@ -32,22 +38,8 @@ public interface IUIController {
         alert.setTitle("Error!");
         alert.setHeaderText(s);
 
-        /*
-        * The code below will allow us to change the icon in the upper left to match our application icon.
-        * We should use this if we ever get an icon for our app. In future JavaFX versions, dialogs should
-        * use the same icon as the application that its running from. This is not true currently (in 8u40)
-        * */
-
-        // Can grab the application icon like this
-        // dialog.initOwner(otherStage);
-
-        //Or use these below to use a different one.
-
-        // Get the Stage.
-        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-
-        // Add a custom icon.
-        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(image);
 
         alert.showAndWait();
     }
@@ -65,23 +57,8 @@ public interface IUIController {
         alert.setHeaderText(s);
         alert.setContentText(e.getMessage());
 
-        /*
-        * The code below will allow us to change the icon in the upper left to match our application icon.
-        * We should use this if we ever get an icon for our app. In future JavaFX versions, dialogs should
-        * use the same icon as the application that its running from. This is not true currently (in 8u40)
-        * */
-
-        // Can grab the application icon like this
-        // dialog.initOwner(otherStage);
-
-        //Or use these below to use a different one.
-
-        // Get the Stage.
-        //Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-
-        // Add a custom icon.
-        //stage.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
-
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(image);
 
         // Create expandable Exception.
         StringWriter sw = new StringWriter();
@@ -142,11 +119,11 @@ public interface IUIController {
         createModal(null, s, windowName);
     }
 
-    default void createModal(Window parrent, Scene child, String windowName) {
-        createModal(parrent, child, windowName, false);
+    default void createModal(Window parent, Scene child, String windowName) {
+        createModal(parent, child, windowName, false);
     }
 
-    default void createModal(Window parrent, Scene child, String windowName, boolean resizeable) {
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable) {
         Stage newStage = new Stage();
         newStage.setScene(child);
         newStage.setResizable(resizeable);
@@ -154,14 +131,15 @@ public interface IUIController {
         newStage.initModality(Modality.WINDOW_MODAL);
         newStage.initStyle(StageStyle.UTILITY);
         newStage.setAlwaysOnTop(true);
+        newStage.getIcons().add(image);
         newStage.show();
 
-        if (parrent != null) {
-            double x = parrent.getX();
-            double y = parrent.getY();
+        if (parent != null) {
+            double x = parent.getX();
+            double y = parent.getY();
 
-            double xSize = parrent.getWidth();
-            double ySize = parrent.getHeight();
+            double xSize = parent.getWidth();
+            double ySize = parent.getHeight();
 
             double centerX = x + xSize / 2;
             double centerY = y + ySize / 2;
@@ -193,6 +171,7 @@ public interface IUIController {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setResizable(false);
         stage.setAlwaysOnTop(true);
+        stage.getIcons().addAll(image);
         stage.show();
     }
 }

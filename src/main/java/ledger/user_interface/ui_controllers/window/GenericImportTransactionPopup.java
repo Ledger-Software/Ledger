@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Transaction;
@@ -22,7 +24,7 @@ import java.util.ResourceBundle;
 /**
  * Created by CJ on 11/2/2016.
  */
-public class DuplicateTransactionPopup extends GridPane implements Initializable, IUIController {
+public class GenericImportTransactionPopup extends GridPane implements Initializable, IUIController {
 
     @FXML
     private Button importButton;
@@ -30,22 +32,26 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
     private Button skipButton;
     @FXML
     private UserTransactionInput transactionInput;
+    @FXML
+    private Text title;
 
-    private static final String pageLoc = "/fxml_files/DuplicateTransactionPopup.fxml";
+    private static final String pageLoc = "/fxml_files/GenericImportTransactionPopup.fxml";
 
     private List<Transaction> trans;
     private Iterator<Transaction> iter;
 //    private Transaction currentTrans;
 
 
-    public DuplicateTransactionPopup() {
+    public GenericImportTransactionPopup(String title) {
         this.initController(pageLoc, this, "Unable to load Duplicate Transaction Popup");
         this.trans = new ArrayList<>();
+        this.title.setText(title);
     }
 
-    public DuplicateTransactionPopup(List<Transaction> trans) {
+    public GenericImportTransactionPopup(List<Transaction> trans, String title) {
         this.trans = trans;
         this.initController(pageLoc, this, "Unable to load Duplicate Transaction Popup");
+        this.title.setText(title);
     }
 
     @Override
@@ -81,6 +87,8 @@ public class DuplicateTransactionPopup extends GridPane implements Initializable
 
 
     private void closeWindow() {
-        ((Stage) this.getScene().getWindow()).close();
+
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).fireEvent(new WindowEvent(((Stage) this.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST)));
+
     }
 }

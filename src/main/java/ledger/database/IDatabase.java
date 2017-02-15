@@ -91,5 +91,18 @@ public interface IDatabase {
     void addBalanceForAccount(AccountBalance balance) throws StorageException;
 
     void setDatabaseAutoCommit(boolean commit) throws StorageException;
+
+    void insertIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    void deleteIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    void editIgnoredExpression(IgnoredExpression igEx) throws StorageException;
+
+    List<IgnoredExpression> getAllIgnoredExpressions() throws StorageException;
+
+    boolean isTransactionIgnored(Transaction transaction) throws StorageException;
+
+
+
 }
 

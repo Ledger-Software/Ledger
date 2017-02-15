@@ -1,15 +1,20 @@
 package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ledger.controller.ImportController;
+import ledger.controller.register.CallableMethodVoidNoArgs;
 import ledger.controller.register.TaskWithArgsReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
@@ -21,6 +26,8 @@ import ledger.user_interface.ui_controllers.component.FileSelectorButton;
 
 import java.io.File;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -39,6 +46,9 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
     @FXML
     private ConverterDropdown converterSelector;
+
+    @FXML
+    private Button ignoreEditorButton;
 
     private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
@@ -59,6 +69,11 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+        this.ignoreEditorButton.setOnAction(event -> {
+            IgnoredExpressionPopupController ignoredExpressionPopupController = new IgnoredExpressionPopupController();
+            Scene scene = new Scene(ignoredExpressionPopupController);
+            this.createModal(this.getScene().getWindow(), scene, "Ignored Transactions");
+        });
         fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("QFX files (*.qfx)", "*.qfx"));
@@ -100,24 +115,71 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         for (Transaction fail : importFailures.failedTransactions) {
             // Todo: Do we even want to show the user?
         }
+        ignoredTransacionDialog(importFailures.ignoredTransactions,
+                ()-> genericTransactionsWindow(importFailures.duplicateTransactions,()->{}, "Duplicate Transactions", "Duplicate!"));
 
-        if (importFailures.duplicateTransactions.size() > 0)
+
+
+        closeWindow();
+    }
+    private void genericTransactionsWindow(List<Transaction> transactions, CallableMethodVoidNoArgs method, String title, String topTitle){
+        if (transactions.size() > 0)
             Startup.INSTANCE.runLater(() -> {
-                DuplicateTransactionPopup popup = new DuplicateTransactionPopup(importFailures.duplicateTransactions);
+                GenericImportTransactionPopup popup = new GenericImportTransactionPopup(transactions, title);
                 Scene scene = new Scene(popup);
                 Stage newStage = new Stage();
                 newStage.setScene(scene);
                 newStage.setResizable(false);
-                newStage.setTitle("Duplicate!");
+                newStage.setTitle(topTitle);
                 newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.show();
-            });
 
-        closeWindow();
+                newStage.setOnCloseRequest(event -> {
+
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        setupErrorPopup("Failed to run method", e);
+                    }
+                    newStage.close();
+
+                });
+                newStage.show();
+
+            });
+    }
+    private void ignoredTransacionDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method){
+        if (transactionList.size() > 0)
+            Startup.INSTANCE.runLater(() -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Ignored Transactions");
+                alert.setHeaderText("There were " + transactionList.size() + " automatically ignored transactions .");
+                alert.setContentText("Would you like to review them?");
+                ButtonType reviewIgnored = new ButtonType("Review Transactions");
+                ButtonType discardIgnored = new ButtonType("Discard Transactions");
+                alert.getButtonTypes().setAll(reviewIgnored, discardIgnored);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == reviewIgnored) {
+                    genericTransactionsWindow(transactionList,
+                            method, "Ignored Transactions", "Ignored!");
+                } else {
+                    try {
+                        method.call();
+                    } catch (Exception e) {
+                        setupErrorPopup("Failed to run method", e);
+                    }
+                }
+            });
+            else {
+            try {
+                method.call();
+            } catch (Exception e) {
+                setupErrorPopup("Failed to run method", e);
+            }
+        }
     }
 
     private void closeWindow() {
-        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).fireEvent(new WindowEvent(((Stage) this.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST)));
     }
 
 }
