@@ -72,7 +72,7 @@ public class Startup extends Application {
     public void createLoginPage() {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
-        switchScene(scene, "Ledger Login");
+        newStage(scene, "Ledger Login", false);
     }
 
     private void checkForUpdates() {
@@ -126,6 +126,7 @@ public class Startup extends Application {
     public void newStage(Scene scene, String title, boolean resizable) {
         this.stage.close();
         this.stage = new Stage();
+        this.stage.setResizable(resizable);
         this.stage.getIcons().add(image);
         this.switchScene(scene, title);
     }
