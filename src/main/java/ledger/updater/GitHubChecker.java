@@ -29,13 +29,13 @@ public class GitHubChecker {
 
     public static class Release {
         @Key
-        public final String tag_name;
+        public String tag_name;
 
         @Key
-        public final List<Asset> assets;
+        public List<Asset> assets;
 
         @Key
-        public final String name;
+        public String name;
 
         public Asset getDownloadAsset() {
             for (Asset a : assets) {
@@ -67,11 +67,11 @@ public class GitHubChecker {
 
     public static class Asset {
         @Key
-        public final String browser_download_url;
+        public String browser_download_url;
         @Key
-        public final String name;
+        public String name;
         @Key
-        public final long size;
+        public long size;
     }
 
     public boolean isUpdateAvailable() {
