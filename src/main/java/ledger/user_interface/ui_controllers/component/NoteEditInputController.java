@@ -34,6 +34,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
     /**
      * Basic Constructor
+     * @param transaction The {@link Transaction} that this will handle
      */
     public NoteEditInputController(Transaction transaction) {
         this.transaction = transaction;
