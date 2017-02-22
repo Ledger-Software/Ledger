@@ -19,8 +19,8 @@ import java.util.List;
  * (will only work if running for a jar with a manifest version)
  */
 public class GitHubChecker {
-    static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    static final JacksonFactory JACKSON_FACTORY = new JacksonFactory();
+    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static final JacksonFactory JACKSON_FACTORY = new JacksonFactory();
     private Release newerRelease;
 
     public Release getNewerRelease() {
@@ -29,13 +29,13 @@ public class GitHubChecker {
 
     public static class Release {
         @Key
-        public String tag_name;
+        public final String tag_name;
 
         @Key
-        public List<Asset> assets;
+        public final List<Asset> assets;
 
         @Key
-        public String name;
+        public final String name;
 
         public Asset getDownloadAsset() {
             for (Asset a : assets) {
@@ -67,14 +67,14 @@ public class GitHubChecker {
 
     public static class Asset {
         @Key
-        public String browser_download_url;
+        public final String browser_download_url;
         @Key
-        public String name;
+        public final String name;
         @Key
-        public long size;
+        public final long size;
     }
 
-    public boolean isUpdateAvaliable() {
+    public boolean isUpdateAvailable() {
         try {
             Release[] releases = getReleases();
             if (hasNewerRelease(releases)) {
