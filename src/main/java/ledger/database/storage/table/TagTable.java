@@ -2,10 +2,10 @@ package ledger.database.storage.table;
 
 public class TagTable {
 
-    public static String TABLE_NAME = "TAG";
-    public static String TAG_ID = "TAG_ID";
-    public static String TAG_NAME = "TAG_NAME";
-    public static String TAG_DESC = "TAG_DESC";
+    public static final String TABLE_NAME = "TAG";
+    public static final String TAG_ID = "TAG_ID";
+    public static final String TAG_NAME = "TAG_NAME";
+    public static final String TAG_DESC = "TAG_DESC";
 
     /**
      * Creates the String command to create the table for this object.

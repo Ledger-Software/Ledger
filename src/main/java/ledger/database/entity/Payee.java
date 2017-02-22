@@ -14,7 +14,7 @@ public class Payee implements IEntity, ITaggable{
     private List<Tag> tags;
 
     public Payee(String name, String description) {
-        this(name, description, -1, new ArrayList<Tag>());
+        this(name, description, -1, new ArrayList<>());
     }
 
     public Payee(String name, String description, int id, List<Tag> tags) {
@@ -139,8 +139,7 @@ public class Payee implements IEntity, ITaggable{
         if (this.getName() == null && otherPayee.getName() != null) return false;
         if (this.getDescription() == null && otherPayee.getDescription() != null) return false;
         if (this.getName() != null && !this.getName().equals((otherPayee.getName()))) return false;
-        if (this.getDescription() != null && !this.getDescription().equals((otherPayee.getDescription()))) return false;
-        return true;
+        return !(this.getDescription() != null && !this.getDescription().equals((otherPayee.getDescription())));
     }
 
 }

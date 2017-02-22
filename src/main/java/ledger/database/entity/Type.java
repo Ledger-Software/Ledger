@@ -86,8 +86,6 @@ public class Type implements IEntity {
 
         if (!(this.id == type2.getId())) return false;
         if (!this.name.equals(type2.getName())) return false;
-        if (!this.description.equals(type2.getDescription())) return false;
-
-        return true;
+        return this.description.equals(type2.getDescription());
     }
 }

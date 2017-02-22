@@ -85,9 +85,7 @@ public class Account implements IEntity {
         Account acc = (Account) o;
 
         if (!this.getName().equals(acc.getName())) return false;
-        if (!this.getDescription().equals(acc.getDescription())) return false;
-
-        return true;
+        return this.getDescription().equals(acc.getDescription());
     }
 
     @Override

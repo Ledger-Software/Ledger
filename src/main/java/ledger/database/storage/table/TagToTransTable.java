@@ -2,9 +2,9 @@ package ledger.database.storage.table;
 
 public class TagToTransTable {
 
-    public static String TABLE_NAME = "TAG_TO_TRANS";
-    public static String TTTS_TAG_ID = "TTTS_TAG_ID";
-    public static String TTTS_TRANS_ID = "TTTS_TRANS_ID";
+    public static final String TABLE_NAME = "TAG_TO_TRANS";
+    public static final String TTTS_TAG_ID = "TTTS_TAG_ID";
+    public static final String TTTS_TRANS_ID = "TTTS_TRANS_ID";
 
     /**
      * Creates the String command to create the table for this object.

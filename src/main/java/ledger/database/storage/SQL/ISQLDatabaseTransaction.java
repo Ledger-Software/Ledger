@@ -346,12 +346,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-
-                String resultTagName = tagName;
-                String resultTagDesc = tagDescription;
                 int id = rs.getInt(TagTable.TAG_ID);
 
-                return new Tag(resultTagName, resultTagDesc, id);
+                return new Tag(tagName, tagDescription, id);
             } else {
                 return null;
             }
@@ -373,19 +370,14 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-
-                String newName = payeeName;
-                String description = payeeDescription;
                 int id = rs.getInt(PayeeTable.PAYEE_ID);
                 List<Tag> tags = getAllTagsForPayeeId(id);
 
-                return new Payee(newName, description, id, tags);
+                return new Payee(payeeName, payeeDescription, id, tags);
             } else {
                 return null;
             }
-        } catch (java.sql.SQLException e) {
-            e.printStackTrace();
-        } catch (StorageException e) {
+        } catch (SQLException | StorageException e) {
             e.printStackTrace();
         }
         return null;
@@ -634,10 +626,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     IgnoredExpressionTable.IGNORE_EXPRESSION+ "=? ");
             stmt.setString(1, exp);
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                return false;
-            }
-            return true;
+            return !rs.next();
         } catch (java.sql.SQLException e){
             throw new StorageException("Error while comparing a match Ignored Expression");
         }

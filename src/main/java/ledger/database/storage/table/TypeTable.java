@@ -7,10 +7,10 @@ import java.util.List;
 
 public class TypeTable {
 
-    public static String TABLE_NAME = "TYPE";
-    public static String TYPE_ID = "TYPE_ID";
-    public static String TYPE_NAME = "TYPE_NAME";
-    public static String TYPE_DESC = "TYPE_DESC";
+    public static final String TABLE_NAME = "TYPE";
+    public static final String TYPE_ID = "TYPE_ID";
+    public static final String TYPE_NAME = "TYPE_NAME";
+    public static final String TYPE_DESC = "TYPE_DESC";
 
     /**
      * Creates the String command to create the table for this object.
