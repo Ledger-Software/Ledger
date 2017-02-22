@@ -13,7 +13,7 @@ import java.util.List;
  * Handles all translation from File to putting into storage
  */
 public class ImportController {
-    public static ImportController INSTANCE;
+    public static final ImportController INSTANCE;
 
     static {
         INSTANCE = new ImportController();
@@ -22,7 +22,7 @@ public class ImportController {
     private ImportController() {
     }
 
-    public Converter[] getAvaliableConverters() {
+    public Converter[] getAvailableConverters() {
         return Converter.values();
     }
 
@@ -36,15 +36,15 @@ public class ImportController {
      * @return An object wrapping two lists. One list is the list of successfully converted transactions. One list contains duplicate transactions.
      */
     public TaskWithArgsReturn<Account, ImportFailures> importTransactions(Converter type, File path, Account account) {
-        return new TaskWithArgsReturn<Account, ImportFailures>((acc) -> {
+        return new TaskWithArgsReturn<>((acc) -> {
             IInAdapter<Transaction> converter = type.method.create(path, acc);
 
             List<Transaction> trans = converter.convert();
             IgnoredDetector igs = new IgnoredDetector(trans);
             IgnoredDetectionResult ignoredDetectionResult = igs.detectIgnoreTransactions(DbController.INSTANCE.getDb());
             List<Transaction> ignoredTransactions = ignoredDetectionResult.getIgnoredTransactions();
-            DuplicateDetector dups = new DuplicateDetector(ignoredDetectionResult.getVerifiedTransactions());
-            DetectionResult result = dups.detectDuplicates(DbController.INSTANCE.getDb());
+            DuplicateDetector duplicates = new DuplicateDetector(ignoredDetectionResult.getVerifiedTransactions());
+            DetectionResult result = duplicates.detectDuplicates(DbController.INSTANCE.getDb());
 
             List<Transaction> transactions = result.getVerifiedTransactions();
             Tagger tagger = new Tagger(transactions);
@@ -62,9 +62,9 @@ public class ImportController {
     }
 
     public class ImportFailures {
-        public List<Transaction> failedTransactions;
-        public List<Transaction> duplicateTransactions;
-        public List<Transaction> ignoredTransactions;
+        public final List<Transaction> failedTransactions;
+        public final List<Transaction> duplicateTransactions;
+        public final List<Transaction> ignoredTransactions;
 
         public ImportFailures(List<Transaction> failedTransactions, List<Transaction> duplicateTransactions, List<Transaction> ignoredTransactions) {
             this.failedTransactions = failedTransactions;
@@ -85,8 +85,8 @@ public class ImportController {
         USBankCSV("US Bank CSV", USBankCSVConverter::new),
         USBankQFX("US Bank QFX", USBankQFXConverter::new);
 
-        private String niceName;
-        private ConverterConstructor method;
+        private final String niceName;
+        private final ConverterConstructor method;
 
         Converter(String niceName, ConverterConstructor method) {
             this.niceName = niceName;

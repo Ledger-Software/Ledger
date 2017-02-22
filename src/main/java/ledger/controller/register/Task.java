@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by CJ on 2/5/2017.
+ * Abstract implementation for {@link ITask} that implements {@link #startTask} and {@link #waitForComplete}
  */
 public abstract class Task implements ITask {
 
-    private List<CallableMethod<Exception>> failureEvents;
+    private final List<CallableMethod<Exception>> failureEvents;
 
     protected Task() {
-        this.failureEvents = new ArrayList<CallableMethod<Exception>>();
+        this.failureEvents = new ArrayList<>();
     }
 
     @Override
@@ -28,7 +28,7 @@ public abstract class Task implements ITask {
     public final void waitForComplete() {
         try {
             getThread().join();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException ignored) {
 
         }
     }
