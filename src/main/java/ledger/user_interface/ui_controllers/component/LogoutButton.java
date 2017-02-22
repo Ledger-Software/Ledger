@@ -17,9 +17,9 @@ import java.util.ResourceBundle;
  * Button that redirects to login screen and properly closes the database file
  */
 public class LogoutButton extends Button implements IUIController, Initializable {
-    private static String pageLoc = "/fxml_files/Button.fxml";
 
     public LogoutButton() {
+        String pageLoc = "/fxml_files/Button.fxml";
         this.initController(pageLoc, this, "Unable to load Logout Button");
     }
 

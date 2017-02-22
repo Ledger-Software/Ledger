@@ -8,11 +8,7 @@ import javafx.util.StringConverter;
 public class IsMatchConverter extends StringConverter<Boolean> {
 
     public Boolean fromString(String matchString) {
-        if (matchString.equals("Matches")) {
-            return true;
-        } else {
-            return false;
-        }
+        return matchString.equals("Matches");
     }
 
     public String toString(Boolean match) {

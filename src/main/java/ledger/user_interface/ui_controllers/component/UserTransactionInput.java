@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers.component;
 
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,10 +20,7 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Control that allows for user input of transactions. On calling getAccountSubmission it does sanitation and tells the
@@ -32,7 +28,6 @@ import java.util.ResourceBundle;
  */
 public class UserTransactionInput extends GridPane implements IUIController, Initializable {
     private static final String pageLog = "/fxml_files/UserTransactionInput.fxml";
-    private ChangeListener<Type> checkListener;
 
     @FXML
     private DatePicker datePicker;
@@ -74,8 +69,9 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
         this.typeText.setDisable(true);
-        this.checkListener = (observable, oldValue, newValue) -> {
-            if( new TypeComparator().compare(TypeConversion.CHECK, newValue) ==0){
+
+        ChangeListener<Type> checkListener = (observable, oldValue, newValue) -> {
+            if (new TypeComparator().compare(TypeConversion.CHECK, newValue) == 0) {
                 checkLabel.setVisible(true);
                 checkField.setVisible(true);
             } else {
@@ -87,7 +83,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         this.notesText.setText("");
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
-        typeTask.RegisterFailureEvent((e) -> e.printStackTrace());
+        typeTask.RegisterFailureEvent(Throwable::printStackTrace);
         typeTask.RegisterSuccessEvent((list) -> {
             this.typeText.setItems(FXCollections.observableArrayList(list));
             this.typeText.setConverter(new TypeStringConverter());
@@ -96,7 +92,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         });
         typeTask.startTask();
         this.datePicker.setValue(LocalDate.now());
-        this.typeText.valueProperty().addListener(this.checkListener);
+        this.typeText.valueProperty().addListener(checkListener);
     }
 
     /**
@@ -143,7 +139,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             amountString = amountString.substring(1);
         }
         double amountToSetDecimal = Double.parseDouble(amountString);
-        long amount = (long) Math.round(amountToSetDecimal * 100);
+        long amount = Math.round(amountToSetDecimal * 100);
 
 
         Note notes = new Note(this.notesText.getText());
@@ -163,13 +159,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         }
 
         if (checkNo.equals("")) {
-            Transaction t = new Transaction(date, type, amount, account,
+            return new Transaction(date, type, amount, account,
                     payee, pending, category, notes);
-            return t;
         } else {
-            Transaction t = new Transaction(date, type, amount, account,
+            return new Transaction(date, type, amount, account,
                     payee, pending, category, notes, Integer.parseInt(checkNo));
-            return t;
         }
 
 

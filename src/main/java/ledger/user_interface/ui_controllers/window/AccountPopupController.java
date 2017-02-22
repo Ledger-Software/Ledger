@@ -80,9 +80,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     }
 
     private void insertDone() {
-        Startup.INSTANCE.runLater(() -> {
-            ((Stage) this.getScene().getWindow()).close();
-        });
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
     }
 
     private void insertFail(Exception e) {
@@ -96,7 +94,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
      *
      * @return a new Account object
      */
-    public Account getAccountSubmission() throws NullPointerException {
+    private Account getAccountSubmission() throws NullPointerException {
         if (InputSanitization.isStringInvalid(accountNameText.getText())) {
             return null;
         } else if (InputSanitization.isStringInvalid(accountDescription.getText())) {
@@ -113,7 +111,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
      *
      * @return a new AccountBalance object
      */
-    public AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
+    private AccountBalance getAccountBalance() throws NullPointerException, NumberFormatException {
         AccountBalance ab;
         long amount;
         if (InputSanitization.isInvalidAmount(accountAmtText.getText())) {

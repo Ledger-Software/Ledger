@@ -1,11 +1,13 @@
 package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -31,12 +33,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
 
     private File saveLocation;
 
-    @FXML
-    public void onEnter(ActionEvent ae) {
-        submitForm();
-    }
-
-    public final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
+    private final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
 
 
     CreateDatabaseController() {
@@ -47,6 +44,18 @@ public class CreateDatabaseController extends GridPane implements IUIController,
     public void initialize(URL location, ResourceBundle resources) {
         this.submitButton.setOnAction(event -> submitForm());
         this.saveLocationButton.setOnAction(this::saveLocation);
+
+        EventHandler<? super javafx.scene.input.KeyEvent> eh = new EventHandler<javafx.scene.input.KeyEvent>() {
+            @Override
+            public void handle(javafx.scene.input.KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER) {
+                    submitForm();
+                }
+            }
+        };
+
+        this.password.setOnKeyPressed(eh);
+        this.confirmPassword.setOnKeyPressed(eh);
     }
 
     private void saveLocation(ActionEvent actionEvent) {
@@ -87,9 +96,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
 
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
-            Startup.INSTANCE.runLater(() -> {
-                ((Stage) this.getScene().getWindow()).close();
-            });
+            Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
 
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);

@@ -1,16 +1,9 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
-import javafx.event.EventHandler;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
-import ledger.database.entity.Transaction;
-import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.component.TransactionTableView;
+import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.AmountEventHandler;
 import ledger.user_interface.utils.AmountDebitStringConverter;
-import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -26,8 +19,8 @@ public class AmountDebitColumn extends AAmountColumn {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.setCellValueFactory(new PropertyValueFactory<Transaction, Integer>("amount"));
+        this.setCellValueFactory(new PropertyValueFactory<>("amount"));
         this.setCellFactory(TextFieldTableCell.forTableColumn(new AmountDebitStringConverter()));
-        this.setOnEditCommit(this.amountEditHandler);
+        this.setOnEditCommit(new AmountEventHandler());
     }
 }

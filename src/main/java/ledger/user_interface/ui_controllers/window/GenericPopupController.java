@@ -25,8 +25,8 @@ public class GenericPopupController extends GridPane implements Initializable, I
     private Text title;
 
     private final static String pageLoc = "/fxml_files/GenericPopup.fxml";
-    private String msg;
-    private String windowTitle;
+    private final String msg;
+    private final String windowTitle;
 
     GenericPopupController(String msg, String windowTitle) {
         this.msg = msg;

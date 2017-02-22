@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers.window;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -115,7 +114,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         for (Transaction fail : importFailures.failedTransactions) {
             // Todo: Do we even want to show the user?
         }
-        ignoredTransacionDialog(importFailures.ignoredTransactions,
+        ignoredTransactionsDialog(importFailures.ignoredTransactions,
                 ()-> genericTransactionsWindow(importFailures.duplicateTransactions,()->{}, "Duplicate Transactions", "Duplicate!"));
 
 
@@ -147,7 +146,8 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
 
             });
     }
-    private void ignoredTransacionDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method){
+
+    private void ignoredTransactionsDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method){
         if (transactionList.size() > 0)
             Startup.INSTANCE.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -179,7 +179,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     }
 
     private void closeWindow() {
-        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).fireEvent(new WindowEvent(((Stage) this.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST)));
+        Startup.INSTANCE.runLater(() -> this.getScene().getWindow().fireEvent(new WindowEvent(this.getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST)));
     }
 
 }

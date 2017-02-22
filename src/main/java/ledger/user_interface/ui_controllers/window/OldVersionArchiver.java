@@ -21,17 +21,17 @@ import java.util.ResourceBundle;
  */
 public class OldVersionArchiver extends GridPane implements IUIController, Initializable {
 
-    private static String pageLoc = "/fxml_files/DeleteArchivePrompt.fxml";
     private final File jarFile;
 
     @FXML
-    public Button deleteButton;
+    private Button deleteButton;
 
     @FXML
-    public Button archiveButton;
+    private Button archiveButton;
 
     public OldVersionArchiver(File jarFile) {
         this.jarFile = jarFile;
+        String pageLoc = "/fxml_files/DeleteArchivePrompt.fxml";
         this.initController(pageLoc, this, "Error loading Old Version Archiver");
     }
 

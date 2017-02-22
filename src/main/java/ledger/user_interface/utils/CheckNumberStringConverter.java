@@ -3,14 +3,14 @@ package ledger.user_interface.utils;
 import javafx.util.StringConverter;
 
 /**
- * Created by Jesse Shellabarger on 2/5/2017.
+ * {@link StringConverter} for Check Numbers
  */
 public class CheckNumberStringConverter extends StringConverter<Integer> {
 
     @Override
     public String toString(Integer checkNum) {
         String checkNumString;
-        if (checkNum == null || checkNum.equals(new Integer(-1)))
+        if (checkNum == null || checkNum.equals(-1))
             checkNumString = "";
         else {
             checkNumString = checkNum.toString();

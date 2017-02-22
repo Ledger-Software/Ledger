@@ -9,7 +9,6 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
@@ -100,9 +99,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
      */
     private void getTransactions() {
         TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.getAllTransactions();
-        task.RegisterFailureEvent(e -> {
-            setupErrorPopup("Error retrieving transactions.", new Exception());
-        });
+        task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving transactions.", new Exception()));
         task.startTask();
         this.allTransactions = task.waitForResult();
     }
@@ -163,15 +160,14 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private void orderMonthsAndYears(Map<String, Integer> monthToYear, List<String> preorderedMonths) {
         preorderedMonths.sort((String o1, String o2) -> {
             SimpleDateFormat s = new SimpleDateFormat("MMM");
-            Date s1 = null;
-            Date s2 = null;
             try {
-                s1 = s.parse(o1);
-                s2 = s.parse(o2);
+                Date s1 = s.parse(o1);
+                Date s2 = s.parse(o2);
+                return s1.compareTo(s2);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            return s1.compareTo(s2);
+            return -1;
         });
         // takes care of transitioning into a new year
         List<String> monthsInNextYear = new ArrayList<>();
@@ -183,9 +179,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 lowestYear = monthToYear.get(preorderedMonths.get(j));
             }
         }
-        for (int i = 0; i < preorderedMonths.size(); i++) {
-            if (monthToYear.get(preorderedMonths.get(i)) > lowestYear) {
-                monthsInNextYear.add(preorderedMonths.get(i));
+        for (String preorderedMonth : preorderedMonths) {
+            if (monthToYear.get(preorderedMonth) > lowestYear) {
+                monthsInNextYear.add(preorderedMonth);
             }
         }
         // takes the months in the next year out of the beginning of the list and tacks them on the end
@@ -340,10 +336,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             map.put(key, value);
         } else {
             Long existingAmount = (Long) map.get(key);
-            Long newAmount = existingAmount;
-            newAmount += value;
+            existingAmount += value;
 
-            map.put(key, newAmount);
+            map.put(key, existingAmount);
         }
     }
 }

@@ -5,10 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -159,9 +156,7 @@ public interface IUIController {
         Stage stage = new Stage(StageStyle.DECORATED);
         for (ButtonType bt : root.getButtonTypes()) {
             ButtonBase b = (ButtonBase) root.lookupButton(bt);
-            b.setOnAction(e -> {
-                stage.close();
-            });
+            b.setOnAction(e -> stage.close());
         }
         root.getScene().setRoot(new Group());
         root.setPadding(new Insets(10, 0, 10, 0));

@@ -1,7 +1,8 @@
 package ledger.user_interface.utils;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link javafx.util.StringConverter} that's toString formats the amount into a proper
+ * debit currency amount string.
  */
 public class AmountDebitStringConverter extends AAmountStringConverter {
 
@@ -13,7 +14,7 @@ public class AmountDebitStringConverter extends AAmountStringConverter {
         }
 
         double amountToSetDecimal = Double.parseDouble(amountString);
-        long amount = (long) Math.round(amountToSetDecimal * 100);
+        long amount = Math.round(amountToSetDecimal * 100);
         amount = -amount;
         return amount;
     }

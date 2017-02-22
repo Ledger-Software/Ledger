@@ -20,10 +20,6 @@ import ledger.user_interface.utils.AmountStringConverter;
 
 import java.net.URL;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -34,22 +30,22 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
   
     @FXML
-    public AmountColumn amountColumn;
+    private AmountColumn amountColumn;
 
     @FXML
-    public AmountDebitColumn amountDebitColumn;
+    private AmountDebitColumn amountDebitColumn;
 
     @FXML
-    public AmountCreditColumn amountCreditColumn;
+    private AmountCreditColumn amountCreditColumn;
 
     @FXML
-    public AccountColumn accountColumn;
+    private AccountColumn accountColumn;
 
     @FXML
-    public CheckNumberColumn checkNumberColumn;
+    private CheckNumberColumn checkNumberColumn;
 
     @FXML
-    public TagColumn tagColumn;
+    private TagColumn tagColumn;
 
     private Account accountFilter;
     private String searchFilterString = "";
@@ -152,7 +148,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             }
             Account acc = accountList.get(0);
             
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<Tag>(), new Note("")));
+            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
             task.startTask();
 
         });
@@ -172,12 +168,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         List<Transaction> transactions = task.waitForResult();
 
         // 0. Manually sort the list based on Date to force a default sorted order
-        transactions.sort(new Comparator<Transaction>() {
-            @Override
-            public int compare(Transaction transaction1, Transaction transaction2) {
-                return transaction1.getDate().compareTo(transaction2.getDate());
-            }
-        });
+        transactions.sort(Comparator.comparing(Transaction::getDate));
 
         ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
 
@@ -203,11 +194,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 return true; // Filter matches tags.
             } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
                 return true; // Filter matches check number.
-            } else if (transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true; // Filter matches account name.
-            }else {
-                return false; // Filter does not match.
-            }
+            } else // Filter matches account name.
+// Filter does not match.
+                return transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter);
         });
 
         // 3. Wrap the FilteredList in a SortedList.
@@ -227,14 +216,14 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             List<Integer> indices = new ArrayList<>();
             // Add indices to new list so they aren't observable
             indices.addAll(this.getSelectionModel().getSelectedIndices());
             if (indices.size() != 0) {
 
                 //TODO: Get around this scary mess
-                if (indices.contains(new Integer(-1))) {
+                if (indices.contains(-1)) {
                     indices = this.getSelectionModel().getSelectedIndices();
                 }
 
@@ -251,8 +240,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 }
                 updateTransactionTableView();
             }
-        } else {
-            return;
         }
     }
 

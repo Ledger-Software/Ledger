@@ -28,7 +28,7 @@ public class PasswordPromptController extends GridPane implements IUIController,
         this.reconnect();
     }
 
-    public final static String pageLoc = "/fxml_files/PasswordPrompt.fxml";
+    private final static String pageLoc = "/fxml_files/PasswordPrompt.fxml";
 
     public PasswordPromptController() {
         this.initController(pageLoc, this, "Error displaying password prompt: ");

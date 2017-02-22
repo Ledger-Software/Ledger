@@ -6,8 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
@@ -20,20 +18,20 @@ import java.util.ResourceBundle;
 /**
  * Controller as part of a TagFlowPane that slows a Tag and allows it to be removed
  */
-public class RemoveableTag extends GridPane implements IUIController, Initializable {
+public class RemovableTag extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagButton.fxml";
     private final Tag tag;
     private final ITaggable t;
 
     @FXML
-    public Label tagText;
+    private Label tagText;
     @FXML
-    public Button removeButton;
+    private Button removeButton;
 
-    public RemoveableTag(ITaggable model, Tag tag) {
+    public RemovableTag(ITaggable model, Tag tag) {
         this.t = model;
         this.tag = tag;
-        this.initController(pageLoc, this, "Unable to load Removeable Tag Button");
+        this.initController(pageLoc, this, "Unable to load Removable Tag Button");
     }
 
     @Override
@@ -46,9 +44,7 @@ public class RemoveableTag extends GridPane implements IUIController, Initializa
         t.getTags().remove(tag);
 
         TaskWithArgs<ITaggable> task = TaggableSwitch.edit(t);
-        task.RegisterFailureEvent((e) -> {
-            setupErrorPopup("Error editing tag field.", e);
-        });
+        task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing tag field.", e));
 
         task.startTask();
         task.waitForComplete();
