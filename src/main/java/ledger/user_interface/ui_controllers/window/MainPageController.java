@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -212,7 +212,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // ... user chose OK
-            TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
+            TaskNoReturn t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
             t.RegisterFailureEvent(Throwable::printStackTrace);
             t.startTask();
         }

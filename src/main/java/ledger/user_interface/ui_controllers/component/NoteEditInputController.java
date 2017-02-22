@@ -11,7 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Note;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -82,8 +82,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
                 noteText.appendText(System.lineSeparator());
             } else if (event.getCode() == KeyCode.ENTER) {
                 transaction.getNote().setNoteText(noteText.getText());
-                TaskWithArgs<Transaction> updateNoteTask;
-                updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
+                TaskNoReturn updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
                 updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> toggleEditors(false)));
                 updateNoteTask.startTask();
                 updateNoteTask.waitForComplete();

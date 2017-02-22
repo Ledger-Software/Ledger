@@ -1,6 +1,6 @@
 package ledger.controller;
 
-import ledger.controller.register.TaskWithArgsReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.io.input.*;
@@ -35,9 +35,9 @@ public class ImportController {
      * @param account The account to add the transactions to
      * @return An object wrapping two lists. One list is the list of successfully converted transactions. One list contains duplicate transactions.
      */
-    public TaskWithArgsReturn<Account, ImportFailures> importTransactions(Converter type, File path, Account account) {
-        return new TaskWithArgsReturn<>((acc) -> {
-            IInAdapter<Transaction> converter = type.method.create(path, acc);
+    public TaskWithReturn<ImportFailures> importTransactions(Converter type, File path, Account account) {
+        return new TaskWithReturn<>(() -> {
+            IInAdapter<Transaction> converter = type.method.create(path, account);
 
             List<Transaction> trans = converter.convert();
             IgnoredDetector igs = new IgnoredDetector(trans);
@@ -50,7 +50,7 @@ public class ImportController {
             Tagger tagger = new Tagger(transactions);
             tagger.tagTransactions();
 
-            TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(transactions);
+            TaskWithReturn<List<Transaction>> task = DbController.INSTANCE.batchInsertTransaction(transactions);
             task.startTask();
             List<Transaction> failedTransactions = task.waitForResult();
             List<Transaction> duplicateTransaction = result.getPossibleDuplicates();
@@ -58,7 +58,7 @@ public class ImportController {
             taggerDupes.tagTransactions();
 
             return new ImportFailures(failedTransactions, duplicateTransaction, ignoredTransactions);
-        }, account);
+        });
     }
 
     public class ImportFailures {

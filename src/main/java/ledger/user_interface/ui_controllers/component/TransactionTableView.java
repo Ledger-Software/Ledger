@@ -9,7 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.io.input.TypeConversion;
@@ -148,7 +148,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             }
             Account acc = accountList.get(0);
 
-            TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
+            TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
             task.startTask();
 
         });
@@ -230,7 +230,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 for (int i : indices) {
                     Transaction transactionToDelete = this.getItems().get(i);
 
-                    TaskWithArgs<Transaction> task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                    TaskNoReturn task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
                     task.RegisterFailureEvent((e) -> {
                         asyncTableUpdate();
                         setupErrorPopup("Error deleting transaction.", e);
@@ -249,8 +249,8 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         configureTransactionTableView();
         updateTransactionTableView();
 
-        DbController.INSTANCE.registerTransactionSuccessEvent(this::asyncTableUpdate);
-        DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncTableUpdate);
+        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncTableUpdate());
+        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncTableUpdate());
     }
 
     public void updateAccountFilter(Account accountToFilterBy) {

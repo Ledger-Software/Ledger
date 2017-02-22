@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.WindowEvent;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
@@ -63,7 +63,7 @@ public class GenericImportTransactionPopup extends GridPane implements Initializ
     }
 
     private void importTrans() {
-        TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transactionInput.getTransactionSubmission());
+        TaskNoReturn task = DbController.INSTANCE.insertTransaction(transactionInput.getTransactionSubmission());
 
         task.RegisterSuccessEvent(this::next);
         task.RegisterFailureEvent((e) -> this.next());

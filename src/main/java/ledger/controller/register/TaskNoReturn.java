@@ -4,23 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link ITask} that takes a method with an argument
+ * {@link ITask} that takes a method with no argument and has a return type
  */
-public class TaskWithArgs<A> extends Task {
-    private final List<CallableMethodVoidNoArgs> SuccessEvents;
+public class TaskNoReturn extends Task<Void> {
 
     private final Thread t;
 
-    public TaskWithArgs(final CallableMethod<A> task, final A args) {
-        SuccessEvents = new ArrayList<>();
+    public TaskNoReturn(final CallableMethodVoidNoArgs task) {
         t = new Thread(() -> {
             try {
-                task.call(args);
+                task.call();
 
-                for (CallableMethodVoidNoArgs method :
-                        SuccessEvents) {
+                for (CallableMethod<Void> method :
+                        getSuccessEvents()) {
                     try {
-                        method.call();
+                        method.call(null);
                     } catch (Exception e) {
                         System.err.println("Post Task Success Event Handler Failed");
                         e.printStackTrace();
@@ -35,7 +33,7 @@ public class TaskWithArgs<A> extends Task {
                     try {
                         method.call(e);
                     } catch (Exception e2) {
-                        System.err.println("Task Error Event Handler Failed");
+                        System.err.println("Task Failed");
                         e2.printStackTrace();
                     }
                 }
@@ -44,9 +42,9 @@ public class TaskWithArgs<A> extends Task {
         });
     }
 
-    public void RegisterSuccessEvent(CallableMethodVoidNoArgs func) {
-        SuccessEvents.add(func);
-
+    @Override
+    public Void getResult() {
+        return null;
     }
 
     @Override

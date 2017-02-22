@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -67,12 +67,12 @@ public class AccountPopupController extends GridPane implements Initializable, I
             this.setupErrorPopup("Required Account field(s) are invalid.", new Exception());
             return;
         }
-        TaskWithArgs<Account> task = DbController.INSTANCE.insertAccount(account);
+        TaskNoReturn task = DbController.INSTANCE.insertAccount(account);
         task.RegisterFailureEvent(this::insertFail);
         task.startTask();
         task.waitForComplete();
 
-        TaskWithArgs<AccountBalance> balanceTask = DbController.INSTANCE.addBalanceForAccount(balance);
+        TaskNoReturn balanceTask = DbController.INSTANCE.addBalanceForAccount(balance);
         balanceTask.RegisterSuccessEvent(this::insertDone);
         balanceTask.RegisterFailureEvent(this::insertFail);
         balanceTask.startTask();

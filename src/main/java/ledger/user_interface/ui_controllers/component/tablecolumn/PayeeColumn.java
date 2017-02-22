@@ -44,7 +44,7 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
         this.setOnEditCommit(new PayeeEventHandler());
         this.setComparator(new PayeeComparator());
 
-        DbController.INSTANCE.registerPayeeSuccessEvent(() -> Startup.INSTANCE.runLater(this::updatePayeeList));
+        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updatePayeeList));
     }
 
     private void updatePayeeList() {

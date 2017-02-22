@@ -3,7 +3,6 @@ package ledger.user_interface.ui_controllers.component;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgsReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
@@ -30,7 +29,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        DbController.INSTANCE.registerTransactionSuccessEvent(this::recalculateBalance);
+        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.recalculateBalance());
         calculateBalanceForAllAccounts();
     }
 
@@ -70,7 +69,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
             amountSpent += t.getAmount();
         }
 
-        TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(this.currentAccount);
+        TaskWithReturn<AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(this.currentAccount);
         balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
         balanceTask.startTask();
         AccountBalance balance = balanceTask.waitForResult();
@@ -90,7 +89,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
         long net = 0;
         for (Account account : accounts) {
-            TaskWithArgsReturn<Account, AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(account);
+            TaskWithReturn<AccountBalance> balanceTask = DbController.INSTANCE.getBalanceForAccount(account);
             balanceTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch current account balance from the database.", e));
             balanceTask.startTask();
             AccountBalance balance = balanceTask.waitForResult();
