@@ -29,33 +29,35 @@ public class IgnoredExpressionPopupController extends GridPane implements Initia
     private ComboBox<Boolean> newExpRule;
     @FXML
     private Button addExpButton;
-    public IgnoredExpressionPopupController(){
+
+    public IgnoredExpressionPopupController() {
 
         this.initController(pageLoc, this, "Unable to load Ignored Transaction window");
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.newExpRule.setEditable(false);
-        this.newExpRule.setItems(FXCollections.observableArrayList(true,false));
+        this.newExpRule.setItems(FXCollections.observableArrayList(true, false));
         this.newExpRule.setConverter(new IsMatchConverter());
         this.addExpButton.setOnAction(event -> addExpression());
 
     }
 
-    private void addExpression(){
-        if(InputSanitization.isStringInvalid(newExpText.getText())){
+    private void addExpression() {
+        if (InputSanitization.isStringInvalid(newExpText.getText())) {
             this.setupErrorPopup("Invalid Expression, Please input a non-empty String", new Exception());
             return;
         }
         String exp = newExpText.getText();
-        if(this.newExpRule.getValue()==null){
+        if (this.newExpRule.getValue() == null) {
             this.setupErrorPopup("Please select a rule", new Exception());
             return;
         }
         Boolean rule = newExpRule.getValue();
         TaskWithArgs<IgnoredExpression> insertIgExpTask
                 = DbController.INSTANCE.insertIgnoredExpression(new IgnoredExpression(exp, rule));
-        insertIgExpTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() ->{
+        insertIgExpTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> {
             this.newExpText.clear();
             this.newExpRule.setValue(Boolean.TRUE);
         }));

@@ -53,7 +53,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
             }
 
             if (payee.getTags() != null) {
-                for(Tag t : payee.getTags()) {
+                for (Tag t : payee.getTags()) {
                     lookupAndInsertTag(t);
                     addTagForPayee(t, payee);
                 }
@@ -96,7 +96,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
 
             if (payee.getTags() != null) {
                 deleteAllTagsForPayee(payee);
-                for(Tag t : payee.getTags()) {
+                for (Tag t : payee.getTags()) {
                     lookupAndInsertTag(t);
                     addTagForPayee(t, payee);
                 }
@@ -139,11 +139,11 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
                     " FROM " + PayeeTable.TABLE_NAME +
                     " WHERE " + PayeeTable.PAYEE_ID + "=?");
 
-            stmt.setInt(1,payee.getId());
+            stmt.setInt(1, payee.getId());
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-               return extractPayee(rs);
+                return extractPayee(rs);
             }
             return null;
         } catch (java.sql.SQLException e) {
@@ -151,7 +151,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
         }
     }
 
-    default Payee extractPayee(ResultSet rs) throws SQLException,StorageException {
+    default Payee extractPayee(ResultSet rs) throws SQLException, StorageException {
         int payeeID = rs.getInt(PayeeTable.PAYEE_ID);
         String payeeName = rs.getString(PayeeTable.PAYEE_NAME);
         String payeeDesc = rs.getString(PayeeTable.PAYEE_DESC);
@@ -163,7 +163,7 @@ public interface ISQLDatabasePayee extends ISQLiteDatabase {
     @Override
     default List<Tag> getAllTagsForPayee(Payee payee) throws StorageException {
         int id = payee.getId();
-        if(id == -1) {
+        if (id == -1) {
             insertPayee(payee);
         }
         return getAllTagsForPayeeId(payee.getId());

@@ -6,7 +6,9 @@ package ledger.controller.register;
 public interface ITask {
 
     void startTask();
+
     void RegisterFailureEvent(CallableMethod<Exception> func);
+
     void waitForComplete();
 
 }

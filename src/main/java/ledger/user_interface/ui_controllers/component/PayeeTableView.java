@@ -60,7 +60,6 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
         });
 
 
-
         DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncUpdateTableView);
         updateTableView();
     }

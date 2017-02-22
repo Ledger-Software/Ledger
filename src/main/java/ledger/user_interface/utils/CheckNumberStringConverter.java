@@ -16,7 +16,7 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
             checkNumString = checkNum.toString();
 
             int length = checkNumString.length();
-            for (int i = length; i < 4; i ++) {
+            for (int i = length; i < 4; i++) {
                 checkNumString = "0" + checkNumString;
             }
         }
@@ -30,7 +30,7 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
             return null;
         }
         int checkNum;
-        if(checkNumString.equals("")) checkNum = -1;
+        if (checkNumString.equals("")) checkNum = -1;
         else checkNum = Integer.parseInt(checkNumString);
 
         return checkNum;

@@ -93,7 +93,7 @@ public interface ISQLDatabaseAccount extends ISQLiteDatabase {
             stmt.setInt(1, account.getId());
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
+            if (rs.next()) {
                 return extractAccount(rs);
             } else {
                 return null;

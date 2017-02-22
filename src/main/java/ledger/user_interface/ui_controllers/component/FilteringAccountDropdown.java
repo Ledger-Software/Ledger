@@ -38,7 +38,7 @@ public class FilteringAccountDropdown extends AccountDropdown {
         accounts.add(allAccounts);
 
         this.setItems(FXCollections.observableArrayList(accounts));
-        if(this.getItems().contains(currentSelection))
+        if (this.getItems().contains(currentSelection))
             this.setValue(currentSelection);
         else {
             this.setValue(allAccounts);

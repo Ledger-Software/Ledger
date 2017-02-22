@@ -28,7 +28,7 @@ public class OldVersionFinder {
 
         return new File(jarFolder).listFiles((dir, name) -> {
             Matcher m = p.matcher(name);
-            if(m.matches()) {
+            if (m.matches()) {
                 String s = m.group(1);
 
                 return name.matches("Ledger-\\d\\.\\d\\.\\d\\.jar")

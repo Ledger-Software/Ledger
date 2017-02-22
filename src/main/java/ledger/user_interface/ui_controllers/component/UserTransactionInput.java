@@ -145,9 +145,9 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         Note notes = new Note(this.notesText.getText());
 
         String checkNo = "";
-        if(checkField.visibleProperty().get()){
+        if (checkField.visibleProperty().get()) {
             checkNo = checkField.getText();
-            if(checkNo==null||checkNo.isEmpty()||InputSanitization.isInvalidCheckNumber(checkNo)){
+            if (checkNo == null || checkNo.isEmpty() || InputSanitization.isInvalidCheckNumber(checkNo)) {
                 this.setupErrorPopup("Please Enter a Check Number", new Exception());
                 return null;
             }

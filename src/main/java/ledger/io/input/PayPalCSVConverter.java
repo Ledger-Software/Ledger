@@ -53,7 +53,8 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
 
                 Payee payee;
                 if (!payeeName.equals("")) payee = new Payee(payeeName, "");
-                else payee = new Payee("***Not Available***" , "Payee information was not included in the provided data");
+                else
+                    payee = new Payee("***Not Available***", "Payee information was not included in the provided data");
                 List<Tag> tags = null;
                 Note note = null;
 

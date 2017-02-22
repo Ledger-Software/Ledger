@@ -15,23 +15,23 @@ public class IgnoredDetector {
     private final List<Transaction> verifiedTransactions;
     private final List<Transaction> ignoredTransactions;
 
-    public IgnoredDetector(List<Transaction> transactionList){
+    public IgnoredDetector(List<Transaction> transactionList) {
         this.transactions = transactionList;
         this.ignoredTransactions = new ArrayList<>();
         this.verifiedTransactions = new ArrayList<>();
     }
 
-    public IgnoredDetectionResult detectIgnoreTransactions(IDatabase database){
-        for (Transaction currentTransaction:transactions) {
+    public IgnoredDetectionResult detectIgnoreTransactions(IDatabase database) {
+        for (Transaction currentTransaction : transactions) {
             try {
-                if(database.isTransactionIgnored(currentTransaction))
+                if (database.isTransactionIgnored(currentTransaction))
                     this.verifiedTransactions.add(currentTransaction);
                 else
                     this.ignoredTransactions.add(currentTransaction);
-            } catch (StorageException e){
+            } catch (StorageException e) {
                 e.printStackTrace();
             }
         }
-        return new IgnoredDetectionResult(this.ignoredTransactions,this.verifiedTransactions);
+        return new IgnoredDetectionResult(this.ignoredTransactions, this.verifiedTransactions);
     }
 }

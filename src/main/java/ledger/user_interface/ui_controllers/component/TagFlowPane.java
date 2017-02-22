@@ -23,7 +23,7 @@ public class TagFlowPane extends FlowPane implements IUIController {
         this.localParent = parent;
         updateTags();
         this.heightProperty().addListener((observable, oldValue, newValue) -> localParent.setPrefHeight(newValue.doubleValue()));
-        this.setPadding(new Insets(0,0,35,0));
+        this.setPadding(new Insets(0, 0, 35, 0));
     }
 
     public void updateTags() {

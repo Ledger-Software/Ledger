@@ -23,6 +23,7 @@ public class NoteColumn extends TableColumn<Transaction, Transaction> implements
         this.initController(pageLoc, this, "Unable to load NoteColumn");
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

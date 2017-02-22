@@ -20,5 +20,6 @@ public interface ISQLiteDatabase extends IDatabase {
     Account extractAccount(ResultSet rs) throws SQLException;
 
     Payee lookupAndInsertPayee(Payee currentPayee) throws StorageException;
+
     Tag lookupAndInsertTag(Tag currentTag) throws StorageException;
 }

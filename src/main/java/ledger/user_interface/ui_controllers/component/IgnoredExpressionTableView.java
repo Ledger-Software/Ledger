@@ -33,7 +33,6 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
     private TableColumn<IgnoredExpression, Boolean> matchOrContainColumn;
 
 
-
     public IgnoredExpressionTableView() {
         this.initController(pageLoc, this, "Error creating Payee Editor");
     }
@@ -60,7 +59,7 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
         });
 
         matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<>("match"));
-        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true,false)));
+        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true, false)));
         matchOrContainColumn.setOnEditCommit(event -> {
             Boolean value = event.getNewValue();
             IgnoredExpression igEx = event.getRowValue();
@@ -76,9 +75,9 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
     }
 
     private void handleDelete() {
-        IgnoredExpression item = (IgnoredExpression)this.getSelectionModel().getSelectedItem();
+        IgnoredExpression item = (IgnoredExpression) this.getSelectionModel().getSelectedItem();
         TaskWithArgs<IgnoredExpression> deleteTask = DbController.INSTANCE.deleteIgnoredExpression(item);
-        deleteTask.RegisterFailureEvent((e)->{
+        deleteTask.RegisterFailureEvent((e) -> {
             asyncUpdateTableView();
             setupErrorPopup("Error deleting transaction.", e);
         });

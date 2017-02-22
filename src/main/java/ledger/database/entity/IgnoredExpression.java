@@ -12,11 +12,12 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Full constructor for IgnoredExpression
-     * @param id Database assigned ID
+     *
+     * @param id  Database assigned ID
      * @param exp Expression used for Match or Contains
      * @param mOR Is Match if True
      */
-    public IgnoredExpression(int id, String exp, Boolean mOR){
+    public IgnoredExpression(int id, String exp, Boolean mOR) {
         this.expressionId = id;
         this.expression = exp;
         this.match = mOR;
@@ -24,15 +25,17 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Constructor for when there is not database ID yet
+     *
      * @param exp Expression used for Match or Contains
      * @param mOR Is Match if True
      */
-    public IgnoredExpression( String exp, Boolean mOR){
+    public IgnoredExpression(String exp, Boolean mOR) {
         this(-1, exp, mOR);
     }
 
     /**
      * Getter for ExpressionID
+     *
      * @return The expression ID
      */
     public int getExpressionId() {
@@ -41,6 +44,7 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Setter for the ExpressionID
+     *
      * @param expressionId sets the Database id to this value
      */
     public void setExpressionId(int expressionId) {
@@ -49,13 +53,16 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Getter for the Expression String
+     *
      * @return the expression String
      */
     public String getExpression() {
         return expression;
     }
+
     /**
      * Setter for the Expression
+     *
      * @param expression sets the matching String
      */
     public void setExpression(String expression) {
@@ -64,6 +71,7 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Getter for the boolean that represents Match(true) or Contains(false)
+     *
      * @return the match/contain boolean
      */
     public Boolean isMatch() {
@@ -72,6 +80,7 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Setter for the boolean that represents Match(true) or Contains(false)
+     *
      * @param match if True is Match, Contains otherwise
      */
     public void setMatch(Boolean match) {
@@ -80,12 +89,14 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Generates the String representation of this object
+     *
      * @return the string representation of this object
      */
     @Override
-    public String toString(){
+    public String toString() {
         return String.format("[ Expression : %s, Rule : %s ]", this.expression, new IsMatchConverter().toString(this.isMatch()));
     }
+
     /**
      * Determines equality between this IgnoredExpression and another object
      *

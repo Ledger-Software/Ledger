@@ -18,7 +18,7 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
         Long amountToSet = t.getNewValue();
         if (amountToSet == null) {
             setupErrorPopup("Provided amount is invalid", new Exception());
-            ((TransactionTableView)t.getTableView()).updateTransactionTableView();
+            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
             return;
         }
 

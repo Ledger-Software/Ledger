@@ -7,5 +7,6 @@ import java.util.List;
  */
 public interface ITaggable {
     List<Tag> getTags();
+
     void setTags(List<Tag> tags);
 }

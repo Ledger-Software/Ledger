@@ -105,10 +105,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
 
         this.setOnKeyPressed(event -> {
-            if(!event.isControlDown())
+            if (!event.isControlDown())
                 return;
 
-            if(! (event.getCode() == KeyCode.Z))
+            if (!(event.getCode() == KeyCode.Z))
                 return;
 
             this.undo();
@@ -118,7 +118,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void undo() {
         String topMessage = DbController.INSTANCE.undoPeekMessage();
 
-        if(topMessage == null)
+        if (topMessage == null)
             return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

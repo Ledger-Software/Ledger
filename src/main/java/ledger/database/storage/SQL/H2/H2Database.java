@@ -88,7 +88,7 @@ public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBa
         try {
             getDatabase().setAutoCommit(autoCommit);
 
-            if(autoCommit)
+            if (autoCommit)
                 getDatabase().commit();
         } catch (SQLException e) {
             throw new StorageException("Error while setting database autocommit to " + autoCommit, e);

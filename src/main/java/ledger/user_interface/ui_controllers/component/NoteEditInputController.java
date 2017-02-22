@@ -54,14 +54,15 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     }
 
     private void toggleEditors(boolean isToggleOpen) {
-        if(isToggleOpen) {
+        if (isToggleOpen) {
             this.noteText.setMinHeight(90);
-        } else{
+        } else {
             this.noteText.setText(transaction.getNote().getNoteText());
             this.noteText.setMinHeight(30);
         }
 
     }
+
     private class NoteFocusChangeListener implements ChangeListener<Boolean> {
 
 
@@ -70,14 +71,15 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             toggleEditors(newValue);
         }
     }
+
     private class NoteKeyEventHandler implements EventHandler<KeyEvent> {
 
 
         @Override
         public void handle(KeyEvent event) {
-            if(event.isShiftDown()&&event.getCode()== KeyCode.ENTER){
+            if (event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
                 noteText.appendText(System.lineSeparator());
-            } else if (event.getCode()== KeyCode.ENTER){
+            } else if (event.getCode() == KeyCode.ENTER) {
                 transaction.getNote().setNoteText(noteText.getText());
                 TaskWithArgs<Transaction> updateNoteTask;
                 updateNoteTask = DbController.INSTANCE.editTransaction(transaction);

@@ -28,7 +28,7 @@ import java.util.*;
 public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
-  
+
     @FXML
     private AmountColumn amountColumn;
 
@@ -147,7 +147,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 return;
             }
             Account acc = accountList.get(0);
-            
+
             TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
             task.startTask();
 

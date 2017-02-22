@@ -49,6 +49,6 @@ public class RemovableTag extends GridPane implements IUIController, Initializab
         task.startTask();
         task.waitForComplete();
 
-        ((TagFlowPane)this.getParent()).updateTags();
+        ((TagFlowPane) this.getParent()).updateTags();
     }
 }

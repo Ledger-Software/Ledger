@@ -13,10 +13,10 @@ public class TaggableSwitch {
 
     public static TaskWithArgs<ITaggable> edit(ITaggable tag) {
         TaskWithArgs task;
-        if(tag instanceof Transaction) {
+        if (tag instanceof Transaction) {
             task = DbController.INSTANCE.editTransaction((Transaction) tag);
         } else if (tag instanceof Payee) {
-            task = DbController.INSTANCE.editPayee((Payee)tag);
+            task = DbController.INSTANCE.editPayee((Payee) tag);
         } else {
             task = null;
         }

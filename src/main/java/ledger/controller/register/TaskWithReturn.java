@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * {@link ITask} that takes a method with no argument and has a return type
  */
-public class TaskWithReturn<R> extends Task{
+public class TaskWithReturn<R> extends Task {
 
     private final List<CallableMethod<R>> SuccessEvents;
     private final Thread t;

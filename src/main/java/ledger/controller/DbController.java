@@ -64,7 +64,9 @@ public class DbController {
         payeeSuccessEvent.add(method);
     }
 
-    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) { ignoredExpSuccessEvent.add(method); }
+    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) {
+        ignoredExpSuccessEvent.add(method);
+    }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -129,7 +131,7 @@ public class DbController {
             System.err.println("Error on getTransactionById");
         }
 
-        undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
+        undoStack.push(new UndoAction(generateEditTransaction(oldTrans), "Undo Edit Transaction"));
 
         return task;
     }
@@ -192,7 +194,8 @@ public class DbController {
         AccountBalance ab = null;
         try {
             ab = db.getBalanceForAccount(account);
-        } catch (StorageException ignored) { }
+        } catch (StorageException ignored) {
+        }
 
         List<Transaction> trans;
         try {
@@ -201,7 +204,7 @@ public class DbController {
             trans = new ArrayList<>();
         }
 
-        if(trans.size() != 0) {
+        if (trans.size() != 0) {
             final AccountBalance finalAb = ab;
             TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((toAddTrans) -> {
                 db.insertAccount(account);
@@ -248,9 +251,10 @@ public class DbController {
         Account oldAccount = null;
         try {
             oldAccount = db.getAccountById(account);
-        } catch (StorageException ignored) { }
+        } catch (StorageException ignored) {
+        }
 
-        undoStack.push(new UndoAction(generateEditAccount(oldAccount),"Undo Edit Transaction"));
+        undoStack.push(new UndoAction(generateEditAccount(oldAccount), "Undo Edit Transaction"));
 
         return task;
     }
@@ -321,7 +325,8 @@ public class DbController {
         Payee oldPayee = null;
         try {
             oldPayee = db.getPayeeById(payee);
-        } catch (StorageException ignored) { }
+        } catch (StorageException ignored) {
+        }
 
         undoStack.push(new UndoAction(generateEditPayee(oldPayee), "Undo Edit Payee"));
 
@@ -398,7 +403,8 @@ public class DbController {
                 for (Transaction currentTransaction : transactionList) {
                     try {
                         db.deleteTransaction(currentTransaction);
-                    } catch (StorageException ignored) { }
+                    } catch (StorageException ignored) {
+                    }
                 }
             } finally {
                 db.setDatabaseAutoCommit(true);
@@ -490,10 +496,11 @@ public class DbController {
 
     /**
      * Shows the message from the action on top of the stack.
+     *
      * @return the String or Null or the stack is empty
      */
     public String undoPeekMessage() {
-        if(undoStack.isEmpty())
+        if (undoStack.isEmpty())
             return null;
         return undoStack.peek().getMessage();
     }
@@ -512,8 +519,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to insert
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::insertIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::insertIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }
@@ -524,8 +531,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to edit
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::editIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::editIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }
@@ -536,8 +543,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to delete
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::deleteIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::deleteIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }

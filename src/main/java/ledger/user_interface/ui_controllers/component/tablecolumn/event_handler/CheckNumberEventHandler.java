@@ -19,7 +19,7 @@ public class CheckNumberEventHandler implements EventHandler<TableColumn.CellEdi
 
         if (checkNumberToSet == null) {
             setupErrorPopup("Provided check number is invalid", new Exception());
-            ((TransactionTableView)t.getTableView()).updateTransactionTableView();
+            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
             return;
         }
 

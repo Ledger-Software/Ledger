@@ -43,7 +43,7 @@ public class ChaseCSVConverter extends AbstractCSVConverter {
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
                 //int balance = 0;
                 //if (!pending)
-                  //  balance = (int) Math.round(Double.parseDouble(balanceString) * 100);
+                //  balance = (int) Math.round(Double.parseDouble(balanceString) * 100);
 
                 Type type = TypeConversion.convert(typeString);
 

@@ -115,13 +115,14 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             // Todo: Do we even want to show the user?
         }
         ignoredTransactionsDialog(importFailures.ignoredTransactions,
-                ()-> genericTransactionsWindow(importFailures.duplicateTransactions,()->{}, "Duplicate Transactions", "Duplicate!"));
-
+                () -> genericTransactionsWindow(importFailures.duplicateTransactions, () -> {
+                }, "Duplicate Transactions", "Duplicate!"));
 
 
         closeWindow();
     }
-    private void genericTransactionsWindow(List<Transaction> transactions, CallableMethodVoidNoArgs method, String title, String topTitle){
+
+    private void genericTransactionsWindow(List<Transaction> transactions, CallableMethodVoidNoArgs method, String title, String topTitle) {
         if (transactions.size() > 0)
             Startup.INSTANCE.runLater(() -> {
                 GenericImportTransactionPopup popup = new GenericImportTransactionPopup(transactions, title);
@@ -147,7 +148,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             });
     }
 
-    private void ignoredTransactionsDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method){
+    private void ignoredTransactionsDialog(List<Transaction> transactionList, CallableMethodVoidNoArgs method) {
         if (transactionList.size() > 0)
             Startup.INSTANCE.runLater(() -> {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -169,7 +170,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
                     }
                 }
             });
-            else {
+        else {
             try {
                 method.call();
             } catch (Exception e) {

@@ -26,7 +26,7 @@ public class Tagger {
      * For each Transaction it sets it appends its tag list with that of its payee.
      */
     public void tagTransactions() {
-        for(Transaction t: transactions) {
+        for (Transaction t : transactions) {
             List<Tag> originalList = t.getTags();
             Set<Tag> fullList = new HashSet<>();
             fullList.addAll(originalList);
@@ -34,7 +34,7 @@ public class Tagger {
             TaskWithArgsReturn<Payee, List<Tag>> task = DbController.INSTANCE.getTagsForPayee(t.getPayee());
             task.startTask();
             List<Tag> payeeTags = task.waitForResult();
-            if(payeeTags != null)
+            if (payeeTags != null)
                 fullList.addAll(payeeTags);
 
             List<Tag> newList = new ArrayList<>();
@@ -42,5 +42,5 @@ public class Tagger {
             t.setTags(newList);
         }
     }
-    
+
 }

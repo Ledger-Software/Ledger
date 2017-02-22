@@ -56,8 +56,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.chooseFileBtn.setOnAction((event -> selectFile()));
         this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
-        this.password.setOnKeyPressed(event ->  {
-            if(event.getCode() == KeyCode.ENTER) {
+        this.password.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
                 login();
             }
         });

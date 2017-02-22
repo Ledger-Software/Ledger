@@ -14,7 +14,7 @@ public abstract class DataBaseManager {
 
     public abstract Connection getDatabase();
 
-    public void executeList(List<String> statements) throws StorageException{
+    public void executeList(List<String> statements) throws StorageException {
         try {
             for (String statement : statements) {
                 Statement stmt = getDatabase().createStatement();

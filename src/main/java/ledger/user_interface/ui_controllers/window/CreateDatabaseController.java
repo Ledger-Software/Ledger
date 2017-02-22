@@ -48,7 +48,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
         EventHandler<? super javafx.scene.input.KeyEvent> eh = new EventHandler<javafx.scene.input.KeyEvent>() {
             @Override
             public void handle(javafx.scene.input.KeyEvent event) {
-                if(event.getCode() == KeyCode.ENTER) {
+                if (event.getCode() == KeyCode.ENTER) {
                     submitForm();
                 }
             }

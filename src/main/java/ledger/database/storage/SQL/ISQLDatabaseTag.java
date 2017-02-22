@@ -104,7 +104,7 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     }
 
     @Override
-    default List<Tag> getAllTagsForPayeeId(int payeeId) throws StorageException{
+    default List<Tag> getAllTagsForPayeeId(int payeeId) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + TagTable.TAG_ID +
                     ", " + TagTable.TAG_NAME +
@@ -151,14 +151,14 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
     }
 
     @Override
-    default void deleteAllTagsForPayee(Payee p) throws StorageException{
+    default void deleteAllTagsForPayee(Payee p) throws StorageException {
         Payee payee = lookupAndInsertPayee(p);
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + TagToPayeeTable.TABLE_NAME + " WHERE " + TagToPayeeTable.TTPE_PAYEE_ID + " =?");
             stmt.setInt(1, payee.getId());
             stmt.execute();
         } catch (java.sql.SQLException e) {
-            if (payee == null)  throw new StorageException("Error while deleting all tags for payee", e);
+            if (payee == null) throw new StorageException("Error while deleting all tags for payee", e);
             else throw new StorageException("Error while deleting all tags for Payee " + payee.getName(), e);
         }
     }

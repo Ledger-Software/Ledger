@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Detects duplicates within a transaction file import.
  */
-public class  DuplicateDetector {
+public class DuplicateDetector {
 
     private final List<Transaction> transactions;
     private final List<Transaction> possibleDuplicates;

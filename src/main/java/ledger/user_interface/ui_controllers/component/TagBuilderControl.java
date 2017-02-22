@@ -44,7 +44,7 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
     }
 
     private void addTag() {
-        if(nameText.getText() == null || nameText.getText().isEmpty())
+        if (nameText.getText() == null || nameText.getText().isEmpty())
             return;
         List<Tag> newTags = model.getTags();
         if (newTags == null) {
@@ -57,6 +57,6 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
         task.startTask();
         task.waitForComplete();
 
-        ((TagFlowPane)this.getParent()).updateTags();
+        ((TagFlowPane) this.getParent()).updateTags();
     }
 }

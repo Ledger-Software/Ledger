@@ -104,7 +104,6 @@ public class GitHubChecker {
     }
 
 
-
     private Release[] getReleases() throws IOException {
         HttpRequestFactory requestFactory =
                 HTTP_TRANSPORT.createRequestFactory(request -> request.setParser(new JsonObjectParser(JACKSON_FACTORY)));

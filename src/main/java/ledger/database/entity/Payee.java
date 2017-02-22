@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Entity that holds a single payee
  */
-public class Payee implements IEntity, ITaggable{
+public class Payee implements IEntity, ITaggable {
     private String name;
     private String description;
     private int id;
@@ -81,7 +81,7 @@ public class Payee implements IEntity, ITaggable{
     /**
      * Gets the Payee's list of Tags
      *
-     * @return  the list of Tags
+     * @return the list of Tags
      */
     public List<Tag> getTags() {
         return tags;

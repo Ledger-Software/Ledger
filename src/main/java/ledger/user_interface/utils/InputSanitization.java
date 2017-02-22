@@ -64,7 +64,11 @@ public class InputSanitization {
     public static boolean isInvalidAmount(String str) {
         return !Pattern.matches(amountRegex, str);
     }
-    public static boolean isInvalidCheckNumber(String str) { return !Pattern.matches(Digits,str);}
+
+    public static boolean isInvalidCheckNumber(String str) {
+        return !Pattern.matches(Digits, str);
+    }
+
     public static boolean isInvalidPayee(Object o) {
         if (o == null) return true;
         if (!(o instanceof Payee)) return true;

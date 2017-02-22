@@ -23,7 +23,7 @@ public class TagColumn extends TableColumn {
     }
 
     private String tagsToString(List<Tag> tags) {
-        return String.join(", " , tags.stream().map(Tag::getName).collect(Collectors.toList()));
+        return String.join(", ", tags.stream().map(Tag::getName).collect(Collectors.toList()));
     }
 
     private class ClickAbleTagCell implements Callback<TableColumn<ITaggable, ITaggable>, TableCell<ITaggable, ITaggable>> {

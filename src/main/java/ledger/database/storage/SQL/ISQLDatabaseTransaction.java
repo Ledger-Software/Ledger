@@ -226,15 +226,15 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_PENDING +
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
-                    ", " + TransactionTable.TRANS_CHECK_NUMBER + 
+                    ", " + TransactionTable.TRANS_CHECK_NUMBER +
                     " FROM " + TransactionTable.TABLE_NAME +
-                    " WHERE " + TransactionTable.TRANS_ID+ "=?;");
+                    " WHERE " + TransactionTable.TRANS_ID + "=?;");
             stmt.setInt(1, transaction.getId());
             ResultSet rs = stmt.executeQuery();
 
             List<Transaction> transactions = extractTransactions(rs);
 
-            if(transactions.size() == 0)
+            if (transactions.size() == 0)
                 return null;
             return transactions.get(0);
         } catch (java.sql.SQLException e) {
@@ -325,7 +325,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next())
+            if (rs.next())
                 return extractAccount(rs);
             else
                 return null;
@@ -491,7 +491,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next())
+            if (rs.next())
                 return extractAccount(rs);
             else
                 return null;
@@ -612,10 +612,11 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             insertTagToTrans(currentTag.getId(), insertedTransactionID);
         }
     }
+
     @Override
-    default boolean isTransactionIgnored(Transaction transaction) throws StorageException{
+    default boolean isTransactionIgnored(Transaction transaction) throws StorageException {
         String payeeName = transaction.getPayee().getName();
-        return isContains(payeeName)&& isMatches(payeeName);
+        return isContains(payeeName) && isMatches(payeeName);
     }
 
 
@@ -623,11 +624,11 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + IgnoredExpressionTable.IGNORE_ID +
                     " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
-                    IgnoredExpressionTable.IGNORE_EXPRESSION+ "=? ");
+                    IgnoredExpressionTable.IGNORE_EXPRESSION + "=? ");
             stmt.setString(1, exp);
             ResultSet rs = stmt.executeQuery();
             return !rs.next();
-        } catch (java.sql.SQLException e){
+        } catch (java.sql.SQLException e) {
             throw new StorageException("Error while comparing a match Ignored Expression");
         }
 
@@ -639,14 +640,14 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             ResultSet rs = stmt.executeQuery("SELECT " + IgnoredExpressionTable.IGNORE_EXPRESSION +
                     " FROM " + IgnoredExpressionTable.TABLE_NAME + " WHERE " +
                     IgnoredExpressionTable.MATCH_OR_CONTAIN + "= FALSE");
-            while(rs.next()){
+            while (rs.next()) {
                 String resultExp = rs.getString(IgnoredExpressionTable.IGNORE_EXPRESSION);
-                if(exp.contains(resultExp)){
+                if (exp.contains(resultExp)) {
                     return false;
                 }
             }
             return true;
-        } catch (java.sql.SQLException e){
+        } catch (java.sql.SQLException e) {
             throw new StorageException("Error while comparing a contains Ignored Expression");
         }
     }
