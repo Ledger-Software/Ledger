@@ -15,9 +15,9 @@ import java.util.List;
  */
 public class  DuplicateDetector {
 
-    private List<Transaction> transactions;
-    private List<Transaction> possibleDuplicates;
-    private List<Transaction> verifiedTransactions;
+    private final List<Transaction> transactions;
+    private final List<Transaction> possibleDuplicates;
+    private final List<Transaction> verifiedTransactions;
 
     public DuplicateDetector(List<Transaction> transactions) {
         this.transactions = transactions;
@@ -36,7 +36,7 @@ public class  DuplicateDetector {
     public DetectionResult detectDuplicates(IDatabase database) throws StorageException {
         List<Transaction> databaseTransactions = database.getAllTransactions();
 
-        Collections.sort(databaseTransactions, new TransactionDuplicateComparator());
+        databaseTransactions.sort(new TransactionDuplicateComparator());
 
         for (Transaction importedTrans : transactions) {
             int index = Collections.binarySearch(databaseTransactions, importedTrans, new TransactionDuplicateComparator());

@@ -17,9 +17,9 @@ import java.util.List;
  */
 public abstract class AbstractCSVConverter implements IInAdapter<Transaction> {
 
-    protected static DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-    protected File file;
-    protected Account account;
+    protected static final DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+    private final File file;
+    private final Account account;
 
     public AbstractCSVConverter(File file, Account account) {
         this.file = file;
@@ -29,20 +29,21 @@ public abstract class AbstractCSVConverter implements IInAdapter<Transaction> {
     /**
      * Converter the data in the CsvConverter's file to TransACT objects.
      *
-     * @return A List of Transaciton objects
+     * @return A List of Transaction objects
      * @throws ConverterException When unexpected behavior leads to a situation that cannot be recovered from.
      */
     public List<Transaction> convert() throws ConverterException {
-        CSVReader reader = null;
         try {
-            reader = new CSVReader(new FileReader(this.file), ',', '"', 1);
+            CSVReader reader = new CSVReader(new FileReader(this.file), ',', '"', 1);
+            return readFile(reader);
         } catch (FileNotFoundException e) {
             throw new ConverterException("Specified CSV file could not be found!", e);
         }
-        List<Transaction> transactions = readFile(reader);
-
-        return transactions;
     }
 
     protected abstract List<Transaction> readFile(CSVReader reader) throws ConverterException;
+
+    protected Account getAccount() {
+        return this.account;
+    }
 }

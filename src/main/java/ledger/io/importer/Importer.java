@@ -15,8 +15,8 @@ import java.util.List;
  * and importing them into the backend DB.
  */
 public class Importer {
-    private List<Transaction> failedImports;
-    private List<String> failedImportExceptionMessages;
+    private final List<Transaction> failedImports;
+    private final List<String> failedImportExceptionMessages;
 
     public Importer() {
         this.failedImports = new ArrayList<>();
@@ -44,11 +44,7 @@ public class Importer {
             }
         }
 
-        if (this.failedImports.size() == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.failedImports.size() == 0;
     }
 
     public List<Transaction> getFailedImports() {

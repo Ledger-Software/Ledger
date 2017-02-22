@@ -44,10 +44,10 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
                 String payeeName = nextLine[3];
                 String amountString = nextLine[7];
 
-                //Doesnt look like PayPal types will be useful to us
+                //Doesn't look like PayPal types will be useful to us
                 //String typeString = nextLine[4];
 
-                Date date = this.df.parse(dateString);
+                Date date = AbstractCSVConverter.df.parse(dateString);
                 boolean pending = isPending(status);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
 
@@ -57,7 +57,7 @@ public class PayPalCSVConverter extends AbstractCSVConverter {
                 List<Tag> tags = null;
                 Note note = null;
 
-                Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
+                Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, pending, tags, note);
 
                 transactions.add(transaction);
             }

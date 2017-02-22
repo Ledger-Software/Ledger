@@ -21,13 +21,13 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
- * Created by CJ on 12/12/2016.
+ * Abstract Base Class for handling UFX file conversions into a list of {@link Transaction} Objects
  */
 public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
 
-    private File qfxFile;
-    private Account account;
-    private boolean missingClosingTags;
+    private final File qfxFile;
+    private final Account account;
+    private final boolean missingClosingTags;
 
     public AbstractUFXConverter(File file, Account account, boolean missingClosingTags) {
         this.qfxFile = file;
@@ -36,17 +36,17 @@ public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
     }
 
     /**
-     * Parses the given file into the application's internal transaction objects.
+     * Parses the given file into the application's internal {@link Transaction} objects.
      *
-     * @return A list of Transaction objects created from the transactions in the provided file.
+     * @return A list of {@link Transaction} objects created from the transactions in the provided file.
      * @throws ConverterException When unable to read the given file
      */
     @Override
     public List<Transaction> convert() throws ConverterException {
-        List<Transaction> transactions = new ArrayList();
+        List<Transaction> transactions = new ArrayList<>();
 
         // read in given file
-        String sgml = null;
+        String sgml;
         try {
             sgml = new Scanner(qfxFile).useDelimiter("\\Z").next();
         } catch (FileNotFoundException e) {
@@ -75,9 +75,7 @@ public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
         Document xml;
         try {
             xml = builder.parse(is);
-        } catch (SAXException e) {
-            throw new ConverterException("Unable to parse the given file.", e);
-        } catch (IOException e) {
+        } catch (SAXException | IOException e) {
             throw new ConverterException("Unable to parse the given file.", e);
         }
         parseXml(transactions, xml);

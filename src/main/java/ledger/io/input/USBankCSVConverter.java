@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by Tayler How on 12/19/2016.
+ * Takes a CSV file from US Bank and turns it into a List of {@link Transaction}
  */
 public class USBankCSVConverter extends AbstractCSVConverter {
 
@@ -35,7 +35,7 @@ public class USBankCSVConverter extends AbstractCSVConverter {
                 String memoString = nextLine[3];
                 String amountString = nextLine[4];
 
-                Date date = this.df.parse(dateString);
+                Date date = AbstractCSVConverter.df.parse(dateString);
 
                 Type type = TypeConversion.convert(typeString);
                 Payee payee = new Payee(payeeString, "");
@@ -57,10 +57,10 @@ public class USBankCSVConverter extends AbstractCSVConverter {
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((amountString)) * 100) + 0.5d)));
 
-                List<Tag> tags = new LinkedList<Tag>();
+                List<Tag> tags = new LinkedList<>();
                 Note note = new Note(memoString);
 
-                Transaction transaction = new Transaction(date, type, amount, this.account, payee, false, tags, note);
+                Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, false, tags, note);
 
                 transactions.add(transaction);
             }

@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gert on 2/7/17.
+ * Takes a list of {@link Transaction} and will sort out Ignored Transactions
  */
 public class IgnoredDetector {
-    private List<Transaction> transactions;
-    private List<Transaction> verifiedTransactions;
-    private List<Transaction> ignoredTransactions;
+    private final List<Transaction> transactions;
+    private final List<Transaction> verifiedTransactions;
+    private final List<Transaction> ignoredTransactions;
 
     public IgnoredDetector(List<Transaction> transactionList){
         this.transactions = transactionList;
