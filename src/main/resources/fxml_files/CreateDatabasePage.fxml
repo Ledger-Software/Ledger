@@ -40,7 +40,7 @@
             </GridPane.margin>
         </Button>
         <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                       minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="300.0"
+                       minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0"
                        promptText="Password" style="-fx-background-color: #abcafc;" GridPane.halignment="CENTER"
                        GridPane.rowIndex="2">
             <GridPane.margin>
@@ -48,7 +48,7 @@
             </GridPane.margin>
         </PasswordField>
         <PasswordField fx:id="confirmPassword" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                       minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="300.0"
+                       minWidth="-Infinity" prefHeight="50.0" prefWidth="300.0"
                        promptText="Confirm Password" style="-fx-background-color: #abcafc;" GridPane.halignment="CENTER"
                        GridPane.rowIndex="3">
             <GridPane.margin>
