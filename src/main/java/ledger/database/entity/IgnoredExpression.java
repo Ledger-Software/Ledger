@@ -12,9 +12,9 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Full constructor for IgnoredExpression
-     * @param id
-     * @param exp
-     * @param mOR
+     * @param id Database assigned ID
+     * @param exp Expression used for Match or Contains
+     * @param mOR Is Match if True
      */
     public IgnoredExpression(int id, String exp, Boolean mOR){
         this.expressionId = id;
@@ -24,8 +24,8 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Constructor for when there is not database ID yet
-     * @param exp
-     * @param mOR
+     * @param exp Expression used for Match or Contains
+     * @param mOR Is Match if True
      */
     public IgnoredExpression( String exp, Boolean mOR){
         this(-1, exp, mOR);
@@ -41,7 +41,7 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Setter for the ExpressionID
-     * @param expressionId
+     * @param expressionId sets the Database id to this value
      */
     public void setExpressionId(int expressionId) {
         this.expressionId = expressionId;
@@ -56,7 +56,7 @@ public class IgnoredExpression implements IEntity {
     }
     /**
      * Setter for the Expression
-     * @param expression
+     * @param expression sets the matching String
      */
     public void setExpression(String expression) {
         this.expression = expression;
@@ -72,7 +72,7 @@ public class IgnoredExpression implements IEntity {
 
     /**
      * Setter for the boolean that represents Match(true) or Contains(false)
-     * @param match
+     * @param match if True is Match, Contains otherwise
      */
     public void setMatch(Boolean match) {
         this.match = match;

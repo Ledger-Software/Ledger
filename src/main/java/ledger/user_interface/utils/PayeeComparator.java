@@ -1,12 +1,11 @@
 package ledger.user_interface.utils;
 
 import ledger.database.entity.Payee;
-import ledger.database.entity.Type;
 
 import java.util.Comparator;
 
 /**
- * Created by Tayler How on 1/19/2017.
+ * {@link Comparator} for {@link Payee} that does it based on name.
  */
 public class PayeeComparator implements Comparator<Payee> {
 

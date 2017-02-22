@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 12/12/2016.
+ * Dropdown that auto-populates with the Payee's in the database
  */
 public class PayeeDropdown extends ComboBox<Payee> implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/ComboBox.fxml";

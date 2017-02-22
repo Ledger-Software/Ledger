@@ -7,7 +7,7 @@ import ledger.database.entity.Payee;
 import ledger.database.entity.Transaction;
 
 /**
- * Created by CJ on 1/23/2017.
+ * Utility Adapter Class for going from ITaggable back to their Database Controller methods
  */
 public class TaggableSwitch {
 

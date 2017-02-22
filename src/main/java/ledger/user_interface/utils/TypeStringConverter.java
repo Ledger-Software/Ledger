@@ -5,7 +5,7 @@ import ledger.database.entity.Type;
 import ledger.io.input.TypeConversion;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link StringConverter} for {@link Type}
  */
 public class TypeStringConverter extends StringConverter<Type> {
 

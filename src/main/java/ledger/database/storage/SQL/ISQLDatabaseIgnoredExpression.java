@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gert on 2/7/17.
+ * Methods for handling Ignored Expression Database calls
  */
 public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
 

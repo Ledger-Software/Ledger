@@ -10,7 +10,7 @@ import java.util.List;
 import static ledger.user_interface.utils.InputSanitization.isStringInvalid;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link StringConverter} for Payees
  */
 public class PayeeStringConverter extends StringConverter<Payee> {
 

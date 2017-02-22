@@ -1,7 +1,7 @@
 package ledger.exception;
 
 /**
- * Created by CJ on 9/27/2016.
+ * Exception relating to any database actions.
  */
 public class StorageException extends LedgerException {
 

@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/22/2017.
+ * Window wrapper for {@link ledger.user_interface.ui_controllers.component.PayeeTableView}
  */
 public class PayeeTableWindow extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/PayeeTableWindow.fxml";

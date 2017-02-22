@@ -5,7 +5,7 @@ import ledger.database.entity.Type;
 import java.util.Comparator;
 
 /**
- * Created by Tayler How on 1/19/2017.
+ * {@link Comparator} for {@link Type} that compares based on their name
  */
 public class TypeComparator implements Comparator<Type> {
 

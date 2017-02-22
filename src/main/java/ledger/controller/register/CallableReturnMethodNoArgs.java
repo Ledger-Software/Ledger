@@ -1,7 +1,8 @@
 package ledger.controller.register;
 
 /**
- * Created by gert on 10/16/16.
+ * Interface for the runnable portion of {@link ITask} that
+ * has a return value but no arguments
  */
 public interface CallableReturnMethodNoArgs<R> {
     R call() throws Exception;
