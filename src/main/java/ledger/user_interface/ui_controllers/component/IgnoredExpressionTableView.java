@@ -11,7 +11,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.IgnoredExpression;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -53,7 +53,7 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
             IgnoredExpression igEx = event.getRowValue();
             igEx.setExpression(exp);
 
-            TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
+            TaskNoReturn task = DbController.INSTANCE.editIgnoredExpression(igEx);
             task.startTask();
             task.waitForComplete();
         });
@@ -65,18 +65,18 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
             IgnoredExpression igEx = event.getRowValue();
             igEx.setMatch(value);
 
-            TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
+            TaskNoReturn task = DbController.INSTANCE.editIgnoredExpression(igEx);
             task.startTask();
             task.waitForComplete();
         });
 
-        DbController.INSTANCE.registerIgnoredExpressionSuccessEvent(this::asyncUpdateTableView);
+        DbController.INSTANCE.registerIgnoredExpressionSuccessEvent((ignored) -> this.asyncUpdateTableView());
         updateTableView();
     }
 
     private void handleDelete() {
         IgnoredExpression item = (IgnoredExpression) this.getSelectionModel().getSelectedItem();
-        TaskWithArgs<IgnoredExpression> deleteTask = DbController.INSTANCE.deleteIgnoredExpression(item);
+        TaskNoReturn deleteTask = DbController.INSTANCE.deleteIgnoredExpression(item);
         deleteTask.RegisterFailureEvent((e) -> {
             asyncUpdateTableView();
             setupErrorPopup("Error deleting transaction.", e);

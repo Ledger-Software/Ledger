@@ -44,7 +44,7 @@ public class AccountColumn extends TableColumn implements IUIController, Initial
         this.setOnEditCommit(new AccountEventHandler());
         this.setComparator(new AccountComparator());
 
-        DbController.INSTANCE.registerAccountSuccessEvent(this::updateAccountList);
+        DbController.INSTANCE.registerAccountSuccessEvent((ignored) -> this.updateAccountList());
     }
 
     private void updateAccountList() {

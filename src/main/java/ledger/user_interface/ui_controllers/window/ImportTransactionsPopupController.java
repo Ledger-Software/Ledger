@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ledger.controller.ImportController;
 import ledger.controller.register.CallableMethodVoidNoArgs;
-import ledger.controller.register.TaskWithArgsReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -99,7 +99,7 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
             return;
         }
 
-        TaskWithArgsReturn<Account, ImportController.ImportFailures> task = ImportController.INSTANCE.importTransactions(converter, file, account);
+        TaskWithReturn<ImportController.ImportFailures> task = ImportController.INSTANCE.importTransactions(converter, file, account);
         task.RegisterFailureEvent((e) -> Startup.INSTANCE.runLater(() -> {
             importButton.setDisable(false);
             this.setupErrorPopup("Unable to import data.", e);

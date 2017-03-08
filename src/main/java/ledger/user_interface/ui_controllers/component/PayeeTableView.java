@@ -7,7 +7,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -42,7 +42,7 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
             Payee payee = event.getRowValue();
             payee.setName(name);
 
-            TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
+            TaskNoReturn task = DbController.INSTANCE.editPayee(payee);
             task.startTask();
             task.waitForComplete();
         });
@@ -54,13 +54,13 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
             Payee payee = event.getRowValue();
             payee.setDescription(description);
 
-            TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
+            TaskNoReturn task = DbController.INSTANCE.editPayee(payee);
             task.startTask();
             task.waitForComplete();
         });
 
 
-        DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncUpdateTableView);
+        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncUpdateTableView());
         updateTableView();
     }
 

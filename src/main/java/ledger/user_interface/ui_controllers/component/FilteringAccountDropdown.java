@@ -25,7 +25,7 @@ public class FilteringAccountDropdown extends AccountDropdown {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateAccounts();
-        DbController.INSTANCE.registerAccountSuccessEvent(() -> Startup.INSTANCE.runLater(this::updateAccounts));
+        DbController.INSTANCE.registerAccountSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updateAccounts));
         this.setValue(allAccounts);
     }
 

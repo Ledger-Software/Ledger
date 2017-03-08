@@ -8,7 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.IgnoredExpression;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
@@ -55,7 +55,7 @@ public class IgnoredExpressionPopupController extends GridPane implements Initia
             return;
         }
         Boolean rule = newExpRule.getValue();
-        TaskWithArgs<IgnoredExpression> insertIgExpTask
+        TaskNoReturn insertIgExpTask
                 = DbController.INSTANCE.insertIgnoredExpression(new IgnoredExpression(exp, rule));
         insertIgExpTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> {
             this.newExpText.clear();

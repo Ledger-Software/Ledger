@@ -73,7 +73,7 @@ public class TaskTest {
 
     @Test(timeout = 3000)
     public void testArgsNoReturn() {
-        TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::call, true);
+        TaskNoReturn t = new TaskNoReturn(() -> foo.call(true));
         t.startTask();
         try {
             Thread.sleep(100);
@@ -89,7 +89,7 @@ public class TaskTest {
 
     @Test(timeout = 3000)
     public void testArgsNoReturnSuccessCall() {
-        TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::call, true);
+        TaskNoReturn t = new TaskNoReturn(() -> foo.call(true));
         t.RegisterSuccessEvent(foo::successCall);
         t.startTask();
         try {
@@ -105,7 +105,7 @@ public class TaskTest {
 
     @Test(timeout = 3000)
     public void atestArgsNoReturnFailureCall() {
-        TaskWithArgs<Boolean> t = new TaskWithArgs<Boolean>(foo::fail, true);
+        TaskNoReturn t = new TaskNoReturn(() -> foo.fail(true));
         t.RegisterFailureEvent(foo::handleFail);
         t.startTask();
         try {

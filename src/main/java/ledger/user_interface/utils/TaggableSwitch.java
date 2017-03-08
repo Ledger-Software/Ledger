@@ -1,7 +1,7 @@
 package ledger.user_interface.utils;
 
 import ledger.controller.DbController;
-import ledger.controller.register.TaskWithArgs;
+import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Transaction;
@@ -11,8 +11,8 @@ import ledger.database.entity.Transaction;
  */
 public class TaggableSwitch {
 
-    public static TaskWithArgs<ITaggable> edit(ITaggable tag) {
-        TaskWithArgs task;
+    public static TaskNoReturn edit(ITaggable tag) {
+        TaskNoReturn task;
         if (tag instanceof Transaction) {
             task = DbController.INSTANCE.editTransaction((Transaction) tag);
         } else if (tag instanceof Payee) {
