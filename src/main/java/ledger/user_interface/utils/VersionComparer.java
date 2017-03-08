@@ -21,6 +21,8 @@ public class VersionComparer {
 
                 if (tagV > currentV)
                     return true;
+                else if (tagV < currentV)
+                    return false;
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
