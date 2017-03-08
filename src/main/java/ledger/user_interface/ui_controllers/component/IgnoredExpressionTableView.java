@@ -1,7 +1,6 @@
 package ledger.user_interface.ui_controllers.component;
 
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
@@ -24,15 +23,14 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Tableview for editing and deleting IgnoredExpressions
+ * {@link TableView} for editing and deleting IgnoredExpressions
  */
 public class IgnoredExpressionTableView extends TableView implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/IgnoredTransactionTableView.fxml";
     @FXML
-    public TableColumn<IgnoredExpression, String> expressionColumn;
+    private TableColumn<IgnoredExpression, String> expressionColumn;
     @FXML
-    public TableColumn<IgnoredExpression, Boolean> matchOrContainColumn;
-
+    private TableColumn<IgnoredExpression, Boolean> matchOrContainColumn;
 
 
     public IgnoredExpressionTableView() {
@@ -48,34 +46,28 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
                 handleDelete();
             }
         });
-        expressionColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, String>("expression"));
+        expressionColumn.setCellValueFactory(new PropertyValueFactory<>("expression"));
         expressionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        expressionColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<IgnoredExpression, String> event) {
-                String exp = event.getNewValue();
-                IgnoredExpression igEx = event.getRowValue();
-                igEx.setExpression(exp);
+        expressionColumn.setOnEditCommit(event -> {
+            String exp = event.getNewValue();
+            IgnoredExpression igEx = event.getRowValue();
+            igEx.setExpression(exp);
 
-                TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
-                task.startTask();
-                task.waitForComplete();
-            }
+            TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
+            task.startTask();
+            task.waitForComplete();
         });
 
-        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<IgnoredExpression, Boolean>("match"));
-        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true,false)));
-        matchOrContainColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<IgnoredExpression, Boolean>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<IgnoredExpression, Boolean> event) {
-                Boolean value = event.getNewValue();
-                IgnoredExpression igEx = event.getRowValue();
-                igEx.setMatch(value);
+        matchOrContainColumn.setCellValueFactory(new PropertyValueFactory<>("match"));
+        matchOrContainColumn.setCellFactory(ComboBoxTableCell.forTableColumn(new IsMatchConverter(), FXCollections.observableArrayList(true, false)));
+        matchOrContainColumn.setOnEditCommit(event -> {
+            Boolean value = event.getNewValue();
+            IgnoredExpression igEx = event.getRowValue();
+            igEx.setMatch(value);
 
-                TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
-                task.startTask();
-                task.waitForComplete();
-            }
+            TaskWithArgs task = DbController.INSTANCE.editIgnoredExpression(igEx);
+            task.startTask();
+            task.waitForComplete();
         });
 
         DbController.INSTANCE.registerIgnoredExpressionSuccessEvent(this::asyncUpdateTableView);
@@ -83,9 +75,9 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
     }
 
     private void handleDelete() {
-        IgnoredExpression item = (IgnoredExpression)this.getSelectionModel().getSelectedItem();
+        IgnoredExpression item = (IgnoredExpression) this.getSelectionModel().getSelectedItem();
         TaskWithArgs<IgnoredExpression> deleteTask = DbController.INSTANCE.deleteIgnoredExpression(item);
-        deleteTask.RegisterFailureEvent((e)->{
+        deleteTask.RegisterFailureEvent((e) -> {
             asyncUpdateTableView();
             setupErrorPopup("Error deleting transaction.", e);
         });
@@ -94,7 +86,7 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
 
     }
 
-    public void updateTableView() {
+    private void updateTableView() {
         TaskWithReturn<List<IgnoredExpression>> task = DbController.INSTANCE.getAllIgnoredExpressions();
         task.startTask();
         List<IgnoredExpression> ignoredExpressions = task.waitForResult();
@@ -102,7 +94,7 @@ public class IgnoredExpressionTableView extends TableView implements IUIControll
         this.getItems().addAll(ignoredExpressions);
     }
 
-    public void asyncUpdateTableView() {
+    private void asyncUpdateTableView() {
         Startup.INSTANCE.runLater(this::updateTableView);
     }
 }

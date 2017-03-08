@@ -1,53 +1,47 @@
 package ledger.controller.register;
 
-/**
- * Created by gert on 10/26/16.
- */
-
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gert on 10/19/16.
+ * {@link ITask} that takes a method with a single argument and a return type
  */
 public class TaskWithArgsReturn<A, R> extends Task {
 
-    private List<CallableMethod<R>> SuccessEvents;
-    private Thread t;
+    private final List<CallableMethod<R>> SuccessEvents;
+    private final Thread t;
     private R result;
 
     public TaskWithArgsReturn(final CallableReturnMethod<A, R> task, final A arg) {
-        SuccessEvents = new ArrayList<CallableMethod<R>>();
-        t = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    result = task.call(arg);
+        SuccessEvents = new ArrayList<>();
+        t = new Thread(() -> {
+            try {
+                result = task.call(arg);
 
-                    for (CallableMethod<R> method :
-                            SuccessEvents) {
-                        try {
-                            method.call(result);
-                        } catch (Exception e) {
-                            System.err.println("Post Task Success Event Handler Failed");
-                            e.printStackTrace();
-                        }
-                    }
-
-                } catch (Exception e) {
-                    System.err.println("Task Failed");
-                    e.printStackTrace();
-                    for (CallableMethod<Exception> method :
-                            getFailureEvents()) {
-                        try {
-                            method.call(e);
-                        } catch (Exception e2) {
-                            System.err.println("Task Failed");
-                            e2.printStackTrace();
-                        }
+                for (CallableMethod<R> method :
+                        SuccessEvents) {
+                    try {
+                        method.call(result);
+                    } catch (Exception e) {
+                        System.err.println("Post Task Success Event Handler Failed");
+                        e.printStackTrace();
                     }
                 }
 
+            } catch (Exception e) {
+                System.err.println("Task Failed");
+                e.printStackTrace();
+                for (CallableMethod<Exception> method :
+                        getFailureEvents()) {
+                    try {
+                        method.call(e);
+                    } catch (Exception e2) {
+                        System.err.println("Task Failed");
+                        e2.printStackTrace();
+                    }
+                }
             }
+
         });
     }
 
@@ -61,7 +55,7 @@ public class TaskWithArgsReturn<A, R> extends Task {
             t.join();
 
         } catch (InterruptedException e) {
-            System.out.println(e.getStackTrace());
+            e.printStackTrace(System.err);
         }
         return result;
     }

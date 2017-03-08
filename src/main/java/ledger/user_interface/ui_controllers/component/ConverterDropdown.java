@@ -25,7 +25,7 @@ public class ConverterDropdown extends ChoiceBox<ImportController.Converter> imp
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ImportController.Converter[] items = ImportController.INSTANCE.getAvaliableConverters();
+        ImportController.Converter[] items = ImportController.INSTANCE.getAvailableConverters();
         this.setItems(FXCollections.observableArrayList(items));
     }
 }

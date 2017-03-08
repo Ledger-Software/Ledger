@@ -64,9 +64,7 @@ public interface ISQLDatabaseAccountBalance extends ISQLiteDatabase {
                 }
             }
 
-            AccountBalance balance = new AccountBalance(account, new Date(mostRecentDate), amount, balanceID);
-
-            return balance;
+            return new AccountBalance(account, new Date(mostRecentDate), amount, balanceID);
 
         } catch (SQLException e) {
             throw new StorageException("Error while getting account balance", e);

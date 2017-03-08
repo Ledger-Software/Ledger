@@ -1,12 +1,11 @@
 package ledger.user_interface.utils;
 
 import ledger.database.entity.Account;
-import ledger.database.entity.Type;
 
 import java.util.Comparator;
 
 /**
- * Created by Tayler How on 1/19/2017.
+ * Compares two accounts based on their primary name
  */
 public class AccountComparator implements Comparator<Account> {
 

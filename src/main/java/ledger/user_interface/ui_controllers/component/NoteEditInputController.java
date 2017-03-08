@@ -1,21 +1,16 @@
 package ledger.user_interface.ui_controllers.component;
 
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
-import ledger.controller.register.CallableMethod;
 import ledger.controller.register.TaskWithArgs;
 import ledger.database.entity.Note;
 import ledger.database.entity.Transaction;
@@ -26,7 +21,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Control that allows for the editing of notes inside of the TransactionTableview.
+ * Control that allows for the editing of notes inside of the TransactionTableView.
  */
 public class NoteEditInputController extends GridPane implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/NoteEditInput.fxml";
@@ -35,10 +30,11 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     private TextArea noteText;
 
 
-    private Transaction transaction;
+    private final Transaction transaction;
 
     /**
      * Basic Constructor
+     * @param transaction The {@link Transaction} that this will handle
      */
     public NoteEditInputController(Transaction transaction) {
         this.transaction = transaction;
@@ -59,14 +55,15 @@ public class NoteEditInputController extends GridPane implements IUIController, 
     }
 
     private void toggleEditors(boolean isToggleOpen) {
-        if(isToggleOpen) {
+        if (isToggleOpen) {
             this.noteText.setMinHeight(90);
-        } else{
+        } else {
             this.noteText.setText(transaction.getNote().getNoteText());
             this.noteText.setMinHeight(30);
         }
 
     }
+
     private class NoteFocusChangeListener implements ChangeListener<Boolean> {
 
 
@@ -75,20 +72,19 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             toggleEditors(newValue);
         }
     }
+
     private class NoteKeyEventHandler implements EventHandler<KeyEvent> {
 
 
         @Override
         public void handle(KeyEvent event) {
-            if(event.isShiftDown()&&event.getCode()== KeyCode.ENTER){
+            if (event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
                 noteText.appendText(System.lineSeparator());
-            } else if (event.getCode()== KeyCode.ENTER){
+            } else if (event.getCode() == KeyCode.ENTER) {
                 transaction.getNote().setNoteText(noteText.getText());
                 TaskWithArgs<Transaction> updateNoteTask;
                 updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
-                updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> {
-                    toggleEditors(false);
-                }));
+                updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> toggleEditors(false)));
                 updateNoteTask.startTask();
                 updateNoteTask.waitForComplete();
             }

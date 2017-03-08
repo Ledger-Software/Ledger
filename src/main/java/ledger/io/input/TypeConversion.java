@@ -10,16 +10,16 @@ import java.util.List;
  */
 public class TypeConversion {
 
-    public static final Type DEBIT_CARD = new Type("Debit Card", "");
-    public static final Type CREDIT_CARD = new Type("Credit Card", "");
-    public static final Type CASH = new Type("Cash", "");
+    private static final Type DEBIT_CARD = new Type("Debit Card", "");
+    private static final Type CREDIT_CARD = new Type("Credit Card", "");
+    private static final Type CASH = new Type("Cash", "");
     public static final Type CHECK = new Type("Check", "");
-    public static final Type ACH_CREDIT = new Type("Account Credit", "");
-    public static final Type ACH_DEBIT = new Type("Account Debit", "");
-    public static final Type MISC_DEBIT = new Type("Misc Debit", "");
-    public static final Type MISC_CREDIT = new Type("Misc Credit", "");
+    private static final Type ACH_CREDIT = new Type("Account Credit", "");
+    private static final Type ACH_DEBIT = new Type("Account Debit", "");
+    private static final Type MISC_DEBIT = new Type("Misc Debit", "");
+    private static final Type MISC_CREDIT = new Type("Misc Credit", "");
 
-    public static final Type UNKNOWN = new Type("UNKNOWN", "Unknown Type of transaction");
+    private static final Type UNKNOWN = new Type("UNKNOWN", "Unknown Type of transaction");
 
     public static Type convert(String type) {
         switch (type) {
@@ -72,7 +72,7 @@ public class TypeConversion {
     }
 
     public static List<Type> getAllTypes() {
-        List<Type> types = new ArrayList<Type>();
+        List<Type> types = new ArrayList<>();
 
         types.add(DEBIT_CARD);
         types.add(CREDIT_CARD);

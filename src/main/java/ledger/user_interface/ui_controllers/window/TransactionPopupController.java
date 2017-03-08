@@ -49,8 +49,8 @@ public class TransactionPopupController extends GridPane implements Initializabl
             Transaction transaction = transactionInput.getTransactionSubmission();
             if (transaction != null) {
                 TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transaction);
-                task.RegisterSuccessEvent(() -> closeWindow());
-                task.RegisterFailureEvent((e) -> e.printStackTrace());
+                task.RegisterSuccessEvent(this::closeWindow);
+                task.RegisterFailureEvent(Throwable::printStackTrace);
 
                 task.startTask();
             }

@@ -1,7 +1,8 @@
 package ledger.user_interface.utils;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link javafx.util.StringConverter} that's toString formats the amount into a proper
+ * credit currency amount string.
  */
 public class AmountCreditStringConverter extends AAmountStringConverter {
 

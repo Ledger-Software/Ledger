@@ -37,7 +37,7 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
     /**
      * Recalculate the balance for the selected account after a change in the TableView
      */
-    public void recalculateBalance() {
+    private void recalculateBalance() {
         if (this.currentAccount == null) {
             Startup.INSTANCE.runLater(this::calculateBalanceForAllAccounts);
             return;

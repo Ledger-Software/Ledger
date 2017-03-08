@@ -1,7 +1,7 @@
 package ledger.exception;
 
 /**
- * Created by CJ on 9/27/2016.
+ * Exceptions that are generated and should be handled by Ledger Software
  */
 public abstract class LedgerException extends Exception {
 

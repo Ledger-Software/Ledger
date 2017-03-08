@@ -55,7 +55,7 @@
                 </Button>
             </children>
         </GridPane>
-        <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#onEnter" prefHeight="50.0" prefWidth="250.0" promptText="Password" style="-fx-background-color: #abcafc;" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
+        <PasswordField fx:id="password" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="250.0" promptText="Password" style="-fx-background-color: #abcafc;" GridPane.columnSpan="3" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.rowIndex="3" GridPane.vgrow="NEVER">
         </PasswordField>
         <Button fx:id="loginBtn" maxHeight="35.0" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Login" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
             <padding>

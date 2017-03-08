@@ -5,7 +5,7 @@ import ledger.database.entity.Account;
 import java.util.Comparator;
 
 /**
- * Created by Tayler How on 1/19/2017.
+ * Used to compare the amounts of {@link Account} objects.
  */
 public class AmountCreditComparator implements Comparator<Long> {
 

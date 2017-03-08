@@ -60,7 +60,7 @@ public class Startup extends Application {
     private void shutdown() {
         try {
             DbController.INSTANCE.shutdown();
-        } catch (StorageException e) {
+        } catch (StorageException ignored) {
         }
 
         Platform.exit();
@@ -69,7 +69,7 @@ public class Startup extends Application {
     /**
      * Creates the login page to be the first thing seen in the application
      */
-    public void createLoginPage() {
+    private void createLoginPage() {
         LoginPageController loginController = new LoginPageController();
         Scene scene = new Scene(loginController);
         newStage(scene, "Ledger Login", false);
@@ -77,7 +77,7 @@ public class Startup extends Application {
 
     private void checkForUpdates() {
         GitHubChecker checker = new GitHubChecker();
-        if (checker.isUpdateAvaliable()) {
+        if (checker.isUpdateAvailable()) {
             GitHubChecker.Release release = checker.getNewerRelease();
             if (release.getDownloadURL() != null) {
                 UpdateConfirmation uc = new UpdateConfirmation(release);
@@ -109,7 +109,7 @@ public class Startup extends Application {
         }
     }
 
-    public void switchScene(Scene scene, String title) {
+    private void switchScene(Scene scene, String title) {
         this.stage.setScene(scene);
         this.stage.setOnCloseRequest(e -> shutdown());
         this.stage.setTitle(title);

@@ -10,24 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by CJ on 10/24/2016.
+ * {@link Button} for selecting a file. At first it's text is 'Select File' but
+ * after Selecting a file it changes it's text the file name.
  */
 public class FileSelectorButton extends Button {
 
     private File file;
-    private List<ExtensionFilter> fileExtentionFilters;
+    private final List<ExtensionFilter> fileExtensionFilters;
 
     public FileSelectorButton() {
         super();
         this.setText("Select File");
-        this.fileExtentionFilters = new ArrayList<>();
+        this.fileExtensionFilters = new ArrayList<>();
 
         this.setOnAction(this::OnAction);
     }
 
     private void OnAction(ActionEvent actionEvent) {
         FileChooser chooser = new FileChooser();
-        chooser.getExtensionFilters().addAll(this.fileExtentionFilters);
+        chooser.getExtensionFilters().addAll(this.fileExtensionFilters);
         File selectedFile = chooser.showOpenDialog(this.getScene().getWindow());
         if (selectedFile != null) {
             this.file = selectedFile;
@@ -40,14 +41,14 @@ public class FileSelectorButton extends Button {
     }
 
     public void addFileExtensionFilter(ExtensionFilter e) {
-        this.fileExtentionFilters.add(e);
+        this.fileExtensionFilters.add(e);
     }
 
     public void removeFileExtensionFilter(ExtensionFilter e) {
-        this.fileExtentionFilters.remove(e);
+        this.fileExtensionFilters.remove(e);
     }
 
     public void clearFileExtensionFilter() {
-        this.fileExtentionFilters.clear();
+        this.fileExtensionFilters.clear();
     }
 }

@@ -1,9 +1,6 @@
 package ledger.user_interface.ui_controllers.window;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -12,14 +9,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountBalanceLabel;
 import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
@@ -35,9 +30,9 @@ import java.util.ResourceBundle;
 
 public class MainPageController extends GridPane implements Initializable, IUIController {
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
+
     @FXML
-    public Button payeeEditorButton;
-    boolean containsAccounts = false;
+    private Button payeeEditorButton;
     @FXML
     private Button addAccountBtn;
     @FXML
@@ -79,43 +74,28 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.addAccountBtn.setOnAction((event) -> {
-            createAccountPopup();
-        });
+        this.addAccountBtn.setOnAction((event) -> createAccountPopup());
 
-        this.deleteAccountBtn.setOnAction((event) -> {
-            deleteAccount();
-        });
+        this.deleteAccountBtn.setOnAction((event) -> deleteAccount());
 
-        this.addTransactionBtn.setOnAction((event) -> {
-            createAddTransPopup();
-        });
+        this.addTransactionBtn.setOnAction((event) -> createAddTransPopup());
 
-        this.trackSpendingBtn.setOnAction((event) -> {
-            createExpenditureChartsPage();
-        });
+        this.trackSpendingBtn.setOnAction((event) -> createExpenditureChartsPage());
 
-        this.importTransactionsBtn.setOnAction((event) -> {
-            createImportTransPopup();
-        });
+        this.importTransactionsBtn.setOnAction((event) -> createImportTransPopup());
 
         this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
         this.searchTextField.setOnAction(this::searchClick);
 
-        this.chooseAccount.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Account>() {
-            @Override
-            public void changed(ObservableValue<? extends Account> observable, Account oldValue, Account newValue) {
-                transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
-                accountBalanceLabel.calculateBalance(chooseAccount.getSelectedAccount());
-            }
+        this.chooseAccount.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
+            accountBalanceLabel.calculateBalance(chooseAccount.getSelectedAccount());
         });
 
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
-        task.RegisterFailureEvent(e -> {
-            setupErrorPopup("Error retrieving accounts.", new Exception());
-        });
+        task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
         task.startTask();
         List<Account> acts = task.waitForResult();
         if (acts.isEmpty()) {
@@ -125,10 +105,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
 
         this.setOnKeyPressed(event -> {
-            if(!event.isControlDown())
+            if (!event.isControlDown())
                 return;
 
-            if(! (event.getCode() == KeyCode.Z))
+            if (!(event.getCode() == KeyCode.Z))
                 return;
 
             this.undo();
@@ -138,7 +118,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void undo() {
         String topMessage = DbController.INSTANCE.undoPeekMessage();
 
-        if(topMessage == null)
+        if (topMessage == null)
             return;
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -147,7 +127,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         alert.setContentText(topMessage);
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             DbController.INSTANCE.undo();
         }
     }
@@ -230,15 +210,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 " associated with the account. Do you wish to proceed?");
 
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
+        if (result.isPresent() && result.get() == ButtonType.OK) {
             // ... user chose OK
             TaskWithArgs<Account> t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
-            t.RegisterFailureEvent((e) -> {
-                e.printStackTrace();
-            });
+            t.RegisterFailureEvent(Throwable::printStackTrace);
             t.startTask();
-        } else {
-            return;
         }
     }
 }

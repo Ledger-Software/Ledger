@@ -26,11 +26,9 @@ public class OldVersionFinder {
 
         final Pattern p = Pattern.compile("Ledger-(.*)\\.jar");
 
-
-
-        File[] files = new File(jarFolder).listFiles((dir, name) -> {
+        return new File(jarFolder).listFiles((dir, name) -> {
             Matcher m = p.matcher(name);
-            if(m.matches()) {
+            if (m.matches()) {
                 String s = m.group(1);
 
                 return name.matches("Ledger-\\d\\.\\d\\.\\d\\.jar")
@@ -40,7 +38,5 @@ public class OldVersionFinder {
                 return false;
             }
         });
-
-        return files;
     }
 }

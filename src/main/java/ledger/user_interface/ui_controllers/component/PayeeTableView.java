@@ -1,39 +1,33 @@
 package ledger.user_interface.ui_controllers.component;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.utils.IdenityCellValueCallback;
 
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 1/22/2017.
+ * {@link TableView} for showing and editing {@link Payee}
+ * Auto pulls from the database
  */
 public class PayeeTableView extends TableView implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/PayeeTableView.fxml";
 
     @FXML
-    public TableColumn<Payee, String> nameColumn;
+    private TableColumn<Payee, String> nameColumn;
     @FXML
-    public TableColumn<Payee, String> descriptionColumn;
-    @FXML
-    public TableColumn<Payee, Payee> tagColumn;
-
+    private TableColumn<Payee, String> descriptionColumn;
 
     public PayeeTableView() {
         this.initController(pageLoc, this, "Error creating Payee Editor");
@@ -41,43 +35,36 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        nameColumn.setCellValueFactory(new PropertyValueFactory<Payee, String>("name"));
+        nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        nameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Payee, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Payee, String> event) {
-                String name = event.getNewValue();
-                Payee payee = event.getRowValue();
-                payee.setName(name);
+        nameColumn.setOnEditCommit(event -> {
+            String name = event.getNewValue();
+            Payee payee = event.getRowValue();
+            payee.setName(name);
 
-                TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
-                task.startTask();
-                task.waitForComplete();
-            }
+            TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
+            task.startTask();
+            task.waitForComplete();
         });
 
-        descriptionColumn.setCellValueFactory(new PropertyValueFactory<Payee, String>("description"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
         descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        descriptionColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Payee, String>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Payee, String> event) {
-                String description = event.getNewValue();
-                Payee payee = event.getRowValue();
-                payee.setDescription(description);
+        descriptionColumn.setOnEditCommit(event -> {
+            String description = event.getNewValue();
+            Payee payee = event.getRowValue();
+            payee.setDescription(description);
 
-                TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
-                task.startTask();
-                task.waitForComplete();
-            }
+            TaskWithArgs task = DbController.INSTANCE.editPayee(payee);
+            task.startTask();
+            task.waitForComplete();
         });
-
 
 
         DbController.INSTANCE.registerPayeeSuccessEvent(this::asyncUpdateTableView);
         updateTableView();
     }
 
-    public void updateTableView() {
+    private void updateTableView() {
         TaskWithReturn<List<Payee>> task = DbController.INSTANCE.getAllPayees();
         task.startTask();
         List<Payee> payees = task.waitForResult();
@@ -85,7 +72,7 @@ public class PayeeTableView extends TableView implements IUIController, Initiali
         this.getItems().addAll(payees);
     }
 
-    public void asyncUpdateTableView() {
+    private void asyncUpdateTableView() {
         Startup.INSTANCE.runLater(this::updateTableView);
     }
 }

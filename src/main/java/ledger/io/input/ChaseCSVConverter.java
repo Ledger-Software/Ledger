@@ -28,22 +28,22 @@ public class ChaseCSVConverter extends AbstractCSVConverter {
             String[] nextLine;
 
             while ((nextLine = reader.readNext()) != null) {
-                String details = nextLine[0];
+                // String details = nextLine[0];
                 String dateString = nextLine[1];
                 String description = nextLine[2];
                 String amountString = nextLine[3];
                 String typeString = nextLine[4];
                 String balanceString = nextLine[5];
-                String checkNumberString = nextLine[6];
+                // String checkNumberString = nextLine[6];
 
                 //Date date, Type type, int amount, Account account, Payee payee, boolean pending, List<Tag> tagList, Note note
 
-                Date date = this.df.parse(dateString);
+                Date date = AbstractCSVConverter.df.parse(dateString);
                 boolean pending = isPending(balanceString);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
-                int balance = 0;
-                if (!pending)
-                    balance = (int) Math.round(Double.parseDouble(balanceString) * 100);
+                //int balance = 0;
+                //if (!pending)
+                //  balance = (int) Math.round(Double.parseDouble(balanceString) * 100);
 
                 Type type = TypeConversion.convert(typeString);
 
@@ -53,7 +53,7 @@ public class ChaseCSVConverter extends AbstractCSVConverter {
                 List<Tag> tags = null;
                 Note note = null;
 
-                Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
+                Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, pending, tags, note);
 
                 transactions.add(transaction);
             }

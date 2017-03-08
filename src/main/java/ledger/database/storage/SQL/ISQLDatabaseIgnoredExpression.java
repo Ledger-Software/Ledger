@@ -12,15 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by gert on 2/7/17.
+ * Methods for handling Ignored Expression Database calls
  */
-public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
+public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase {
 
     @Override
     default void insertIgnoredExpression(IgnoredExpression igEx) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + IgnoredExpressionTable.TABLE_NAME +
-                    " (" + IgnoredExpressionTable.IGNORE_EXPRESSION+
+                    " (" + IgnoredExpressionTable.IGNORE_EXPRESSION +
                     ", " + IgnoredExpressionTable.MATCH_OR_CONTAIN +
                     ") VALUES (?,?)");
             stmt.setString(1, igEx.getExpression());
@@ -30,6 +30,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
             throw new StorageException("Error while inserting an Ignored Expression");
         }
     }
+
     @Override
     default void deleteIgnoredExpression(IgnoredExpression igEx) throws StorageException {
         try {
@@ -48,11 +49,11 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
             PreparedStatement stmt =
                     getDatabase().prepareStatement("UPDATE " + IgnoredExpressionTable.TABLE_NAME +
                             " SET " + IgnoredExpressionTable.IGNORE_EXPRESSION + "=?, " +
-                            IgnoredExpressionTable.MATCH_OR_CONTAIN +"=? WHERE " + IgnoredExpressionTable.IGNORE_ID + " = ?");
+                            IgnoredExpressionTable.MATCH_OR_CONTAIN + "=? WHERE " + IgnoredExpressionTable.IGNORE_ID + " = ?");
 
             stmt.setString(1, igEx.getExpression());
             stmt.setBoolean(2, igEx.isMatch());
-            stmt.setInt(3,igEx.getExpressionId());
+            stmt.setInt(3, igEx.getExpressionId());
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing an Ignored Expression");
@@ -60,7 +61,7 @@ public interface ISQLDatabaseIgnoredExpression extends ISQLiteDatabase{
     }
 
     @Override
-    default List<IgnoredExpression> getAllIgnoredExpressions() throws StorageException{
+    default List<IgnoredExpression> getAllIgnoredExpressions() throws StorageException {
         try {
             Statement stmt = getDatabase().createStatement();
             ResultSet rs = stmt.executeQuery("SELECT " + IgnoredExpressionTable.IGNORE_ID +

@@ -37,7 +37,7 @@ public class DbController {
     /**
      * Constructor for the DBcontroller
      */
-    public DbController() {
+    private DbController() {
         INSTANCE = this;
         transactionSuccessEvent = new LinkedList<>();
         accountSuccessEvent = new LinkedList<>();
@@ -64,7 +64,9 @@ public class DbController {
         payeeSuccessEvent.add(method);
     }
 
-    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) { ignoredExpSuccessEvent.add(method); }
+    public void registerIgnoredExpressionSuccessEvent(CallableMethodVoidNoArgs method) {
+        ignoredExpSuccessEvent.add(method);
+    }
 
     private void registerSuccess(TaskWithArgs<?> task, List<CallableMethodVoidNoArgs> methods) {
         methods.forEach(task::RegisterSuccessEvent);
@@ -129,7 +131,7 @@ public class DbController {
             System.err.println("Error on getTransactionById");
         }
 
-        undoStack.push(new UndoAction(generateEditTransaction(oldTrans),"Undo Edit Transaction"));
+        undoStack.push(new UndoAction(generateEditTransaction(oldTrans), "Undo Edit Transaction"));
 
         return task;
     }
@@ -154,7 +156,7 @@ public class DbController {
      * Creates a ITask that can be used to make an asynchronous call to the database to get all transactions
      * associated with the given account
      *
-     * @param account The account to retrieve all transactions assioted with
+     * @param account The account to retrieve all transactions associated with
      * @return A task for the Async Call that returns a list of all the Transactions
      */
     public TaskWithReturn<List<Transaction>> getAllTransactionsForAccount(Account account) {
@@ -192,7 +194,8 @@ public class DbController {
         AccountBalance ab = null;
         try {
             ab = db.getBalanceForAccount(account);
-        } catch (StorageException e) { }
+        } catch (StorageException ignored) {
+        }
 
         List<Transaction> trans;
         try {
@@ -201,27 +204,25 @@ public class DbController {
             trans = new ArrayList<>();
         }
 
-        if(trans.size() != 0) {
+        if (trans.size() != 0) {
             final AccountBalance finalAb = ab;
-            TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<List<Transaction>>((toAddTrans)-> {
+            TaskWithArgs<List<Transaction>> undoTask = new TaskWithArgs<>((toAddTrans) -> {
                 db.insertAccount(account);
-                for(Transaction t: toAddTrans) {
+                for (Transaction t : toAddTrans) {
                     t.setAccount(account);
                     db.insertTransaction(t);
                 }
                 finalAb.setAccount(account);
-                if(finalAb != null)
-                    db.addBalanceForAccount(finalAb);
+                db.addBalanceForAccount(finalAb);
             }, trans);
             registerSuccess(undoTask, transactionSuccessEvent);
             registerSuccess(undoTask, accountSuccessEvent);
             undoStack.push(new UndoAction(undoTask, "Undo Delete Account and Transactions"));
         } else {
-            TaskWithArgs<AccountBalance> undoTask = new TaskWithArgs<AccountBalance>((finalAb)-> {
+            TaskWithArgs<AccountBalance> undoTask = new TaskWithArgs<>((finalAb) -> {
                 db.insertAccount(account);
                 finalAb.setAccount(account);
-                if(finalAb != null)
-                    db.addBalanceForAccount(finalAb);
+                db.addBalanceForAccount(finalAb);
             }, ab);
             registerSuccess(undoTask, transactionSuccessEvent);
             registerSuccess(undoTask, accountSuccessEvent);
@@ -250,14 +251,15 @@ public class DbController {
         Account oldAccount = null;
         try {
             oldAccount = db.getAccountById(account);
-        } catch (StorageException e) { }
+        } catch (StorageException ignored) {
+        }
 
-        undoStack.push(new UndoAction(generateEditAccount(oldAccount),"Undo Edit Transaction"));
+        undoStack.push(new UndoAction(generateEditAccount(oldAccount), "Undo Edit Transaction"));
 
         return task;
     }
 
-    public TaskWithArgs<Account> generateEditAccount(final Account account) {
+    private TaskWithArgs<Account> generateEditAccount(final Account account) {
         TaskWithArgs<Account> task = new TaskWithArgs<>(db::editAccount, account);
         registerSuccess(task, accountSuccessEvent);
         return task;
@@ -323,7 +325,8 @@ public class DbController {
         Payee oldPayee = null;
         try {
             oldPayee = db.getPayeeById(payee);
-        } catch (StorageException e) { }
+        } catch (StorageException ignored) {
+        }
 
         undoStack.push(new UndoAction(generateEditPayee(oldPayee), "Undo Edit Payee"));
 
@@ -400,7 +403,8 @@ public class DbController {
                 for (Transaction currentTransaction : transactionList) {
                     try {
                         db.deleteTransaction(currentTransaction);
-                    } catch (StorageException e) { }
+                    } catch (StorageException ignored) {
+                    }
                 }
             } finally {
                 db.setDatabaseAutoCommit(true);
@@ -412,7 +416,7 @@ public class DbController {
         return task;
     }
 
-    public TaskWithArgsReturn<List<Transaction>, List<Transaction>> generateBatchInsertTransaction(List<Transaction> transactions) {
+    private TaskWithArgsReturn<List<Transaction>, List<Transaction>> generateBatchInsertTransaction(List<Transaction> transactions) {
         TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<>((transactionList) -> {
             try {
                 List<Transaction> list = new ArrayList<>();
@@ -471,22 +475,20 @@ public class DbController {
      * @return A task for the asynchronous call
      */
     public TaskWithArgsReturn<List<Transaction>, List<Transaction>> batchTransactionIgnoreCheck(List<Transaction> transactions) {
-        TaskWithArgsReturn<List<Transaction>, List<Transaction>> task = new TaskWithArgsReturn<List<Transaction>, List<Transaction>>((transactionList) -> {
-            List<Transaction> list =  new ArrayList<>();
+        return new TaskWithArgsReturn<>((transactionList) -> {
+            List<Transaction> list = new ArrayList<>();
             for (Transaction currentTransaction : transactionList) {
 
                 try {
-                    if(db.isTransactionIgnored(currentTransaction))
+                    if (db.isTransactionIgnored(currentTransaction))
                         list.add(currentTransaction);
-                } catch (StorageException e) {
+                } catch (StorageException ignored) {
                 }
             }
             return list;
         }, transactions);
-
-
-        return task;
     }
+
     protected IDatabase getDb() {
         return db;
     }
@@ -494,10 +496,11 @@ public class DbController {
 
     /**
      * Shows the message from the action on top of the stack.
-     * @return
+     *
+     * @return the String or Null or the stack is empty
      */
     public String undoPeekMessage() {
-        if(undoStack.isEmpty())
+        if (undoStack.isEmpty())
             return null;
         return undoStack.peek().getMessage();
     }
@@ -516,8 +519,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to insert
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::insertIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> insertIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::insertIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }
@@ -528,8 +531,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to edit
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::editIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> editIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::editIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }
@@ -540,8 +543,8 @@ public class DbController {
      * @param igEx the IgnoredExpression to delete
      * @return a Task for the Async Call
      */
-    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx){
-        TaskWithArgs task =  new TaskWithArgs<>(db::deleteIgnoredExpression,igEx);
+    public TaskWithArgs<IgnoredExpression> deleteIgnoredExpression(IgnoredExpression igEx) {
+        TaskWithArgs task = new TaskWithArgs<>(db::deleteIgnoredExpression, igEx);
         registerSuccess(task, ignoredExpSuccessEvent);
         return task;
     }
@@ -552,7 +555,7 @@ public class DbController {
      * @return A task for the Async Call that returns a list of all the IgnoredExpressions
      */
     public TaskWithReturn<List<IgnoredExpression>> getAllIgnoredExpressions() {
-        return new TaskWithReturn<List<IgnoredExpression>>(db::getAllIgnoredExpressions);
+        return new TaskWithReturn<>(db::getAllIgnoredExpressions);
     }
 
 

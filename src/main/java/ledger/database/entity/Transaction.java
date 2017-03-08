@@ -31,7 +31,7 @@ public class Transaction implements IEntity, ITaggable {
 
     public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id) {
-        this.tagList = new ArrayList<Tag>();
+        this.tagList = new ArrayList<>();
 
         this.date = date;
         this.type = type;

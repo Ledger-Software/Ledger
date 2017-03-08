@@ -55,7 +55,7 @@ public class AccountBalance implements IEntity {
     /**
      * Sets the account associated with this balance
      *
-     * @param account the account to assocate the balance with
+     * @param account the account to associate the balance with
      */
     public void setAccount(Account account) {
         this.account = account;
@@ -82,7 +82,7 @@ public class AccountBalance implements IEntity {
     /**
      * Gets the AccountBalance amount
      *
-     * @return amount the ammount of the current balance
+     * @return amount the amount of the current balance
      */
     public long getAmount() {
         return amount;

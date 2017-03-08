@@ -8,14 +8,13 @@ import ledger.exception.StorageException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 
 /**
  * Database handler for h2 storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class H2Database implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression {
+public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression {
 
     private Connection databaseObject;
 
@@ -58,14 +57,7 @@ public class H2Database implements ISQLDatabaseAccountBalance, ISQLDatabaseTrans
         tableSQL.add(TagToPayeeTable.CreateStatementH2());
         tableSQL.add((IgnoredExpressionTable.CreateStatementH2()));
 
-        try {
-            for (String statement : tableSQL) {
-                Statement stmt = getDatabase().createStatement();
-                stmt.execute(statement);
-            }
-        } catch (SQLException e) {
-            throw new StorageException("Unable to Create Table", e);
-        }
+        executeList(tableSQL);
 
         if (this.getAllTypes().size() == 0)
             for (Type type : TypeTable.defaultTypes()) {
@@ -96,7 +88,7 @@ public class H2Database implements ISQLDatabaseAccountBalance, ISQLDatabaseTrans
         try {
             getDatabase().setAutoCommit(autoCommit);
 
-            if(autoCommit)
+            if (autoCommit)
                 getDatabase().commit();
         } catch (SQLException e) {
             throw new StorageException("Error while setting database autocommit to " + autoCommit, e);

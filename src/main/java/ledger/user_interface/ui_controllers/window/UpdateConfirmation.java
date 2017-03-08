@@ -25,15 +25,15 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
     private final GitHubChecker.Release release;
 
     @FXML
-    public Text titleText;
+    private Text titleText;
     @FXML
-    public Text versionText;
+    private Text versionText;
     @FXML
-    public Button cancelButton;
+    private Button cancelButton;
     @FXML
-    public Button updateButton;
+    private Button updateButton;
     @FXML
-    public ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     public UpdateConfirmation(GitHubChecker.Release release) {
         this.release = release;
@@ -80,13 +80,9 @@ public class UpdateConfirmation extends GridPane implements IUIController, Initi
                         "java", "-jar", newJar).start();
 
                 System.exit(0);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (FileNotFoundException e) {
+            } catch (MalformedURLException | URISyntaxException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
-            } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
         }).start();

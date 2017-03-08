@@ -2,10 +2,10 @@ package ledger.database.storage.table;
 
 public class PayeeTable {
 
-    public static String TABLE_NAME = "PAYEE";
-    public static String PAYEE_ID = "PAYEE_ID";
-    public static String PAYEE_NAME = "PAYEE_NAME";
-    public static String PAYEE_DESC = "PAYEE_DESC";
+    public static final String TABLE_NAME = "PAYEE";
+    public static final String PAYEE_ID = "PAYEE_ID";
+    public static final String PAYEE_NAME = "PAYEE_NAME";
+    public static final String PAYEE_DESC = "PAYEE_DESC";
 
     /**
      * Creates the String command to create the table for this object.

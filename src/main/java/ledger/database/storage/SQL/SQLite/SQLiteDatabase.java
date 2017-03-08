@@ -8,14 +8,13 @@ import ledger.exception.StorageException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.LinkedList;
 
 /**
  * Database handler for SQLite storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class SQLiteDatabase implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression {
+public class SQLiteDatabase extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression {
 
     private Connection databaseObject;
 
@@ -53,14 +52,7 @@ public class SQLiteDatabase implements ISQLDatabaseAccountBalance, ISQLDatabaseT
         tableSQL.add(TagToTransTable.CreateStatementSQLite());
         tableSQL.add(TagToPayeeTable.CreateStatementSQLite());
 
-        try {
-            for (String statement : tableSQL) {
-                Statement stmt = getDatabase().createStatement();
-                stmt.execute(statement);
-            }
-        } catch (SQLException e) {
-            throw new StorageException("Unable to Create Table", e);
-        }
+        executeList(tableSQL);
 
         if (this.getAllTypes().size() == 0)
             for (Type type : TypeTable.defaultTypes()) {

@@ -1,9 +1,9 @@
 package ledger.user_interface.utils;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link javafx.util.StringConverter} that's toString formats the amount into a proper
+ * +/- currency amount string.
  */
-
 public class AmountStringConverter extends AAmountStringConverter {
 
     public String toString(Long amount) {
@@ -11,7 +11,7 @@ public class AmountStringConverter extends AAmountStringConverter {
             return "";
         }
 
-        boolean positiveValue = amount >= 0 ? true : false;
+        boolean positiveValue = amount >= 0;
         Long absoluteAmount = Math.abs(amount);
         String absoluteAmountInCents = String.valueOf(absoluteAmount);
 
@@ -28,8 +28,6 @@ public class AmountStringConverter extends AAmountStringConverter {
             cents = "0" + absoluteAmountInCents;
         }
 
-        String amountString = (positiveValue ? "" : "-") + dollars + "." + cents;
-
-        return amountString;
+        return (positiveValue ? "" : "-") + dollars + "." + cents;
     }
 }

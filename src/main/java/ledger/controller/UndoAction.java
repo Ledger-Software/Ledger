@@ -3,12 +3,12 @@ package ledger.controller;
 import ledger.controller.register.ITask;
 
 /**
- * Created by CJ on 2/5/2017.
+ * Class used in the implementation of the undo stack in {@link DbController}
  */
 public class UndoAction {
 
-    private ITask task;
-    private String message;
+    private final ITask task;
+    private final String message;
 
     public UndoAction(ITask task, String message) {
         this.task = task;

@@ -19,8 +19,8 @@ import java.util.List;
  * (will only work if running for a jar with a manifest version)
  */
 public class GitHubChecker {
-    static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-    static final JacksonFactory JACKSON_FACTORY = new JacksonFactory();
+    private static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
+    private static final JacksonFactory JACKSON_FACTORY = new JacksonFactory();
     private Release newerRelease;
 
     public Release getNewerRelease() {
@@ -74,7 +74,7 @@ public class GitHubChecker {
         public long size;
     }
 
-    public boolean isUpdateAvaliable() {
+    public boolean isUpdateAvailable() {
         try {
             Release[] releases = getReleases();
             if (hasNewerRelease(releases)) {
@@ -102,7 +102,6 @@ public class GitHubChecker {
 
         return false;
     }
-
 
 
     private Release[] getReleases() throws IOException {

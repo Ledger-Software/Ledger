@@ -38,18 +38,14 @@ public class FifthThirdBankQFXConverter extends AbstractUFXConverter {
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
                 Payee payee = new Payee(names.item(i).getTextContent(), "");
 
-                List<Tag> tags = new LinkedList<Tag>();
+                List<Tag> tags = new LinkedList<>();
                 Note note = new Note(memos.item(i).getTextContent());
 
                 Transaction transaction = new Transaction(date, type, amount, this.getAccount(), payee, false, tags, note);
                 transactions.add(transaction);
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | DateTimeParseException | NumberFormatException e) {
             throw new ConverterException("Qfx data invalid!", e);
-        } catch (NumberFormatException e2) {
-            throw new ConverterException("Qfx data invalid!", e2);
-        } catch (DateTimeParseException e3) {
-            throw new ConverterException("Qfx data invalid!", e3);
         }
     }
 }

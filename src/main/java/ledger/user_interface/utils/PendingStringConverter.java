@@ -3,16 +3,12 @@ package ledger.user_interface.utils;
 import javafx.util.StringConverter;
 
 /**
- * Created by Tayler How on 11/1/2016.
+ * {@link StringConverter} for Pending field of {@link ledger.database.entity.Account}
  */
 public class PendingStringConverter extends StringConverter<Boolean> {
 
     public Boolean fromString(String pendingString) {
-        if (pendingString.equals("Pending")) {
-            return true;
-        } else {
-            return false;
-        }
+        return pendingString.equals("Pending");
     }
 
     public String toString(Boolean pending) {

@@ -40,15 +40,14 @@ public class FirstDataCorpCSVConverter extends AbstractCSVConverter {
                 String dateString = nextLine[0];
                 String amountString = nextLine[3];
 
-                Date date = this.df.parse(dateString);
+                Date date = AbstractCSVConverter.df.parse(dateString);
                 Type type = convertType(descriptionString);
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
 
-                Transaction transaction = new Transaction(date, type, amount, this.account, payee, pending, tags, note);
+                Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, pending, tags, note);
 
                 transactions.add(transaction);
             }
-
         } catch (IOException e) {
             throw new ConverterException("Unable to read file.", e);
         } catch (ParseException e) {

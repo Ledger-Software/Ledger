@@ -7,13 +7,13 @@ import javafx.util.Callback;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.NoteEditInputController;
-import ledger.user_interface.utils.IdenityCellValueCallback;
+import ledger.user_interface.utils.IdentityCellValueCallback;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * Created by gert on 2/7/17.
+ * {@link TableColumn} that handles Note text for {@link Transaction} objects
  */
 public class NoteColumn extends TableColumn<Transaction, Transaction> implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TableColumn.fxml";
@@ -23,11 +23,12 @@ public class NoteColumn extends TableColumn<Transaction, Transaction> implements
         this.initController(pageLoc, this, "Unable to load NoteColumn");
 
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
 
-        this.setCellValueFactory(new IdenityCellValueCallback<Transaction>());
+        this.setCellValueFactory(new IdentityCellValueCallback<>());
         this.setCellFactory(
                 new Callback<TableColumn<Transaction, Transaction>, TableCell<Transaction, Transaction>>() {
                     @Override

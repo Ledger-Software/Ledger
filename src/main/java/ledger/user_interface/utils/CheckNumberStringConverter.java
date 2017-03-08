@@ -3,20 +3,20 @@ package ledger.user_interface.utils;
 import javafx.util.StringConverter;
 
 /**
- * Created by Jesse Shellabarger on 2/5/2017.
+ * {@link StringConverter} for Check Numbers
  */
 public class CheckNumberStringConverter extends StringConverter<Integer> {
 
     @Override
     public String toString(Integer checkNum) {
         String checkNumString;
-        if (checkNum == null || checkNum.equals(new Integer(-1)))
+        if (checkNum == null || checkNum.equals(-1))
             checkNumString = "";
         else {
             checkNumString = checkNum.toString();
 
             int length = checkNumString.length();
-            for (int i = length; i < 4; i ++) {
+            for (int i = length; i < 4; i++) {
                 checkNumString = "0" + checkNumString;
             }
         }
@@ -30,7 +30,7 @@ public class CheckNumberStringConverter extends StringConverter<Integer> {
             return null;
         }
         int checkNum;
-        if(checkNumString.equals("")) checkNum = -1;
+        if (checkNumString.equals("")) checkNum = -1;
         else checkNum = Integer.parseInt(checkNumString);
 
         return checkNum;

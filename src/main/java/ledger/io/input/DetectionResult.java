@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class DetectionResult {
 
-    private List<Transaction> possibleDuplicates;
-    private List<Transaction> verifiedTransactions;
+    private final List<Transaction> possibleDuplicates;
+    private final List<Transaction> verifiedTransactions;
 
     public DetectionResult(List<Transaction> possibleDuplicates, List<Transaction> verifiedTransactions) {
         this.possibleDuplicates = possibleDuplicates;

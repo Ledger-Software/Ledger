@@ -1,12 +1,10 @@
 package ledger.user_interface.ui_controllers.window;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithArgs;
@@ -22,7 +20,9 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 /**
- * Created by CJ on 11/2/2016.
+ * Takes a list of {@link Transaction} and will ask the user if they want to
+ * either import or skip each transaction. Also gives them the ability to edit
+ * before importing.
  */
 public class GenericImportTransactionPopup extends GridPane implements Initializable, IUIController {
 
@@ -37,8 +37,8 @@ public class GenericImportTransactionPopup extends GridPane implements Initializ
 
     private static final String pageLoc = "/fxml_files/GenericImportTransactionPopup.fxml";
 
-    private List<Transaction> trans;
-    private Iterator<Transaction> iter;
+    private final List<Transaction> trans;
+    private Iterator<Transaction> iterator;
 //    private Transaction currentTrans;
 
 
@@ -56,26 +56,26 @@ public class GenericImportTransactionPopup extends GridPane implements Initializ
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.iter = this.trans.iterator();
-        this.skipButton.setOnAction(this::next);
-        this.importButton.setOnAction(this::importTrans);
-        next(null);
+        this.iterator = this.trans.iterator();
+        this.skipButton.setOnAction((ae) -> this.next());
+        this.importButton.setOnAction((ae) -> this.importTrans());
+        next();
     }
 
-    private void importTrans(ActionEvent actionEvent) {
+    private void importTrans() {
         TaskWithArgs<Transaction> task = DbController.INSTANCE.insertTransaction(transactionInput.getTransactionSubmission());
 
-        task.RegisterSuccessEvent(() -> this.next(null));
-        task.RegisterFailureEvent((e) -> this.next(null));
+        task.RegisterSuccessEvent(this::next);
+        task.RegisterFailureEvent((e) -> this.next());
 
         importButton.setDisable(true);
         task.startTask();
 
     }
 
-    private void next(ActionEvent actionEvent) {
-        if (iter.hasNext()) {
-            Transaction currentTrans = iter.next();
+    private void next() {
+        if (iterator.hasNext()) {
+            Transaction currentTrans = iterator.next();
             Startup.INSTANCE.runLater(() -> {
                 transactionInput.setTransaction(currentTrans);
                 importButton.setDisable(false);
@@ -88,7 +88,7 @@ public class GenericImportTransactionPopup extends GridPane implements Initializ
 
     private void closeWindow() {
 
-        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).fireEvent(new WindowEvent(((Stage) this.getScene().getWindow()), WindowEvent.WINDOW_CLOSE_REQUEST)));
+        Startup.INSTANCE.runLater(() -> this.getScene().getWindow().fireEvent(new WindowEvent(this.getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST)));
 
     }
 }

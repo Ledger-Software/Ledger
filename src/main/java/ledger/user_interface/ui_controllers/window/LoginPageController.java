@@ -1,12 +1,12 @@
 package ledger.user_interface.ui_controllers.window;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import ledger.controller.DbController;
@@ -33,15 +33,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     @FXML
     private Button newFileBtn;
 
-    @FXML
-    public void onEnter(ActionEvent ae) {
-        login();
-    }
-
-    private String pwd;
     private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
-    private boolean containsDbFile;
 
     public LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -63,16 +56,21 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.chooseFileBtn.setOnAction((event -> selectFile()));
         this.newFileBtn.setOnAction((event -> openCreateFilePopup()));
         this.loginBtn.setOnAction((event -> login()));
+        this.password.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
+            }
+        });
 
         File initDir = new File(System.getProperty("user.home"));
         File[] listFiles = initDir.listFiles();
-        this.containsDbFile = false;
+        boolean containsDbFile = false;
         for (File f : listFiles) {
             if (f.isFile() && f.getName().endsWith(".mv.db")) {
-                this.containsDbFile = true;
+                containsDbFile = true;
             }
         }
-        if (!this.containsDbFile) {
+        if (!containsDbFile) {
             setUpIntroHelp();
         }
     }
@@ -90,8 +88,6 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     /**
      * Opens a file selector window so the user can choose what file they wish to use.
-     *
-     * @return void
      */
     private void selectFile() {
         FileChooser chooser = new FileChooser();
@@ -105,30 +101,16 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     }
 
     private void login() {
-        this.pwd = this.password.getText();
+        String pwd = this.password.getText();
         if (InputSanitization.isStringInvalid(this.filePath)) {
             this.setupErrorPopup("Please select a file or create a new one.");
             return;
-        } else if (InputSanitization.isStringInvalid(this.pwd)) {
+        } else if (InputSanitization.isStringInvalid(pwd)) {
             this.setupErrorPopup("Please enter a password.");
             return;
         }
         try {
-            DbController.INSTANCE.initialize(this.filePath, this.pwd);
-
-//            MainPageController mainPageController = new MainPageController();
-//            Scene scene = new Scene(mainPageController);
-//            Stage currStage = (Stage) this.getScene().getWindow();
-//            currStage.close();
-//            Stage newStage = new Stage();
-//            newStage.setMinWidth(780);
-//            newStage.setWidth(1280);
-//            newStage.setHeight(800);
-//            newStage.setMinHeight(5000);
-//            newStage.setResizable(true);
-//            newStage.setScene(scene);
-//            newStage.setTitle("Ledger: Transaction View");
-//            newStage.show();
+            DbController.INSTANCE.initialize(this.filePath, pwd);
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
@@ -141,7 +123,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.createModal(scene, "Create New File");
     }
 
-    public void setChosenFile(File file) {
+    private void setChosenFile(File file) {
         this.filePath = file.getAbsolutePath();
         this.chooseFileBtn.setText(file.getName());
         this.password.requestFocus();

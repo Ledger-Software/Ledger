@@ -103,6 +103,5 @@ public interface IDatabase {
     boolean isTransactionIgnored(Transaction transaction) throws StorageException;
 
 
-
 }
 

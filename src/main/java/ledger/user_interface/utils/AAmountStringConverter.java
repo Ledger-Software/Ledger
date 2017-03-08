@@ -3,7 +3,7 @@ package ledger.user_interface.utils;
 import javafx.util.StringConverter;
 
 /**
- * Created by Tayler How on 2/5/2017.
+ * String Converter for showing valid currency amounts. Only has From String implemented
  */
 public abstract class AAmountStringConverter extends StringConverter<Long> {
 
@@ -14,8 +14,8 @@ public abstract class AAmountStringConverter extends StringConverter<Long> {
         }
 
         double amountToSetDecimal = Double.parseDouble(amountString);
-        long amount = (long) Math.round(amountToSetDecimal * 100);
-        return amount;
+
+        return Math.round(amountToSetDecimal * 100);
     }
 
     public abstract String toString(Long amount);

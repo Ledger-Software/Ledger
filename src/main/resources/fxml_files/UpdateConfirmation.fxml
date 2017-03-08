@@ -23,7 +23,7 @@
     </rowConstraints>
     <children>
         <Pane fx:id="header" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="2"/>
-        <Label fx:id="title" text="Update Avaliable" GridPane.columnSpan="2">
+        <Label fx:id="title" text="Update Available" GridPane.columnSpan="2">
             <GridPane.margin>
                 <Insets/>
             </GridPane.margin>
@@ -47,7 +47,7 @@
             </GridPane.margin>
         </Button>
         <Text fx:id="updateText" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="There is a new update avaliable. Do you wish to download it?" textAlignment="CENTER"
+              text="There is a new update available. Do you wish to download it?" textAlignment="CENTER"
               wrappingWidth="380.0" GridPane.halignment="LEFT" GridPane.rowIndex="1">
             <font>
                 <Font size="18.0"/>

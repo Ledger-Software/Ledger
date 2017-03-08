@@ -2,9 +2,9 @@ package ledger.database.storage.table;
 
 public class TagToPayeeTable {
 
-    public static String TABLE_NAME = "TAG_TO_PAYEE";
-    public static String TTPE_TAG_ID = "TTPE_TAG_ID";
-    public static String TTPE_PAYEE_ID = "TTPE_PAYEE_ID";
+    public static final String TABLE_NAME = "TAG_TO_PAYEE";
+    public static final String TTPE_TAG_ID = "TTPE_TAG_ID";
+    public static final String TTPE_PAYEE_ID = "TTPE_PAYEE_ID";
 
     /**
      * Creates the String command to create the table for this object.

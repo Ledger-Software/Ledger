@@ -23,9 +23,8 @@ import java.util.ResourceBundle;
  */
 public class ExportButton extends Button implements IUIController, Initializable {
 
-    private static String pageLoc = "/fxml_files/Button.fxml";
-
     public ExportButton() {
+        String pageLoc = "/fxml_files/Button.fxml";
         this.initController(pageLoc, this, "Unable to load Export Button");
     }
 
