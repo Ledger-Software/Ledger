@@ -3,6 +3,7 @@ package ledger.user_interface.ui_controllers.component;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
 
@@ -12,7 +13,7 @@ import java.util.ResourceBundle;
 /**
  * UI object to hold information about both the account and the display shown in the Account list.
  */
-public class AccountInfo implements IUIController, Initializable {
+public class AccountInfo extends GridPane implements IUIController, Initializable {
 
     @FXML
     private Label accountName;

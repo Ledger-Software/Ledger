@@ -255,6 +255,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // ... user chose OK
             TaskNoReturn t = DbController.INSTANCE.deleteAccount(this.accountListView.getSelectionModel().getSelectedItem().getAccount());
+            this.accountListView.getItems().remove(this.accountListView.getSelectionModel().getSelectedItem());
             t.RegisterFailureEvent(Throwable::printStackTrace);
             t.startTask();
         }

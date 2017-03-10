@@ -47,7 +47,7 @@
                <content>
                   <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <children>
-                         <TitledPane animated="false" expanded="false" text="Choose Account">
+                         <TitledPane animated="false" expanded="false" text="Accounts">
                              <content>
                                  <AnchorPane>
                                      <children>
