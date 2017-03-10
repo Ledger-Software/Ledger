@@ -96,11 +96,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.searchTextField.setOnAction(this::searchClick);
 
-//        this.chooseAccount.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-//            transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
-//            accountBalanceLabel.calculateBalance(chooseAccount.getSelectedAccount());
-//        });
-
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
         task.startTask();
@@ -108,9 +103,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         if (acts.isEmpty()) {
             setUpAccountCreationHelp();
         }
-
-
-
 
         List<AccountInfo> infoItems = new ArrayList<>();
         for (Account a : acts) {
@@ -123,11 +115,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.accountListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.accountListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            transactionTableView.updateAccountFilter(accountListView.getSelectionModel().getSelectedItem().getAccount());
+            // if item is recently deleted we want to ignore it
+            if (accountListView.getSelectionModel().getSelectedItem() != null) {
+                transactionTableView.updateAccountFilter(accountListView.getSelectionModel().getSelectedItem().getAccount());
+            }
         });
-
-
-
 
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
 
