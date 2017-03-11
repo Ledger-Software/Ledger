@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers.window;
 
+import com.sun.glass.ui.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

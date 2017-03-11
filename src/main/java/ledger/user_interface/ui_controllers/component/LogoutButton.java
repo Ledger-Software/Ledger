@@ -2,6 +2,7 @@ package ledger.user_interface.ui_controllers.component;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import ledger.controller.DbController;
@@ -34,6 +35,7 @@ public class LogoutButton extends Button implements IUIController, Initializable
         } catch (StorageException e) {
             this.setupErrorPopup("Database file did not close properly.", e);
         }
+
         LoginPageController login = new LoginPageController();
         Scene scene = new Scene(login);
         Startup.INSTANCE.newStage(scene, "Ledger Login", false);
