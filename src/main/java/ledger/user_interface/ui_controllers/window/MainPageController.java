@@ -16,9 +16,7 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
-import ledger.user_interface.ui_controllers.component.AccountBalanceLabel;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
-import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
