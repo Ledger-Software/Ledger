@@ -108,6 +108,13 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
         importButton.setDisable(true);
 
         task.startTask();
+        handleUpdating(task);
+    }
+
+    // The All Accounts aggregate won't update by itself upon adding transactions to other accounts
+    private void handleUpdating(TaskWithReturn<ImportController.ImportFailures> t) {
+        t.waitForComplete();
+        MainPageController.INSTANCE.updateAccounts();
     }
 
     private void handleReturn(ImportController.ImportFailures importFailures) {
