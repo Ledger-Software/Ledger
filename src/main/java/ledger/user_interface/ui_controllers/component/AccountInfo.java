@@ -35,7 +35,20 @@ public class AccountInfo extends GridPane implements IUIController, Initializabl
         this.accountBalance.calculateBalance(this.currentAccount);
     }
 
+    /**
+     * Returns the current account object stored herein.
+     *
+     * @return Account a
+     */
     public Account getAccount() {
         return this.currentAccount;
+    }
+
+
+    /**
+     * Call to set the all accounts balance for the 'All Accounts' aggregate.
+     */
+    public void setAllAccountBalance() {
+        this.accountBalance.calculateBalanceForAllAccounts();
     }
 }

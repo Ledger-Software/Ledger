@@ -107,6 +107,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             infoItems.add(new AccountInfo(a));
         }
 
+        // Adds the All Accounts Aggregation
+        Account allActs = new Account("All Accounts", "All accounts");
+        AccountInfo allInfo = new AccountInfo(allActs);
+        allInfo.setAllAccountBalance();
+        infoItems.add(0, allInfo);
+
         ObservableList<AccountInfo> accounts = FXCollections.observableArrayList(infoItems);
         this.accountListView.setItems(accounts);
         DbController.INSTANCE.registerAccountSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updateAccounts));
@@ -117,6 +123,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             if (accountListView.getSelectionModel().getSelectedItem() != null) {
                 transactionTableView.updateAccountFilter(accountListView.getSelectionModel().getSelectedItem().getAccount());
             }
+            accountListView.getItems().get(0).setAllAccountBalance();
         });
 
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
@@ -140,6 +147,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         for (Account a : accounts) {
             infoItems.add(new AccountInfo(a));
         }
+        // Adds the All Accounts Aggregation
+        Account allActs = new Account("All Accounts", "All accounts");
+        AccountInfo allInfo = new AccountInfo(allActs);
+        allInfo.setAllAccountBalance();
+        infoItems.add(0, allInfo);
         this.accountListView.setItems(FXCollections.observableArrayList(infoItems));
         if (this.accountListView.getItems().size() == 1) {
             this.accountListView.getSelectionModel().select(0);
