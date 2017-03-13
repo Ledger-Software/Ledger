@@ -1,9 +1,8 @@
 package ledger.user_interface.ui_controllers.component.charts;
 
 import javafx.beans.NamedArg;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.XYChart;
+import javafx.geometry.Side;
+import javafx.scene.chart.*;
 import ledger.database.entity.Transaction;
 
 import java.text.DateFormatSymbols;
@@ -14,7 +13,26 @@ import java.util.*;
 /**
  * Line Chart that shows monthly differentials
  */
-public class ExpenditureLineChart extends LineChart<String,Long> {
+public class ExpenditureLineChart extends LineChart<String,Long> implements IChart {
+
+    private static Axis defaultXAxis() {
+        Axis xAxis = new CategoryAxis();
+        xAxis.setSide(Side.BOTTOM);
+
+        return xAxis;
+    }
+
+    private static Axis defaultYAxis() {
+        Axis yAxis = new NumberAxis();
+        yAxis.setSide(Side.LEFT);
+
+        return yAxis;
+    }
+
+    public ExpenditureLineChart(List<Transaction> data) {
+        this(defaultXAxis(),defaultYAxis());
+        this.updateData(data);
+    }
 
     public ExpenditureLineChart(@NamedArg("xAxis") Axis<String> xAxis, @NamedArg("yAxis") Axis<Long> yAxis) {
         super(xAxis, yAxis);
@@ -23,6 +41,9 @@ public class ExpenditureLineChart extends LineChart<String,Long> {
         this.getYAxis().setLabel("Net Expenditure");
         this.getXAxis().setAutoRanging(true);
         this.getYAxis().setAutoRanging(true);
+
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMaxWidth(Double.MAX_VALUE);
     }
 
     public void updateData(List<Transaction> transactions) {

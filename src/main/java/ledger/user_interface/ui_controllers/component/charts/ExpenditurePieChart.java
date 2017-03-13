@@ -17,7 +17,14 @@ import java.util.Map;
 /**
  * Created by millerc5 on 2/22/2017.
  */
-public class ExpenditurePieChart extends PieChart implements IUIController {
+public class ExpenditurePieChart extends PieChart implements IUIController, IChart{
+
+    public ExpenditurePieChart(List<Transaction> data) {
+        updateData(data);
+
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMaxWidth(Double.MAX_VALUE);
+    }
 
     public void updateData(List<Transaction> transactions) {
         Map<String, Long> tagNameToAmountSpent = new HashMap<>();

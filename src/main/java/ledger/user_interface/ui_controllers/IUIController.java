@@ -121,12 +121,16 @@ public interface IUIController {
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable) {
+        createModal(parent,child,windowName,resizeable, StageStyle.UTILITY);
+    }
+
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, StageStyle stageStyle) {
         Stage newStage = new Stage();
         newStage.setScene(child);
         newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
         newStage.initModality(Modality.WINDOW_MODAL);
-        newStage.initStyle(StageStyle.UTILITY);
+        newStage.initStyle(stageStyle);
         newStage.setAlwaysOnTop(true);
         newStage.getIcons().add(image);
         newStage.show();
