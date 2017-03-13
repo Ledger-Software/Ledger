@@ -31,6 +31,7 @@ import java.util.ResourceBundle;
 
 public class MainPageController extends GridPane implements Initializable, IUIController {
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    public static MainPageController INSTANCE;
 
     @FXML
     private Button payeeEditorButton;
@@ -63,6 +64,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TransactionTableView transactionTableView;
 
     public MainPageController() {
+        INSTANCE = this;
         this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
@@ -119,6 +121,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.accountListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         this.accountListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
             // if item is recently deleted we want to ignore it
             if (accountListView.getSelectionModel().getSelectedItem() != null) {
                 transactionTableView.updateAccountFilter(accountListView.getSelectionModel().getSelectedItem().getAccount());
@@ -139,7 +142,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         });
     }
 
-    private void updateAccounts() {
+    /**
+     * Used to update all accounts after selecting accounts or importing/adding transactions.
+     */
+    public void updateAccounts() {
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.startTask();
         List<Account> accounts = task.waitForResult();
