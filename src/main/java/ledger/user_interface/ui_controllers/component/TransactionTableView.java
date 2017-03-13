@@ -131,7 +131,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         menu.getItems().add(showHideRunningBalanceColumnMenuItem);
         showHideRunningBalanceColumnMenuItem.setOnAction(event -> {
             this.runningBalanceColumn.setVisible(!this.runningBalanceColumn.isVisible());
-            if (this.tagColumn.isVisible()) {
+            if (this.runningBalanceColumn.isVisible()) {
                 showHideRunningBalanceColumnMenuItem.setText("Hide Running Account Balance Column");
             } else {
                 showHideRunningBalanceColumnMenuItem.setText("Show Running Account Balance Column");
