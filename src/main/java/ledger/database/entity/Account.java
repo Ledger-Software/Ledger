@@ -3,7 +3,7 @@ package ledger.database.entity;
 /**
  * Entity that holds a single Account
  */
-public class Account implements IEntity {
+public class Account implements IEntity, Comparable<Account> {
     private String name;
     private String description;
     private int id;
@@ -91,5 +91,10 @@ public class Account implements IEntity {
     @Override
     public String toString() {
         return String.format("%s: %s", this.name, this.description);
+    }
+
+    @Override
+    public int compareTo(Account o) {
+        return ((Integer) this.getId()).compareTo(o.getId());
     }
 }

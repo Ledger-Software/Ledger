@@ -12,11 +12,13 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
+import ledger.exception.StorageException;
 import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.*;
 import ledger.user_interface.utils.AmountStringConverter;
+import ledger.user_interface.utils.TransactionRunningAccountBalanceCalculator;
 
 import java.net.URL;
 import java.util.*;
@@ -46,6 +48,9 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     @FXML
     private TagColumn tagColumn;
+
+    @FXML
+    private RunningBalanceColumn runningBalanceColumn;
 
     private Account accountFilter;
     private String searchFilterString = "";
@@ -121,6 +126,18 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             }
         });
 
+        // Upon initialization, Running Balance column is displayed
+        MenuItem showHideRunningBalanceColumnMenuItem = new MenuItem("Hide Running Account Balance Column");
+        menu.getItems().add(showHideRunningBalanceColumnMenuItem);
+        showHideRunningBalanceColumnMenuItem.setOnAction(event -> {
+            this.runningBalanceColumn.setVisible(!this.runningBalanceColumn.isVisible());
+            if (this.tagColumn.isVisible()) {
+                showHideRunningBalanceColumnMenuItem.setText("Hide Running Account Balance Column");
+            } else {
+                showHideRunningBalanceColumnMenuItem.setText("Show Running Account Balance Column");
+            }
+        });
+
         // Upon initialization, Debit/Credit perspective is disabled
         MenuItem toggleDebitCreditView = new MenuItem("Enable Debit/Credit Perspective");
         menu.getItems().add(toggleDebitCreditView);
@@ -158,55 +175,56 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     public void updateTransactionTableView() {
         // Update table rows
-        TaskWithReturn<List<Transaction>> task;
-        if (accountFilter == null) {
-            task = DbController.INSTANCE.getAllTransactions();
-        } else {
-            task = DbController.INSTANCE.getAllTransactionsForAccount(accountFilter);
-        }
-        task.startTask();
-        List<Transaction> transactions = task.waitForResult();
-
-        // 0. Manually sort the list based on Date to force a default sorted order
-        transactions.sort(Comparator.comparing(Transaction::getDate));
-
-        ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
-
-        // 1. Wrap the ObservableList in a FilteredList (initially display all data).
-        FilteredList<Transaction> filteredData = new FilteredList<>(observableTransactions, p -> true);
-
-        // 2. Set the filter Predicate.
-        filteredData.setPredicate(transaction -> {
-            // If filter text is empty, display all persons.
-            if (searchFilterString == null || searchFilterString.isEmpty()) {
-                return true;
+        try {
+            List<Transaction> transactions;
+            if (accountFilter == null) {
+                transactions = TransactionRunningAccountBalanceCalculator.getAllTransactionsWithRunningBalances();
+            } else {
+                transactions = TransactionRunningAccountBalanceCalculator.getTransactionsWithRunningBalancesForAccount(accountFilter);
             }
 
-            // Compare first name and last name of every person with filter text.
-            String lowerCaseFilter = searchFilterString.toLowerCase();
+            // 0. Manually sort the list based on Date to force a default sorted order
+            transactions.sort(Comparator.comparing(Transaction::getDate));
 
-            AmountStringConverter asc = new AmountStringConverter();
-            if (asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
-                return true; // Filter matches amount.
-            } else if (transaction.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true; // Filter matches Payee name.
-            } else if (transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
-                return true; // Filter matches tags.
-            } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                return true; // Filter matches check number.
-            } else // Filter matches account name.
-// Filter does not match.
-                return transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter);
-        });
+            ObservableList<Transaction> observableTransactions = FXCollections.observableList(transactions);
 
-        // 3. Wrap the FilteredList in a SortedList.
-        SortedList<Transaction> sortedData = new SortedList<>(filteredData);
+            // 1. Wrap the ObservableList in a FilteredList (initially display all data).
+            FilteredList<Transaction> filteredData = new FilteredList<>(observableTransactions, p -> true);
 
-        // 4. Bind the SortedList comparator to the TableView comparator.
-        sortedData.comparatorProperty().bind(this.comparatorProperty());
+            // 2. Set the filter Predicate.
+            filteredData.setPredicate(transaction -> {
+                // If filter text is empty, display all persons.
+                if (searchFilterString == null || searchFilterString.isEmpty()) {
+                    return true;
+                }
 
-        // 5. Add sorted (and filtered) data to the table.
-        this.setItems(sortedData);
+                // Compare first name and last name of every person with filter text.
+                String lowerCaseFilter = searchFilterString.toLowerCase();
+
+                AmountStringConverter asc = new AmountStringConverter();
+                if (asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches amount.
+                } else if (transaction.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches Payee name.
+                } else if (transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
+                    return true; // Filter matches tags.
+                } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches check number.
+                } else // Check if filter matches account name.
+                    return transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter);
+            });
+
+            // 3. Wrap the FilteredList in a SortedList.
+            SortedList<Transaction> sortedData = new SortedList<>(filteredData);
+
+            // 4. Bind the SortedList comparator to the TableView comparator.
+            sortedData.comparatorProperty().bind(this.comparatorProperty());
+
+            // 5. Add sorted (and filtered) data to the table.
+            this.setItems(sortedData);
+        } catch (StorageException e) {
+            this.setupErrorPopup(e.getMessage(), e);
+        }
     }
 
     private void handleDeleteSelectedTransactionsFromTableView() {
