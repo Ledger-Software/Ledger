@@ -8,6 +8,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -107,7 +108,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
         expenditureLineChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
-                chartHBox.getChildren().add(new ExpenditureLineChart(this.filteredTransactions));
+                Node chart = new ExpenditureLineChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
             } else {
                 chartHBox.getChildren().removeIf(item -> item instanceof ExpenditureLineChart);
             }
@@ -115,7 +118,9 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
         expenditurePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
+                Node chart = new ExpenditurePieChart(this.filteredTransactions);
                 chartHBox.getChildren().add(new ExpenditurePieChart(this.filteredTransactions));
+                HBox.setHgrow(chart, Priority.ALWAYS);
             } else {
                 chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePieChart
                 );

@@ -20,10 +20,10 @@ import java.util.Map;
 public class ExpenditurePieChart extends PieChart implements IUIController, IChart{
 
     public ExpenditurePieChart(List<Transaction> data) {
-        updateData(data);
-
         this.setMaxHeight(Double.MAX_VALUE);
         this.setMaxWidth(Double.MAX_VALUE);
+
+        updateData(data);
     }
 
     public void updateData(List<Transaction> transactions) {
