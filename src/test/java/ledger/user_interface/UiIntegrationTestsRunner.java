@@ -11,6 +11,9 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
 
+import static org.junit.Assume.assumeThat;
+import static org.junit.Assume.assumeTrue;
+
 /**
  * Integration runner for our UI Integration tests. This runner will be picked up by the Junit runner.
  * Test methods in here can call methods in the various IntegrationTest classes to form an integration test.
@@ -50,12 +53,16 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test
     public void testLogin() {
+        assumeTrue(!Boolean.getBoolean("headless"));
         loginTests.createDatabase();
         loginTests.logout();
     }
 
+
+
     @Test
     public void testCreateAccount() {
+        assumeTrue(!Boolean.getBoolean("headless"));
         loginTests.createDatabase();
         accountTests.createAccount();
         loginTests.logout();
