@@ -2,6 +2,7 @@ package ledger.user_interface.ui_controllers.window;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -126,6 +127,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
                 );
             }
         });
+        chartHBox.setAlignment(Pos.CENTER);
 
         DbController.INSTANCE.registerTransactionSuccessEvent((ignore) -> this.updateTransactions());
         updateFilter();
