@@ -1,26 +1,27 @@
 package ledger.user_interface.ui_controllers.window;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.stage.StageStyle;
+import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.component.AccountBalanceLabel;
-import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.component.AccountInfo;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -31,6 +32,7 @@ import java.util.ResourceBundle;
 
 public class MainPageController extends GridPane implements Initializable, IUIController {
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
+    public static MainPageController INSTANCE;
 
     @FXML
     private Button payeeEditorButton;
@@ -44,10 +46,14 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button trackSpendingBtn;
     @FXML
     private Button addTransactionBtn;
+    //    @FXML
+//    private AccountBalanceLabel accountBalanceLabel;
     @FXML
-    private AccountBalanceLabel accountBalanceLabel;
+    private VBox accountsVBox;
     @FXML
-    private FilteringAccountDropdown chooseAccount;
+    private ListView<AccountInfo> accountListView;
+    //    @FXML
+//    private FilteringAccountDropdown chooseAccount;
     @FXML
     private Button searchButton;
     @FXML
@@ -59,6 +65,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TransactionTableView transactionTableView;
 
     public MainPageController() {
+        INSTANCE = this;
         this.initController(pageLoc, this, "Error on main page startup: ");
     }
 
@@ -90,11 +97,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.searchTextField.setOnAction(this::searchClick);
 
-        this.chooseAccount.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            transactionTableView.updateAccountFilter(chooseAccount.getSelectedAccount());
-            accountBalanceLabel.calculateBalance(chooseAccount.getSelectedAccount());
-        });
-
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
         task.startTask();
@@ -102,6 +104,31 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         if (acts.isEmpty()) {
             setUpAccountCreationHelp();
         }
+
+        List<AccountInfo> infoItems = new ArrayList<>();
+        for (Account a : acts) {
+            infoItems.add(new AccountInfo(a));
+        }
+
+        // Adds the All Accounts Aggregation
+        Account allActs = new Account("All Accounts", "All accounts");
+        AccountInfo allInfo = new AccountInfo(allActs);
+        allInfo.setAllAccountBalance();
+        infoItems.add(0, allInfo);
+
+        ObservableList<AccountInfo> accounts = FXCollections.observableArrayList(infoItems);
+        this.accountListView.setItems(accounts);
+        DbController.INSTANCE.registerAccountSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updateAccounts));
+
+        this.accountListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+        this.accountListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            // if item is recently deleted we want to ignore it
+            if (accountListView.getSelectionModel().getSelectedItem() != null) {
+                transactionTableView.updateAccountFilter(accountListView.getSelectionModel().getSelectedItem().getAccount());
+            }
+            accountListView.getItems().get(0).setAllAccountBalance();
+        });
 
         this.payeeEditorButton.setOnAction(this::openPayeeEditor);
 
@@ -114,6 +141,28 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             this.undo();
         });
+    }
+
+    /**
+     * Used to update all accounts after selecting accounts or importing/adding transactions.
+     */
+    public void updateAccounts() {
+        TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
+        task.startTask();
+        List<Account> accounts = task.waitForResult();
+        List<AccountInfo> infoItems = new ArrayList<>();
+        for (Account a : accounts) {
+            infoItems.add(new AccountInfo(a));
+        }
+        // Adds the All Accounts Aggregation
+        Account allActs = new Account("All Accounts", "All accounts");
+        AccountInfo allInfo = new AccountInfo(allActs);
+        allInfo.setAllAccountBalance();
+        infoItems.add(0, allInfo);
+        this.accountListView.setItems(FXCollections.observableArrayList(infoItems));
+        if (this.accountListView.getItems().size() == 1) {
+            this.accountListView.getSelectionModel().select(0);
+        }
     }
 
     private void undo() {
@@ -198,7 +247,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      * Deletes the Account selected in the chooseAccount dropdown
      */
     private void deleteAccount() {
-        if (chooseAccount.getSelectedAccount() == null) {
+        if (this.accountListView.getSelectionModel().getSelectedItem() == null) {
+
             setupErrorPopup("Cannot delete the All Accounts aggregation. Please select an account " +
                     "to delete.");
             return;
@@ -207,13 +257,14 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirm Account Delete");
         alert.setHeaderText(null);
-        alert.setContentText("Deleting " + chooseAccount.getSelectedAccount().getName() + " will delete all Transactions" +
+        alert.setContentText("Deleting " + this.accountListView.getSelectionModel().getSelectedItem().getAccount().getName() + " will delete all Transactions" +
                 " associated with the account. Do you wish to proceed?");
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // ... user chose OK
-            TaskNoReturn t = DbController.INSTANCE.deleteAccount(chooseAccount.getSelectedAccount());
+            TaskNoReturn t = DbController.INSTANCE.deleteAccount(this.accountListView.getSelectionModel().getSelectedItem().getAccount());
+            this.accountListView.getItems().remove(this.accountListView.getSelectionModel().getSelectedItem());
             t.RegisterFailureEvent(Throwable::printStackTrace);
             t.startTask();
         }

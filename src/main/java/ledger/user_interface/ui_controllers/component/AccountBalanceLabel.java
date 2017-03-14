@@ -76,12 +76,13 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
 
         long net = balance == null ? amountSpent : balance.getAmount() + amountSpent;
 
-        String accountName = this.currentAccount.getName();
-        if (accountName.length() > 20) accountName = accountName.substring(0, 17) + "...";
-        this.setText(accountName + ": " + String.format("%.2f", (double) net / 100.0));
+        this.setText(String.format("%.2f", (double) net / 100.0));
     }
 
-    private void calculateBalanceForAllAccounts() {
+    /**
+     * Used to calculate the balance for all accounts in the 'All Accounts' aggregate.
+     */
+    public void calculateBalanceForAllAccounts() {
         TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
         accountsTask.RegisterFailureEvent((e) -> this.setupErrorPopup("Unable to fetch accounts from database.", e));
         accountsTask.startTask();
@@ -105,6 +106,6 @@ public class AccountBalanceLabel extends Label implements IUIController, Initial
             net += transaction.getAmount();
         }
 
-        this.setText("All Accounts Balance: " + String.format("%.2f", (double) net / 100));
+        this.setText(String.format("%.2f", (double) net / 100));
     }
 }
