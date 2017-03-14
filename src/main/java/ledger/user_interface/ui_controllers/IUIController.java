@@ -5,7 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Modality;
@@ -121,7 +121,7 @@ public interface IUIController {
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable) {
-        createModal(parent,child,windowName,resizeable, StageStyle.UTILITY);
+        createModal(parent, child, windowName, resizeable, StageStyle.UTILITY);
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, StageStyle stageStyle) {

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by millerc5 on 2/22/2017.
+ * Chart that shows all expenditures in the form of a pie chart.
  */
 public class ExpenditurePieChart extends PieChart implements IUIController, IChart{
 

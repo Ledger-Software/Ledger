@@ -5,7 +5,7 @@ import ledger.database.entity.Transaction;
 import java.util.List;
 
 /**
- * Created by CJ on 3/10/2017.
+ * Interface for Charts that can have their data updated
  */
 public interface IChart {
     void updateData(List<Transaction> transactionList);
