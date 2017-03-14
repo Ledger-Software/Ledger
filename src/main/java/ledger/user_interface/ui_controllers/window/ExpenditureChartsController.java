@@ -129,6 +129,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         });
         chartHBox.setAlignment(Pos.CENTER);
 
+        expenditureLineChartCheckBox.setSelected(true);
+
         DbController.INSTANCE.registerTransactionSuccessEvent((ignore) -> this.updateTransactions());
         updateFilter();
     }

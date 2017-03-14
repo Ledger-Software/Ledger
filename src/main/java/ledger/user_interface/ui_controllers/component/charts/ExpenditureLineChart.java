@@ -59,8 +59,6 @@ public class ExpenditureLineChart extends LineChart<String,Long> implements ICha
             }
         }
 
-
-
         Map<String, Long> monthToAmountSpent = new HashMap<>();
         Map<String, Integer> monthToYear = new HashMap<>();
         for (Transaction t : filteredTransactions) {
