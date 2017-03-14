@@ -84,7 +84,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             Date tempFromDate, tempToDate;
 
             if(tempLocalFromDate == null) {
-                tempFromDate = new Date(Long.MAX_VALUE);
+                tempFromDate = new Date(Long.MIN_VALUE);
             } else {
                 tempFromDate = Date.from(tempLocalFromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             }

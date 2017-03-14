@@ -44,10 +44,6 @@ public class ExpenditurePieChart extends PieChart implements IUIController, ICha
             NumberFormat formatter = new DecimalFormat("#0.00");
             dataList.add(new PieChart.Data(tag + " - " + "(" + formatter.format(amountSpent) + ")", amountSpent));
         }
-        if (dataList.isEmpty()) {
-            this.setupErrorPopup("There's no data to be displayed!", new Exception());
-            return;
-        }
         ObservableList<Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.setData(pieChartData);
         this.setTitle("Expenditures by Category");
