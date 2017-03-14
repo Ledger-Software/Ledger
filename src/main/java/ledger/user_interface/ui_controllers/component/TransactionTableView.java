@@ -177,7 +177,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         // Update table rows
         try {
             List<Transaction> transactions;
-            if (accountFilter == null) {
+            if (accountFilter == null || accountFilter.getName().equals("All Accounts")) {
                 transactions = TransactionRunningAccountBalanceCalculator.getAllTransactionsWithRunningBalances();
             } else {
                 transactions = TransactionRunningAccountBalanceCalculator.getTransactionsWithRunningBalancesForAccount(accountFilter);
