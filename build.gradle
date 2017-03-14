@@ -46,7 +46,7 @@ dependencies {
     testCompile "org.testfx:testfx-core:4.0.+"
     // provides org.testfx.framework.junit to the test source set.
     testCompile "org.testfx:testfx-junit:4.0.+"
-    
+
     compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.8.11.2'
     compile group: 'net.sf.opencsv', name: 'opencsv', version: '2.3'
     compile group: 'com.h2database', name: 'h2', version: '1.4.192'

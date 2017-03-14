@@ -11,7 +11,6 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
 
-import static org.junit.Assume.assumeThat;
 import static org.junit.Assume.assumeTrue;
 
 /**
@@ -27,12 +26,15 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
-        new Startup().start(stage);
+        System.out.println(Boolean.getBoolean("headless"));
+        if (!Boolean.getBoolean("headless")) {
+            new Startup().start(stage);
+        }
     }
 
     @BeforeClass
     public static void setupHeadlessRun() throws Exception {
-        if (Boolean.getBoolean("headless")) {
+        if ("true".equals(System.getenv("headless"))) {
             System.setProperty("testfx.robot", "glass");
             System.setProperty("testfx.headless", "true");
             System.setProperty("prism.order", "sw");
@@ -53,7 +55,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test
     public void testLogin() {
-        assumeTrue(!Boolean.getBoolean("headless"));
+        assumeTrue(!"true".equals(System.getenv("headless")));
         loginTests.createDatabase();
         loginTests.logout();
     }
@@ -62,7 +64,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test
     public void testCreateAccount() {
-        assumeTrue(!Boolean.getBoolean("headless"));
+        assumeTrue(!"true".equals(System.getenv("headless")));
         loginTests.createDatabase();
         accountTests.createAccount();
         loginTests.logout();
