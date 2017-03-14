@@ -53,8 +53,15 @@ public class TransactionPopupController extends GridPane implements Initializabl
                 task.RegisterFailureEvent(Throwable::printStackTrace);
 
                 task.startTask();
+                handleUpdating(task);
             }
         });
+    }
+
+    // The All Accounts aggregate won't update by itself upon adding transactions to other accounts
+    private void handleUpdating(TaskNoReturn t) {
+        t.waitForComplete();
+        MainPageController.INSTANCE.updateAccounts();
     }
 
     private void closeWindow() {

@@ -159,7 +159,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
     public void updateTransactionTableView() {
         // Update table rows
         TaskWithReturn<List<Transaction>> task;
-        if (accountFilter == null) {
+        if (accountFilter == null || accountFilter.getName().equals("All Accounts")) {
             task = DbController.INSTANCE.getAllTransactions();
         } else {
             task = DbController.INSTANCE.getAllTransactionsForAccount(accountFilter);
