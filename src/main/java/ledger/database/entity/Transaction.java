@@ -18,6 +18,7 @@ public class Transaction implements IEntity, ITaggable {
     private List<Tag> tagList;
     private Note note;
     private int checkNumber;
+    private long runningBalance;
 
     public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber) {
@@ -125,6 +126,24 @@ public class Transaction implements IEntity, ITaggable {
      */
     public void setCheckNumber(int checkNumber) {
         this.checkNumber = checkNumber;
+    }
+
+    /**
+     * Gets the running balance
+     *
+     * @return running balance
+     */
+    public long getRunningBalance() {
+        return runningBalance;
+    }
+
+    /**
+     * Sets the running balance
+     *
+     * @param runningBalance running balance
+     */
+    public void setRunningBalance(long runningBalance) {
+        this.runningBalance = runningBalance;
     }
 
     /**

@@ -12,6 +12,6 @@ public abstract class AAmountColumn extends TableColumn<Transaction, Long> imple
     private static final String pageLoc = "/fxml_files/TableColumn.fxml";
 
     public AAmountColumn() {
-        this.initController(pageLoc, this, "Unable to load AmountColumn");
+        this.initController(pageLoc, this, "Unable to load AmountColumn/RunningBalanceColumn");
     }
 }
