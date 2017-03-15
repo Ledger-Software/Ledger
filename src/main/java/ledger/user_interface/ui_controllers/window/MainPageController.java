@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.stage.StageStyle;
 import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
@@ -221,7 +222,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         ExpenditureChartsController chartController = new ExpenditureChartsController();
         Scene scene = new Scene(chartController);
-        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts");
+        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts", true, StageStyle.DECORATED);
     }
 
     /**

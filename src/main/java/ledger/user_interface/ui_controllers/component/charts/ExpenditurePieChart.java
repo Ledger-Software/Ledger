@@ -15,9 +15,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by millerc5 on 2/22/2017.
+ * Chart that shows all expenditures in the form of a pie chart.
  */
-public class ExpenditurePieChart extends PieChart implements IUIController {
+public class ExpenditurePieChart extends PieChart implements IUIController, IChart{
+
+    public ExpenditurePieChart(List<Transaction> data) {
+        this.setMaxHeight(Double.MAX_VALUE);
+        this.setMaxWidth(Double.MAX_VALUE);
+
+        updateData(data);
+    }
 
     public void updateData(List<Transaction> transactions) {
         Map<String, Long> tagNameToAmountSpent = new HashMap<>();
@@ -37,10 +44,10 @@ public class ExpenditurePieChart extends PieChart implements IUIController {
             NumberFormat formatter = new DecimalFormat("#0.00");
             dataList.add(new PieChart.Data(tag + " - " + "(" + formatter.format(amountSpent) + ")", amountSpent));
         }
-        if (dataList.isEmpty()) {
-            this.setupErrorPopup("There's no data to be displayed!", new Exception());
-            return;
+        if(dataList.isEmpty()) {
+            dataList.add(new PieChart.Data( "No Expenses", 0));
         }
+
         ObservableList<Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.setData(pieChartData);
         this.setTitle("Expenditures by Category");
