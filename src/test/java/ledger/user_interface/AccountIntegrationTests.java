@@ -1,5 +1,6 @@
 package ledger.user_interface;
 
+
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ledger.controller.DbController;

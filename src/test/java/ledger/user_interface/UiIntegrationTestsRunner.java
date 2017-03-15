@@ -3,10 +3,10 @@ package ledger.user_interface;
 import javafx.stage.Stage;
 import ledger.database.IDatabase;
 import ledger.user_interface.ui_controllers.Startup;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
+import org.junit.runners.model.Statement;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
@@ -43,7 +43,16 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     }
 
     @Before
+    public void beforeAllTests() {
+        removeExistingDBFile();
+    }
+
+
     @After
+    public void afterAllTests() {
+        removeExistingDBFile();
+    }
+
     public void removeExistingDBFile() {
         String home = System.getProperty("user.home");
         File dbFile = new File(home, "LedgerDB.mv.db");
@@ -52,6 +61,8 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
+    @Rule public RetryRule retryLogin
+            = new RetryRule(2);
     @Test
     public void testLogin() {
         assumeTrue(!"true".equals(System.getenv("headless")));
@@ -59,13 +70,53 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
-
-
+    @Rule public RetryRule retryTestAccount = new RetryRule(2
+    );
     @Test
     public void testCreateAccount() {
+        System.out.println("try");
+
         assumeTrue(!"true".equals(System.getenv("headless")));
+
         loginTests.createDatabase();
         accountTests.createAccount();
         loginTests.logout();
     }
+
+    private
+    class RetryRule implements TestRule {
+        private int retryCount;
+
+        public RetryRule(int retryCount) {
+            this.retryCount = retryCount;
+        }
+
+        public Statement apply(Statement base, Description description) {
+            return statement(base, description);
+        }
+        private Statement statement(final Statement base, final Description description) {
+            return new Statement() {
+                @Override
+                public void evaluate() throws Throwable {
+                    Throwable caughtThrowable = null;
+
+                    // implement retry logic here
+                    for (int i = 0; i < retryCount; i++) {
+                        try {
+                            base.evaluate();
+                            return;
+                        } catch (Throwable t) {
+                            caughtThrowable = t;
+
+                            //  System.out.println(": run " + (i+1) + " failed");
+                            System.err.println(description.getDisplayName() + ": run " + (i + 1) + " failed");
+                        }
+                    }
+                    System.err.println(description.getDisplayName() + ": giving up after " + retryCount + " failures");
+                    throw caughtThrowable;
+                }
+            };
+        }
+    }
+
 }
