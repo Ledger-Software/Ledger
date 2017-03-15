@@ -26,7 +26,6 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
-        System.out.println(Boolean.getBoolean("headless"));
         if (!Boolean.getBoolean("headless")) {
             new Startup().start(stage);
         }
