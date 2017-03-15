@@ -11,6 +11,8 @@ cache:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
 sudo: false
+env:
+  - headless=true
 addons:
   apt:
     packages:
