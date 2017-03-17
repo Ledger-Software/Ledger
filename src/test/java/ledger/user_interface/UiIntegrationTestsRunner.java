@@ -1,7 +1,6 @@
 package ledger.user_interface;
 
 import javafx.stage.Stage;
-import ledger.database.IDatabase;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
 import org.junit.rules.TestRule;
@@ -18,8 +17,6 @@ import static org.junit.Assume.assumeTrue;
  * Test methods in here can call methods in the various IntegrationTest classes to form an integration test.
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
-
-    private static IDatabase database;
 
     private static LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static AccountIntegrationTests accountTests = new AccountIntegrationTests();
@@ -61,8 +58,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @Rule public RetryRule retryLogin
-            = new RetryRule(2);
+    @Rule public RetryRule retryLogin = new RetryRule(2);
     @Test
     public void testLogin() {
         assumeTrue(!"true".equals(System.getenv("headless")));
@@ -70,16 +66,13 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
-    @Rule public RetryRule retryTestAccount = new RetryRule(2
-    );
+    @Rule public RetryRule retryTestAccounts = new RetryRule(2);
     @Test
-    public void testCreateAccount() {
-        System.out.println("try");
-
+    public void testCreateAccounts() {
         assumeTrue(!"true".equals(System.getenv("headless")));
 
         loginTests.createDatabase();
-        accountTests.createAccount();
+        accountTests.createAccounts();
         loginTests.logout();
     }
 
