@@ -22,7 +22,6 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Rule public RetryRule retryRule = new RetryRule(2);
 
-
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
 
@@ -50,13 +49,15 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         assumeTrue(!"true".equals(System.getenv("headless")));
     }
 
-
     @After
     public void afterAllTests() {
         removeExistingDBFile();
     }
 
-    public void removeExistingDBFile() {
+    /**
+     * Remove a database file with the default name, if one exists
+     */
+    private void removeExistingDBFile() {
         String home = System.getProperty("user.home");
         File dbFile = new File(home, "LedgerDB.mv.db");
         if (dbFile.exists()) {
@@ -72,11 +73,9 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test
     public void testCreateAccounts() {
-
         loginTests.createDatabase();
         accountTests.createAccounts();
         loginTests.logout();
-
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests the User Interface regarding account interaction using the TestFX framework.
@@ -129,6 +130,10 @@ public class AccountIntegrationTests extends ApplicationTest{
         int numAccountsAfterDelete = accounts.size();
 
         assertEquals(numAccountsBeforeDelete - 1, numAccountsAfterDelete);
+
+        for (Account a : accounts) {
+            assertFalse(a.getName().equals(accountName));
+        }
 
     }
 }
