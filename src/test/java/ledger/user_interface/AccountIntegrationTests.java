@@ -21,6 +21,10 @@ public class AccountIntegrationTests extends ApplicationTest{
     @Override
     public void start(Stage stage) throws Exception {}
 
+    /**
+     * Uses the TestFx Framework to create four {@link Account} and verify that they are created with the correct
+     * {@link AccountBalance}
+     */
     public void createAccounts() {
         clickOn("Account Operations");
         addAccount("Account A", "For Integration Tests", "123");
@@ -81,5 +85,13 @@ public class AccountIntegrationTests extends ApplicationTest{
 
         clickOn("Submit as Complete");
         sleep(100);
+    }
+
+    /**
+     * Uses the TestFx framework to edit an {@link Account} through the user interface and verify that that the changes
+     * persist to the backend database.
+     */
+    public void editAccount() {
+
     }
 }
