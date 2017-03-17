@@ -66,6 +66,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
+
     @Rule public RetryRule retryTestAccounts = new RetryRule(2);
     @Test
     public void testCreateAccounts() {
@@ -74,10 +75,10 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.createAccounts();
         loginTests.logout();
+
     }
 
-    private
-    class RetryRule implements TestRule {
+    private class RetryRule implements TestRule {
         private int retryCount;
 
         public RetryRule(int retryCount) {

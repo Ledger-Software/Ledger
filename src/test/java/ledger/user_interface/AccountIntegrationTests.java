@@ -34,41 +34,41 @@ public class AccountIntegrationTests extends ApplicationTest{
 
         assertEquals(4, accounts.size());
 
-//        Account accountA = null;
-//        Account accountB = null;
-//        Account accountC = null;
-//        Account accountD = null;
-//
-//        for (Account a : accounts) {
-//            switch (a.getName()) {
-//                case "Account A": accountA = a;
-//                case "Account B": accountB = a;
-//                case "Account C": accountC = a;
-//                case "Account D": accountD = a;
-//            }
-//        }
-//
-//        TaskWithReturn<AccountBalance> taskAccountA = DbController.INSTANCE.getBalanceForAccount(accountA);
-//        TaskWithReturn<AccountBalance> taskAccountB = DbController.INSTANCE.getBalanceForAccount(accountB);
-//        TaskWithReturn<AccountBalance> taskAccountC = DbController.INSTANCE.getBalanceForAccount(accountC);
-//        TaskWithReturn<AccountBalance> taskAccountD = DbController.INSTANCE.getBalanceForAccount(accountD);
-//
-//        taskAccountA.startTask();
-//        AccountBalance balanceA = taskAccountA.waitForResult();
-//
-//        taskAccountA.startTask();
-//        AccountBalance balanceB = taskAccountB.waitForResult();
-//
-//        taskAccountA.startTask();
-//        AccountBalance balanceC = taskAccountC.waitForResult();
-//
-//        taskAccountA.startTask();
-//        AccountBalance balanceD = taskAccountD.waitForResult();
-//
-//        assertEquals(12300, balanceA.getAmount());
-//        assertEquals(12300, balanceB.getAmount());
-//        assertEquals(12310, balanceC.getAmount());
-//        assertEquals(12300, balanceD.getAmount());
+        Account accountA = null;
+        Account accountB = null;
+        Account accountC = null;
+        Account accountD = null;
+
+        for (Account a : accounts) {
+            switch (a.getName()) {
+                case "Account A": accountA = a;
+                case "Account B": accountB = a;
+                case "Account C": accountC = a;
+                case "Account D": accountD = a;
+            }
+        }
+
+        TaskWithReturn<AccountBalance> taskAccountA = DbController.INSTANCE.getBalanceForAccount(accountA);
+        TaskWithReturn<AccountBalance> taskAccountB = DbController.INSTANCE.getBalanceForAccount(accountB);
+        TaskWithReturn<AccountBalance> taskAccountC = DbController.INSTANCE.getBalanceForAccount(accountC);
+        TaskWithReturn<AccountBalance> taskAccountD = DbController.INSTANCE.getBalanceForAccount(accountD);
+
+        taskAccountA.startTask();
+        AccountBalance balanceA = taskAccountA.waitForResult();
+
+        taskAccountB.startTask();
+        AccountBalance balanceB = taskAccountB.waitForResult();
+
+        taskAccountC.startTask();
+        AccountBalance balanceC = taskAccountC.waitForResult();
+
+        taskAccountD.startTask();
+        AccountBalance balanceD = taskAccountD.waitForResult();
+
+        assertEquals(12300, balanceA.getAmount());
+        assertEquals(12300, balanceB.getAmount());
+        assertEquals(12310, balanceC.getAmount());
+        assertEquals(12300, balanceD.getAmount());
     }
 
     private void addAccount(String name, String description, String amount) {
