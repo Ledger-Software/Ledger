@@ -88,10 +88,47 @@ public class AccountIntegrationTests extends ApplicationTest{
     }
 
     /**
-     * Uses the TestFx framework to edit an {@link Account} through the user interface and verify that that the changes
-     * persist to the backend database.
+     * Uses the TestFx framework to add a single {@link Account}
+     *
+     * @param accountName Name of the account
+     * @param accountDescription Description of the account
+     * @param amount Account balance
      */
-    public void editAccount() {
+    public void addSingleAccount(String accountName, String accountDescription, String amount) {
+        clickOn("Account Operations");
+        addAccount(accountName, accountDescription, amount);
+    }
+
+    /**
+     * Uses the TestFx framework to delete an {@link Account} through the user interface and verify that that the changes
+     * persist to the backend database.
+     *
+     * @param accountName Name of the account to delete
+     */
+    public void deleteAccount(String accountName) {
+        TaskWithReturn<List<Account>> accountsTask = DbController.INSTANCE.getAllAccounts();
+        accountsTask.startTask();
+        List<Account> accounts = accountsTask.waitForResult();
+        int numAccountsBeforeDelete = accounts.size();
+
+        clickOn(accountName);
+        clickOn("Delete Account");
+
+        //Clear popup warning about transaction deletion
+        press(KeyCode.ALT);
+        press(KeyCode.TAB);
+
+        release(KeyCode.ALT);
+        release(KeyCode.TAB);
+
+        type(KeyCode.ENTER);
+
+        accountsTask = DbController.INSTANCE.getAllAccounts();
+        accountsTask.startTask();
+        accounts = accountsTask.waitForResult();
+        int numAccountsAfterDelete = accounts.size();
+
+        assertEquals(numAccountsBeforeDelete - 1, numAccountsAfterDelete);
 
     }
 }
