@@ -1,8 +1,6 @@
 package ledger.user_interface;
 
 import javafx.stage.Stage;
-import ledger.controller.DbController;
-import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
 import org.junit.rules.TestRule;
@@ -20,10 +18,11 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule public RetryRule retryRule = new RetryRule(2);
+    @Rule public RetryRule retryRule = new RetryRule(1);
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
+    private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -84,6 +83,15 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         accountTests.addSingleAccount("Hello", "World", "1234");
         accountTests.deleteAccount("Hello");
         loginTests.logout();
+    }
+
+    @Test
+    public void testTransactionInsertionViaWindow() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactions();
+        loginTests.logout();
+
     }
 
     private class RetryRule implements TestRule {

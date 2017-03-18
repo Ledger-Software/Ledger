@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 /**
- * Tests the User Interface regarding account interaction using the TestFX framework.
+ * Tests the User Interface regarding {@link Account} interaction using the TestFX framework.
  */
 public class AccountIntegrationTests extends ApplicationTest{
 
