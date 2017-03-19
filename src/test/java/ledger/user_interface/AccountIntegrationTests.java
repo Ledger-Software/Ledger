@@ -77,14 +77,14 @@ public class AccountIntegrationTests extends ApplicationTest{
     }
 
     private void addAccount(String name, String description, String amount) {
-        clickOn("Add Account");
+        clickOn("#addAccountBtn");
         write(name);
         type(KeyCode.TAB);
         write(description);
         type(KeyCode.TAB);
         write(amount);
 
-        clickOn("Submit as Complete");
+        clickOn("#submitAccountInfo");
         sleep(100);
     }
 
@@ -113,7 +113,7 @@ public class AccountIntegrationTests extends ApplicationTest{
         int numAccountsBeforeDelete = accounts.size();
 
         clickOn(accountName);
-        clickOn("Delete Account");
+        clickOn("#deleteAccountBtn");
 
         //Clear popup warning about transaction deletion
         press(KeyCode.ALT);

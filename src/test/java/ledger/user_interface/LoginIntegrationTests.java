@@ -43,8 +43,8 @@ public class LoginIntegrationTests extends ApplicationTest{
             type(KeyCode.ENTER);
         }
 
-        clickOn("New File");
-        clickOn("Select Location");
+        clickOn("#newFileBtn");
+        clickOn("#saveLocationButton");
         type(KeyCode.ENTER);
         write("PasswordForUiTesting1234");
         type(KeyCode.TAB);
