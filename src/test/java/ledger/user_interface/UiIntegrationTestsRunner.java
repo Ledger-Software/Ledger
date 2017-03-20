@@ -18,9 +18,6 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule
-    public RetryRule retryRule = new RetryRule(1);
-
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
     private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
@@ -127,42 +124,5 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         miscTests.exportData();
         loginTests.logout(false);
     }
-
-    private class RetryRule implements TestRule {
-        private int retryCount;
-
-        public RetryRule(int retryCount) {
-            this.retryCount = retryCount;
-        }
-
-        public Statement apply(Statement base, Description description) {
-            return statement(base, description);
-        }
-
-        private Statement statement(final Statement base, final Description description) {
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    Throwable caughtThrowable = null;
-
-                    // implement retry logic here
-                    for (int i = 0; i < retryCount; i++) {
-                        try {
-                            base.evaluate();
-                            return;
-                        } catch (Throwable t) {
-                            caughtThrowable = t;
-
-                            //  System.out.println(": run " + (i+1) + " failed");
-                            System.err.println(description.getDisplayName() + ": run " + (i + 1) + " failed");
-                            t.printStackTrace();
-                        }
-                    }
-                    System.err.println(description.getDisplayName() + ": giving up after " + retryCount + " failures");
-                    throw caughtThrowable;
-                }
-            };
-        }
-    }
-
+    
 }
