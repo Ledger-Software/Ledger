@@ -18,7 +18,7 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule public RetryRule retryRule = new RetryRule(1);
+    @Rule public RetryRule retryRule = new RetryRule(2);
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
