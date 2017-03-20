@@ -6,11 +6,13 @@ import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
 
 import java.io.File;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -21,7 +23,7 @@ import static org.junit.Assume.assumeTrue;
  * Integration runner for our UI Integration tests. This runner will be picked up by the Junit runner.
  * Test methods in here can call methods in the various IntegrationTest classes to form an integration test.
  */
-public class UiIntegrationTestsRunner extends ApplicationTest {
+public class UiIntegrationTestsRunner extends FxRobot {
 
     @Rule public RetryRule retryRule = new RetryRule(1);
 
@@ -31,13 +33,13 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     public static Stage primaryStage;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        System.out.println("Start Method");
-        if (!Boolean.getBoolean("headless")) {
-            new Startup().start(stage);
-        }
-    }
+//    @Override
+//    public void start(Stage stage) throws Exception {
+//        System.out.println("Start Method");
+//        if (!Boolean.getBoolean("headless")) {
+//            new Startup().start(stage);
+//        }
+//    }
 
     @BeforeClass
     public static void setUpClass() {
@@ -57,11 +59,11 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         try {
             FxToolkit.setupApplication(Startup.class);
 
-            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, primaryStage.showingProperty());
+            Thread.sleep(1000);
         } catch (TimeoutException ex) {
             ex.printStackTrace();
             fail("Timeout during application setup");
-        }
+        } catch (InterruptedException ignored) { }
     }
 
     //@After
