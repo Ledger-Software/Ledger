@@ -89,9 +89,17 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     public void testTransactionInsertionViaWindow() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
-        transactionTests.insertTransactions();
+        transactionTests.insertTransactionViaTableView();
         loginTests.logout();
+    }
 
+    @Ignore //This test should work once the fix for window modality is in
+    @Test
+    public void testInvalidValuesInTransactionWindow() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertInvalidTransactionViaTableView();
+        loginTests.logout();
     }
 
     private class RetryRule implements TestRule {

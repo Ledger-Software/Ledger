@@ -1,5 +1,6 @@
 package ledger.user_interface;
 
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -25,9 +26,9 @@ public class TransactionIntegrationTests extends ApplicationTest {
     /**
      * Uses the TestFx framework to add a {@link ledger.database.entity.Transaction} through the User Interface.
      */
-    public void insertTransactions() {
+    public void insertTransactionViaTableView() {
         clickOn("Transaction Operations");
-        clickOn("Add Transaction");
+        clickOn("#addTransactionBtn");
 
         clickOn("#payeeText");
         write("IntegrationTests");
@@ -53,8 +54,88 @@ public class TransactionIntegrationTests extends ApplicationTest {
         assertEquals("IntegrationTests", t.getPayee().getDescription());
         assertEquals(1000, t.getAmount());
         assertEquals("Hello" , t.getAccount().getName());
-        assertTrue(t.getDate().before(new Date())); //can't verify exact date, check its in the past
+        //We don't know exactly when the transaction was imported. Best we can do is verify its in the past
+        assertTrue(t.getDate().before(new Date()));
         assertEquals(null, t.getNote());
         assertEquals("Account Credit", t.getType().getName());
+    }
+
+    /**
+     * Uses the TestFx framework to import a {@link Transaction} and verify correctness.
+     */
+//    public void editTransactionViaTableView() {
+//        doubleClickOn("Cleared");
+//        clickOn("Pending");
+//
+//        doubleClickOn("Account Credit");
+//        clickOn("Cash");
+//
+//        TaskWithReturn<List<Transaction>> allTransactionsTask = DbController.INSTANCE.getAllTransactions();
+//        allTransactionsTask.startTask();
+//        List<Transaction> allTransactions = allTransactionsTask.waitForResult();
+//
+//        assertEquals(1, allTransactions.size());
+//
+//        Transaction trans = allTransactions.get(0);
+//        assertEquals(TypeConversion.convert("Cash"), trans.getType());
+//
+//        assertTrue(!trans.isPending());
+//    }
+
+    /**
+     * Uses the TestFx framework to import an invalid {@link Transaction} and verify that the errors are caught.
+     */
+    public void insertInvalidTransactionViaTableView() {
+        clickOn("Transaction Operations");
+        clickOn("#addTransactionBtn");
+
+        clickOn("#addTrnxnSubmitButton");
+
+        this.altTabThenEnter();
+
+        clickOn("#payeeText");
+        write("IntegrationTests");
+
+        clickOn("#addTrnxnSubmitButton");
+
+        this.altTabThenEnter();
+
+        clickOn("#amountText");
+        write("10.00");
+
+        clickOn("#addTrnxnSubmitButton");
+
+        this.altTabThenEnter();
+
+        clickOn("#typeText");
+        write("Account Credit");
+
+        clickOn("#addTrnxnSubmitButton");
+
+        TaskWithReturn<List<Transaction>> allTransactionsTask = DbController.INSTANCE.getAllTransactions();
+        allTransactionsTask.startTask();
+        List<Transaction> allTransactions = allTransactionsTask.waitForResult();
+
+        assertEquals(1, allTransactions.size());
+
+        Transaction t = allTransactions.get(0);
+
+        assertEquals("IntegrationTests", t.getPayee().getName());
+        assertEquals("IntegrationTests", t.getPayee().getDescription());
+        assertEquals(1000, t.getAmount());
+        assertEquals("Hello" , t.getAccount().getName());
+        //We don't know exactly when the transaction was imported. Best we can do is verify its in the past
+        assertTrue(t.getDate().before(new Date()));
+        assertEquals(null, t.getNote());
+        assertEquals("Account Credit", t.getType().getName());
+
+    }
+
+    private void altTabThenEnter() {
+        press(KeyCode.ALT);
+        press(KeyCode.TAB);
+        release(KeyCode.ALT);
+        release(KeyCode.TAB);
+        press(KeyCode.ENTER);
     }
 }
