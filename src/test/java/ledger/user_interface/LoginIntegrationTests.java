@@ -9,6 +9,7 @@ import ledger.user_interface.ui_controllers.Startup;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.List;
 
@@ -44,9 +45,27 @@ public class LoginIntegrationTests extends FxRobot {
         clickOn("#newFileBtn");
         clickOn("#saveLocationButton");
         type(KeyCode.ENTER);
-        write("PasswordForUiTesting1234");
+        //write("PasswordForUiTesting1234");
+        type(KeyCode.P);
+        type(KeyCode.A);
+        type(KeyCode.S);
+        type(KeyCode.S);
+        type(KeyCode.W);
+        type(KeyCode.O);
+        type(KeyCode.R);
+        type(KeyCode.D);
+
         type(KeyCode.TAB);
-        write("PasswordForUiTesting1234");
+        //write("PasswordForUiTesting1234");
+        type(KeyCode.P);
+        type(KeyCode.A);
+        type(KeyCode.S);
+        type(KeyCode.S);
+        type(KeyCode.W);
+        type(KeyCode.O);
+        type(KeyCode.R);
+        type(KeyCode.D);
+
         type(KeyCode.ENTER);
 
         press(KeyCode.ALT);
