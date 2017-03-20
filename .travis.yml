@@ -29,23 +29,10 @@ matrix:
       env: USE_FRAMEBUFFER=true
     - os: linux
       dist: trusty
-      jdk: oraclejdk8
-      env:
-        - USE_FRAMEBUFFER=false
-        - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
-    - os: linux
-      dist: trusty
       jdk: oraclejdk9
       env:
         - USE_FRAMEBUFFER=true
         - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
-  allow_failures:
-    - env:
-      - USE_FRAMEBUFFER=false
-      - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
-    - env:
-      - USE_FRAMEBUFFER=true
-      - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
 
 before_script:
   # run on xvfb screen (for linux).
