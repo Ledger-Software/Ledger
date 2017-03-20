@@ -1,7 +1,10 @@
 package ledger.user_interface;
 
 import javafx.scene.input.KeyCode;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
@@ -68,13 +71,14 @@ public class LoginIntegrationTests extends FxRobot {
 
         type(KeyCode.ENTER);
 
-        press(KeyCode.ALT);
-        press(KeyCode.TAB);
 
-        release(KeyCode.ALT);
-        release(KeyCode.TAB);
-
-        type(KeyCode.ENTER);
+        Startup.INSTANCE.runLater(window("Welcome!")::hide);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //window("Welcome!").fireEvent(new WindowEvent(null, WindowEvent.WINDOW_CLOSE_REQUEST));
 
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.startTask();
