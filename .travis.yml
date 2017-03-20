@@ -44,12 +44,9 @@ matrix:
       - USE_FRAMEBUFFER=false
       - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
     - env:
-      - OSX_HEADLESS=false
-      - _JAVA_OPTIONS="-Dprism.order=sw"
-    - env:
       - USE_FRAMEBUFFER=true
       - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
-      
+
 before_script:
   # run on xvfb screen (for linux).
   - if [ $USE_FRAMEBUFFER = "true" ]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start; fi
