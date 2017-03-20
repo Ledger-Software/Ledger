@@ -18,6 +18,7 @@ import ledger.user_interface.utils.InputSanitization;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 /**
  * Controls application startup - handles passwords and lets user select a file for the database
@@ -35,6 +36,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
+    private final static String LAST_DATABASE_FILE_KEY = "LAST_DATABASE_FILE_KEY";
 
     public LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -61,7 +63,14 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-
+        Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
+        String lastDBFile = preferences.get(LAST_DATABASE_FILE_KEY,null);
+        try{
+            if(lastDBFile!=null)
+                setChosenFile(new File(lastDBFile) );
+        } catch (Exception e){
+            this.setupErrorPopup("Previous file not Found: Does not exist or has been moved", e);
+        }
         File initDir = new File(System.getProperty("user.home"));
         File[] listFiles = initDir.listFiles();
         boolean containsDbFile = false;
@@ -112,6 +121,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         try {
             DbController.INSTANCE.initialize(this.filePath, pwd);
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
+            Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
+            preferences.put(LAST_DATABASE_FILE_KEY,this.filePath);
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }
