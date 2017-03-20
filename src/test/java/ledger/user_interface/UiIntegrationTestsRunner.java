@@ -136,6 +136,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
                             //  System.out.println(": run " + (i+1) + " failed");
                             System.err.println(description.getDisplayName() + ": run " + (i + 1) + " failed");
+                            t.printStackTrace();
                         }
                     }
                     System.err.println(description.getDisplayName() + ": giving up after " + retryCount + " failures");
