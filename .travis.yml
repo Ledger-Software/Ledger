@@ -9,7 +9,6 @@ addons:
     packages:
       - gdb
       - oracle-java8-installer
-      - oracle-java9-installer
 
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -27,12 +26,6 @@ matrix:
       dist: trusty
       jdk: oraclejdk8
       env: USE_FRAMEBUFFER=true
-    - os: linux
-      dist: trusty
-      jdk: oraclejdk9
-      env:
-        - USE_FRAMEBUFFER=true
-        - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
 
 before_script:
   # run on xvfb screen (for linux).
@@ -40,6 +33,7 @@ before_script:
 
 script: ./gradlew clean build --debug
 
+install: true
 
 before_deploy: "gradle prod"
 
