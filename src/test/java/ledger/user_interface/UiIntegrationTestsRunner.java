@@ -32,18 +32,6 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @BeforeClass
-    public static void setupHeadlessRun() throws Exception {
-        System.out.println("BeforeClass");
-        if ("true".equals(System.getenv("headless"))) {
-            System.setProperty("testfx.robot", "glass");
-            System.setProperty("testfx.headless", "true");
-            System.setProperty("prism.order", "sw");
-            System.setProperty("prism.text", "t2k");
-            System.setProperty("java.awt.headless", "true");
-        }
-    }
-
     @Before
     public void beforeAllTests() {
         System.out.println("Before");
