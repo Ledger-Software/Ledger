@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -121,17 +122,21 @@ public interface IUIController {
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable) {
-        createModal(parent, child, windowName, resizeable, StageStyle.UTILITY);
+        createModal(parent, child, windowName, resizeable, Modality.APPLICATION_MODAL);
     }
 
-    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, StageStyle stageStyle) {
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality) {
+        createModal(parent, child, windowName, resizeable, modality, StageStyle.UTILITY);
+    }
+
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle) {
         Stage newStage = new Stage();
         newStage.setScene(child);
         newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
-        newStage.initModality(Modality.WINDOW_MODAL);
+        newStage.initModality(modality);
         newStage.initStyle(stageStyle);
-        newStage.setAlwaysOnTop(true);
+//        newStage.setAlwaysOnTop(true);
         newStage.getIcons().add(image);
         newStage.show();
 

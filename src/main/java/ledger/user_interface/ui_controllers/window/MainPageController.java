@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
@@ -18,6 +19,7 @@ import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
+import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
@@ -46,20 +48,18 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private Button trackSpendingBtn;
     @FXML
     private Button addTransactionBtn;
-    //    @FXML
-//    private AccountBalanceLabel accountBalanceLabel;
     @FXML
     private VBox accountsVBox;
     @FXML
     private ListView<AccountInfo> accountListView;
-    //    @FXML
-//    private FilteringAccountDropdown chooseAccount;
     @FXML
     private Button searchButton;
     @FXML
     private Button clearButton;
     @FXML
     private TextField searchTextField;
+    @FXML
+    private LogoutButton logoutBtn;
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
@@ -222,7 +222,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         ExpenditureChartsController chartController = new ExpenditureChartsController();
         Scene scene = new Scene(chartController);
-        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts", true, StageStyle.DECORATED);
+        this.createModal(this.getScene().getWindow(), scene, "Expenditure Charts", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
     }
 
     /**
