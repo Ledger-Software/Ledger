@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
  */
-public class USBankQFXConverter extends AbstractUFXConverter {
+public class USBankQFXConverter extends AbstractQFXConverter {
 
     public USBankQFXConverter(File file, Account account) {
         super(file, account, true);
@@ -27,6 +27,10 @@ public class USBankQFXConverter extends AbstractUFXConverter {
         NodeList transactionAmounts = xml.getElementsByTagName("TRNAMT");
         NodeList names = xml.getElementsByTagName("NAME");
         NodeList memos = xml.getElementsByTagName("MEMO");
+        NodeList checkNumbers = xml.getElementsByTagName("CHECKNUM");
+
+        // keep counter for check numbers
+        int checkNumberCounter = 0;
 
         // pull out relevant data and create java objects
         try {
@@ -57,6 +61,13 @@ public class USBankQFXConverter extends AbstractUFXConverter {
                 Note note = new Note(memos.item(i).getTextContent());
 
                 Transaction transaction = new Transaction(date, type, amount, this.getAccount(), payee, false, tags, note);
+
+                // Add check number if applicable
+                if (type.getName().equals("Check")) {
+                    transaction.setCheckNumber(Integer.parseInt(checkNumbers.item(checkNumberCounter).getTextContent()));
+                    checkNumberCounter++;
+                }
+
                 transactions.add(transaction);
             }
         } catch (NullPointerException | DateTimeParseException | NumberFormatException e) {

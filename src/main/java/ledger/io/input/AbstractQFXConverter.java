@@ -23,13 +23,13 @@ import java.util.regex.Pattern;
 /**
  * Abstract Base Class for handling UFX file conversions into a list of {@link Transaction} Objects
  */
-public abstract class AbstractUFXConverter implements IInAdapter<Transaction> {
+public abstract class AbstractQFXConverter implements IInAdapter<Transaction> {
 
     private final File qfxFile;
     private final Account account;
     private final boolean missingClosingTags;
 
-    public AbstractUFXConverter(File file, Account account, boolean missingClosingTags) {
+    public AbstractQFXConverter(File file, Account account, boolean missingClosingTags) {
         this.qfxFile = file;
         this.account = account;
         this.missingClosingTags = missingClosingTags;

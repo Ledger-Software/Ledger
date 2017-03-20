@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
  */
-public class FifthThirdBankQFXConverter extends AbstractUFXConverter {
+public class FifthThirdBankQFXConverter extends AbstractQFXConverter {
 
     public FifthThirdBankQFXConverter(File file, Account account) {
         super(file, account, true);

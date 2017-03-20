@@ -38,6 +38,7 @@ public class FirstDataCorpCSVConverter extends AbstractCSVConverter {
                 if (descriptionString.equals("Daily Ledger Bal")) continue;
 
                 String dateString = nextLine[0];
+                String checkNumberString = nextLine[1];
                 String amountString = nextLine[3];
 
                 Date date = AbstractCSVConverter.df.parse(dateString);
@@ -45,6 +46,12 @@ public class FirstDataCorpCSVConverter extends AbstractCSVConverter {
                 int amount = (int) Math.round(Double.parseDouble(amountString) * 100);
 
                 Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, pending, tags, note);
+
+                // Add check number if applicable
+                if (type.getName().equals("Check")) {
+                    int checkNumber = Integer.parseInt(checkNumberString);
+                    transaction.setCheckNumber(checkNumber);
+                }
 
                 transactions.add(transaction);
             }
