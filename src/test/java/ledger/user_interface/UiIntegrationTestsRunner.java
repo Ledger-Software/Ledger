@@ -64,20 +64,20 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void testLogin() {
         loginTests.createDatabase();
         loginTests.logout();
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void testCreateAccounts() {
         loginTests.createDatabase();
         accountTests.createAccounts();
         loginTests.logout();
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void testDeleteAccount() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
@@ -85,7 +85,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
-    @Test
+    @Test(timeout = 60000)
     public void testTransactionInsertionViaWindow() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
