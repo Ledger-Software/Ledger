@@ -26,6 +26,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.out.println("Start Method");
         if (!Boolean.getBoolean("headless")) {
             new Startup().start(stage);
         }
@@ -33,6 +34,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @BeforeClass
     public static void setupHeadlessRun() throws Exception {
+        System.out.println("BeforeClass");
         if ("true".equals(System.getenv("headless"))) {
             System.setProperty("testfx.robot", "glass");
             System.setProperty("testfx.headless", "true");
@@ -44,12 +46,14 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Before
     public void beforeAllTests() {
+        System.out.println("Before");
         removeExistingDBFile();
         assumeTrue(!"true".equals(System.getenv("headless")));
     }
 
     @After
     public void afterAllTests() {
+        System.out.println("After");
         removeExistingDBFile();
     }
 
@@ -66,12 +70,14 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test(timeout = 60000)
     public void testLogin() {
+        System.out.println("Test Login");
         loginTests.createDatabase();
         loginTests.logout();
     }
 
     @Test(timeout = 60000)
     public void testCreateAccounts() {
+        System.out.println("Test Create Accounts");
         loginTests.createDatabase();
         accountTests.createAccounts();
         loginTests.logout();
@@ -79,6 +85,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test(timeout = 60000)
     public void testDeleteAccount() {
+        System.out.println("Test Delete Account");
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         accountTests.deleteAccount("Hello");
@@ -87,6 +94,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @Test(timeout = 60000)
     public void testTransactionInsertionViaWindow() {
+        System.out.println("Test T Insert Via Window");
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactions();
