@@ -48,6 +48,8 @@ public class USBankCSVConverter extends AbstractCSVConverter {
                 } else if (payeeString.contains("ELECTRONIC DEPOSIT ")) {
                     type = TypeConversion.convert("ACH_CREDIT");
                     payee.setName(payeeString.split("ELECTRONIC DEPOSIT ")[1]);
+                } else if (payeeString.equals("CHECK")) {
+                    type = TypeConversion.convert(payeeString);
                 }
 
                 String[] memoData = memoString.split("Download from usbank\\.com\\.");
@@ -61,6 +63,11 @@ public class USBankCSVConverter extends AbstractCSVConverter {
                 Note note = new Note(memoString);
 
                 Transaction transaction = new Transaction(date, type, amount, getAccount(), payee, false, tags, note);
+
+                // Add check number if applicable
+                if (type.getName().equals("Check")) {
+                    transaction.setCheckNumber(Integer.parseInt(typeString));
+                }
 
                 transactions.add(transaction);
             }
