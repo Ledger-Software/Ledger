@@ -6,10 +6,15 @@ import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
+import static org.junit.Assert.fail;
 import static org.junit.Assume.assumeTrue;
 
 /**
@@ -24,6 +29,8 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
     private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
 
+    public static Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws Exception {
         System.out.println("Start Method");
@@ -32,11 +39,29 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
+    @BeforeClass
+    public static void setUpClass() {
+        try {
+            // Start the Toolkit and block until the primary Stage was retrieved.
+            primaryStage = FxToolkit.registerPrimaryStage();
+        } catch (TimeoutException ex) {
+            ex.printStackTrace();
+            fail("Timeout during stage setup");
+        }
+    }
+
     @Before
     public void beforeAllTests() {
         System.out.println("Before");
         removeExistingDBFile();
-        assumeTrue(!"true".equals(System.getenv("headless")));
+        try {
+            FxToolkit.setupApplication(Startup.class);
+
+            WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, primaryStage.showingProperty());
+        } catch (TimeoutException ex) {
+            ex.printStackTrace();
+            fail("Timeout during application setup");
+        }
     }
 
     //@After
