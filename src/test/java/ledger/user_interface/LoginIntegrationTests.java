@@ -66,8 +66,18 @@ public class LoginIntegrationTests extends ApplicationTest{
         assertEquals(0, accounts.size());
     }
 
-    public void logout() {
+    /**
+     * Uses the TestFx framework to logout from the application, when the Miscellaneous VBox is currently closed
+     */
+    public void logoutVBoxClosed() {
         clickOn("Miscellaneous");
+        clickOn("Logout");
+    }
+
+    /**
+     * Uses the TestFx framework to logout from the application, when the Miscellaneous VBox is currently closed
+     */
+    public void logoutVBoxOpen() {
         clickOn("Logout");
     }
 }
