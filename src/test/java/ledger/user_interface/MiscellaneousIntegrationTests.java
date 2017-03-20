@@ -17,6 +17,9 @@ public class MiscellaneousIntegrationTests extends ApplicationTest{
     @Override
     public void start(Stage stage) throws Exception {}
 
+    /**
+     * Uses the TestFx framework to export the application's data and verify that the new file exists
+     */
     public void exportData() {
         clickOn("Miscellaneous");
         clickOn("#exportDataBtn");
