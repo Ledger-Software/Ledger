@@ -39,6 +39,8 @@ public class LoginIntegrationTests extends FxRobot {
             type(KeyCode.ENTER);
         }
 
+        listWindows().forEach((a) -> System.out.println("WindowX: " + a.getX()));
+
         clickOn("#newFileBtn");
         clickOn("#saveLocationButton");
         type(KeyCode.ENTER);
