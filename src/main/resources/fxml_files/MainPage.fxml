@@ -53,7 +53,7 @@
                                  <children>
                                     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                           <ListView fx:id="accountListView" minHeight="60.0" prefHeight="200.0" prefWidth="200.0" />
+                                           <ListView fx:id="accountListView" minHeight="200.0" prefHeight="200.0" prefWidth="200.0" />
                                               <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Account" textAlignment="CENTER">
                                                   <font>
                                                       <Font name="Calibri" size="17.0" />
