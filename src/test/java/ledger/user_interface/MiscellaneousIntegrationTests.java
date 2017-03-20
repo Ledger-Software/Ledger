@@ -24,6 +24,7 @@ public class MiscellaneousIntegrationTests extends ApplicationTest{
         clickOn("Miscellaneous");
         clickOn("#exportDataBtn");
         press(KeyCode.ENTER);
+        write("PasswordForUiTesting1234");
 
         File initDir = new File(System.getProperty("user.home"));
         File[] listFiles = initDir.listFiles();
