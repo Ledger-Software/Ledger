@@ -89,7 +89,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     public void testTransactionInsertionViaWindow() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
-        transactionTests.insertTransactionViaTableView();
+        transactionTests.insertTransactionViaTransactionWindow();
         loginTests.logout();
     }
 
@@ -98,7 +98,15 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     public void testInvalidValuesInTransactionWindow() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
-        transactionTests.insertInvalidTransactionViaTableView();
+        transactionTests.insertInvalidTransactionViaTransactionWindow();
+        loginTests.logout();
+    }
+
+    @Test
+    public void testInsertTransactionViaTableView() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactionViaTableView();
         loginTests.logout();
     }
 
