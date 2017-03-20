@@ -155,6 +155,19 @@ public class TransactionIntegrationTests extends ApplicationTest {
         assertEquals(TypeConversion.convert("UNKNOWN"), t.getType());
     }
 
+    public void deleteTransactionViaTableView() {
+        clickOn("UNKNOWN");
+        rightClickOn("#transactionTableView");
+        clickOn("Delete Selected Transaction(s)");
+        press(KeyCode.ENTER);
+
+        TaskWithReturn<List<Transaction>> allTransactionsTask = DbController.INSTANCE.getAllTransactions();
+        allTransactionsTask.startTask();
+        List<Transaction> allTransactions = allTransactionsTask.waitForResult();
+
+        assertEquals(0, allTransactions.size());
+    }
+
     private void altTabThenEnter() {
         press(KeyCode.ALT);
         press(KeyCode.TAB);

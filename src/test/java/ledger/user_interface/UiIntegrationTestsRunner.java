@@ -18,7 +18,7 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule public RetryRule retryRule = new RetryRule(2);
+    @Rule public RetryRule retryRule = new RetryRule(1); //TODO change this back to 2
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
@@ -107,6 +107,15 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactionViaTableView();
+        loginTests.logout();
+    }
+
+    @Test
+    public void testDeleteTransactionFromTableView(){
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactionViaTableView();
+        transactionTests.deleteTransactionViaTableView();
         loginTests.logout();
     }
 
