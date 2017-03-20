@@ -54,7 +54,6 @@ public class UiIntegrationTestsRunner extends FxRobot {
 
     @Before
     public void beforeAllTests() {
-        System.out.println("Before");
         removeExistingDBFile();
         try {
             FxToolkit.setupApplication(Startup.class);
@@ -66,11 +65,9 @@ public class UiIntegrationTestsRunner extends FxRobot {
         } catch (InterruptedException ignored) { }
     }
 
-    //@After
+    @After
     public void afterAllTests() {
-        System.out.println("After Start");
         removeExistingDBFile();
-        System.out.println("After Done");
     }
 
     /**
@@ -86,14 +83,12 @@ public class UiIntegrationTestsRunner extends FxRobot {
 
     @Test
     public void testLogin() {
-        System.out.println("Test Login");
         loginTests.createDatabase();
         loginTests.logout();
     }
 
     @Test
     public void testCreateAccounts() {
-        System.out.println("Test Create Accounts");
         loginTests.createDatabase();
         accountTests.createAccounts();
         loginTests.logout();
@@ -101,7 +96,6 @@ public class UiIntegrationTestsRunner extends FxRobot {
 
     @Test
     public void testDeleteAccount() {
-        System.out.println("Test Delete Account");
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         accountTests.deleteAccount("Hello");
@@ -110,7 +104,6 @@ public class UiIntegrationTestsRunner extends FxRobot {
 
     @Test
     public void testTransactionInsertionViaWindow() {
-        System.out.println("Test T Insert Via Window");
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactions();

@@ -7,6 +7,7 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Note;
 import ledger.database.entity.Transaction;
 import ledger.io.input.TypeConversion;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.Date;
@@ -18,10 +19,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Tests the User Interface regarding {@link ledger.database.entity.Transaction} interaction using the TestFX framework.
  */
-public class TransactionIntegrationTests extends ApplicationTest {
-    @Override
-    public void start(Stage stage) throws Exception {}
-
+public class TransactionIntegrationTests extends FxRobot {
     /**
      * Uses the TestFx framework to add a {@link ledger.database.entity.Transaction} through the User Interface.
      */
