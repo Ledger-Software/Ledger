@@ -1,26 +1,64 @@
 language: java
-jdk:
-- oraclejdk8
+sudo: false
+
 notifications:
   email: false
+
+addons:
+  apt:
+    packages:
+      - gdb
+      - oracle-java8-installer
+      - oracle-java9-installer
+
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
 cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-sudo: true
+
+matrix:
+  fast_finish: true
+  include:
+    - os: linux
+      dist: trusty
+      jdk: oraclejdk8
+      env: USE_FRAMEBUFFER=true
+    - os: linux
+      dist: trusty
+      jdk: oraclejdk8
+      env:
+        - USE_FRAMEBUFFER=false
+        - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
+    - os: linux
+      dist: trusty
+      jdk: oraclejdk9
+      env:
+        - USE_FRAMEBUFFER=true
+        - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+  allow_failures:
+    - env:
+      - USE_FRAMEBUFFER=false
+      - _JAVA_OPTIONS="-Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500"
+    - env:
+      - OSX_HEADLESS=false
+      - _JAVA_OPTIONS="-Dprism.order=sw"
+    - env:
+      - USE_FRAMEBUFFER=true
+      - _JAVA_OPTIONS="--add-exports=javafx.graphics/com.sun.glass.ui=ALL-UNNAMED"
+      
+before_script:
+  # run on xvfb screen (for linux).
+  - if [ $USE_FRAMEBUFFER = "true" ]; then export DISPLAY=:99.0 && sh -e /etc/init.d/xvfb start; fi
 
 script: ./gradlew clean build --debug
 
-before_install:
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1920x1080x16"
-addons:
-  apt:
-    packages:
-    - oracle-java8-installer
+
 before_deploy: "gradle prod"
+
 deploy:
   provider: releases
   api_key:
