@@ -53,8 +53,9 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
 
     @After
     public void afterAllTests() {
-        System.out.println("After");
+        System.out.println("After Start");
         removeExistingDBFile();
+        System.out.println("After Done");
     }
 
     /**
