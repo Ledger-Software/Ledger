@@ -17,10 +17,11 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests the User Interface regarding {@link Account} interaction using the TestFX framework.
  */
-public class AccountIntegrationTests extends ApplicationTest{
+public class AccountIntegrationTests extends ApplicationTest {
 
     @Override
-    public void start(Stage stage) throws Exception {}
+    public void start(Stage stage) throws Exception {
+    }
 
     /**
      * Uses the TestFx Framework to create four {@link Account} and verify that they are created with the correct
@@ -46,10 +47,14 @@ public class AccountIntegrationTests extends ApplicationTest{
 
         for (Account a : accounts) {
             switch (a.getName()) {
-                case "Account A": accountA = a;
-                case "Account B": accountB = a;
-                case "Account C": accountC = a;
-                case "Account D": accountD = a;
+                case "Account A":
+                    accountA = a;
+                case "Account B":
+                    accountB = a;
+                case "Account C":
+                    accountC = a;
+                case "Account D":
+                    accountD = a;
             }
         }
 
@@ -91,9 +96,9 @@ public class AccountIntegrationTests extends ApplicationTest{
     /**
      * Uses the TestFx framework to add a single {@link Account}
      *
-     * @param accountName Name of the account
+     * @param accountName        Name of the account
      * @param accountDescription Description of the account
-     * @param amount Account balance
+     * @param amount             Account balance
      */
     public void addSingleAccount(String accountName, String accountDescription, String amount) {
         clickOn("Account Operations");

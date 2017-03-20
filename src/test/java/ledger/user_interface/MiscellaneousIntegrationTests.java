@@ -9,13 +9,14 @@ import java.io.File;
 import static org.junit.Assert.assertTrue;
 
 /**
-* Tests the User Interface where the test does not fit cleanly into one of the other IntegrationTest classes
-* Uses the TestFX framework.
-*/
-public class MiscellaneousIntegrationTests extends ApplicationTest{
+ * Tests the User Interface where the test does not fit cleanly into one of the other IntegrationTest classes
+ * Uses the TestFX framework.
+ */
+public class MiscellaneousIntegrationTests extends ApplicationTest {
 
     @Override
-    public void start(Stage stage) throws Exception {}
+    public void start(Stage stage) throws Exception {
+    }
 
     /**
      * Uses the TestFx framework to export the application's data and verify that the new file exists

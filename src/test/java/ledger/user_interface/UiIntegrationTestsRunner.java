@@ -1,6 +1,5 @@
 package ledger.user_interface;
 
-import javafx.geometry.VerticalDirection;
 import javafx.stage.Stage;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
@@ -19,7 +18,8 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule public RetryRule retryRule = new RetryRule(1);
+    @Rule
+    public RetryRule retryRule = new RetryRule(1);
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
@@ -69,14 +69,14 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     @Test
     public void testLogin() {
         loginTests.createDatabase();
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
     public void testCreateAccounts() {
         loginTests.createDatabase();
         accountTests.createAccounts();
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
@@ -84,7 +84,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         accountTests.deleteAccount("Hello");
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
@@ -92,10 +92,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactionViaTransactionWindow();
-        clickOn("Account Operations");
-        scroll(10, VerticalDirection.DOWN);
-
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Ignore //This test should work once the fix for window modality is in
@@ -104,7 +101,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertInvalidTransactionViaTransactionWindow();
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
@@ -112,23 +109,23 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactionViaTableView();
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
-    public void testDeleteTransactionFromTableView(){
+    public void testDeleteTransactionFromTableView() {
         loginTests.createDatabase();
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactionViaTableView();
         transactionTests.deleteTransactionViaTableView();
-        loginTests.logoutVBoxClosed();
+        loginTests.logout(true);
     }
 
     @Test
-    public void testDataExport(){
+    public void testDataExport() {
         loginTests.createDatabase();
         miscTests.exportData();
-        loginTests.logoutVBoxOpen();
+        loginTests.logout(false);
     }
 
     private class RetryRule implements TestRule {
@@ -141,6 +138,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         public Statement apply(Statement base, Description description) {
             return statement(base, description);
         }
+
         private Statement statement(final Statement base, final Description description) {
             return new Statement() {
                 @Override

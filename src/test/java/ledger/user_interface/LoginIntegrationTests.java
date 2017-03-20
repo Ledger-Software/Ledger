@@ -1,5 +1,6 @@
 package ledger.user_interface;
 
+import javafx.geometry.VerticalDirection;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
@@ -16,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the Login User Interface using the TestFX framework.
  */
-public class LoginIntegrationTests extends ApplicationTest{
+public class LoginIntegrationTests extends ApplicationTest {
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -68,16 +69,12 @@ public class LoginIntegrationTests extends ApplicationTest{
 
     /**
      * Uses the TestFx framework to logout from the application, when the Miscellaneous VBox is currently closed
+     *
+     * @param vBoxClosed True if the Miscellaneous VBox is currently closed
      */
-    public void logoutVBoxClosed() {
-        clickOn("Miscellaneous");
-        clickOn("Logout");
-    }
-
-    /**
-     * Uses the TestFx framework to logout from the application, when the Miscellaneous VBox is currently closed
-     */
-    public void logoutVBoxOpen() {
+    public void logout(boolean vBoxClosed) {
+        if (vBoxClosed) clickOn("Miscellaneous");
+        scroll(20, VerticalDirection.DOWN);
         clickOn("Logout");
     }
 }
