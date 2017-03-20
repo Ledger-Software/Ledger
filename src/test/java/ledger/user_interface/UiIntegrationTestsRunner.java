@@ -68,14 +68,14 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @Test(timeout = 60000)
+    //@Test(timeout = 60000)
     public void testLogin() {
         System.out.println("Test Login");
         loginTests.createDatabase();
         loginTests.logout();
     }
 
-    @Test(timeout = 60000)
+    //@Test(timeout = 60000)
     public void testCreateAccounts() {
         System.out.println("Test Create Accounts");
         loginTests.createDatabase();
@@ -83,7 +83,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
-    @Test(timeout = 60000)
+    //@Test(timeout = 60000)
     public void testDeleteAccount() {
         System.out.println("Test Delete Account");
         loginTests.createDatabase();
@@ -92,7 +92,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         loginTests.logout();
     }
 
-    @Test(timeout = 60000)
+    //@Test(timeout = 60000)
     public void testTransactionInsertionViaWindow() {
         System.out.println("Test T Insert Via Window");
         loginTests.createDatabase();
