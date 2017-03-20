@@ -7,6 +7,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.List;
@@ -17,10 +18,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests the User Interface regarding {@link Account} interaction using the TestFX framework.
  */
-public class AccountIntegrationTests extends ApplicationTest{
-
-    @Override
-    public void start(Stage stage) throws Exception {}
+public class AccountIntegrationTests extends FxRobot {
 
     /**
      * Uses the TestFx Framework to create four {@link Account} and verify that they are created with the correct

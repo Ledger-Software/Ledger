@@ -6,6 +6,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.Startup;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
@@ -16,12 +17,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the Login User Interface using the TestFX framework.
  */
-public class LoginIntegrationTests extends ApplicationTest{
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        new Startup().start(stage);
-    }
+public class LoginIntegrationTests extends FxRobot {
 
     public void createDatabase() {
         File initDir = new File(System.getProperty("user.home"));
