@@ -18,11 +18,12 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    @Rule public RetryRule retryRule = new RetryRule(1); //TODO change this back to 2
+    @Rule public RetryRule retryRule = new RetryRule(2);
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
     private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
+    private static final MiscellaneousIntegrationTests miscTests = new MiscellaneousIntegrationTests();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -116,6 +117,13 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         accountTests.addSingleAccount("Hello", "World", "1234");
         transactionTests.insertTransactionViaTableView();
         transactionTests.deleteTransactionViaTableView();
+        loginTests.logout();
+    }
+
+    @Test
+    public void testDataExport(){
+        loginTests.createDatabase();
+        miscTests.exportData();
         loginTests.logout();
     }
 

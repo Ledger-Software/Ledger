@@ -1,11 +1,9 @@
 package ledger.user_interface;
 
-import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Note;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Transaction;
 import ledger.io.input.TypeConversion;
