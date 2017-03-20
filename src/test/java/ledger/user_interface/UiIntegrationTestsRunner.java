@@ -39,7 +39,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         assumeTrue(!"true".equals(System.getenv("headless")));
     }
 
-    @After
+    //@After
     public void afterAllTests() {
         System.out.println("After Start");
         removeExistingDBFile();
