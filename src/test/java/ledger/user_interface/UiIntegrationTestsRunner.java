@@ -1,7 +1,8 @@
 package ledger.user_interface;
 
 import javafx.stage.Stage;
-import ledger.database.IDatabase;
+import ledger.controller.DbController;
+import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
 import org.junit.rules.TestRule;
@@ -19,10 +20,11 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    private static IDatabase database;
+    @Rule public RetryRule retryRule = new RetryRule(2);
 
-    private static LoginIntegrationTests loginTests = new LoginIntegrationTests();
-    private static AccountIntegrationTests accountTests = new AccountIntegrationTests();
+
+    private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
+    private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,6 +47,7 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     @Before
     public void beforeAllTests() {
         removeExistingDBFile();
+        assumeTrue(!"true".equals(System.getenv("headless")));
     }
 
 
@@ -61,30 +64,30 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @Rule public RetryRule retryLogin
-            = new RetryRule(2);
     @Test
     public void testLogin() {
-        assumeTrue(!"true".equals(System.getenv("headless")));
         loginTests.createDatabase();
         loginTests.logout();
     }
 
-    @Rule public RetryRule retryTestAccount = new RetryRule(2
-    );
     @Test
-    public void testCreateAccount() {
-        System.out.println("try");
-
-        assumeTrue(!"true".equals(System.getenv("headless")));
+    public void testCreateAccounts() {
 
         loginTests.createDatabase();
-        accountTests.createAccount();
+        accountTests.createAccounts();
+        loginTests.logout();
+
+    }
+
+    @Test
+    public void testDeleteAccount() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        accountTests.deleteAccount("Hello");
         loginTests.logout();
     }
 
-    private
-    class RetryRule implements TestRule {
+    private class RetryRule implements TestRule {
         private int retryCount;
 
         public RetryRule(int retryCount) {
