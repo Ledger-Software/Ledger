@@ -1,7 +1,6 @@
 package ledger.user_interface;
 
 import javafx.stage.Stage;
-import ledger.database.IDatabase;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
 import org.junit.rules.TestRule;
@@ -19,10 +18,10 @@ import static org.junit.Assume.assumeTrue;
  */
 public class UiIntegrationTestsRunner extends ApplicationTest {
 
-    private static IDatabase database;
-
-    private static LoginIntegrationTests loginTests = new LoginIntegrationTests();
-    private static AccountIntegrationTests accountTests = new AccountIntegrationTests();
+    private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
+    private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
+    private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
+    private static final MiscellaneousIntegrationTests miscTests = new MiscellaneousIntegrationTests();
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,15 +44,18 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
     @Before
     public void beforeAllTests() {
         removeExistingDBFile();
+        assumeTrue(!"true".equals(System.getenv("headless")));
     }
-
 
     @After
     public void afterAllTests() {
         removeExistingDBFile();
     }
 
-    public void removeExistingDBFile() {
+    /**
+     * Remove a database file with the default name, if one exists
+     */
+    private void removeExistingDBFile() {
         String home = System.getProperty("user.home");
         File dbFile = new File(home, "LedgerDB.mv.db");
         if (dbFile.exists()) {
@@ -61,62 +63,66 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         }
     }
 
-    @Rule public RetryRule retryLogin
-            = new RetryRule(2);
     @Test
     public void testLogin() {
-        assumeTrue(!"true".equals(System.getenv("headless")));
         loginTests.createDatabase();
-        loginTests.logout();
+        loginTests.logout(true);
     }
 
-    @Rule public RetryRule retryTestAccount = new RetryRule(2
-    );
     @Test
-    public void testCreateAccount() {
-        System.out.println("try");
-
-        assumeTrue(!"true".equals(System.getenv("headless")));
-
+    public void testCreateAccounts() {
         loginTests.createDatabase();
-        accountTests.createAccount();
-        loginTests.logout();
+        accountTests.createAccounts();
+        loginTests.logout(true);
     }
 
-    private
-    class RetryRule implements TestRule {
-        private int retryCount;
-
-        public RetryRule(int retryCount) {
-            this.retryCount = retryCount;
-        }
-
-        public Statement apply(Statement base, Description description) {
-            return statement(base, description);
-        }
-        private Statement statement(final Statement base, final Description description) {
-            return new Statement() {
-                @Override
-                public void evaluate() throws Throwable {
-                    Throwable caughtThrowable = null;
-
-                    // implement retry logic here
-                    for (int i = 0; i < retryCount; i++) {
-                        try {
-                            base.evaluate();
-                            return;
-                        } catch (Throwable t) {
-                            caughtThrowable = t;
-
-                            //  System.out.println(": run " + (i+1) + " failed");
-                            System.err.println(description.getDisplayName() + ": run " + (i + 1) + " failed");
-                        }
-                    }
-                    System.err.println(description.getDisplayName() + ": giving up after " + retryCount + " failures");
-                    throw caughtThrowable;
-                }
-            };
-        }
+    @Test
+    public void testDeleteAccount() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        accountTests.deleteAccount("Hello");
+        loginTests.logout(true);
     }
 
+    @Test
+    public void testTransactionInsertionViaWindow() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactionViaTransactionWindow();
+        loginTests.logout(true);
+    }
+
+    @Ignore //This test should work once the fix for window modality is in
+    @Test
+    public void testInvalidValuesInTransactionWindow() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertInvalidTransactionViaTransactionWindow();
+        loginTests.logout(true);
+    }
+
+    @Test
+    public void testInsertTransactionViaTableView() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactionViaTableView();
+        loginTests.logout(true);
+    }
+
+    @Test
+    public void testDeleteTransactionFromTableView() {
+        loginTests.createDatabase();
+        accountTests.addSingleAccount("Hello", "World", "1234");
+        transactionTests.insertTransactionViaTableView();
+        transactionTests.deleteTransactionViaTableView();
+        loginTests.logout(true);
+    }
+
+    @Test
+    public void testDataExport() {
+        loginTests.createDatabase();
+        miscTests.exportData();
+        loginTests.logout(false);
+    }
+    
 }
