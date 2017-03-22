@@ -18,6 +18,7 @@ import ledger.user_interface.utils.InputSanitization;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 /**
@@ -123,8 +124,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
             Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
             preferences.put(LAST_DATABASE_FILE_KEY,this.filePath);
+            preferences.flush();
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
+        } catch (BackingStoreException e){
+
         }
     }
 
