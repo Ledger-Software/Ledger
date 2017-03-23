@@ -121,14 +121,16 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         }
         try {
             DbController.INSTANCE.initialize(this.filePath, pwd);
-            Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
             Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
             preferences.put(LAST_DATABASE_FILE_KEY,this.filePath);
             preferences.flush();
+            Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
+
+
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         } catch (BackingStoreException e){
-
+            this.setupErrorPopup("Unable store last Db file", e);
         }
     }
 
