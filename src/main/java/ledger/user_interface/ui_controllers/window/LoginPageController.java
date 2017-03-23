@@ -14,6 +14,7 @@ import ledger.exception.StorageException;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.PreferenceHandler;
 
 import java.io.File;
 import java.net.URL;
@@ -37,7 +38,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
 
     private String filePath;
     private final static String pageLoc = "/fxml_files/LoginPage.fxml";
-    private final static String LAST_DATABASE_FILE_KEY = "LAST_DATABASE_FILE_KEY";
+
 
     public LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -64,9 +65,9 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-        Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
-        String lastDBFile = preferences.get(LAST_DATABASE_FILE_KEY,null);
+
         try{
+            String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
             if(lastDBFile!=null)
                 setChosenFile(new File(lastDBFile) );
         } catch (Exception e){
@@ -121,16 +122,12 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         }
         try {
             DbController.INSTANCE.initialize(this.filePath, pwd);
-            Preferences preferences = Preferences.userRoot().node("LedgerSoftware");
-            preferences.put(LAST_DATABASE_FILE_KEY,this.filePath);
-            preferences.flush();
+            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY,this.filePath);
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
 
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
-        } catch (BackingStoreException e){
-            this.setupErrorPopup("Unable store last Db file", e);
         }
     }
 

@@ -16,6 +16,7 @@ import ledger.exception.StorageException;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.PreferenceHandler;
 
 import java.io.File;
 import java.net.URL;
@@ -93,7 +94,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
                 this.saveLocation.delete();
 
             DbController.INSTANCE.initialize(saveLocation.getAbsolutePath(), this.password.getText());
-
+            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY,this.saveLocation.getAbsolutePath());
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
             Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
