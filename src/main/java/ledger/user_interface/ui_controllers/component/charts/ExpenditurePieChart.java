@@ -50,7 +50,7 @@ public class ExpenditurePieChart extends PieChart implements IUIController, ICha
 
         ObservableList<Data> pieChartData = FXCollections.observableArrayList(dataList);
         this.setData(pieChartData);
-        this.setTitle("Expenditures by Category");
+        this.setTitle("Expenditures by Tag");
     }
 
     /**

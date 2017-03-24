@@ -38,7 +38,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @FXML
     private AccountDropdown accountText;
     @FXML
-    private TextField categoryText;
+    private TextField tagText;
     @FXML
     private TextField amountText;
     @FXML
@@ -126,8 +126,8 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             return null;
         }
 
-        List<Tag> category = new ArrayList<Tag>() {{
-            add(new Tag(categoryText.getText(), ""));
+        List<Tag> tags = new ArrayList<Tag>() {{
+            add(new Tag(tagText.getText(), ""));
         }};
 
         if (InputSanitization.isInvalidAmount(this.amountText.getText())) {
@@ -160,10 +160,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         if (checkNo.equals("")) {
             return new Transaction(date, type, amount, account,
-                    payee, pending, category, notes);
+                    payee, pending, tags, notes);
         } else {
             return new Transaction(date, type, amount, account,
-                    payee, pending, category, notes, Integer.parseInt(checkNo));
+                    payee, pending, tags, notes, Integer.parseInt(checkNo));
         }
 
 
@@ -186,9 +186,9 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         List<Tag> tags = currentTrans.getTags();
 
         if (tags.size() > 0)
-            this.categoryText.setText(tags.get(0).toString());
+            this.tagText.setText(tags.get(0).toString());
         else
-            this.categoryText.setText("");
+            this.tagText.setText("");
 
         Note note = currentTrans.getNote();
         if (note != null)
