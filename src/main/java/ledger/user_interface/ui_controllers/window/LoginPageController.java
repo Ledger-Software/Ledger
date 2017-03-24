@@ -14,6 +14,7 @@ import ledger.exception.StorageException;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
+import ledger.user_interface.utils.PreferenceHandler;
 
 import java.io.File;
 import java.net.URL;
@@ -24,6 +25,7 @@ import java.util.ResourceBundle;
  */
 public class LoginPageController extends GridPane implements Initializable, IUIController {
 
+    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
     @FXML
     private Button chooseFileBtn;
     @FXML
@@ -32,9 +34,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private Button loginBtn;
     @FXML
     private Button newFileBtn;
-
     private String filePath;
-    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
+
 
     public LoginPageController() {
         this.initController(pageLoc, this, "Error on login startup: ");
@@ -62,6 +63,13 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             }
         });
 
+        try {
+            String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
+            if (lastDBFile != null)
+                setChosenFile(new File(lastDBFile));
+        } catch (Exception e) {
+            this.setupErrorPopup("Previous file not Found: Does not exist or has been moved", e);
+        }
         File initDir = new File(System.getProperty("user.home"));
         File[] listFiles = initDir.listFiles();
         boolean containsDbFile = false;
@@ -111,7 +119,10 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         }
         try {
             DbController.INSTANCE.initialize(this.filePath, pwd);
+            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY, this.filePath);
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
+
+
         } catch (StorageException e) {
             this.setupErrorPopup("Unable to connect to database", e);
         }
