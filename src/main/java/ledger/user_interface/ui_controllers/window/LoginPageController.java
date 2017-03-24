@@ -19,14 +19,13 @@ import ledger.user_interface.utils.PreferenceHandler;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 
 /**
  * Controls application startup - handles passwords and lets user select a file for the database
  */
 public class LoginPageController extends GridPane implements Initializable, IUIController {
 
+    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
     @FXML
     private Button chooseFileBtn;
     @FXML
@@ -35,9 +34,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     private Button loginBtn;
     @FXML
     private Button newFileBtn;
-
     private String filePath;
-    private final static String pageLoc = "/fxml_files/LoginPage.fxml";
 
 
     public LoginPageController() {
@@ -66,11 +63,11 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             }
         });
 
-        try{
+        try {
             String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
-            if(lastDBFile!=null)
-                setChosenFile(new File(lastDBFile) );
-        } catch (Exception e){
+            if (lastDBFile != null)
+                setChosenFile(new File(lastDBFile));
+        } catch (Exception e) {
             this.setupErrorPopup("Previous file not Found: Does not exist or has been moved", e);
         }
         File initDir = new File(System.getProperty("user.home"));
@@ -122,7 +119,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         }
         try {
             DbController.INSTANCE.initialize(this.filePath, pwd);
-            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY,this.filePath);
+            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY, this.filePath);
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
 

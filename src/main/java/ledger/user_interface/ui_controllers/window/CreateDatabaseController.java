@@ -23,6 +23,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CreateDatabaseController extends GridPane implements IUIController, Initializable {
+    private final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
     @FXML
     private TextField password;
     @FXML
@@ -31,10 +32,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
     private Button submitButton;
     @FXML
     private Button saveLocationButton;
-
     private File saveLocation;
-
-    private final static String pageLoc = "/fxml_files/CreateDatabasePage.fxml";
 
 
     CreateDatabaseController() {
@@ -94,7 +92,7 @@ public class CreateDatabaseController extends GridPane implements IUIController,
                 this.saveLocation.delete();
 
             DbController.INSTANCE.initialize(saveLocation.getAbsolutePath(), this.password.getText());
-            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY,this.saveLocation.getAbsolutePath());
+            PreferenceHandler.setStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY, this.saveLocation.getAbsolutePath());
             Startup.INSTANCE.newStage(new Scene(new MainPageController()), "Ledger");
 
             Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
