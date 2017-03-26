@@ -48,6 +48,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private CheckBox incomeCheckBox;
     @FXML
     private CheckBox netBalanceCheckBox;
+    @FXML
+    private CheckBox expenditurePayeePieChartCheckBox;
 
 
     private List<Transaction> allTransactions;
@@ -122,11 +124,11 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
         expenditurePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
-                Node chart = new ExpenditurePieChart(this.filteredTransactions);
+                Node chart = new ExpenditureTagPieChart(this.filteredTransactions);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
             } else {
-                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePieChart);
+                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditureTagPieChart);
             }
         });
 
@@ -150,7 +152,15 @@ public class ExpenditureChartsController extends GridPane implements Initializab
             }
         });
 
-
+        expenditurePayeePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                Node chart = new ExpenditurePayeePieChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePayeePieChart);
+            }
+        });
 
         chartHBox.setAlignment(Pos.CENTER);
 

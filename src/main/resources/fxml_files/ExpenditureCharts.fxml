@@ -33,7 +33,7 @@
         <RowConstraints maxHeight="40.0" minHeight="40.0" prefHeight="40.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="300.0" vgrow="SOMETIMES" />
-    </rowConstraints>sc
+    </rowConstraints>
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="7">
             <children>
@@ -105,7 +105,8 @@
                                           <VBox layoutX="-9.599998474121094" layoutY="250.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="5.0">
                                              <children>
                                                 <CheckBox fx:id="expenditureLineChartCheckBox" mnemonicParsing="false" text="Expenditure Line Chart" />
-                                                <CheckBox fx:id="expenditurePieChartCheckBox" mnemonicParsing="false" text="Expenditure Pie Chart" />
+                                                <CheckBox fx:id="expenditurePieChartCheckBox" mnemonicParsing="false" text="Expenditure Pie Chart by Tags" />
+                                                <CheckBox fx:id="expenditurePayeePieChartCheckBox" mnemonicParsing="false" text="Expenditure Pie Chart by Payee" />
                                                 <CheckBox fx:id="incomeCheckBox" mnemonicParsing="false" text="Income Bar Chart" />
                                                 <CheckBox fx:id="netBalanceCheckBox" mnemonicParsing="false" text="Net Balance Line Chart" />
                                              </children>
