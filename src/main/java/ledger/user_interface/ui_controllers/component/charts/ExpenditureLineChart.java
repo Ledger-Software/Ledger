@@ -57,6 +57,8 @@ public class ExpenditureLineChart extends LineChart<Long ,Double> implements ICh
             if(amount > 0)
                 continue;
 
+            amount *= -1;
+
             Date date = transaction.getDate();
 
             long mills = date.toInstant().toEpochMilli();

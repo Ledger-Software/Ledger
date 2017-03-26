@@ -24,19 +24,21 @@ public class ExpenditurePayeePieChart extends PieChart implements IUIController,
         this.setMaxWidth(Double.MAX_VALUE);
 
         updateData(data);
+
+        this.setLabelsVisible(false);
     }
 
     public void updateData(List<Transaction> transactions) {
         Map<String, Long> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : transactions) {
-            populateMap(tagNameToAmountSpent, t.getPayee().toString(), t.getAmount());
+            populateMap(tagNameToAmountSpent, t.getPayee().getName(), t.getAmount());
         }
         List<Data> dataList = new ArrayList<>();
         for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
             double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
             NumberFormat formatter = new DecimalFormat("#0.00");
-            dataList.add(new Data(tag + " - " + "(" + formatter.format(amountSpent) + ")", amountSpent));
+            dataList.add(new Data(tag, amountSpent));
         }
         if(dataList.isEmpty()) {
             dataList.add(new Data( "No Expenses", 0));
