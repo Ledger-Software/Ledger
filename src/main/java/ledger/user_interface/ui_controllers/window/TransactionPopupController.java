@@ -48,6 +48,17 @@ public class TransactionPopupController extends GridPane implements Initializabl
         this.addTrnxnSubmitButton.setOnAction((event) -> {
             Transaction transaction = transactionInput.getTransactionSubmission();
             if (transaction != null) {
+
+                if ((transaction.getAmount() < 0) && (transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
+                    setupErrorPopup("Transactions of the Account Credit/Misc Credit type must have a non-negative amount.", new Exception());
+                    return;
+                }
+
+                if ((transaction.getAmount() > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
+                    setupErrorPopup("Transactions not of the Account Credit/Misc Credit type cannot have a positive amount.", new Exception());
+                    return;
+                }
+
                 TaskNoReturn task = DbController.INSTANCE.insertTransaction(transaction);
                 task.RegisterSuccessEvent(this::closeWindow);
                 task.RegisterFailureEvent(Throwable::printStackTrace);
