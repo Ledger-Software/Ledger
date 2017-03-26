@@ -1,6 +1,5 @@
 package ledger.user_interface.ui_controllers;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Group;

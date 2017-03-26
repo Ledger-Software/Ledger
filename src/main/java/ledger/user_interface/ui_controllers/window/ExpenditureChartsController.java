@@ -16,9 +16,7 @@ import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
-import ledger.user_interface.ui_controllers.component.charts.ExpenditureLineChart;
-import ledger.user_interface.ui_controllers.component.charts.ExpenditurePieChart;
-import ledger.user_interface.ui_controllers.component.charts.IChart;
+import ledger.user_interface.ui_controllers.component.charts.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -46,6 +44,11 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private CheckBox expenditureLineChartCheckBox;
     @FXML
     private CheckBox expenditurePieChartCheckBox;
+    @FXML
+    private CheckBox incomeCheckBox;
+    @FXML
+    private CheckBox netBalanceCheckBox;
+
 
     private List<Transaction> allTransactions;
     private List<Transaction> filteredTransactions;
@@ -120,13 +123,35 @@ public class ExpenditureChartsController extends GridPane implements Initializab
         expenditurePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
                 Node chart = new ExpenditurePieChart(this.filteredTransactions);
-                chartHBox.getChildren().add(new ExpenditurePieChart(this.filteredTransactions));
+                chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
             } else {
-                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePieChart
-                );
+                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePieChart);
             }
         });
+
+        incomeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                Node chart = new IncomeBarChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof IncomeBarChart);
+            }
+        });
+
+        netBalanceCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                Node chart = new NetBalanceLineChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof NetBalanceLineChart);
+            }
+        });
+
+
+
         chartHBox.setAlignment(Pos.CENTER);
 
         expenditureLineChartCheckBox.setSelected(true);
