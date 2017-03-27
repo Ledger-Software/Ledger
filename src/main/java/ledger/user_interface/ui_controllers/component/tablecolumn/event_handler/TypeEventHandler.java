@@ -9,6 +9,7 @@ import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.util.Optional;
 
@@ -20,6 +21,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
     public void handle(TableColumn.CellEditEvent<Transaction, Type> t) {
         Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         Type typeToSet = t.getNewValue();
+        TransactionTableView transactionTableView = (TransactionTableView) t.getTableView();
 
         if (transaction.getAmount() < 0 && (typeToSet.getName().equals("Account Credit") || typeToSet.getName().equals("Misc Credit"))) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -39,6 +41,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
                 task.waitForComplete();
             } else {
                 // TODO: Figure out how to update the tableview from here
+                transactionTableView.updateTransactionTableView();
                 return;
             }
         } else if (transaction.getAmount() > 0 && !(typeToSet.getName().equals("Account Credit") || typeToSet.getName().equals("Misc Credit"))) {
@@ -59,6 +62,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
                 task.waitForComplete();
             } else {
                 // TODO: and here
+                transactionTableView.updateTransactionTableView();
                 return;
             }
         } else {
