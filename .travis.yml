@@ -26,12 +26,12 @@ matrix:
       dist: trusty
       jdk: oraclejdk8
 
-before_install:
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1920x1080x16"
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
 
 script: ./gradlew clean build --debug
-
-install: true
 
 before_deploy: "gradle prod"
 
@@ -41,7 +41,7 @@ deploy:
     secure: V4fs1Nvbqob91f1uBF/4tfPTW0LKA0N9BteC9xNhTU5CeN3KvKf4m+/U5llOx6REtJu/AreDc7/HgWK6OJlAEAO85NfTIeuRC0cJMpBYu0u6AbYGE+AxrLtJ8aDVzQOBOFl9bCeZn3uSaabtgemwX2wM1Y4kU8A5v3pFs8WeKP10G0YznoITL2YRvsXJCdbXsVO3t8U7Nxky075GXdq0gm8dB3KYzCullBvLMdthC9kOAzoPveFdUVxjas3MwXlPIuAuHsHGFkCKk++llL0v6aWv5f0qaLRDEr0M7ScQ2l5gofU82LxjrqCswRl4k5Kv4h6krAEMvcEHjrRgHCuxgcz4zh4rqate/YgGWYQ8rsP05QII4MzDp0LJ3AbC5DTiuxWwa3xTXdjjqlwWr/8SJjN/Z7nJulXRRXEYE6aE4FjDzMwbKIvzDKjg6St2MDZfM56ql9IwWbHG8fVK0hw+FHVr89I4WYcA7WyO4pjqg7CkKsUgErcG42By5JYUkEov9SC5AzJGTJrsWbhPq9IbmWwoq6W+DeVuSUUgsnPWDGQOsowMQce00xarZsZ4BeECO3tgV3ayOUJ/dyFixKouffSf4pmcn/Dit1RUu3YZCMqipukfDOz9lYG1eInsEv8DxU0wzEtO4J2B21tcmOYiEHDZLXU9DoOiId0l3mv0jXI=
   file_glob: true
   file: "./build/libs/Ledger-*.jar"
-  prerelease: true
+  prerelease: false
   on:
     repo: Ledger-Software/Ledger
     tags: true
