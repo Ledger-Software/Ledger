@@ -30,20 +30,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
             alert.setContentText("To change the Transaction type from" + transaction.getType().getName() + " to " + typeToSet.getName() + ", the amount will automatically be changed to a positive value, is this okay?");
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                transaction.setAmount(-transaction.getAmount());
-                transaction.setType(typeToSet);
-
-                TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);
-                task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing transaction type.", e));
-
-                task.startTask();
-                task.waitForComplete();
-            } else {
-                // TODO: Figure out how to update the tableview from here
-                transactionTableView.updateTransactionTableView();
-                return;
-            }
+            executeAmountFlipTypeEdit(result, transaction, typeToSet, transactionTableView);
         } else if (transaction.getAmount() > 0 && !(typeToSet.getName().equals("Account Credit") || typeToSet.getName().equals("Misc Credit"))) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Edit Transaction Type");
@@ -51,20 +38,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
             alert.setContentText("To change the Transaction type from " + transaction.getType().getName() + " to " + typeToSet.getName() + ", the amount will automatically be changed to a negative value, is this okay?");
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK){
-                transaction.setAmount(-transaction.getAmount());
-                transaction.setType(typeToSet);
-
-                TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);
-                task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing transaction type.", e));
-
-                task.startTask();
-                task.waitForComplete();
-            } else {
-                // TODO: and here
-                transactionTableView.updateTransactionTableView();
-                return;
-            }
+            executeAmountFlipTypeEdit(result, transaction, typeToSet, transactionTableView);
         } else {
             transaction.setType(typeToSet);
 
@@ -73,6 +47,22 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
 
             task.startTask();
             task.waitForComplete();
+        }
+    }
+
+    private void executeAmountFlipTypeEdit(Optional<ButtonType> result, Transaction transaction, Type typeToSet, TransactionTableView transactionTableView) {
+        if (result.get() == ButtonType.OK){
+            transaction.setAmount(-transaction.getAmount());
+            transaction.setType(typeToSet);
+
+            TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);
+            task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing transaction type.", e));
+
+            task.startTask();
+            task.waitForComplete();
+        } else {
+            transactionTableView.updateTransactionTableView();
+            return;
         }
     }
 }
