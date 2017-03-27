@@ -50,12 +50,12 @@ public class TransactionPopupController extends GridPane implements Initializabl
             if (transaction != null) {
 
                 if ((transaction.getAmount() < 0) && (transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
-                    setupErrorPopup("Transactions of the Account Credit/Misc Credit type must have a non-negative amount.", new Exception());
+                    setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a positive amount.", new Exception());
                     return;
                 }
 
                 if ((transaction.getAmount() > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
-                    setupErrorPopup("Transactions not of the Account Credit/Misc Credit type cannot have a positive amount.", new Exception());
+                    setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a negative amount.", new Exception());
                     return;
                 }
 
