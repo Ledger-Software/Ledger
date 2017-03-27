@@ -29,18 +29,21 @@ public class ExpenditureTagPieChart extends PieChart implements IUIController, I
     public void updateData(List<Transaction> transactions) {
         Map<String, Long> tagNameToAmountSpent = new HashMap<>();
         for (Transaction t : transactions) {
+            if(t.getAmount() > 0) {
+                continue;
+            }
             if (t.getTags().isEmpty()) {
-                addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount());
+                addToMapForPieChart(tagNameToAmountSpent, "Uncategorized", t.getAmount() * -1);
             } else {
                 for (Tag tag : t.getTags()) {
-                    addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount());
+                    addToMapForPieChart(tagNameToAmountSpent, tag.getName(), t.getAmount() * -1);
                 }
             }
         }
         List<PieChart.Data> dataList = new ArrayList<>();
         for (String tag : tagNameToAmountSpent.keySet()) {
             // use absolute value here so it's not negative
-            double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
+            double amountSpent = tagNameToAmountSpent.get(tag) / 100.0;
             NumberFormat formatter = new DecimalFormat("#0.00");
             dataList.add(new PieChart.Data(tag + " - " + "(" + formatter.format(amountSpent) + ")", amountSpent));
         }
@@ -62,12 +65,10 @@ public class ExpenditureTagPieChart extends PieChart implements IUIController, I
      * @param value value to add to existing value or empty map
      */
     private void addToMapForPieChart(Map map, String key, Long value) {
-        if (value <= 0) {
-            if (key.equals("")) {
-                key = "Uncategorized";
-            }
-            populateMap(map, key, value);
+        if (key.equals("")) {
+            key = "Uncategorized";
         }
+        populateMap(map, key, value);
     }
 
     /**
