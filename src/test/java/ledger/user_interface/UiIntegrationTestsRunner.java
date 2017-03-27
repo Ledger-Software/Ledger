@@ -6,45 +6,51 @@ import org.junit.*;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+import org.testfx.api.FxRobot;
+import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
+import java.util.concurrent.TimeoutException;
 
+import static junit.framework.TestCase.fail;
 import static org.junit.Assume.assumeTrue;
 
 /**
  * Integration runner for our UI Integration tests. This runner will be picked up by the Junit runner.
  * Test methods in here can call methods in the various IntegrationTest classes to form an integration test.
  */
-public class UiIntegrationTestsRunner extends ApplicationTest {
+public class UiIntegrationTestsRunner extends FxRobot {
 
     private static final LoginIntegrationTests loginTests = new LoginIntegrationTests();
     private static final AccountIntegrationTests accountTests = new AccountIntegrationTests();
     private static final TransactionIntegrationTests transactionTests = new TransactionIntegrationTests();
     private static final MiscellaneousIntegrationTests miscTests = new MiscellaneousIntegrationTests();
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        if (!Boolean.getBoolean("headless")) {
-            new Startup().start(stage);
-        }
-    }
+    public static Stage primaryStage;
 
     @BeforeClass
-    public static void setupHeadlessRun() throws Exception {
-        if ("true".equals(System.getenv("headless"))) {
-            System.setProperty("testfx.robot", "glass");
-            System.setProperty("testfx.headless", "true");
-            System.setProperty("prism.order", "sw");
-            System.setProperty("prism.text", "t2k");
-            System.setProperty("java.awt.headless", "true");
+    public static void setUpClass() {
+        try {
+            // Start the Toolkit and block until the primary Stage was retrieved.
+            primaryStage = FxToolkit.registerPrimaryStage();
+        } catch (TimeoutException ex) {
+            ex.printStackTrace();
+            fail("Timeout during stage setup");
         }
     }
 
     @Before
     public void beforeAllTests() {
         removeExistingDBFile();
-        assumeTrue(!"true".equals(System.getenv("headless")));
+        try {
+            FxToolkit.setupApplication(Startup.class);
+
+            Thread.sleep(1000);
+        } catch (TimeoutException ex) {
+            ex.printStackTrace();
+            fail("Timeout during application setup");
+        } catch (InterruptedException ignored) { }
     }
 
     @After
@@ -124,5 +130,4 @@ public class UiIntegrationTestsRunner extends ApplicationTest {
         miscTests.exportData();
         loginTests.logout(false);
     }
-    
 }

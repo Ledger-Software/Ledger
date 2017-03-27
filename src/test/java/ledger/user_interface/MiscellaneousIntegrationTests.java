@@ -2,6 +2,7 @@ package ledger.user_interface;
 
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
@@ -12,11 +13,7 @@ import static org.junit.Assert.assertTrue;
  * Tests the User Interface where the test does not fit cleanly into one of the other IntegrationTest classes
  * Uses the TestFX framework.
  */
-public class MiscellaneousIntegrationTests extends ApplicationTest {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-    }
+public class MiscellaneousIntegrationTests extends FxRobot {
 
     /**
      * Uses the TestFx framework to export the application's data and verify that the new file exists
@@ -24,7 +21,9 @@ public class MiscellaneousIntegrationTests extends ApplicationTest {
     public void exportData() {
         clickOn("Miscellaneous");
         clickOn("#exportDataBtn");
-        press(KeyCode.ENTER);
+        type(KeyCode.ENTER);
+        sleep(5000);
+        clickOn("#password");
         write("PasswordForUiTesting1234");
         clickOn("Continue");
 
