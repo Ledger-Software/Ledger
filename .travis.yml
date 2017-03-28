@@ -25,6 +25,8 @@ matrix:
     - os: linux
       dist: trusty
       jdk: oraclejdk8
+      env:
+        - travis=true
 
 before_script:
   - "export DISPLAY=:99.0"

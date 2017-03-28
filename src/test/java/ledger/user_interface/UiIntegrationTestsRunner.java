@@ -31,6 +31,10 @@ public class UiIntegrationTestsRunner extends FxRobot {
 
     @BeforeClass
     public static void setUpClass() {
+        if ("true".equals(System.getenv("travis"))) {
+            assumeTrue(false);
+        }
+
         try {
             // Start the Toolkit and block until the primary Stage was retrieved.
             primaryStage = FxToolkit.registerPrimaryStage();
