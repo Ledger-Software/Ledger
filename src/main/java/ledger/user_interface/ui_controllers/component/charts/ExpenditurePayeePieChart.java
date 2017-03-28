@@ -38,7 +38,7 @@ public class ExpenditurePayeePieChart extends PieChart implements IUIController,
             // use absolute value here so it's not negative
             double amountSpent = Math.abs(tagNameToAmountSpent.get(tag)) / 100;
             NumberFormat formatter = new DecimalFormat("#0.00");
-            dataList.add(new Data(tag, amountSpent));
+            dataList.add(new Data(tag + ": " + formatter.format(amountSpent), amountSpent));
         }
         if(dataList.isEmpty()) {
             dataList.add(new Data( "No Expenses", 0));
