@@ -27,7 +27,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Edit Transaction Type");
             alert.setHeaderText("Transactions of the " + typeToSet.getName() + " type must have a positive amount.");
-            alert.setContentText("To change the Transaction type from" + transaction.getType().getName() + " to " + typeToSet.getName() + ", the amount will automatically be changed to a positive value, is this okay?");
+            alert.setContentText("To change the Transaction type from " + transaction.getType().getName() + " to " + typeToSet.getName() + ", the amount will automatically be changed to a positive value, is this okay?");
 
             Optional<ButtonType> result = alert.showAndWait();
             executeAmountFlipTypeEdit(result, transaction, typeToSet, transactionTableView);
