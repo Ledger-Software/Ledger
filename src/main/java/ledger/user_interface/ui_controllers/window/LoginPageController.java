@@ -62,20 +62,17 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-
-        try {
-            String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
-            if (lastDBFile != null) {
-                File file = new File(lastDBFile);
-                if(file.exists()&&!file.isDirectory()){
-                    this.setChosenFile(file);
-                }
-            } else{
-                setUpIntroHelp();
+        
+        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
+        if (lastDBFile != null) {
+            File file = new File(lastDBFile);
+            if (file.exists() && !file.isDirectory()) {
+                this.setChosenFile(file);
             }
-        } catch (Exception e) {
-            this.setupErrorPopup("Previous file not Found: Does not exist or has been moved", e);
+        } else {
+            setUpIntroHelp();
         }
+
     }
 
     /**
