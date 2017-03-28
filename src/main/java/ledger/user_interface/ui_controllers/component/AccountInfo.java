@@ -31,7 +31,11 @@ public class AccountInfo extends GridPane implements IUIController, Initializabl
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.accountName.setText(this.currentAccount.getName());
+        if (currentAccount!=null) {
+            this.accountName.setText(this.currentAccount.getName());
+        } else {
+            this.accountName.setText("All Accounts");
+        }
         this.accountBalance.calculateBalance(this.currentAccount);
     }
 
