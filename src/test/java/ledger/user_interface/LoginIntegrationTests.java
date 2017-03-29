@@ -1,6 +1,7 @@
 package ledger.user_interface;
 
 import javafx.geometry.VerticalDirection;
+import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
@@ -59,7 +60,7 @@ public class LoginIntegrationTests extends FxRobot {
     public void logout(boolean vBoxClosed) {
         closeAccountOperations();
         closeTransactionOperations();
-        
+
         if (vBoxClosed) clickOn("Miscellaneous");
         while(true) {
             try {
@@ -71,16 +72,12 @@ public class LoginIntegrationTests extends FxRobot {
     }
 
     private void closeAccountOperations() {
-        try {
-            moveTo("Add Account");
-            clickOn("Account Operations");
-        } catch (FxRobotException ignored) {}
+        TitledPane pane = lookup("Account Operations").query();
+        interact(() -> pane.setExpanded(false));
     }
 
     private void closeTransactionOperations() {
-        try {
-            moveTo("Add Transaction");
-            clickOn("Transaction Operations");
-        } catch (FxRobotException ignored) {}
+        TitledPane pane = lookup("Transaction Operations").query();
+        interact(() -> pane.setExpanded(false));
     }
 }
