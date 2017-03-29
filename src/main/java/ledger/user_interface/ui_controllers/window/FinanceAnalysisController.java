@@ -28,8 +28,8 @@ import java.util.*;
 /**
  * Controls how the charts render with user given information.
  */
-public class ExpenditureChartsController extends GridPane implements Initializable, IUIController {
-    private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
+public class FinanceAnalysisController extends GridPane implements Initializable, IUIController {
+    private final static String pageLoc = "/fxml_files/FinanceAnalysisPage.fxml";
 
     @FXML
     private AccountDropdown accountFilterDropdown;
@@ -54,7 +54,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private Date dateToFilter;
 
 
-    ExpenditureChartsController() {
+    FinanceAnalysisController() {
         dateFromFilter = new Date(Long.MIN_VALUE);
         dateToFilter = new Date(Long.MAX_VALUE);
         this.initController(pageLoc, this, "Error on expenditure chart page startup: ");

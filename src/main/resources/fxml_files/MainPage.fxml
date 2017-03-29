@@ -110,7 +110,7 @@
                                  <children>
                                     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                              <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Track Spending" textAlignment="CENTER" />
+                                              <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Analyze Finances" textAlignment="CENTER" />
 
 
                                               <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
