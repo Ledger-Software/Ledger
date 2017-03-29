@@ -16,6 +16,7 @@ import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
+import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.charts.*;
 
 import java.net.URL;
@@ -30,7 +31,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     @FXML
-    private AccountDropdown accountFilterDropdown;
+    private FilteringAccountDropdown accountFilterDropdown;
     @FXML
     private DatePicker fromDateFilter;
     @FXML
@@ -144,7 +145,8 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
         netBalanceCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
-                Node chart = new NetBalanceLineChart(this.filteredTransactions);
+
+                Node chart = new NetBalanceLineChart(this.filteredTransactions, accountFilterDropdown);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
             } else {

@@ -62,4 +62,22 @@ public class Note implements IEntity {
     public void setNoteText(String noteText) {
         this.noteText = noteText;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Note)) return false;
+
+        Note note = (Note) o;
+
+        if (transactionId != note.transactionId) return false;
+        return noteText != null ? noteText.equals(note.noteText) : note.noteText == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = transactionId;
+        result = 31 * result + (noteText != null ? noteText.hashCode() : 0);
+        return result;
+    }
 }
