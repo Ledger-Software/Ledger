@@ -57,6 +57,9 @@ public class LoginIntegrationTests extends FxRobot {
      * @param vBoxClosed True if the Miscellaneous VBox is currently closed
      */
     public void logout(boolean vBoxClosed) {
+        closeAccountOperations();
+        closeTransactionOperations();
+        
         if (vBoxClosed) clickOn("Miscellaneous");
         while(true) {
             try {
@@ -65,5 +68,19 @@ public class LoginIntegrationTests extends FxRobot {
                 break;
             } catch (FxRobotException ignored) { }
         }
+    }
+
+    private void closeAccountOperations() {
+        try {
+            moveTo("Add Account");
+            clickOn("Account Operations");
+        } catch (FxRobotException ignored) {}
+    }
+
+    private void closeTransactionOperations() {
+        try {
+            moveTo("Add Transaction");
+            clickOn("Transaction Operations");
+        } catch (FxRobotException ignored) {}
     }
 }
