@@ -1,5 +1,6 @@
 package ledger.user_interface;
 
+import javafx.application.Application;
 import javafx.stage.Stage;
 import ledger.user_interface.ui_controllers.Startup;
 import org.junit.*;
@@ -28,6 +29,7 @@ public class UiIntegrationTestsRunner extends FxRobot {
     private static final MiscellaneousIntegrationTests miscTests = new MiscellaneousIntegrationTests();
 
     public static Stage primaryStage;
+    private Application app;
 
     @BeforeClass
     public static void setUpClass() {
@@ -48,7 +50,7 @@ public class UiIntegrationTestsRunner extends FxRobot {
     public void beforeAllTests() {
         removeExistingDBFile();
         try {
-            FxToolkit.setupApplication(Startup.class);
+            app = FxToolkit.setupApplication(Startup.class);
 
             Thread.sleep(1000);
         } catch (TimeoutException ex) {
@@ -60,6 +62,14 @@ public class UiIntegrationTestsRunner extends FxRobot {
     @After
     public void afterAllTests() {
         removeExistingDBFile();
+        try {
+            app.stop();
+            FxToolkit.cleanupApplication(app);
+        } catch (TimeoutException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**

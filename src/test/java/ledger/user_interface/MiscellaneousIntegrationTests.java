@@ -22,7 +22,7 @@ public class MiscellaneousIntegrationTests extends FxRobot {
         clickOn("Miscellaneous");
         clickOn("#exportDataBtn");
         type(KeyCode.ENTER);
-        sleep(5000);
+        sleep(1000);
         clickOn("#password");
         write("PasswordForUiTesting1234");
         clickOn("Continue");

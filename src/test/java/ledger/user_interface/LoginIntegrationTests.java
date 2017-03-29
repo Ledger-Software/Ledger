@@ -1,15 +1,18 @@
 package ledger.user_interface;
 
 import javafx.geometry.VerticalDirection;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.window.CreateDatabaseController;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxRobotException;
 import org.testfx.framework.junit.ApplicationTest;
@@ -32,9 +35,10 @@ public class LoginIntegrationTests extends FxRobot {
         } catch (NoSuchElementException ignored){}
 
         clickOn("#newFileBtn");
-        clickOn("#saveLocationButton");
-        type(KeyCode.ENTER);
-        sleep(1000);
+
+        CreateDatabaseController controller = lookup(node ->  node instanceof CreateDatabaseController).query();
+        interact(() -> controller.setSaveLocation(new File("Ledger.mv.db")));
+        clickOn(node -> node instanceof PasswordField && ((Stage)node.getScene().getWindow()).getModality() == Modality.APPLICATION_MODAL && "password".equals(node.getId()));
         write("PasswordForUiTesting1234");
         type(KeyCode.TAB);
         write("PasswordForUiTesting1234");
