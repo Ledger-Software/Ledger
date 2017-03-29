@@ -17,8 +17,7 @@ import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.*;
-import ledger.user_interface.utils.AmountStringConverter;
-import ledger.user_interface.utils.TransactionRunningAccountBalanceCalculator;
+import ledger.user_interface.utils.*;
 
 import java.net.URL;
 import java.util.*;
@@ -100,6 +99,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             } else {
                 showHideTagColumnMenuItem.setText("Show Tag Column");
             }
+            updateTransactionTableView();
         });
 
         // Upon initialization, Account column is displayed
@@ -112,6 +112,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             } else {
                 showHideAccountColumnMenuItem.setText("Show Account Column");
             }
+            updateTransactionTableView();
         });
 
         // Upon initialization, Check Number column is displayed
@@ -124,6 +125,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             } else {
                 showHideCheckNumberColumnMenuItem.setText("Show Check Number Column");
             }
+            updateTransactionTableView();
         });
 
         // Upon initialization, Running Balance column is displayed
@@ -136,6 +138,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             } else {
                 showHideRunningBalanceColumnMenuItem.setText("Show Running Account Balance Column");
             }
+            updateTransactionTableView();
         });
 
         // Upon initialization, Debit/Credit perspective is disabled
@@ -151,6 +154,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             } else {
                 toggleDebitCreditView.setText("Disable Debit/Credit Perspective");
             }
+            updateTransactionTableView();
         });
 
         MenuItem addTransactionMenuItem = new MenuItem("Add Transaction");
@@ -201,17 +205,32 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 // Compare first name and last name of every person with filter text.
                 String lowerCaseFilter = searchFilterString.toLowerCase();
 
+                // NOTE: Currently, the only two columns not filtered on are the Date & Cleared columns
                 AmountStringConverter asc = new AmountStringConverter();
-                if (asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches amount.
+                AmountDebitStringConverter adsc = new AmountDebitStringConverter();
+                AmountCreditStringConverter acsc = new AmountCreditStringConverter();
+                CheckNumberStringConverter cnsc = new CheckNumberStringConverter();
+                if (this.amountColumn.isVisible() && asc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Amount column visible & filter matches standard amount display
+                } else if (this.amountDebitColumn.isVisible() && adsc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Debit column visible & filter matches debit amount display
+                } else if (this.amountCreditColumn.isVisible() && acsc.toString(transaction.getAmount()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Credit column visible & filter matches credit amount display
                 } else if (transaction.getPayee().getName().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches Payee name.
-                } else if (transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
-                    return true; // Filter matches tags.
-                } else if (String.valueOf(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches check number.
-                } else // Check if filter matches account name.
-                    return transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter);
+                    return true; // Filter matches payee name (Payee column always visible)
+                } else if (this.tagColumn.isVisible() && transaction.getTags().stream().map(Tag::getName).anyMatch(s -> s.toLowerCase().contains(lowerCaseFilter))) {
+                    return true; // Tag column visible & filter matches tags
+                } else if (this.accountColumn.isVisible() && transaction.getAccount().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Account column visible & filter matches account name
+                } else if (transaction.getType().getName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches type name (Type column always visible)
+                } else if (this.checkNumberColumn.isVisible() && cnsc.toString(transaction.getCheckNumber()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Check number column visible && filter matches check number
+                } else if (this.runningBalanceColumn.isVisible() && asc.toString(transaction.getRunningBalance()).toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Running balance column visible & filter matches running balance
+                } else {
+                    return false; // Filter doesn't match
+                }
             });
 
             // 3. Wrap the FilteredList in a SortedList.

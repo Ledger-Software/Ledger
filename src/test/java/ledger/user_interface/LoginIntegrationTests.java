@@ -73,6 +73,8 @@ public class LoginIntegrationTests extends ApplicationTest {
      * @param vBoxClosed True if the Miscellaneous VBox is currently closed
      */
     public void logout(boolean vBoxClosed) {
+        clickOn("Account Operations");
+        scroll(50, VerticalDirection.DOWN);
         if (vBoxClosed) clickOn("Miscellaneous");
         scroll(20, VerticalDirection.DOWN);
         clickOn("Logout");

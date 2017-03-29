@@ -22,6 +22,18 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
             return;
         }
 
+        if ((amountToSet < 0) && (transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
+            setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a positive amount.", new Exception());
+            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            return;
+        }
+
+        if ((amountToSet > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
+            setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a negative amount.", new Exception());
+            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            return;
+        }
+
         transaction.setAmount(amountToSet);
 
         TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);

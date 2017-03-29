@@ -55,7 +55,7 @@
                 <Insets right="5.0" />
             </GridPane.margin>
         </Text>
-        <Text fx:id="categoryLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Category:" textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+        <Text fx:id="tagLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="Tag:" textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
             <font>
                 <Font name="Calibri" size="24.0" />
             </font>
@@ -120,7 +120,7 @@
                 <Insets left="10.0" />
             </GridPane.margin>
         </ComboBox>
-        <TextField fx:id="categoryText" maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+        <TextField fx:id="tagText" maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" style="-fx-background-color: #abcafc;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="10.0" />
             </GridPane.margin>
