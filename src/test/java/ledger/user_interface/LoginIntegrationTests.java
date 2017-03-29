@@ -10,6 +10,7 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.user_interface.ui_controllers.Startup;
 import org.testfx.api.FxRobot;
+import org.testfx.api.FxRobotException;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.io.File;
@@ -56,10 +57,13 @@ public class LoginIntegrationTests extends FxRobot {
      * @param vBoxClosed True if the Miscellaneous VBox is currently closed
      */
     public void logout(boolean vBoxClosed) {
-        clickOn("Account Operations");
-        scroll(50, VerticalDirection.DOWN);
         if (vBoxClosed) clickOn("Miscellaneous");
-        scroll(20, VerticalDirection.DOWN);
-        clickOn("Logout");
+        while(true) {
+            try {
+                scroll(20, VerticalDirection.DOWN);
+                clickOn("Logout");
+                break;
+            } catch (FxRobotException ignored) { }
+        }
     }
 }
