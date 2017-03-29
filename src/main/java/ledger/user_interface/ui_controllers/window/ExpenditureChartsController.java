@@ -16,9 +16,8 @@ import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
-import ledger.user_interface.ui_controllers.component.charts.ExpenditureLineChart;
-import ledger.user_interface.ui_controllers.component.charts.ExpenditurePieChart;
-import ledger.user_interface.ui_controllers.component.charts.IChart;
+import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
+import ledger.user_interface.ui_controllers.component.charts.*;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -32,7 +31,7 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private final static String pageLoc = "/fxml_files/ExpenditureCharts.fxml";
 
     @FXML
-    private AccountDropdown accountFilterDropdown;
+    private FilteringAccountDropdown accountFilterDropdown;
     @FXML
     private DatePicker fromDateFilter;
     @FXML
@@ -46,6 +45,13 @@ public class ExpenditureChartsController extends GridPane implements Initializab
     private CheckBox expenditureLineChartCheckBox;
     @FXML
     private CheckBox expenditurePieChartCheckBox;
+    @FXML
+    private CheckBox incomeCheckBox;
+    @FXML
+    private CheckBox netBalanceCheckBox;
+    @FXML
+    private CheckBox expenditurePayeePieChartCheckBox;
+
 
     private List<Transaction> allTransactions;
     private List<Transaction> filteredTransactions;
@@ -119,14 +125,45 @@ public class ExpenditureChartsController extends GridPane implements Initializab
 
         expenditurePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue) {
-                Node chart = new ExpenditurePieChart(this.filteredTransactions);
-                chartHBox.getChildren().add(new ExpenditurePieChart(this.filteredTransactions));
+                Node chart = new ExpenditureTagPieChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
             } else {
-                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePieChart
-                );
+                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditureTagPieChart);
             }
         });
+
+        incomeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                Node chart = new IncomeBarChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof IncomeBarChart);
+            }
+        });
+
+        netBalanceCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+
+                Node chart = new NetBalanceLineChart(this.filteredTransactions, accountFilterDropdown);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof NetBalanceLineChart);
+            }
+        });
+
+        expenditurePayeePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue) {
+                Node chart = new ExpenditurePayeePieChart(this.filteredTransactions);
+                chartHBox.getChildren().add(chart);
+                HBox.setHgrow(chart, Priority.ALWAYS);
+            } else {
+                chartHBox.getChildren().removeIf(item -> item instanceof ExpenditurePayeePieChart);
+            }
+        });
+
         chartHBox.setAlignment(Pos.CENTER);
 
         expenditureLineChartCheckBox.setSelected(true);
