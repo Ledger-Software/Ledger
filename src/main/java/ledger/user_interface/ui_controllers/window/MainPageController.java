@@ -221,7 +221,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         FinanceAnalysisController chartController = new FinanceAnalysisController();
         Scene scene = new Scene(chartController);
-        this.createModal(this.getScene().getWindow(), scene, "Finance Analysis", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
+        this.createModal(this.getScene().getWindow(), scene, "Financial Analysis", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
     }
 
     /**

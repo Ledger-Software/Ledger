@@ -37,7 +37,7 @@
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" GridPane.columnSpan="7">
             <children>
-                <Text fx:id="title" fill="#ffa81f" layoutX="21.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Finance Analysis" />
+                <Text fx:id="title" fill="#ffa81f" layoutX="21.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Financial Analysis" />
             </children>
         </Pane>
       <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-border-color: #5667B5; -fx-border-radius: 10; -fx-border-width: 2;" GridPane.columnSpan="2" GridPane.rowIndex="1">
