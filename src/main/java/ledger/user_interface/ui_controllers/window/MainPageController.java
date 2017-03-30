@@ -95,7 +95,10 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
-        this.searchTextField.setOnAction(this::searchClick);
+//        this.searchTextField.setOnAction(this::searchClick);
+        this.searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            this.updateSearchOnChange();
+        });
 
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
@@ -199,6 +202,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void clearSearch(ActionEvent actionEvent) {
         searchTextField.setText("");
         transactionTableView.updateSearchFilterString("");
+    }
+
+    private void updateSearchOnChange() {
+        String searchText = searchTextField.getText();
+        transactionTableView.updateSearchFilterString(searchText);
     }
 
     private void searchClick(ActionEvent actionEvent) {
