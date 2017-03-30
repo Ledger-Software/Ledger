@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -34,27 +35,33 @@ public class ExportButton extends Button implements IUIController, Initializable
     }
 
     private void OnClick(ActionEvent actionEvent) {
-        DirectoryChooser chooser = new DirectoryChooser();
-        chooser.setTitle("Select Directory");
-        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Select Save File");
+        File userHome = new File(System.getProperty("user.home"));
+        chooser.setInitialDirectory(userHome);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
+        chooser.getExtensionFilters().add(extFilter);
 
-        File saveLocation = chooser.showDialog(this.getScene().getWindow());
-        if (saveLocation == null) return;
         File currentDbFile = DbController.INSTANCE.getDbFile();
         String timeStamp = new SimpleDateFormat("yyyyMMddhhmm").format(new Date());
         String fileName = timeStamp + currentDbFile.getName();
-        File newDbFile = new File(saveLocation.toPath().toString(), fileName);
+        File newDbFile = new File(userHome.toPath().toString(), fileName);
 
         int numFiles = 1;
         while (newDbFile.exists()) {
             fileName = timeStamp + "(" + numFiles + ")" + currentDbFile.getName();
-            newDbFile = new File(saveLocation.toPath().toString(), fileName);
+            newDbFile = new File(userHome.toPath().toString(), fileName);
             numFiles++;
         }
 
+        chooser.setInitialFileName(newDbFile.getName());
+        File saveLocation = chooser.showSaveDialog(this.getScene().getWindow());
+        if (saveLocation == null) return;
+
+
         try {
             DbController.INSTANCE.shutdown();
-            Files.copy(currentDbFile.toPath(), newDbFile.toPath());
+            Files.copy(currentDbFile.toPath(), saveLocation.toPath());
         } catch (IOException e) {
             this.setupErrorPopup("Unable to properly copy data.", e);
             e.printStackTrace();
