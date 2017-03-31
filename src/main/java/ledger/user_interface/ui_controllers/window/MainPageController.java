@@ -53,8 +53,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private ListView<AccountInfo> accountListView;
     @FXML
-    private Button searchButton;
-    @FXML
     private Button clearButton;
     @FXML
     private TextField searchTextField;
@@ -92,10 +90,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.importTransactionsBtn.setOnAction((event) -> createImportTransPopup());
 
-        this.searchButton.setOnAction(this::searchClick);
         this.clearButton.setOnAction(this::clearSearch);
 
-//        this.searchTextField.setOnAction(this::searchClick);
         this.searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.updateSearchOnChange();
         });
@@ -205,11 +201,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     }
 
     private void updateSearchOnChange() {
-        String searchText = searchTextField.getText();
-        transactionTableView.updateSearchFilterString(searchText);
-    }
-
-    private void searchClick(ActionEvent actionEvent) {
         String searchText = searchTextField.getText();
         transactionTableView.updateSearchFilterString(searchText);
     }
