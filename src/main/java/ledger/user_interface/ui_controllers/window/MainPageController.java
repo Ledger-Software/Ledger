@@ -129,7 +129,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             accountListView.getItems().get(0).setAllAccountBalance();
         });
 
-        this.payeeEditorButton.setOnAction(this::openPayeeEditor);
+        this.payeeEditorButton.setOnAction(this::openAutoTaggingEditor);
 
         this.setOnKeyPressed(event -> {
             if (!event.isControlDown())
@@ -181,11 +181,11 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
-    private void openPayeeEditor(ActionEvent actionEvent) {
-        PayeeTableWindow window = new PayeeTableWindow();
+    private void openAutoTaggingEditor(ActionEvent actionEvent) {
+        AutoTaggingTableWindow window = new AutoTaggingTableWindow();
         Scene scene = new Scene(window);
 
-        this.createModal(null, scene, "Payee Editor", true);
+        this.createModal(null, scene, "Automatic Tagging", true);
     }
 
     private void setUpAccountCreationHelp() {

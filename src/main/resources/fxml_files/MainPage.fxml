@@ -94,7 +94,7 @@
                                               <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER">
                 </Button>
                                               <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER" />
-                                              <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Payee Editor" />
+                                              <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Add Automatic Tags" />
                                        </children>
                                     </VBox>
                                  </children>

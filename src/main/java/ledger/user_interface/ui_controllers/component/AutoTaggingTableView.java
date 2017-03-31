@@ -21,15 +21,15 @@ import java.util.ResourceBundle;
  * {@link TableView} for showing and editing {@link Payee}
  * Auto pulls from the database
  */
-public class PayeeTableView extends TableView implements IUIController, Initializable {
-    private static final String pageLoc = "/fxml_files/PayeeTableView.fxml";
+public class AutoTaggingTableView extends TableView implements IUIController, Initializable {
+    private static final String pageLoc = "/fxml_files/AutoTaggingTableView.fxml";
 
     @FXML
     private TableColumn<Payee, String> nameColumn;
     @FXML
     private TableColumn<Payee, String> descriptionColumn;
 
-    public PayeeTableView() {
+    public AutoTaggingTableView() {
         this.initController(pageLoc, this, "Error creating Payee Editor");
     }
 
