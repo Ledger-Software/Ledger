@@ -56,10 +56,16 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
     private void toggleEditors(boolean isToggleOpen) {
         if (isToggleOpen) {
+            this.noteText.setText(transaction.getNote().getNoteText());
             this.noteText.setMinHeight(90);
         } else {
+            transaction.getNote().setNoteText(noteText.getText());
+            TaskNoReturn updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
+            updateNoteTask.startTask();
+            updateNoteTask.waitForComplete();
             this.noteText.setText(transaction.getNote().getNoteText());
             this.noteText.setMinHeight(30);
+
         }
 
     }
@@ -70,6 +76,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
             toggleEditors(newValue);
+
         }
     }
 
@@ -81,11 +88,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             if (event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
                 noteText.appendText(System.lineSeparator());
             } else if (event.getCode() == KeyCode.ENTER) {
-                transaction.getNote().setNoteText(noteText.getText());
-                TaskNoReturn updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
-                updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> toggleEditors(false)));
-                updateNoteTask.startTask();
-                updateNoteTask.waitForComplete();
+                toggleEditors(false);
             }
         }
     }
