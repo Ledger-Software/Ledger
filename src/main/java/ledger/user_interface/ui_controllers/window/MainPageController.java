@@ -61,6 +61,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
+    @FXML
+    private Button addIgnoreTransactionButton;
 
     public MainPageController() {
         INSTANCE = this;
@@ -129,6 +131,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         });
 
         this.payeeEditorButton.setOnAction(this::openAutoTaggingEditor);
+        this.addIgnoreTransactionButton.setOnAction(this::openIgnoredTransactionEditor);
 
         this.setOnKeyPressed(event -> {
             if (!event.isControlDown())
@@ -139,6 +142,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             this.undo();
         });
+    }
+
+    private void openIgnoredTransactionEditor(ActionEvent actionEvent) {
+        IgnoredExpressionPopupController ignoredExpressionPopupController = new IgnoredExpressionPopupController();
+        Scene scene = new Scene(ignoredExpressionPopupController);
+        this.createModal(this.getScene().getWindow(), scene, "Automatic Ignored Transactions");
     }
 
     /**
