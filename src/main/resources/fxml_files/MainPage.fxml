@@ -151,11 +151,6 @@
             </rowConstraints>
             <children>
                 <TextField fx:id="searchTextField" maxWidth="1.7976931348623157E308" promptText="Search..." GridPane.hgrow="ALWAYS" />
-                <Button fx:id="searchButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" styleClass="smallButton" text="Search" GridPane.columnIndex="1">
-                    <GridPane.margin>
-                        <Insets left="5.0" />
-                    </GridPane.margin>
-                </Button>
                 <Button fx:id="clearButton" maxWidth="60.0" minWidth="60.0" mnemonicParsing="false" prefWidth="60.0" styleClass="smallButton" text="Clear" GridPane.columnIndex="2">
                     <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
