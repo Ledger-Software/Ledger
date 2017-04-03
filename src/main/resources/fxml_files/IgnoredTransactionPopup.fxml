@@ -17,7 +17,7 @@
 <fx:root fx:id="ignoredTransGridPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="130.0" />
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="170.0" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="130.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="300.0" />
     </columnConstraints>
     <rowConstraints>
@@ -55,7 +55,7 @@
                 <Font name="Calibri Light" size="22.0" />
             </font>
         </Text>
-        <Button fx:id="addExpButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Add" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+        <Button fx:id="addExpButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add" GridPane.halignment="CENTER" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
             </GridPane.margin>
@@ -75,7 +75,7 @@
          <GridPane.margin>
             <Insets />
          </GridPane.margin></IgnoredExpressionTableView>
-      <Button fx:id="doneButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Done" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="TOP">
+      <Button fx:id="doneButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Done" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
          </GridPane.margin>
