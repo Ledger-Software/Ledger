@@ -25,7 +25,6 @@
         <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
         <RowConstraints maxHeight="-Infinity" minHeight="10.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="1.7976931348623157E308" minHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
@@ -71,9 +70,9 @@
             <Insets left="15.0" right="15.0" />
          </GridPane.margin>
       </ComboBox>
-      <IgnoredExpressionTableView editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.rowSpan="4" GridPane.valignment="BASELINE">
+      <IgnoredExpressionTableView editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.rowSpan="3" GridPane.valignment="BASELINE">
          <GridPane.margin>
-            <Insets />
+            <Insets bottom="10.0" />
          </GridPane.margin></IgnoredExpressionTableView>
       <Button fx:id="doneButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Done" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
          <GridPane.margin>
