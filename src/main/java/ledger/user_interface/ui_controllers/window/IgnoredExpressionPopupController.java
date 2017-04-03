@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.WindowEvent;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.IgnoredExpression;
@@ -29,6 +30,8 @@ public class IgnoredExpressionPopupController extends GridPane implements Initia
     private ComboBox<Boolean> newExpRule;
     @FXML
     private Button addExpButton;
+    @FXML
+    private Button doneButton;
 
     public IgnoredExpressionPopupController() {
 
@@ -41,6 +44,9 @@ public class IgnoredExpressionPopupController extends GridPane implements Initia
         this.newExpRule.setItems(FXCollections.observableArrayList(true, false));
         this.newExpRule.setConverter(new IsMatchConverter());
         this.addExpButton.setOnAction(event -> addExpression());
+        this.doneButton.setOnAction((actionEvent) ->
+                this.getScene().getWindow().fireEvent(
+                        new WindowEvent(this.getScene().getWindow(), WindowEvent.WINDOW_CLOSE_REQUEST)));
 
     }
 
