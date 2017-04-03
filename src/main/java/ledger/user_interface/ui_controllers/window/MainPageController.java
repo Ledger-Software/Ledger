@@ -147,7 +147,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void openIgnoredTransactionEditor(ActionEvent actionEvent) {
         IgnoredExpressionPopupController ignoredExpressionPopupController = new IgnoredExpressionPopupController();
         Scene scene = new Scene(ignoredExpressionPopupController);
-        this.createModal(this.getScene().getWindow(), scene, "Automatic Ignored Transactions");
+        this.createModal(this.getScene().getWindow(), scene, "Automatically Ignored Transactions");
     }
 
     /**
