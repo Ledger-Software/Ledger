@@ -14,7 +14,7 @@
 <?import ledger.user_interface.ui_controllers.component.ConverterDropdown?>
 <?import ledger.user_interface.ui_controllers.component.FileSelectorButton?>
 
-<fx:root fx:id="addAcctGridPane" alignment="CENTER" scaleShape="false" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.102-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root fx:id="addAcctGridPane" alignment="CENTER" scaleShape="false" style="-fx-background-color: #ffffff;" type="GridPane" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" />
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" />
@@ -69,10 +69,6 @@
                 <Cursor fx:constant="HAND" />
             </cursor>
         </Button>
-      <Button fx:id="ignoreEditorButton" mnemonicParsing="false" text="Ignored Editor" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER">
-         <padding>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-         </padding></Button>
     </children>
     <stylesheets>
         <URL value="@../css/colorStyle.css" />

@@ -29,7 +29,7 @@
     <children>
         <Pane fx:id="header" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnSpan="3" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
             <children>
-                <Text fx:id="title" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ignored Transactions" wrappingWidth="307.203125">
+                <Text fx:id="title" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Automatically Ignored Transactions">
                     <font>
                         <Font name="Calibri" size="28.0" />
                     </font>

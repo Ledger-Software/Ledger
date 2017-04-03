@@ -46,9 +46,6 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     @FXML
     private ConverterDropdown converterSelector;
 
-    @FXML
-    private Button ignoreEditorButton;
-
     private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
 
     ImportTransactionsPopupController() {
@@ -68,11 +65,6 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        this.ignoreEditorButton.setOnAction(event -> {
-            IgnoredExpressionPopupController ignoredExpressionPopupController = new IgnoredExpressionPopupController();
-            Scene scene = new Scene(ignoredExpressionPopupController);
-            this.createModal(this.getScene().getWindow(), scene, "Ignored Transactions");
-        });
         fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
         fileSelector.addFileExtensionFilter(new ExtensionFilter("QFX files (*.qfx)", "*.qfx"));
