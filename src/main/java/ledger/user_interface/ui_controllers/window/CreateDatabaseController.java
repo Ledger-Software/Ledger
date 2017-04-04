@@ -101,4 +101,8 @@ public class CreateDatabaseController extends GridPane implements IUIController,
             this.setupErrorPopup("Unable to connect to database", e);
         }
     }
+
+    public void setSaveLocation(File file) {
+        this.saveLocation = file;
+    }
 }

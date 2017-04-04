@@ -2,14 +2,17 @@ package ledger.user_interface;
 
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit.ApplicationTest;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,11 +20,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests the User Interface regarding {@link Account} interaction using the TestFX framework.
  */
-public class AccountIntegrationTests extends ApplicationTest {
-
-    @Override
-    public void start(Stage stage) throws Exception {
-    }
+public class AccountIntegrationTests extends FxRobot {
 
     /**
      * Uses the TestFx Framework to create four {@link Account} and verify that they are created with the correct
@@ -83,6 +82,7 @@ public class AccountIntegrationTests extends ApplicationTest {
 
     private void addAccount(String name, String description, String amount) {
         clickOn("#addAccountBtn");
+        clickOn("#accountNameText");
         write(name);
         type(KeyCode.TAB);
         write(description);
@@ -121,13 +121,10 @@ public class AccountIntegrationTests extends ApplicationTest {
         clickOn("#deleteAccountBtn");
 
         //Clear popup warning about transaction deletion
-        press(KeyCode.ALT);
-        press(KeyCode.TAB);
-
-        release(KeyCode.ALT);
-        release(KeyCode.TAB);
-
-        type(KeyCode.ENTER);
+        try{
+            clickOn(window("Confirm Account Delete"), MouseButton.PRIMARY);
+            type(KeyCode.ENTER);
+        } catch (NoSuchElementException ignored){}
 
         accountsTask = DbController.INSTANCE.getAllAccounts();
         accountsTask.startTask();
