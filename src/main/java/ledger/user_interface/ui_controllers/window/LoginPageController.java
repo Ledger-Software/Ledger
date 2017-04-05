@@ -35,6 +35,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     @FXML
     private Button newFileBtn;
     private String filePath;
+    private File directory;
 
 
     public LoginPageController() {
@@ -69,6 +70,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
             if (file.exists() && !file.isDirectory()) {
                 this.setChosenFile(file);
             }
+            directory = file.getParentFile();
         } else {
             setUpIntroHelp();
         }
@@ -91,7 +93,10 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     private void selectFile() {
         FileChooser chooser = new FileChooser();
+        if(directory==null)
         chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        else
+            chooser.setInitialDirectory(directory);
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
         chooser.getExtensionFilters().add(extFilter);
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
