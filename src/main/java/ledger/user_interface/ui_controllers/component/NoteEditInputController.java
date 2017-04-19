@@ -34,6 +34,7 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
     /**
      * Basic Constructor
+     *
      * @param transaction The {@link Transaction} that this will handle
      */
     public NoteEditInputController(Transaction transaction) {
@@ -69,7 +70,11 @@ public class NoteEditInputController extends GridPane implements IUIController, 
 
         @Override
         public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-            toggleEditors(newValue);
+            transaction.getNote().setNoteText(noteText.getText());
+            TaskNoReturn updateNoteTask = DbController.INSTANCE.editTransaction(transaction);
+            updateNoteTask.RegisterSuccessEvent(() -> Startup.INSTANCE.runLater(() -> toggleEditors(newValue)));
+            updateNoteTask.startTask();
+            updateNoteTask.waitForComplete();
         }
     }
 
@@ -89,6 +94,5 @@ public class NoteEditInputController extends GridPane implements IUIController, 
             }
         }
     }
-
 
 }
