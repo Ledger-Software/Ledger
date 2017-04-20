@@ -47,6 +47,9 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
     private ConverterDropdown converterSelector;
 
     private final static String pageLoc = "/fxml_files/ImportTransactionsPopup.fxml";
+    private final static ExtensionFilter allFilesFilter = new ExtensionFilter("All files (*.*)", "*.*");
+    private final static ExtensionFilter csvFilesFilter = new ExtensionFilter("CSV files (*.csv, *.CSV)", "*.csv", "*.CSV");
+    private final static ExtensionFilter qfxFilesFilter = new ExtensionFilter("QFX files (*.qfx, *.QFX)", "*.qfx", "*.QFX");
 
     ImportTransactionsPopupController() {
         this.initController(pageLoc, this, "Error on transaction popup startup: ");
@@ -65,11 +68,23 @@ public class ImportTransactionsPopupController extends GridPane implements Initi
      */
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        fileSelector.addFileExtensionFilter(new ExtensionFilter("All files (*.*)", "*.*"));
-        fileSelector.addFileExtensionFilter(new ExtensionFilter("CSV files (*.csv)", "*.csv"));
-        fileSelector.addFileExtensionFilter(new ExtensionFilter("QFX files (*.qfx)", "*.qfx"));
+        fileSelector.addFileExtensionFilter(allFilesFilter);
+        fileSelector.addFileExtensionFilter(csvFilesFilter);
+        fileSelector.addFileExtensionFilter(qfxFilesFilter);
         importButton.setOnAction(this::importFile);
         // TODO Hook up insert
+        converterSelector.setOnAction(this::applyExtensionFilters);
+    }
+
+    private void applyExtensionFilters(ActionEvent actionEvent) {
+        fileSelector.clearFileExtensionFilter();
+        ImportController.Converter converter = converterSelector.getFileConverter();
+        if (converter.toString().contains("CSV")) {
+            fileSelector.addFileExtensionFilter(csvFilesFilter);
+        } else if (converter.toString().contains("QFX")) {
+            fileSelector.addFileExtensionFilter(qfxFilesFilter);
+        }
+        fileSelector.addFileExtensionFilter(allFilesFilter);
     }
 
     private void importFile(ActionEvent actionEvent) {
