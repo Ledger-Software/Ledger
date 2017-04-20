@@ -60,7 +60,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TextField searchTextField;
     @FXML
     private LogoutButton logoutBtn;
-    // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
     @FXML
