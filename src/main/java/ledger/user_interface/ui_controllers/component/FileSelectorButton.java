@@ -31,7 +31,7 @@ public class FileSelectorButton extends Button {
         chooser.getExtensionFilters().addAll(this.fileExtensionFilters);
         File selectedFile = chooser.showOpenDialog(this.getScene().getWindow());
         if (selectedFile != null) {
-            setFile(file);
+            setFile(selectedFile);
         }
     }
 
