@@ -14,7 +14,6 @@ import ledger.user_interface.ui_controllers.component.PayeeDropdown;
 import ledger.user_interface.utils.TypeStringConverter;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -22,8 +21,8 @@ import java.util.ResourceBundle;
 /**
  * Controller for the Add Recurring Transaction Window.
  */
-public class RecurringBillPaymentWindow extends GridPane implements IUIController, Initializable {
-    private static final String pageLoc = "/fxml_files/RecurringBillPaymentWindow.fxml";
+public class RecurringTransactionController extends GridPane implements IUIController, Initializable {
+    private static final String pageLoc = "/fxml_files/RecurringTransactionWindow.fxml";
 
     @FXML
     DatePicker startDatePicker;
@@ -46,7 +45,7 @@ public class RecurringBillPaymentWindow extends GridPane implements IUIControlle
     @FXML
     Button addButton;
 
-    public RecurringBillPaymentWindow() {
+    public RecurringTransactionController() {
         this.initController(pageLoc, this, "Unable to load recurring bill payment window");
     }
 
