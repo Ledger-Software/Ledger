@@ -31,7 +31,7 @@ public class MiscellaneousIntegrationTests extends FxRobot {
         File[] listFiles = initDir.listFiles();
         boolean containsExportFile = false;
         for (File f : listFiles) {
-            if (f.isFile() && f.getName().matches("\\d+(LedgerDB.mv.db)")) {
+            if (f.getName().matches("\\d+Ledger.mv.db")) {
                 containsExportFile = true;
             }
         }

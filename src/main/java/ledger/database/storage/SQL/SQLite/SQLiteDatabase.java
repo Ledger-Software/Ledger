@@ -52,6 +52,10 @@ public class SQLiteDatabase extends DataBaseManager implements ISQLDatabaseAccou
         tableSQL.add(TagToTransTable.CreateStatementSQLite());
         tableSQL.add(TagToPayeeTable.CreateStatementSQLite());
 
+        tableSQL.add((IgnoredExpressionTable.CreateStatementSQLite()));
+
+        tableSQL.add(RecurringTransactionTable.CreateStatementSQLite());
+
         executeList(tableSQL);
 
         if (this.getAllTypes().size() == 0)

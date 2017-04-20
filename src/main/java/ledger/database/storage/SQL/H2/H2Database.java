@@ -55,7 +55,10 @@ public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBa
 
         tableSQL.add(TagToTransTable.CreateStatementH2());
         tableSQL.add(TagToPayeeTable.CreateStatementH2());
+
         tableSQL.add((IgnoredExpressionTable.CreateStatementH2()));
+
+        tableSQL.add(RecurringTransactionTable.CreateStatementH2());
 
         executeList(tableSQL);
 
