@@ -49,6 +49,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
+    private Button recurringTransactionBtn;
+    @FXML
     private VBox accountsVBox;
     @FXML
     private ListView<AccountInfo> accountListView;
@@ -98,6 +100,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             this.updateSearchOnChange();
         });
 
+        this.recurringTransactionBtn.setOnAction(this::createRecurringTransactionPopup);
+
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
         task.startTask();
@@ -142,6 +146,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             this.undo();
         });
+    }
+
+    private void createRecurringTransactionPopup(ActionEvent actionEvent) {
+        RecurringTransactionController controller = new RecurringTransactionController();
+        Scene scene = new Scene(controller);
+        this.createModal(this.getScene().getWindow(), scene, "Add Recurring Transaction");
     }
 
     private void openIgnoredTransactionEditor(ActionEvent actionEvent) {
