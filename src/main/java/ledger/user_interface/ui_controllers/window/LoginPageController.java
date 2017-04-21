@@ -63,15 +63,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-
-        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
-        if (lastDBFile != null) {
-            File file = new File(lastDBFile);
-            if (file.exists() && !file.isDirectory()) {
-                this.setChosenFile(file);
-            }
-            directory = file.getParentFile();
-        } else {
+        if (!checkForDbPref()) {
             setUpIntroHelp();
         }
 
@@ -102,6 +94,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
             setChosenFile(selectedFile);
+        } else {
+            checkForDbPref();
         }
     }
 
@@ -135,6 +129,21 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.filePath = file.getAbsolutePath();
         this.chooseFileBtn.setText(file.getName());
         this.password.requestFocus();
+    }
+
+    private boolean checkForDbPref(){
+        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
+        if (lastDBFile != null) {
+            File file = new File(lastDBFile);
+            if (file.exists() && !file.isDirectory()) {
+                this.setChosenFile(file);
+            } else{
+                this.chooseFileBtn.setText("Existing File");
+            }
+            directory = file.getParentFile();
+            return true;
+        }
+        return false;
     }
 
 }
