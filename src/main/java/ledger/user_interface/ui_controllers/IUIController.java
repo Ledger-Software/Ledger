@@ -121,7 +121,7 @@ public interface IUIController {
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable) {
-        createModal(parent, child, windowName, resizeable, Modality.APPLICATION_MODAL);
+        createModal(parent, child, windowName, resizeable, Modality.WINDOW_MODAL);
     }
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality) {
@@ -130,6 +130,7 @@ public interface IUIController {
 
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle) {
         Stage newStage = new Stage();
+        newStage.initOwner(parent);
         newStage.setScene(child);
         newStage.setResizable(resizeable);
         newStage.setTitle(windowName);
