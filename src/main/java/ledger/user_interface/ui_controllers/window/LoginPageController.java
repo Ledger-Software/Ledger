@@ -63,7 +63,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-        
+
         String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
         if (lastDBFile != null) {
             File file = new File(lastDBFile);
@@ -93,8 +93,8 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     private void selectFile() {
         FileChooser chooser = new FileChooser();
-        if(directory==null)
-        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (directory == null)
+            chooser.setInitialDirectory(new File(System.getProperty("user.home")));
         else
             chooser.setInitialDirectory(directory);
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
