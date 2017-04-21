@@ -556,4 +556,8 @@ public class DbController {
     }
 
 
+    public TaskWithReturn<List<Tag>> getAllTags() {
+        return new TaskWithReturn<>(db::getAllTags);
+    }
+
 }
