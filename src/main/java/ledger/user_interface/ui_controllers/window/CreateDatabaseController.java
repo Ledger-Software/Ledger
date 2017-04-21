@@ -64,7 +64,13 @@ public class CreateDatabaseController extends GridPane implements IUIController,
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
         fileChooser.getExtensionFilters().add(extFilter);
         fileChooser.setSelectedExtensionFilter(extFilter);
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
+        if (lastDBFile != null) {
+            File file = new File(lastDBFile);
+            fileChooser.setInitialDirectory(file.getParentFile());
+        }
+        else
+            fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
         File file = fileChooser.showSaveDialog(this.getScene().getWindow());
         if (file != null) {
             this.saveLocationButton.setText(file.getName());

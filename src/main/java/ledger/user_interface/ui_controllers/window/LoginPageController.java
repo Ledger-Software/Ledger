@@ -35,6 +35,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
     @FXML
     private Button newFileBtn;
     private String filePath;
+    private File directory;
 
 
     public LoginPageController() {
@@ -62,14 +63,7 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
                 login();
             }
         });
-        
-        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
-        if (lastDBFile != null) {
-            File file = new File(lastDBFile);
-            if (file.exists() && !file.isDirectory()) {
-                this.setChosenFile(file);
-            }
-        } else {
+        if (!checkForDbPref()) {
             setUpIntroHelp();
         }
 
@@ -91,12 +85,17 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
      */
     private void selectFile() {
         FileChooser chooser = new FileChooser();
-        chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        if (directory == null)
+            chooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        else
+            chooser.setInitialDirectory(directory);
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Ledger files (*.mv.db)", "*.mv.db");
         chooser.getExtensionFilters().add(extFilter);
         File selectedFile = chooser.showOpenDialog(chooseFileBtn.getScene().getWindow());
         if (selectedFile != null) {
             setChosenFile(selectedFile);
+        } else {
+            checkForDbPref();
         }
     }
 
@@ -130,6 +129,21 @@ public class LoginPageController extends GridPane implements Initializable, IUIC
         this.filePath = file.getAbsolutePath();
         this.chooseFileBtn.setText(file.getName());
         this.password.requestFocus();
+    }
+
+    private boolean checkForDbPref(){
+        String lastDBFile = PreferenceHandler.getStringPreference(PreferenceHandler.LAST_DATABASE_FILE_KEY);
+        if (lastDBFile != null) {
+            File file = new File(lastDBFile);
+            if (file.exists() && !file.isDirectory()) {
+                this.setChosenFile(file);
+            } else{
+                this.chooseFileBtn.setText("Existing File");
+            }
+            directory = file.getParentFile();
+            return true;
+        }
+        return false;
     }
 
 }
