@@ -8,6 +8,7 @@ import java.util.prefs.Preferences;
  */
 public class PreferenceHandler {
     public final static String LAST_DATABASE_FILE_KEY = "LAST_DATABASE_FILE_KEY";
+    public final static String FINANCE_ANALYSIS_HELP_SHOWN = "FINANCE_ANALYSIS_HELP_SHOWN";
     private final static String LEDGER_SOFTWARE_NODE_NAME = "LedgerSoftware";
 
     public static String getStringPreference(String key) {
