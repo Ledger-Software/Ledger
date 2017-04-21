@@ -20,18 +20,29 @@ public class Transaction implements IEntity, ITaggable {
     private int checkNumber;
     private long runningBalance;
 
+
+    private Account transferAccount;
+
     public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber) {
-        this(date, type, amount, account, payee, pending, tagList, note, checkNumber, -1);
+        this(date, type, amount, account, payee, pending, tagList, note, checkNumber, -1, null);
     }
 
     public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note) {
-        this(date, type, amount, account, payee, pending, tagList, note, -1, -1);
+        this(date, type, amount, account, payee, pending, tagList, note, -1, -1, null);
+    }
+    public Transaction(Date date, Type type, long amount, Account account,
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, Account transferAccount) {
+        this(date, type, amount, account, payee, pending, tagList, note, -1, -1, transferAccount);
+    }
+    public Transaction(Date date, Type type, long amount, Account account,
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, Account transferAccount) {
+        this(date, type, amount, account, payee, pending, tagList, note, checkNumber, -1, transferAccount);
     }
 
     public Transaction(Date date, Type type, long amount, Account account,
-                       Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id) {
+                       Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber, int id, Account transferAccount) {
         this.tagList = new ArrayList<>();
 
         this.date = date;
@@ -45,6 +56,7 @@ public class Transaction implements IEntity, ITaggable {
         this.note = note;
         this.id = id;
         this.checkNumber = checkNumber;
+        this.transferAccount = transferAccount;
     }
 
     /**
@@ -245,6 +257,24 @@ public class Transaction implements IEntity, ITaggable {
         this.note = note;
     }
 
+    /**
+     * Gets the Transaction's transferAccount
+     *
+     * @return transferAccount
+     */
+    public Account getTransferAccount() {
+        return transferAccount;
+    }
+
+    /**
+     * Sets the Transaction's transferAccount
+     *
+     * @param transferAccount The new Account
+     */
+    public void setTransferAccount(Account transferAccount) {
+        this.transferAccount = transferAccount;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -293,6 +323,7 @@ public class Transaction implements IEntity, ITaggable {
                 ", tagList=" + tagList +
                 ", note=" + note +
                 ", checkNumber=" + checkNumber +
+                ", transferAccount=" + transferAccount +
                 '}';
     }
 }

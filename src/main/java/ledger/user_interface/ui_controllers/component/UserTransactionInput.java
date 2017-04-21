@@ -20,7 +20,10 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Control that allows for user input of transactions. On calling getAccountSubmission it does sanitation and tells the
@@ -36,9 +39,12 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     @FXML
     private PayeeDropdown payeeText;
     @FXML
-    private AccountDropdown accountText;
+    private AccountDropdown destAccountText;
     @FXML
     private TextField tagText;
+    @FXML
+    private AccountDropdown sourceAccountText;
+
     @FXML
     private TextField amountText;
     @FXML
@@ -47,6 +53,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
     private ComboBox<Type> typeText;
     @FXML
     private Text checkLabel;
+    @FXML
+    private Text sourceLabel;
+    @FXML
+    private Text destLabel;
     @FXML
     private TextField checkField;
 
@@ -80,6 +90,26 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
                 checkField.setVisible(false);
             }
         };
+        ChangeListener<Type> transferListener = (observable, oldValue, newValue) -> {
+            if (new TypeComparator().compare(TypeConversion.ACC_TRANSFER, newValue) == 0) {
+                payeeText.getSelectionModel().clearSelection();
+                payeeText.setVisible(false);
+                payeeText.setManaged(false);
+                destAccountText.setVisible(true);
+                destAccountText.setManaged(true);
+                sourceLabel.setText("From:");
+                destLabel.setText("To:");
+
+            } else {
+                sourceAccountText.getSelectionModel().clearSelection();
+                payeeText.setVisible(true);
+                payeeText.setManaged(true);
+                destAccountText.setVisible(false);
+                destAccountText.setManaged(false);
+                destLabel.setText("Payee:");
+                sourceLabel.setText("Account:");
+            }
+        };
 
         this.notesText.setText("");
         TaskWithReturn<List<Type>> typeTask = DbController.INSTANCE.getAllTypes();
@@ -93,6 +123,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         typeTask.startTask();
         this.datePicker.setValue(LocalDate.now());
         this.typeText.valueProperty().addListener(checkListener);
+        this.typeText.valueProperty().addListener(transferListener);
     }
 
     /**
@@ -114,17 +145,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         boolean pending = this.pendingCheckBox.isSelected();
 
-        Payee payee = this.payeeText.getSelectedPayee();
-        if (InputSanitization.isInvalidPayee(payee)) {
-            this.setupErrorPopup("Invalid Payee entry.");
-            return null;
-        }
 
-        Account account = this.accountText.getSelectedAccount();
-        if (account == null) {
-            this.setupErrorPopup("No account selected.");
-            return null;
-        }
 
         List<Tag> tags = new ArrayList<Tag>() {{
             add(new Tag(tagText.getText(), ""));
@@ -140,7 +161,27 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         }
         double amountToSetDecimal = Double.parseDouble(amountString);
         long amount = Math.round(amountToSetDecimal * 100);
-
+        Account account = this.sourceAccountText.getSelectedAccount();
+        if (account == null) {
+            this.setupErrorPopup("No account selected.");
+            return null;
+        }
+        Account acc = this.destAccountText.getSelectedAccount();
+        Payee payee;
+        if (acc != null) {
+            if(acc.equals(account)){
+                this.setupErrorPopup("Accounts must be different for Transfers");
+                return null;
+            }
+            payee = new Payee("Transfer Payee", "");
+            amount = amount*-1;
+        } else {
+            payee = this.payeeText.getSelectedPayee();
+            if (InputSanitization.isInvalidPayee(payee)) {
+                this.setupErrorPopup("Invalid Payee entry.");
+                return null;
+            }
+        }
 
         Note notes = new Note(this.notesText.getText());
 
@@ -160,10 +201,10 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         if (checkNo.equals("")) {
             return new Transaction(date, type, amount, account,
-                    payee, pending, tags, notes);
+                    payee, pending, tags, notes, acc);
         } else {
             return new Transaction(date, type, amount, account,
-                    payee, pending, tags, notes, Integer.parseInt(checkNo));
+                    payee, pending, tags, notes, Integer.parseInt(checkNo), acc);
         }
 
 
@@ -179,7 +220,7 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         this.datePicker.setValue(currentTrans.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         this.typeText.setValue(currentTrans.getType());
         this.amountText.setText(Double.toString(currentTrans.getAmount() / 100.0));
-        this.accountText.setValue(currentTrans.getAccount());
+        this.sourceAccountText.setValue(currentTrans.getAccount());
         this.payeeText.setValue(currentTrans.getPayee());
         this.pendingCheckBox.setSelected(currentTrans.isPending());
 
@@ -190,6 +231,9 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         else
             this.tagText.setText("");
 
+        if (currentTrans.getType().equals(TypeConversion.ACC_TRANSFER)) {
+            destAccountText.setValue(currentTrans.getTransferAccount());
+        }
         Note note = currentTrans.getNote();
         if (note != null)
             this.notesText.setText(note.getNoteText());

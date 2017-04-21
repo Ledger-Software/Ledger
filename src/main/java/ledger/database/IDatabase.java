@@ -102,6 +102,8 @@ public interface IDatabase {
 
     boolean isTransactionIgnored(Transaction transaction) throws StorageException;
 
+    Transaction getTransactionWithoutId(Transaction transaction) throws StorageException;
+
 
 }
 

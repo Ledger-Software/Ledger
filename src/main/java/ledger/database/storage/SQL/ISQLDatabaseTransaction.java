@@ -4,6 +4,7 @@ import ledger.database.entity.*;
 import ledger.database.storage.SQL.SQLite.ISQLiteDatabase;
 import ledger.database.storage.table.*;
 import ledger.exception.StorageException;
+import ledger.io.input.TypeConversion;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +23,6 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         try {
             originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
-
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + TransactionTable.TABLE_NAME +
                     " (" + TransactionTable.TRANS_DATETIME +
                     "," + TransactionTable.TRANS_AMOUNT +
@@ -31,7 +31,8 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     "," + TransactionTable.TRANS_ACCOUNT_ID +
                     "," + TransactionTable.TRANS_PAYEE_ID +
                     "," + TransactionTable.TRANS_CHECK_NUMBER +
-                    ") VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    "," + TransactionTable.TRANS_TRANSFER_ACC_ID +
+                    ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setLong(2, transaction.getAmount());
             lookupAndSetTypeForSQLStatement(transaction, stmt, 3);
@@ -43,6 +44,30 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             lookupAndSetPayeeForSQLStatement(transaction, stmt, 6);
 
             stmt.setInt(7, transaction.getCheckNumber());
+            if (transaction.getTransferAccount() != null) {
+                try {
+                    Account existingAccount = null;
+                    if (transaction.getTransferAccount().getId() != -1) {
+                        stmt.setInt(8, transaction.getTransferAccount().getId());
+                    } else {
+                        existingAccount = getAccountForNameAndDescription(transaction.getTransferAccount().getName(), transaction.getTransferAccount().getDescription());
+
+                        if (existingAccount != null) {
+                            stmt.setInt(8, existingAccount.getId());
+
+                            // Write existing account ID to java object
+                            transaction.setTransferAccount(existingAccount);
+                        } else {
+                            insertAccount(transaction.getTransferAccount());
+                            stmt.setInt(8, transaction.getTransferAccount().getId());
+                        }
+                    }
+                } catch (SQLException e) {
+                    throw new StorageException("Error while looking up account for SQL statement", e);
+                }
+            } else {
+                stmt.setInt(8, -1);
+            }
 
             stmt.executeUpdate();
 
@@ -84,7 +109,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         try {
             originalAutoCommit = getDatabase().getAutoCommit();
             setDatabaseAutoCommit(false);
-
+            if (transaction.getId() == -1) {
+                transaction = getTransactionWithoutId(transaction);
+            }
             //First delete the corresponding Note
             PreparedStatement noteStatement = getDatabase().prepareStatement("DELETE FROM " + NoteTable.TABLE_NAME + " WHERE "
                     + NoteTable.NOTE_TRANS_ID + " = ?");
@@ -124,8 +151,9 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     TransactionTable.TRANS_TYPE_ID + "=?," +
                     TransactionTable.TRANS_PENDING + "=?," +
                     TransactionTable.TRANS_ACCOUNT_ID + "=?," +
-                    TransactionTable.TRANS_PAYEE_ID + "=?, " +
-                    TransactionTable.TRANS_CHECK_NUMBER + "=? " + "WHERE " +
+                    TransactionTable.TRANS_PAYEE_ID + "=?," +
+                    TransactionTable.TRANS_CHECK_NUMBER + "=?," +
+                    TransactionTable.TRANS_TRANSFER_ACC_ID + "=? " + "WHERE " +
                     TransactionTable.TRANS_ID + "=?");
             stmt.setLong(1, transaction.getDate().getTime());
             stmt.setLong(2, transaction.getAmount());
@@ -140,7 +168,14 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
 
             stmt.setInt(7, transaction.getCheckNumber());
 
-            stmt.setInt(8, transaction.getId());
+            if(transaction.getTransferAccount()!=null) {
+
+                stmt.setInt(8, transaction.getTransferAccount().getId());
+
+            } else {
+                stmt.setInt(8,-1);
+            }
+            stmt.setInt(9, transaction.getId());
 
             stmt.executeUpdate();
 
@@ -183,6 +218,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
                     " ," + TransactionTable.TRANS_CHECK_NUMBER +
+                    " ," + TransactionTable.TRANS_TRANSFER_ACC_ID +
                     " FROM " + TransactionTable.TABLE_NAME +
                     ";");
 
@@ -204,6 +240,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
                     ", " + TransactionTable.TRANS_CHECK_NUMBER +
+                    ", " + TransactionTable.TRANS_TRANSFER_ACC_ID +
                     " FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ACCOUNT_ID + "=?;");
             stmt.setInt(1, account.getId());
@@ -227,6 +264,7 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
                     ", " + TransactionTable.TRANS_ACCOUNT_ID +
                     ", " + TransactionTable.TRANS_PAYEE_ID +
                     ", " + TransactionTable.TRANS_CHECK_NUMBER +
+                    ", " + TransactionTable.TRANS_TRANSFER_ACC_ID +
                     " FROM " + TransactionTable.TABLE_NAME +
                     " WHERE " + TransactionTable.TRANS_ID + "=?;");
             stmt.setInt(1, transaction.getId());
@@ -254,14 +292,19 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
             int accountID = rs.getInt(TransactionTable.TRANS_ACCOUNT_ID);
             int payeeID = rs.getInt(TransactionTable.TRANS_PAYEE_ID);
             int checkNumber = rs.getInt(TransactionTable.TRANS_CHECK_NUMBER);
+            int transaccID = rs.getInt(TransactionTable.TRANS_TRANSFER_ACC_ID);
 
             Type type = getTypeForID(typeID);
             Account transAccount = getAccountForID(accountID);
             Payee payee = getPayeeForID(payeeID);
             List<Tag> tags = getTagsForTransactionID(transactionID);
             Note note = getNoteForTransactionID(transactionID);
+            Account transferAccount = null;
+            if (transaccID != -1) {
+                transferAccount = getAccountForID(transaccID);
+            }
 
-            Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, checkNumber, transactionID);
+            Transaction currentTransaction = new Transaction(date, type, amount, transAccount, payee, pending, tags, note, checkNumber, transactionID, transferAccount);
 
             transactionList.add(currentTransaction);
         }
@@ -652,4 +695,28 @@ public interface ISQLDatabaseTransaction extends ISQLiteDatabase {
         }
     }
 
+    @Override
+    default Transaction getTransactionWithoutId(Transaction transaction) throws StorageException {
+        try {
+            PreparedStatement getTransactionStmt = getDatabase().prepareStatement("SELECT * " +
+                    "FROM " + TransactionTable.TABLE_NAME + " WHERE " + TransactionTable.TRANS_ACCOUNT_ID + "=? AND "
+                    + TransactionTable.TRANS_PAYEE_ID + "=? AND " + TransactionTable.TRANS_DATETIME + "=? AND " + TransactionTable.TRANS_AMOUNT + "=? AND "
+                    + TransactionTable.TRANS_TRANSFER_ACC_ID + "=? AND " + TransactionTable.TRANS_TYPE_ID + "=? AND " + TransactionTable.TRANS_PENDING + "=?");
+            getTransactionStmt.setInt(1, transaction.getAccount().getId());
+            getTransactionStmt.setInt(2, transaction.getPayee().getId());
+            getTransactionStmt.setLong(3, transaction.getDate().getTime());
+            getTransactionStmt.setLong(4, transaction.getAmount());
+            getTransactionStmt.setInt(5, transaction.getTransferAccount().getId());
+            getTransactionStmt.setInt(6, transaction.getType().getId());
+            getTransactionStmt.setBoolean(7, transaction.isPending());
+            ResultSet rs = getTransactionStmt.executeQuery();
+
+            List<Transaction> transactions = extractTransactions(rs);
+            if(transactions.isEmpty())
+                return null;
+            return transactions.get(0);
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Couldnt find Transaction", e);
+        }
+    }
 }

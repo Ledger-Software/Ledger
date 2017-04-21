@@ -18,6 +18,7 @@ public class TypeConversion {
     private static final Type ACH_DEBIT = new Type("Account Debit", "");
     private static final Type MISC_DEBIT = new Type("Misc Debit", "");
     private static final Type MISC_CREDIT = new Type("Misc Credit", "");
+    public static final Type ACC_TRANSFER = new Type("Transfer", "");
 
     private static final Type UNKNOWN = new Type("UNKNOWN", "Unknown Type of transaction");
 
@@ -43,6 +44,8 @@ public class TypeConversion {
                 return MISC_CREDIT;
             case "CREDIT":
                 return MISC_CREDIT;
+            case "TRANSFER":
+                return ACC_TRANSFER;
             default:
                 return UNKNOWN;
         }
@@ -66,6 +69,8 @@ public class TypeConversion {
                 return MISC_DEBIT;
             case "Misc Credit":
                 return MISC_CREDIT;
+            case "Transfer":
+                return ACC_TRANSFER;
             default:
                 return UNKNOWN;
         }
@@ -82,6 +87,7 @@ public class TypeConversion {
         types.add(ACH_DEBIT);
         types.add(MISC_DEBIT);
         types.add(MISC_CREDIT);
+        types.add(ACC_TRANSFER);
         types.add(UNKNOWN);
 
         return types;

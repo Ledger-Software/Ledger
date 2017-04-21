@@ -1,8 +1,10 @@
 package ledger.database.storage;
 
+import ledger.controller.DbController;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
+import ledger.io.input.TypeConversion;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -22,9 +24,12 @@ public class H2DatabaseTest {
     private static Transaction sampleTransaction1;
     private static Transaction sampleTransaction2;
     private static Transaction sampleTransaction3;
+    private static Transaction sampleTransaction4;
     private static Type sampleType;
     private static Type sampleType2;
+    private static Type transferType;
     private static Account sampleAccount;
+    private static Account sampleAccount2;
     private static Payee samplePayee;
     private static Payee samplePayee2;
     private static Payee samplePayee3;
@@ -46,7 +51,9 @@ public class H2DatabaseTest {
     public void setupTestData() throws Exception {
         sampleType = new Type("Credit", "Purchased with a credit card");
         sampleType2 = new Type("Debit", "Purchased with a debit card");
+        transferType = TypeConversion.ACC_TRANSFER;
         sampleAccount = new Account("Chase", "Credit account with Chase Bank");
+        sampleAccount2 = new Account("US Bank", "Debit account with US Bank");
         samplePayee = new Payee("Meijer", "Grocery store");
         samplePayee2 = new Payee("Kroger", "Grocery store");
         samplePayee3 = new Payee("Wal-Mart", "Grocery store");
@@ -63,6 +70,7 @@ public class H2DatabaseTest {
         sampleTransaction1 = new Transaction(new Date(), sampleType, 4201, sampleAccount, samplePayee, true, sampleTagList, sampleNote);
         sampleTransaction2 = new Transaction(new Date(), sampleType, 103, sampleAccount, samplePayee, true, sampleTagList, sampleNote2);
         sampleTransaction3 = new Transaction(new Date(), sampleType, 3304, sampleAccount, samplePayee, false, sampleTagList, sampleNote3);
+        sampleTransaction4 = new Transaction(new Date(), transferType, 3321, sampleAccount2, new Payee("Transfer Payee",""), false, sampleTagList, sampleNote3, -1, -1, sampleAccount);
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
@@ -73,6 +81,8 @@ public class H2DatabaseTest {
 
         database.insertType(sampleType);
         database.insertType(sampleType2);
+        database.insertAccount(sampleAccount);
+        database.insertAccount(sampleAccount2);
     }
 
     @Test
@@ -660,8 +670,6 @@ public class H2DatabaseTest {
         assertEquals(database.isTransactionIgnored(sampleTransaction1), true);
 
     }
-
-
     @AfterClass
     public static void afterTests() throws Exception {
         database.shutdown();
