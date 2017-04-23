@@ -172,23 +172,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
-//    private void undo() {
-//        String topMessage = DbController.INSTANCE.undoPeekMessage();
-//
-//        if (topMessage == null)
-//            return;
-//
-//        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-//        alert.setTitle("Undo");
-//        alert.setHeaderText("Do you wish to undo the follow action?");
-//        alert.setContentText(topMessage);
-//
-//        Optional<ButtonType> result = alert.showAndWait();
-//        if (result.isPresent() && result.get() == ButtonType.OK) {
-//            DbController.INSTANCE.undo();
-//        }
-//    }
-
     private void openAutoTaggingEditor(ActionEvent actionEvent) {
         AutoTaggingTableWindow window = new AutoTaggingTableWindow();
         Scene scene = new Scene(window);
