@@ -362,6 +362,43 @@ public class DbController {
     }
 
     /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Tag
+     *
+     * @param tag The tag to edit
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn editTag(final Tag tag) {
+        TaskNoReturn task = generateEditTag(tag);
+
+        Tag oldTag = null;
+//        try {
+        oldTag = db.getTagForNameAndDescription(tag.getName(), tag.getDescription());
+//        } catch (StorageException ignored) {
+//        }
+
+        undoStack.push(new UndoAction(generateEditTag(oldTag), "Undo Edit Payee"));
+
+        return task;
+    }
+
+    private TaskNoReturn generateEditTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.editTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
+
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all stored Payees
+     *
+     * @return A task for the Async Call that returns a list of all the Payees
+     */
+    public TaskWithReturn<List<Tag>> getAllTags() {
+        return new TaskWithReturn<>(db::getAllTags);
+
+    }
+
+    /**
      * Creates a ITask that can be used to make an asynchronous call to the database to get all Tags associated with a
      * Payee
      *
