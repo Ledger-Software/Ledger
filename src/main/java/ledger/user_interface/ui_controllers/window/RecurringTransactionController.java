@@ -1,6 +1,7 @@
 package ledger.user_interface.ui_controllers.window;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -68,5 +69,11 @@ public class RecurringTransactionController extends GridPane implements IUIContr
             this.typeText.setDisable(false);
         });
         typeTask.startTask();
+
+        this.addButton.setOnAction(this::addRecurringTransaction);
+    }
+
+    private void addRecurringTransaction(ActionEvent actionEvent) {
+        System.out.println("Clicky");
     }
 }
