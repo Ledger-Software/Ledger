@@ -1,15 +1,15 @@
 package ledger.database.entity;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * Entity that holds a single Recurring Transaction
  */
 public class RecurringTransaction implements IEntity {
-    private Date startDate;
-    private Date endDate;
+    private Calendar startDate;
+    private Calendar endDate;
     private Type type;
     private long amount;
     private Account account;
@@ -19,12 +19,12 @@ public class RecurringTransaction implements IEntity {
     private Note note;
     private Frequency frequency;
 
-    public RecurringTransaction(Date startDate, Date endDate, Type type, long amount, Account account, Payee payee, List<Tag>
+    public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency) {
         this(startDate, endDate, type, amount, account, payee, tagList, note, frequency, -1);
     }
 
-    public RecurringTransaction(Date startDate, Date endDate, Type type, long amount, Account account, Payee payee, List<Tag>
+    public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
         this.tagList = new ArrayList();
 
@@ -53,9 +53,9 @@ public class RecurringTransaction implements IEntity {
     /**
      * Gets the Recurring Transaction's start date
      *
-     * @return date
+     * @return Calendar
      */
-    public Date getStartDate() {
+    public Calendar getStartDate() {
         return startDate;
     }
 
@@ -64,16 +64,16 @@ public class RecurringTransaction implements IEntity {
      *
      * @param startDate the new start date
      */
-    public void setStartDate(Date startDate) {
+    public void setStartDate(Calendar startDate) {
         this.startDate = startDate;
     }
 
     /**
      * Get's the Recurring Transaction's end date
      *
-     * @return date
+     * @return Calendar
      */
-    public Date getEndDate() {
+    public Calendar getEndDate() {
         return endDate;
     }
 
@@ -82,7 +82,7 @@ public class RecurringTransaction implements IEntity {
      *
      * @param endDate the new end date
      */
-    public void setEndDate(Date endDate) {
+    public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
     }
 
