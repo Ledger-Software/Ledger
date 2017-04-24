@@ -20,6 +20,7 @@ public class CheckNumberEventHandler implements EventHandler<TableColumn.CellEdi
     public void handle(TableColumn.CellEditEvent<Transaction, Integer> t) {
         Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         Integer checkNumberToSet = t.getNewValue();
+        TransactionTableView transactionTableView = (TransactionTableView) t.getTableView();
 
         if (checkNumberToSet == null) {
             setupErrorPopup("Provided check number is invalid", new Exception());
@@ -30,7 +31,11 @@ public class CheckNumberEventHandler implements EventHandler<TableColumn.CellEdi
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Edit Transfer Check Number");
             alert.setHeaderText("This change will cause the matching transfer to change as well.");
-            alert.setContentText("The check number will change from "+transaction.getCheckNumber() +" to "+ checkNumberToSet+ ". Is this okay?");
+            if(transaction.getCheckNumber() ==-1){
+                alert.setContentText("The check number will be set to " + checkNumberToSet + ". Is this okay?");
+            } else {
+                alert.setContentText("The check number will change from " + transaction.getCheckNumber() + " to " + checkNumberToSet + ". Is this okay?");
+            }
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.get() != ButtonType.OK){
