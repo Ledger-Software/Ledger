@@ -8,17 +8,17 @@ import java.util.List;
  * Entity that holds a single Transaction
  */
 public class Transaction implements IEntity, ITaggable {
-    private Date date;
-    private Type type;
-    private long amount;
-    private Account account;
-    private Payee payee;
-    private boolean pending;
-    private int id;
-    private List<Tag> tagList;
-    private Note note;
-    private int checkNumber;
-    private long runningBalance;
+    protected Date date;
+    protected Type type;
+    protected long amount;
+    protected Account account;
+    protected Payee payee;
+    protected boolean pending;
+    protected int id;
+    protected List<Tag> tagList;
+    protected Note note;
+    protected int checkNumber;
+    protected long runningBalance;
 
     public Transaction(Date date, Type type, long amount, Account account,
                        Payee payee, boolean pending, List<Tag> tagList, Note note, int checkNumber) {

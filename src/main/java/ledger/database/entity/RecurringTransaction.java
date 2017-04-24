@@ -1,23 +1,17 @@
 package ledger.database.entity;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Entity that holds a single Recurring Transaction
  */
-public class RecurringTransaction implements IEntity {
+public class RecurringTransaction extends Transaction {
     private Calendar startDate;
     private Calendar endDate;
-    private Type type;
-    private long amount;
-    private Account account;
-    private Payee payee;
-    private int id;
-    private List<Tag> tagList;
-    private Note note;
     private Frequency frequency;
+    private int id;
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency) {
@@ -26,21 +20,11 @@ public class RecurringTransaction implements IEntity {
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
-        this.tagList = new ArrayList();
-
+        super(new Date(), type, amount, account, payee, false, tagList, note);
         this.startDate = startDate;
         this.endDate = endDate;
-        this.type = type;
-        this.amount = amount;
-        this.account = account;
-        this.payee = payee;
-        if (tagList != null) {
-            this.tagList.addAll(tagList);
-        }
-        this.note = note;
         this.frequency = frequency;
         this.id = id;
-
     }
 
     /**
