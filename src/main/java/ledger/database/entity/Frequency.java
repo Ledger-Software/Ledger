@@ -1,7 +1,12 @@
 package ledger.database.entity;
 
 /**
- * Created by Jesse Shellabarger on 4/23/2017.
+ * Possible occurrence frequencies for {@link RecurringTransaction}
  */
 public enum Frequency {
+    Daily,
+    Weekly,
+    Monthly,
+    Yearly,
+    UNKNOWN
 }

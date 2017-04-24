@@ -1,5 +1,6 @@
 package ledger.database.storage.SQL.H2;
 
+import ledger.database.entity.Frequency;
 import ledger.database.entity.Type;
 import ledger.database.storage.SQL.*;
 import ledger.database.storage.table.*;
@@ -14,7 +15,7 @@ import java.util.LinkedList;
  * Database handler for h2 storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction {
+public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction, ISQLFrequency {
 
     private Connection databaseObject;
 
@@ -59,13 +60,21 @@ public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBa
         tableSQL.add((IgnoredExpressionTable.CreateStatementH2()));
 
         tableSQL.add(RecurringTransactionTable.CreateStatementH2());
+        tableSQL.add(FrequencyTable.CreateStatementH2());
 
         executeList(tableSQL);
 
-        if (this.getAllTypes().size() == 0)
+        if (this.getAllTypes().size() == 0) {
             for (Type type : TypeTable.defaultTypes()) {
                 this.insertType(type);
             }
+        }
+
+        if (this.getAllFrequencies().size() == 0) {
+            for (Frequency freq : FrequencyTable.getDefaultFrequencies()) {
+                this.insertFrequency(freq);
+            }
+        }
     }
 
     @Override

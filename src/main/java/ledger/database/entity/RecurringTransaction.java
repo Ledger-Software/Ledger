@@ -43,13 +43,6 @@ public class RecurringTransaction implements IEntity {
 
     }
 
-    public enum Frequency {
-        Daily,
-        Weekly,
-        Monthly,
-        Yearly
-    }
-
     /**
      * Gets the Recurring Transaction's start date
      *
