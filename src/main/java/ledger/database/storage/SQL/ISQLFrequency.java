@@ -21,7 +21,7 @@ public interface ISQLFrequency extends ISQLiteDatabase {
     default void insertFrequency(Frequency frequency) throws StorageException {
         try {
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + FrequencyTable.TABLE_NAME +
-                " (" + FrequencyTable.FREQUENCY_NAME + ") VALUES (?)");
+                    " (" + FrequencyTable.FREQUENCY_NAME + ") VALUES (?)");
             stmt.setString(1, FrequencyConverter.convertFrequencyToString(frequency));
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
@@ -45,5 +45,23 @@ public interface ISQLFrequency extends ISQLiteDatabase {
             throw new StorageException("Error while getting all frequencies from database.", e);
         }
         return frequencies;
+    }
+
+    @Override
+    default int getIdForFrequency(Frequency frequency) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + FrequencyTable.FREQUENCY_ID +
+                    " FROM " + FrequencyTable.TABLE_NAME +
+                    " WHERE " + FrequencyTable.FREQUENCY_NAME + "=?");
+            stmt.setString(1, FrequencyConverter.convertFrequencyToString(frequency));
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(FrequencyTable.FREQUENCY_ID);
+            }
+            return -1;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while getitng ID for frequency.", e);
+        }
     }
 }

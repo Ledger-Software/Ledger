@@ -8,7 +8,7 @@ public class RecurringTransactionTable {
     public static final String RECURRING_ID = "RECURRING_ID";
     public static final String RECURRING_START_DATE = "RECURRING_START_DATE";
     public static final String RECURRING_END_DATE = "RECURRING_END_DATE";
-    public static final String RECURRING_FREQUENCY = "RECURRING_FREQUENCY";
+    public static final String RECURRING_FREQUENCY_ID = "RECURRING_FREQUENCY_ID";
     public static final String RECURRING_AMOUNT = "RECURRING_AMOUNT";
     public static final String RECURRING_ACCOUNT_ID = "RECURRING_ACCOUNT_ID";
     public static final String RECURRING_PAYEE_ID = "RECURRING_PAYEE_ID";
@@ -31,12 +31,14 @@ public class RecurringTransactionTable {
                         "%s INT NOT NULL, " + //TYPE_ID
                         "FOREIGN KEY (%s) REFERENCES %s(%s) ON DELETE CASCADE, " + //ACCOUNT FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s), " + //PAYEE FOREIGN KEY CONSTRAINT
-                        "FOREIGN KEY (%s) REFERENCES %s(%s)" + //TYPE FOREIGN KEY CONSTRAINT
-                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY, RECURRING_AMOUNT,
+                        "FOREIGN KEY (%s) REFERENCES %s(%s), " + //TYPE FOREIGN KEY CONSTRAINT
+                        "FOREIGN KEY (%s) REFERENCES %s(%s)" + //FREQUENCY FOREIGN KEY CONSTRAINT
+                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY_ID, RECURRING_AMOUNT,
                 RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
                 RECURRING_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
                 RECURRING_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID,
-                RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID
+                RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID,
+                RECURRING_FREQUENCY_ID, FrequencyTable.TABLE_NAME, FrequencyTable.FREQUENCY_ID
         );
     }
 
@@ -58,12 +60,14 @@ public class RecurringTransactionTable {
                         "%s INT NOT NULL, " + //TYPE_ID
                         "FOREIGN KEY (%s) REFERENCES %s(%s) ON DELETE CASCADE, " + //ACCOUNT FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s), " + //PAYEE FOREIGN KEY CONSTRAINT
-                        "FOREIGN KEY (%s) REFERENCES %s(%s)" + //TYPE FOREIGN KEY CONSTRAINT
-                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY, RECURRING_AMOUNT,
+                        "FOREIGN KEY (%s) REFERENCES %s(%s)," + //TYPE FOREIGN KEY CONSTRAINT
+                        "FOREIGN KEY (%s) REFERENCES %s(%s)" + //FREQUENCY FOREIGN KEY CONSTRAINT
+                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY_ID, RECURRING_AMOUNT,
                 RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
                 RECURRING_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
                 RECURRING_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID,
-                RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID
+                RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID,
+                RECURRING_FREQUENCY_ID, FrequencyTable.TABLE_NAME, FrequencyTable.FREQUENCY_ID
         );
     }
 }
