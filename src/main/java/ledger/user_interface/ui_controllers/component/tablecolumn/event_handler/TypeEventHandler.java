@@ -43,7 +43,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
             executeAmountFlipTypeEdit(result, transaction, typeToSet, transactionTableView);
         } else if(typeToSet.equals(TypeConversion.ACC_TRANSFER)){
             setupErrorPopup("Transfers can not be created in the Table, Please use Add Transaction Popup");
-            transactionTableView.updateTransactionTableView();
+            ((TransactionTableView)t.getTableView()).updateTransactionTableView();
         } else {
             transaction.setType(typeToSet);
 

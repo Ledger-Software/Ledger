@@ -34,22 +34,21 @@ public class PayeeEventHandler implements EventHandler<TableColumn.CellEditEvent
             task.waitForComplete();
         } else if (t.getNewValue() instanceof Account) {
             Account accountToSet = (Account)t.getNewValue();
-            TransactionTableView transactionTableView = (TransactionTableView) t.getTableView();
             if(accountToSet.equals(transaction.getAccount())){
                 setupErrorPopup("Source and Destination accounts can not be the same");
                 transaction.setTransferAccount((Account)t.getOldValue());
-                transactionTableView.updateTransactionTableView();
+                ((TransactionTableView)t.getTableView()).updateTransactionTableView();
                 return;
             }
             transaction.setTransferAccount(accountToSet);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             if(transaction.getAmount()>=0) {
                 alert.setTitle("Edit Transfer Destination Acconut");
-                alert.setContentText("The Destination Account will change from "+transaction.getAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
+                alert.setContentText("The Destination Account will change from "+transaction.getTransferAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
             }
             else {
                 alert.setTitle("Edit Transfer Source Account");
-                alert.setContentText("The Source Account will change from "+transaction.getAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
+                alert.setContentText("The Source Account will change from "+transaction.getTransferAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
             }
             alert.setHeaderText("This change will cause the other Transfer to change as well.");
 

@@ -21,15 +21,13 @@ public class AccountEventHandler implements EventHandler<TableColumn.CellEditEve
     public void handle(TableColumn.CellEditEvent<Transaction, Account> t) {
         Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         Account accountToSet = t.getNewValue();
-        TransactionTableView transactionTableView = (TransactionTableView) t.getTableView();
-
 
         if(transaction.getType().getName().equals("Transfer")){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             if(accountToSet.equals(transaction.getTransferAccount())){
                 setupErrorPopup("Source and Destination accounts can not be the same");
                 transaction.setAccount(t.getOldValue());
-                transactionTableView.updateTransactionTableView();
+                ((TransactionTableView)t.getTableView()).updateTransactionTableView();
 
                 return;
             }
