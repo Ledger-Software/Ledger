@@ -64,60 +64,6 @@ public class RecurringTransaction extends Transaction {
     }
 
     /**
-     * Get's the Recurring Transaction {@link Type}
-     *
-     * @return type
-     */
-    public Type getType() {
-        return type;
-    }
-
-    /**
-     * Set's the Recurring Transaction {@link Type}
-     *
-     * @param type the new type
-     */
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    /**
-     * Get the Recurring Transaction amount
-     *
-     * @return long
-     */
-    public long getAmount() {
-        return amount;
-    }
-
-    /**
-     * Set the Recurring Transaction amount
-     *
-     * @param amount the new amount
-     */
-    public void setAmount(long amount) {
-        this.amount = amount;
-    }
-
-    /**
-     * Gets the Recurring Transaction {@link Account}
-     *
-     * @return account
-     */
-    public Account getAccount() {
-        return account;
-    }
-
-    /**
-     * Sets the Recurring Transaction {@link Account}
-     *
-     * @param account the new {@link Account}
-     */
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    /**
      * Gets the Recurring Transaction database ID number
      *
      * @return id
@@ -135,23 +81,6 @@ public class RecurringTransaction extends Transaction {
         this.id = id;
     }
 
-    /**
-     * Gets the Recurring Transaction {@link Note}
-     *
-     * @return Note
-     */
-    public Note getNote() {
-        return note;
-    }
-
-    /**
-     * Sets the Recurring Transaction {@link Note}
-     *
-     * @param note
-     */
-    public void setNote(Note note) {
-        this.note = note;
-    }
 
     /**
      * Gets the RecurringTransaction frequency
@@ -162,53 +91,8 @@ public class RecurringTransaction extends Transaction {
         return frequency;
     }
 
-    /**
-     * Gets the Recurring Transaction TagList
-     *
-     * @return List of tags
-     */
-    public List<Tag> getTagList() {
-        return tagList;
-    }
+    public void setFrequency(Frequency freq) { this.frequency = freq;}
 
-    /**
-     * Sets the Recurring Transaction TagList
-
-     *
-     * @param tagList
-     */
-    public void setTagList(List<Tag> tagList) {
-        this.tagList = tagList;
-    }
-
-    /**
-     * Sets the Recurring Transaction frequency
-
-     *
-     * @param frequency
-     */
-    public void setFrequency(Frequency frequency) {
-        this.frequency = frequency;
-    }
-
-    /**
-     * Gets the Recurring Transaction {@link Payee}
-     *
-     * @return payee
-     */
-
-    public Payee getPayee() {
-        return payee;
-    }
-
-    /**
-     * Sets the Recurring Transaction {@link Payee}
-     *
-     * @param payee the new payee
-     */
-    public void setPayee(Payee payee) {
-        this.payee = payee;
-    }
 
     @Override
     public boolean equals(Object o) {
