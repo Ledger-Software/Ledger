@@ -22,7 +22,7 @@ public class FrequencyTable {
     public static String CreateStatementSQLite() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
             "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "%s TEXT NOT NULL, " +
+            "%s TEXT NOT NULL " +
             ")", TABLE_NAME, FREQUENCY_ID, FREQUENCY_NAME);
     }
 
@@ -34,7 +34,7 @@ public class FrequencyTable {
     public static String CreateStatementH2() {
         return String.format("CREATE TABLE IF NOT EXISTS %s " +
                         "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-                        "%s TEXT NOT NULL, " +
+                        "%s TEXT NOT NULL" +
                 ")", TABLE_NAME, FREQUENCY_ID, FREQUENCY_NAME);
     }
 

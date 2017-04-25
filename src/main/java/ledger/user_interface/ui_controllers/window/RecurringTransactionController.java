@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
+import ledger.database.entity.Frequency;
 import ledger.database.entity.Type;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
@@ -52,6 +53,7 @@ public class RecurringTransactionController extends GridPane implements IUIContr
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //TaskWithReturn<List<Frequency>> freqTask = DbController.INSTANCE.getAll
         this.frequencyText.getItems().addAll(new ArrayList<String>(){{
             add("Daily");
             add("Weekly");
@@ -74,6 +76,6 @@ public class RecurringTransactionController extends GridPane implements IUIContr
     }
 
     private void addRecurringTransaction(ActionEvent actionEvent) {
-        System.out.println("Clicky");
+
     }
 }
