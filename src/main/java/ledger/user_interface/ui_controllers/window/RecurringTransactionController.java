@@ -6,11 +6,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountDropdown;
 import ledger.user_interface.ui_controllers.component.PayeeDropdown;
 import ledger.user_interface.utils.InputSanitization;
@@ -131,6 +133,12 @@ public class RecurringTransactionController extends GridPane implements IUIContr
         RecurringTransaction recurringTrans = new RecurringTransaction(startDate, endDate, type, amount, account, payee,
                 null, null, frequency);
         TaskNoReturn addRecurringTransTask = DbController.INSTANCE.insertRecurringTransaction(recurringTrans);
+        addRecurringTransTask.RegisterSuccessEvent(this::closeWindow);
+        addRecurringTransTask.RegisterFailureEvent(Throwable::printStackTrace);
         addRecurringTransTask.startTask();
+    }
+
+    private void closeWindow() {
+        Startup.INSTANCE.runLater(() -> ((Stage) this.getScene().getWindow()).close());
     }
 }

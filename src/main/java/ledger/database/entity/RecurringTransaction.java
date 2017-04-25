@@ -131,8 +131,8 @@ public class RecurringTransaction extends Transaction {
     @Override
     public String toString() {
         return "RecurringTransaction{" +
-                "startDate=" + startDate +
-                ", endDate=" + endDate +
+                "startDate=" + startDate.getTime() +
+                ", endDate=" + endDate.getTime() +
                 ", type=" + type +
                 ", amount=" + amount +
                 ", account=" + account +
