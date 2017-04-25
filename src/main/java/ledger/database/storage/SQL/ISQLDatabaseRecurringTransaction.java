@@ -32,7 +32,7 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
                     "," + RecurringTransactionTable.RECURRING_ACCOUNT_ID +
                     "," + RecurringTransactionTable.RECURRING_PAYEE_ID +
                     "," + RecurringTransactionTable.RECURRING_TYPE_ID +
-                    ") VALUES (?, ?, ?, ?, ?, ?, ?");
+                    ") VALUES (?, ?, ?, ?, ?, ?, ?);");
 
             stmt.setLong(1, trans.getStartDate().getTimeInMillis());
             stmt.setLong(2, trans.getEndDate().getTimeInMillis());
