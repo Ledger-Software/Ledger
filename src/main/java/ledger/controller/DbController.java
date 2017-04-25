@@ -555,5 +555,31 @@ public class DbController {
         return new TaskWithReturn<>(db::getAllIgnoredExpressions);
     }
 
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all {@link Frequency}
+     *
+     * @return A task for the Async Call that returns a list of all the {@link Frequency} objects that exist
+     */
+    public TaskWithReturn<List<Frequency>> getAllFrequencies() {
+        return new TaskWithReturn<>(db::getAllFrequencies);
+    }
 
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all {@link RecurringTransaction}
+     *
+     * @return A task for the Async Call that returns a list of all the {@link RecurringTransaction}
+     */
+    public TaskWithReturn<List<RecurringTransaction>> getAllRecurringTransactions() {
+        return new TaskWithReturn<>(db::getAllRecurringTransactions);
+    }
+
+    public TaskNoReturn insertRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        undoStack.push(new UndoAction(generateDeleteRecurringTransaction(recurringTransaction), "Undo Insert Recurring Transaction"));
+        return new TaskNoReturn(() -> db.insertRecurringTransaction(recurringTransaction));
+    }
+
+    private TaskNoReturn generateDeleteRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        return new TaskNoReturn(() -> db.deleteRecurringTransaction(recurringTransaction));
+    }
 }

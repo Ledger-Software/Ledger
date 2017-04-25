@@ -52,6 +52,17 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
     }
 
     @Override
+    default void deleteRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("DELETE FROM " + RecurringTransactionTable.TABLE_NAME +
+                    " WHERE " + RecurringTransactionTable.RECURRING_ID + " = ?;");
+            stmt.setInt(1, recurringTransaction.getId());
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Error while deleting Recurring Transaction from the database.", e);
+        }
+    }
+
+    @Override
     default List<RecurringTransaction> getAllRecurringTransactions() throws StorageException {
         List<RecurringTransaction> recurringTransactions = new ArrayList();
         try {

@@ -112,8 +112,9 @@ public interface IDatabase {
 
     void insertRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
 
-    List<RecurringTransaction> getAllRecurringTransactions() throws StorageException;
+    void deleteRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
 
+    List<RecurringTransaction> getAllRecurringTransactions() throws StorageException;
 
 }
 
