@@ -55,8 +55,8 @@ public class SQLiteDatabase extends DataBaseManager implements ISQLDatabaseAccou
 
         tableSQL.add((IgnoredExpressionTable.CreateStatementSQLite()));
 
-        tableSQL.add(RecurringTransactionTable.CreateStatementSQLite());
         tableSQL.add(FrequencyTable.CreateStatementSQLite());
+        tableSQL.add(RecurringTransactionTable.CreateStatementSQLite());
 
         executeList(tableSQL);
 
