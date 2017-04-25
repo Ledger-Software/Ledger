@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * Database handler for h2 storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction, ISQLFrequency {
+public class H2Database extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction, ISQLDatabaseFrequency {
 
     private Connection databaseObject;
 

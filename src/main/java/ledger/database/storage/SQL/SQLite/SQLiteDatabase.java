@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * Database handler for SQLite storage mechanism.
  */
 @SuppressWarnings("SqlDialectInspection") // TODO: Find how to get this integration working.
-public class SQLiteDatabase extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction, ISQLFrequency {
+public class SQLiteDatabase extends DataBaseManager implements ISQLDatabaseAccountBalance, ISQLDatabaseTransaction, ISQLDatabaseNote, ISQLDatabasePayee, ISQLDatabaseAccount, ISQLDatabaseTag, ISQLDatabaseType, ISQLDatabaseIgnoredExpression, ISQLDatabaseRecurringTransaction, ISQLDatabaseFrequency {
 
     private Connection databaseObject;
 

@@ -108,6 +108,8 @@ public interface IDatabase {
 
     int getIdForFrequency(Frequency frequency) throws StorageException;
 
+    Frequency getFrequencyById(int id) throws StorageException;
+
     void insertRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
 
     List<RecurringTransaction> getAllRecurringTransactions() throws StorageException;

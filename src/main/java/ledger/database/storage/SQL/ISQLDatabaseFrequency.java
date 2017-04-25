@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Manages database calls for {@link Frequency} objects.
  */
-public interface ISQLFrequency extends ISQLiteDatabase {
+public interface ISQLDatabaseFrequency extends ISQLiteDatabase {
 
     @Override
     default void insertFrequency(Frequency frequency) throws StorageException {
@@ -62,6 +62,26 @@ public interface ISQLFrequency extends ISQLiteDatabase {
             return -1;
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while getitng ID for frequency.", e);
+        }
+    }
+
+    @Override
+    default Frequency getFrequencyById(int id) throws StorageException {
+        Frequency toReturn = Frequency.UNKNOWN;
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("SELECT " + FrequencyTable.FREQUENCY_NAME +
+                    " FROM " + FrequencyTable.TABLE_NAME +
+                    " WHERE " + FrequencyTable.FREQUENCY_ID + "=?");
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                toReturn = FrequencyConverter.convertStringToFrequency(rs.getString(FrequencyTable.FREQUENCY_NAME));
+            }
+
+            return toReturn;
+        } catch (java.sql.SQLException e) {
+            throw new StorageException("Unable to get Frequency from database by ID.", e);
         }
     }
 }
