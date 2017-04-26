@@ -23,6 +23,7 @@ public class PayeeComboBoxTableCell extends ComboBoxTableCell<Transaction, IEnti
     private ObjectProperty<StringConverter<IEntity>> converterObjectProperty;
 
     public PayeeComboBoxTableCell(ObservableList observableAllPayees, ObservableList observableAllAccounts) {
+
         this.accounts = observableAllAccounts;
         this.payees = observableAllPayees;
 
@@ -30,6 +31,7 @@ public class PayeeComboBoxTableCell extends ComboBoxTableCell<Transaction, IEnti
 
 
         this.converterProperty().bindBidirectional(this.converterObjectProperty);
+
 
 
     }
@@ -40,7 +42,7 @@ public class PayeeComboBoxTableCell extends ComboBoxTableCell<Transaction, IEnti
         if (empty) {
 
         } else if (item instanceof Account) {
-            ((PayeeComboBoxConverter)this.converterObjectProperty.get()).setIsAcc(true);
+           ((PayeeComboBoxConverter)this.converterObjectProperty.get()).setIsAcc(true);
 
             this.getItems().setAll(accounts);
         } else {

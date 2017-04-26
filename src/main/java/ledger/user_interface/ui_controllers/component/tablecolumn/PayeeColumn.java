@@ -7,6 +7,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.ComboBoxTableCell;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskWithReturn;
@@ -20,6 +22,7 @@ import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.CustomCells.PayeeComboBoxTableCell;
 import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.PayeeEventHandler;
 import ledger.user_interface.utils.PayeeComboboxComparator;
+import ledger.user_interface.utils.PayeeStringConverter;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,22 +51,24 @@ public class PayeeColumn extends TableColumn<Transaction, IEntity> implements IU
         getAllAccountsTask.startTask();
         List<Account> allAccounts = getAllAccountsTask.waitForResult();
         this.observableAllAccounts = FXCollections.observableList(allAccounts);
+        this.setCellFactory(ComboBoxTableCell.forTableColumn(new PayeeStringConverter(), observableAllPayees));
         this.setCellFactory(param -> new PayeeComboBoxTableCell(observableAllPayees, observableAllAccounts));
-        this.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Transaction, IEntity>, ObservableValue<IEntity>>() {
-
-            @Override
-            public ObservableValue<IEntity> call(CellDataFeatures<Transaction, IEntity> param) {
-                Transaction trans =  param.getValue();
-                if (trans.getType().equals(TypeConversion.ACC_TRANSFER)) {
-                    return new SimpleObjectProperty(trans.getTransferAccount());
-                }
-
-
-                return new SimpleObjectProperty(trans.getPayee());
-            }
-
-
-        });
+        this.setCellValueFactory(new PropertyValueFactory<Transaction, IEntity>("payee"));
+//        this.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Transaction, IEntity>, ObservableValue<IEntity>>() {
+//
+//            @Override
+//            public ObservableValue<IEntity> call(CellDataFeatures<Transaction, IEntity> param) {
+//                Transaction trans =  param.getValue();
+//                if (trans.getType().equals(TypeConversion.ACC_TRANSFER)) {
+//                    return new SimpleObjectProperty(trans.getTransferAccount());
+//                }
+//
+//
+//                return new SimpleObjectProperty(trans.getPayee());
+//            }
+//
+//
+//        });
         this.setOnEditCommit(new PayeeEventHandler());
         this.setComparator(new PayeeComboboxComparator());
 
