@@ -9,7 +9,7 @@ import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 
 /**
- * Created by gert on 3/31/17.
+ * {@link EventHandler} for {@link ledger.user_interface.ui_controllers.component.tablecolumn.NoteColumn}
  */
 public class NoteEventHandler implements EventHandler<TableColumn.CellEditEvent<Transaction, Note>>, IUIController {
     @Override

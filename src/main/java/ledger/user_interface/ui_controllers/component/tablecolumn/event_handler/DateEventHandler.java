@@ -27,7 +27,7 @@ public class DateEventHandler implements EventHandler<TableColumn.CellEditEvent<
         Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         LocalDate localDateToSet = t.getNewValue();
         t.getOldValue();
-        java.util.Date dateToSet = java.sql.Date.valueOf(localDateToSet);
+        java.util.Date dateToSet = new java.util.Date(java.sql.Date.valueOf(localDateToSet).getTime());
 
         if(transaction.getType().getName().equals("Transfer")){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

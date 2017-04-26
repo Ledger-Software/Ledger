@@ -7,7 +7,7 @@ import ledger.database.entity.Payee;
 import java.util.Comparator;
 
 /**
- * Created by gert on 4/26/17.
+ * {@link Comparator} for {@link Payee} and {@link Account} that does it based on name for the mixed table cell.
  */
 public class PayeeComboboxComparator  implements Comparator<IEntity> {
     @Override

@@ -6,7 +6,7 @@ import ledger.database.entity.IEntity;
 import ledger.database.entity.Payee;
 
 /**
- * Created by gert on 4/26/17.
+ * {@link StringConverter} for Payees and accounts for the mixed column
  */
 public class PayeeComboBoxConverter extends StringConverter<IEntity> {
     private AccountStringConverter accountStringConverter;

@@ -13,7 +13,8 @@ import ledger.user_interface.ui_controllers.component.TransactionTableView;
 import java.util.Optional;
 
 /**
- * Event Handler for Amount Column's Cell Edit Events.
+ * /**
+ * {@link EventHandler} for {@link ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn}
  */
 public class AmountEventHandler implements EventHandler<TableColumn.CellEditEvent<Transaction, Long>>, IUIController {
     @Override
