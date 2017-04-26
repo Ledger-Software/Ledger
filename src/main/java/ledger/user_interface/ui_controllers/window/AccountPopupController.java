@@ -16,7 +16,6 @@ import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
