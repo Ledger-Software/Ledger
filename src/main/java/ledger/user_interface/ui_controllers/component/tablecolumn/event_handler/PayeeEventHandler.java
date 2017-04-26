@@ -54,7 +54,7 @@ public class PayeeEventHandler implements EventHandler<TableColumn.CellEditEvent
 
             Optional<ButtonType> result = alert.showAndWait();
             if(result.get() != ButtonType.OK){
-                ((TransactionTableView)t.getTableView()).updateTransactionTableView();
+                t.getTableView().refresh();
                 return;
             }
             TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);
