@@ -362,6 +362,26 @@ public class DbController {
     }
 
     /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Tag
+     *
+     * @param tag The tag to insert
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn insertTag(final Tag tag) {
+        TaskNoReturn task = generateInsertTag(tag);
+        undoStack.push(new UndoAction(generateDeleteTag(tag), "Undo Insert Tag"));
+        return task;
+
+    }
+
+    private TaskNoReturn generateInsertTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.insertTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
+
+        return task;
+    }
+
+    /**
      * Creates a ITask that can be used to make an asynchronous call to the database to edit a Tag
      *
      * @param tag The tag to edit
@@ -385,6 +405,24 @@ public class DbController {
         TaskNoReturn task = new TaskNoReturn(() -> db.editTag(tag));
         registerSuccess(task, transactionSuccessEvent);
 
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Tag
+     *
+     * @param tag The tag to delete
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn deleteTag(final Tag tag) {
+        TaskNoReturn task = generateDeleteTag(tag);
+        undoStack.push(new UndoAction(generateInsertTag(tag), "Undo Delete Tag"));
+        return task;
+    }
+
+    private TaskNoReturn generateDeleteTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.deleteTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
         return task;
     }
 

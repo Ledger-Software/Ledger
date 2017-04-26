@@ -2,27 +2,30 @@ package ledger.user_interface.ui_controllers.component;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Payee;
 import ledger.database.entity.Tag;
+import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
  * {@link TableView} for showing and editing {@link Payee}
  * Auto pulls from the database
  */
-public class TagEditorTableView extends TableView implements IUIController, Initializable {
+public class TagEditorTableView extends TableView<Tag> implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TagEditorTableView.fxml";
 
     @FXML
@@ -36,6 +39,13 @@ public class TagEditorTableView extends TableView implements IUIController, Init
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        setupColumns();
+        setupDelete();
+        setupContextMenu();
+        updateTableView();
+    }
+
+    private void setupColumns() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         nameColumn.setOnEditCommit(event -> {
@@ -59,10 +69,32 @@ public class TagEditorTableView extends TableView implements IUIController, Init
             task.startTask();
             task.waitForComplete();
         });
+    }
 
+    private void setupDelete() {
+        this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncUpdateTableView());
-        updateTableView();
+        // Add ability to delete tags from tableView
+        this.setOnKeyPressed(t -> {
+            if (t.getCode() == KeyCode.DELETE) {
+                handleDeleteSelectedTagsFromTableView();
+            }
+        });
+    }
+
+    private void setupContextMenu() {
+        // Configure right-click context menu
+        ContextMenu menu = new ContextMenu();
+
+        // Add right-click option for deleting tags
+        MenuItem deleteTagsMenuItem = new MenuItem("Delete Selected Tag(s)");
+        menu.getItems().add(deleteTagsMenuItem);
+        deleteTagsMenuItem.setOnAction(event -> handleDeleteSelectedTagsFromTableView());
+
+        // TODO: merge tags
+
+        this.setContextMenu(menu);
+
     }
 
     private void updateTableView() {
@@ -85,5 +117,40 @@ public class TagEditorTableView extends TableView implements IUIController, Init
 
     private void asyncUpdateTableView() {
         Startup.INSTANCE.runLater(this::updateTableView);
+    }
+
+    // Adapted from TransactionTableView
+    private void handleDeleteSelectedTagsFromTableView() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Tag(s)");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you would like to delete the selected tag(s)?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            List<Integer> indices = new ArrayList<>();
+            // Add indices to new list so they aren't observable
+            indices.addAll(this.getSelectionModel().getSelectedIndices());
+            if (indices.size() != 0) {
+
+                //TODO: Get around this scary mess
+                if (indices.contains(-1)) {
+                    indices = this.getSelectionModel().getSelectedIndices();
+                }
+
+                for (int i : indices) {
+                    Tag tagToDelete = this.getItems().get(i);
+
+                    TaskNoReturn task = DbController.INSTANCE.deleteTag(tagToDelete);
+                    task.RegisterFailureEvent((e) -> {
+                        asyncUpdateTableView();
+                        setupErrorPopup("Error deleting tag(s).", e);
+                    });
+                    task.startTask();
+                    task.waitForComplete();
+                }
+                updateTableView();
+            }
+        }
     }
 }
