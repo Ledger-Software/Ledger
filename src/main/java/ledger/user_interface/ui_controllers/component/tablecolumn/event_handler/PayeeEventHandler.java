@@ -37,7 +37,7 @@ public class PayeeEventHandler implements EventHandler<TableColumn.CellEditEvent
             if(accountToSet.equals(transaction.getAccount())){
                 setupErrorPopup("Source and Destination accounts can not be the same");
 
-                //((TransactionTableView)t.getTableView()).updateTransactionTableView();
+                t.getTableView().refresh();
                 return;
             }
             transaction.setTransferAccount(accountToSet);

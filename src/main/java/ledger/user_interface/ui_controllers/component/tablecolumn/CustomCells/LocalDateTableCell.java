@@ -1,4 +1,4 @@
-package ledger.user_interface.utils;
+package ledger.user_interface.ui_controllers.component.tablecolumn.CustomCells;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.*;

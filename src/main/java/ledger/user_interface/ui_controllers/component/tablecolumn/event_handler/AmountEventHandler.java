@@ -22,19 +22,19 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
         Long amountToSet = t.getNewValue();
         if (amountToSet == null) {
             setupErrorPopup("Provided amount is invalid", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            t.getTableView().refresh();
             return;
         }
 
         if ((amountToSet < 0) && (transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit")) && !(transaction.getType().getName().equals("Transfer"))) {
             setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a positive amount.", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            t.getTableView().refresh();
             return;
         }
 
         if ((amountToSet > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit")) && !(transaction.getType().getName().equals("Transfer"))) {
             setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a negative amount.", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            t.getTableView().refresh();
             return;
         }
         if(transaction.getType().getName().equals("Transfer")){
@@ -45,7 +45,7 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.get() != ButtonType.OK){
-                ((TransactionTableView)t.getTableView()).updateTransactionTableView();
+                t.getTableView().refresh();
                 return;
             }
         }

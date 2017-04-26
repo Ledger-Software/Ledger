@@ -31,7 +31,7 @@ public class ClearedEventHandler implements EventHandler<TableColumn.CellEditEve
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.get() != ButtonType.OK){
-                ((TransactionTableView)t.getTableView()).updateTransactionTableView();
+                t.getTableView().refresh();
                 return;
             }
         }
