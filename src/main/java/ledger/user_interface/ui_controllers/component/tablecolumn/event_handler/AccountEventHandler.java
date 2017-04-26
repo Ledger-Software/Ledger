@@ -26,9 +26,7 @@ public class AccountEventHandler implements EventHandler<TableColumn.CellEditEve
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             if(accountToSet.equals(transaction.getTransferAccount())){
                 setupErrorPopup("Source and Destination accounts can not be the same");
-                transaction.setAccount(t.getOldValue());
                 ((TransactionTableView)t.getTableView()).updateTransactionTableView();
-
                 return;
             }
             if(transaction.getAmount()>=0) {

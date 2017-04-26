@@ -19,9 +19,7 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.CustomCells.PayeeComboBoxTableCell;
 import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.PayeeEventHandler;
-import ledger.user_interface.utils.AccountStringConverter;
-import ledger.user_interface.utils.PayeeComparator;
-import ledger.user_interface.utils.PayeeStringConverter;
+import ledger.user_interface.utils.PayeeComboboxComparator;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,7 +29,7 @@ import java.util.ResourceBundle;
 /**
  * TableColumn for Payees
  */
-public class PayeeColumn extends TableColumn implements IUIController, Initializable {
+public class PayeeColumn extends TableColumn<Transaction, IEntity> implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TableColumn.fxml";
     private ObservableList observableAllPayees;
     private ObservableList observableAllAccounts;
@@ -50,17 +48,12 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
         getAllAccountsTask.startTask();
         List<Account> allAccounts = getAllAccountsTask.waitForResult();
         this.observableAllAccounts = FXCollections.observableList(allAccounts);
-        this.setCellFactory(new Callback<TableColumn<Transaction, IEntity>, TableCell<Transaction, IEntity>>() {
-            @Override
-            public TableCell<Transaction, IEntity> call(TableColumn<Transaction, IEntity> param) {
+        this.setCellFactory(param -> new PayeeComboBoxTableCell(observableAllPayees, observableAllAccounts));
+        this.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Transaction, IEntity>, ObservableValue<IEntity>>() {
 
-                return new PayeeComboBoxTableCell(new PayeeStringConverter(), new AccountStringConverter(), observableAllPayees, observableAllAccounts, FXCollections.observableList(new ArrayList<>()));
-            }
-        });
-        this.setCellValueFactory(new Callback<CellDataFeatures, ObservableValue>() {
             @Override
-            public ObservableValue call(CellDataFeatures param) {
-                Transaction trans = (Transaction) param.getValue();
+            public ObservableValue<IEntity> call(CellDataFeatures<Transaction, IEntity> param) {
+                Transaction trans =  param.getValue();
                 if (trans.getType().equals(TypeConversion.ACC_TRANSFER)) {
                     return new SimpleObjectProperty(trans.getTransferAccount());
                 }
@@ -68,9 +61,11 @@ public class PayeeColumn extends TableColumn implements IUIController, Initializ
 
                 return new SimpleObjectProperty(trans.getPayee());
             }
+
+
         });
         this.setOnEditCommit(new PayeeEventHandler());
-        this.setComparator(new PayeeComparator());
+        this.setComparator(new PayeeComboboxComparator());
 
         DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updatePayeeList));
         DbController.INSTANCE.registerAccountSuccessEvent((ignored) -> Startup.INSTANCE.runLater(this::updateAccountList));
