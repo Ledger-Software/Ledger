@@ -42,7 +42,7 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Edit Transfer Amount");
             alert.setHeaderText("This change will cause the matching transfer to change as well.");
-            alert.setContentText("The amount will change from "+ String.format("%.2f", (double) -1*transaction.getAmount()/100.0) + " to "+ String.format("%.2f", (double) amountToSet/100.0)+ ". Is this okay?");
+            alert.setContentText("The amount will change from "+ String.format("%.2f", (double) -1*transaction.getAmount()/100.0) + " to "+ String.format("%.2f", (double) -1*amountToSet/100.0)+ ". Is this okay?");
             Optional<ButtonType> result = alert.showAndWait();
 
             if(result.get() != ButtonType.OK){
