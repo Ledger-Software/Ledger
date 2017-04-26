@@ -29,8 +29,8 @@ public class AccountEventHandler implements EventHandler<TableColumn.CellEditEve
                 t.getTableView().refresh();
                 return;
             }
-            if(transaction.getAmount()>=0) {
-                alert.setTitle("Edit Transfer Destination Acconut");
+            if(transaction.getAmount()<=0) {
+                alert.setTitle("Edit Transfer Destination Account");
                 alert.setContentText("The Destination Account will change from "+transaction.getAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
             }
             else {

@@ -42,8 +42,8 @@ public class PayeeEventHandler implements EventHandler<TableColumn.CellEditEvent
             }
             transaction.setTransferAccount(accountToSet);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            if(transaction.getAmount()>=0) {
-                alert.setTitle("Edit Transfer Destination Acconut");
+            if(transaction.getAmount()<=0) {
+                alert.setTitle("Edit Transfer Destination Account");
                 alert.setContentText("The Destination Account will change from "+transaction.getTransferAccount().getName() +" to "+ accountToSet.getName()+ ". Is this okay?");
             }
             else {
