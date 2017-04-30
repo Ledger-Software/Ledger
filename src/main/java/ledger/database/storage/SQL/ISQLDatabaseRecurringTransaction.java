@@ -27,20 +27,22 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
             PreparedStatement stmt = getDatabase().prepareStatement("INSERT INTO " + RecurringTransactionTable.TABLE_NAME +
                     " (" + RecurringTransactionTable.RECURRING_START_DATE +
                     "," + RecurringTransactionTable.RECURRING_END_DATE +
+                    "," + RecurringTransactionTable.RECURRING_NEXT_TRIGGER_DATE +
                     "," + RecurringTransactionTable.RECURRING_FREQUENCY_ID +
                     "," + RecurringTransactionTable.RECURRING_AMOUNT +
                     "," + RecurringTransactionTable.RECURRING_ACCOUNT_ID +
                     "," + RecurringTransactionTable.RECURRING_PAYEE_ID +
                     "," + RecurringTransactionTable.RECURRING_TYPE_ID +
-                    ") VALUES (?, ?, ?, ?, ?, ?, ?);");
+                    ") VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
 
             stmt.setLong(1, trans.getStartDate().getTimeInMillis());
             stmt.setLong(2, trans.getEndDate().getTimeInMillis());
-            stmt.setInt(3, getIdForFrequency(trans.getFrequency()));
-            stmt.setLong(4, trans.getAmount());
-            lookupAndSetAccountForSQLStatement(trans, stmt, 5);
-            lookupAndSetPayeeForSQLStatement(trans, stmt, 6);
-            lookupAndSetTypeForSQLStatement(trans, stmt, 7);
+            stmt.setLong(3, trans.getNextTriggerDate().getTimeInMillis());
+            stmt.setInt(4, getIdForFrequency(trans.getFrequency()));
+            stmt.setLong(5, trans.getAmount());
+            lookupAndSetAccountForSQLStatement(trans, stmt, 6);
+            lookupAndSetPayeeForSQLStatement(trans, stmt, 7);
+            lookupAndSetTypeForSQLStatement(trans, stmt, 8);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -70,6 +72,7 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
             ResultSet rs = stmt.executeQuery("SELECT " + RecurringTransactionTable.RECURRING_ID +
                     ", " + RecurringTransactionTable.RECURRING_START_DATE +
                     ", " + RecurringTransactionTable.RECURRING_END_DATE +
+                    ", " + RecurringTransactionTable.RECURRING_NEXT_TRIGGER_DATE +
                     "," + RecurringTransactionTable.RECURRING_FREQUENCY_ID +
                     "," + RecurringTransactionTable.RECURRING_AMOUNT +
                     "," + RecurringTransactionTable.RECURRING_ACCOUNT_ID +
@@ -87,6 +90,9 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
                 Calendar endDate = Calendar.getInstance();
                 startDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_END_DATE));
 
+                Calendar nextTriggerDate = Calendar.getInstance();
+                nextTriggerDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_NEXT_TRIGGER_DATE));
+
                 int frequencyId = rs.getInt(RecurringTransactionTable.RECURRING_FREQUENCY_ID);
                 Frequency freq = getFrequencyById(frequencyId);
 
@@ -101,8 +107,8 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
                 int typeId = rs.getInt(RecurringTransactionTable.RECURRING_TYPE_ID);
                 Type type = getTypeForID(typeId);
 
-                RecurringTransaction rt = new RecurringTransaction(startDate, endDate, type, amount, recurringAccount,
-                        payee, null, null, freq, recurringId);
+                RecurringTransaction rt = new RecurringTransaction(startDate, endDate, nextTriggerDate, type, amount,
+                        recurringAccount, payee, null, null, freq, recurringId);
 
                 recurringTransactions.add(rt);
             }

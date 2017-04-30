@@ -16,6 +16,8 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
+import ledger.database.entity.Frequency;
+import ledger.database.entity.RecurringTransaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -23,10 +25,7 @@ import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -145,6 +144,41 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             this.undo();
         });
+
+        this.checkForRecurringTransactions();
+    }
+
+    private void checkForRecurringTransactions() {
+        TaskWithReturn<List<RecurringTransaction>> recurringTransactionTask = DbController.INSTANCE.getAllRecurringTransactions();
+        recurringTransactionTask.startTask();
+        List<RecurringTransaction> recurringTransactions = recurringTransactionTask.waitForResult();
+
+
+        for (RecurringTransaction recurringTransaction : recurringTransactions) {
+            Frequency transactionFrequency = recurringTransaction.getFrequency();
+            if (transactionFrequency.equals(Frequency.Daily)) {
+                Date dateNow = new Date();
+                Calendar calendarNow = Calendar.getInstance();
+                calendarNow.setTime(dateNow);
+
+                Calendar startDate = recurringTransaction.getStartDate();
+
+                if (calendarNow.before(startDate)) continue;
+
+                continue;
+            } else if (transactionFrequency.equals(Frequency.Weekly)) {
+
+                continue;
+            } else if (transactionFrequency.equals(Frequency.Monthly)) {
+
+                continue;
+            } else if (transactionFrequency.equals(Frequency.Yearly)) {
+
+                continue;
+            } else {
+                System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
+            }
+        }
     }
 
     private void createRecurringTransactionPopup(ActionEvent actionEvent) {

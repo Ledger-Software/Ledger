@@ -8,6 +8,7 @@ public class RecurringTransactionTable {
     public static final String RECURRING_ID = "RECURRING_ID";
     public static final String RECURRING_START_DATE = "RECURRING_START_DATE";
     public static final String RECURRING_END_DATE = "RECURRING_END_DATE";
+    public static final String RECURRING_NEXT_TRIGGER_DATE = "RECURRING_NEXT_TRIGGER_DATE";
     public static final String RECURRING_FREQUENCY_ID = "RECURRING_FREQUENCY_ID";
     public static final String RECURRING_AMOUNT = "RECURRING_AMOUNT";
     public static final String RECURRING_ACCOUNT_ID = "RECURRING_ACCOUNT_ID";
@@ -24,6 +25,7 @@ public class RecurringTransactionTable {
                         "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " + //PRIMARY KEY
                         "%s BIGINT NOT NULL, " + //START DATE
                         "%s BIGINT NOT NULL, " + //END DATE
+                        "%s BIGINT NOT NULL, " + //NEXT TRIGGER DATE
                         "%S INT NOT NULL, " + //FREQUENCY
                         "%s LONG NOT NULL, " + //AMOUNT
                         "%s INT NOT NULL, " + //ACCOUNT ID
@@ -33,8 +35,8 @@ public class RecurringTransactionTable {
                         "FOREIGN KEY (%s) REFERENCES %s(%s), " + //PAYEE FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s), " + //TYPE FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s)" + //FREQUENCY FOREIGN KEY CONSTRAINT
-                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY_ID, RECURRING_AMOUNT,
-                RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
+                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_NEXT_TRIGGER_DATE,
+                RECURRING_FREQUENCY_ID, RECURRING_AMOUNT, RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
                 RECURRING_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
                 RECURRING_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID,
                 RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID,
@@ -53,6 +55,7 @@ public class RecurringTransactionTable {
                         "(%s INTEGER PRIMARY KEY AUTO_INCREMENT, " + //PRIMARY KEY
                         "%s BIGINT NOT NULL, " + //START DATE
                         "%s BIGINT NOT NULL, " + //END DATE
+                        "%s BIGINT NOT NULL, " + // NEXT TRIGGER DATE
                         "%S INT NOT NULL, " + //FREQUENCY
                         "%s LONG NOT NULL, " + //AMOUNT
                         "%s INT NOT NULL, " + //ACCOUNT ID
@@ -62,8 +65,8 @@ public class RecurringTransactionTable {
                         "FOREIGN KEY (%s) REFERENCES %s(%s), " + //PAYEE FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s)," + //TYPE FOREIGN KEY CONSTRAINT
                         "FOREIGN KEY (%s) REFERENCES %s(%s)" + //FREQUENCY FOREIGN KEY CONSTRAINT
-                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_FREQUENCY_ID, RECURRING_AMOUNT,
-                RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
+                        ")", TABLE_NAME, RECURRING_ID, RECURRING_START_DATE, RECURRING_END_DATE, RECURRING_NEXT_TRIGGER_DATE,
+                RECURRING_FREQUENCY_ID, RECURRING_AMOUNT, RECURRING_ACCOUNT_ID, RECURRING_PAYEE_ID, RECURRING_TYPE_ID,
                 RECURRING_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
                 RECURRING_PAYEE_ID, PayeeTable.TABLE_NAME, PayeeTable.PAYEE_ID,
                 RECURRING_TYPE_ID, TypeTable.TABLE_NAME, TypeTable.TYPE_ID,

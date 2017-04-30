@@ -10,19 +10,36 @@ import java.util.List;
 public class RecurringTransaction extends Transaction {
     private Calendar startDate;
     private Calendar endDate;
+    private Calendar nextTriggerDate;
     private Frequency frequency;
-    private int id;
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency) {
-        this(startDate, endDate, type, amount, account, payee, tagList, note, frequency, -1);
+        this(startDate, endDate, Calendar.getInstance(), type, amount, account, payee, tagList, note, frequency, -1);
+
+        Date dateNow = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateNow);
+        if (frequency.equals(Frequency.Daily)) {
+            calendar.add(Calendar.DATE, 1);
+            this.nextTriggerDate = calendar;
+        } else if (frequency.equals(Frequency.Weekly)) {
+            calendar.add(Calendar.DATE, 7);
+            this.nextTriggerDate = calendar;
+        } else if (frequency.equals(Frequency.Monthly)) {
+            calendar.add(Calendar.MONTH, 1);
+            this.nextTriggerDate = calendar;
+        } else if (this.frequency.equals(Frequency.Yearly)) {
+            calendar.add(Calendar.YEAR, 1);
+        }
     }
 
-    public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
+    public RecurringTransaction(Calendar startDate, Calendar endDate, Calendar nextTriggerDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
         super(new Date(), type, amount, account, payee, false, tagList, note);
         this.startDate = startDate;
         this.endDate = endDate;
+        this.nextTriggerDate = nextTriggerDate;
         this.frequency = frequency;
         this.id = id;
     }
@@ -61,6 +78,24 @@ public class RecurringTransaction extends Transaction {
      */
     public void setEndDate(Calendar endDate) {
         this.endDate = endDate;
+    }
+
+    /**
+     * Gets the Calendar object which represents the date on which this Recurring Transaction will next trigger
+     *
+     * @return Calendar
+     */
+    public Calendar getNextTriggerDate() {
+        return nextTriggerDate;
+    }
+
+    /**
+     * Sets the Calendar object which represents the date on which this Recurring Transaction will next trigger
+     *
+     * @param nextTriggerDate The calendar object representing a date on which this transaction will trigger next
+     */
+    public void setNextTriggerDate(Calendar nextTriggerDate) {
+        this.nextTriggerDate = nextTriggerDate;
     }
 
     /**
