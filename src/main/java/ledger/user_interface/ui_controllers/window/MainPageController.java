@@ -168,17 +168,26 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             if (transactionFrequency.equals(Frequency.Daily)) {
                 calendarNow.add(Calendar.DATE, 1);
                 recurringTransaction.setNextTriggerDate(calendarNow);
-                //TaskNoReturn editTriggerDateTask = DbController.
-
+                TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+                editTriggerDateTask.startTask();
                 continue;
             } else if (transactionFrequency.equals(Frequency.Weekly)) {
-
+                calendarNow.add(Calendar.DATE, 7);
+                recurringTransaction.setNextTriggerDate(calendarNow);
+                TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+                editTriggerDateTask.startTask();
                 continue;
             } else if (transactionFrequency.equals(Frequency.Monthly)) {
-
+                calendarNow.add(Calendar.MONTH, 1);
+                recurringTransaction.setNextTriggerDate(calendarNow);
+                TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+                editTriggerDateTask.startTask();
                 continue;
             } else if (transactionFrequency.equals(Frequency.Yearly)) {
-
+                calendarNow.add(Calendar.YEAR, 1);
+                recurringTransaction.setNextTriggerDate(calendarNow);
+                TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+                editTriggerDateTask.startTask();
                 continue;
             } else {
                 System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
