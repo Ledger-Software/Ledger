@@ -574,6 +574,18 @@ public class DbController {
         return new TaskWithReturn<>(db::getAllRecurringTransactions);
     }
 
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a RecurringTransaction
+     *
+     * @param recurringTransaction The transaction to edit
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn editRecurringTransaction(final RecurringTransaction recurringTransaction) {
+
+        return new TaskNoReturn(() -> db.editRecurringTransaction(recurringTransaction));
+    }
+
+
     public TaskNoReturn insertRecurringTransaction(final RecurringTransaction recurringTransaction) {
         undoStack.push(new UndoAction(generateDeleteRecurringTransaction(recurringTransaction), "Undo Insert Recurring Transaction"));
         return new TaskNoReturn(() -> db.insertRecurringTransaction(recurringTransaction));

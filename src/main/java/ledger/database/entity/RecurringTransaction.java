@@ -168,6 +168,7 @@ public class RecurringTransaction extends Transaction {
         return "RecurringTransaction{" +
                 "startDate=" + startDate.getTime() +
                 ", endDate=" + endDate.getTime() +
+                ", nextTriggerDate=" + nextTriggerDate.getTime() +
                 ", type=" + type +
                 ", amount=" + amount +
                 ", account=" + account +

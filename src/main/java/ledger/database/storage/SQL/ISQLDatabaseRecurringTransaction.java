@@ -117,4 +117,34 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
         }
         return recurringTransactions;
     }
+
+    @Override
+    default void editRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException {
+        try {
+            PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + RecurringTransactionTable.TABLE_NAME + " SET " +
+                    RecurringTransactionTable.RECURRING_START_DATE + "=?," +
+                    RecurringTransactionTable.RECURRING_END_DATE + "=?," +
+                    RecurringTransactionTable.RECURRING_NEXT_TRIGGER_DATE + "=?," +
+                    RecurringTransactionTable.RECURRING_FREQUENCY_ID + "=?," +
+                    RecurringTransactionTable.RECURRING_AMOUNT + "=?," +
+                    RecurringTransactionTable.RECURRING_ACCOUNT_ID + "=?," +
+                    RecurringTransactionTable.RECURRING_PAYEE_ID + "=?," +
+                    RecurringTransactionTable.RECURRING_TYPE_ID + "=?" + " WHERE " +
+                    RecurringTransactionTable.RECURRING_ID + "=?");
+
+            stmt.setLong(1, recurringTransaction.getStartDate().getTimeInMillis());
+            stmt.setLong(2, recurringTransaction.getEndDate().getTimeInMillis());
+            stmt.setLong(3, recurringTransaction.getNextTriggerDate().getTimeInMillis());
+            stmt.setInt(4, getIdForFrequency(recurringTransaction.getFrequency()));
+            stmt.setLong(5, recurringTransaction.getAmount());
+            lookupAndSetAccountForSQLStatement(recurringTransaction, stmt, 6);
+            lookupAndSetPayeeForSQLStatement(recurringTransaction, stmt, 7);
+            lookupAndSetTypeForSQLStatement(recurringTransaction, stmt, 8);
+
+            stmt.executeUpdate();
+
+        } catch (java.sql.SQLException e){
+            throw new StorageException("Error while editing Recurring Transaction.", e);
+        }
+    }
 }

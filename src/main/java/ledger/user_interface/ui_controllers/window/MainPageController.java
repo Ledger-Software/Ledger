@@ -15,9 +15,7 @@ import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Account;
-import ledger.database.entity.Frequency;
-import ledger.database.entity.RecurringTransaction;
+import ledger.database.entity.*;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -155,15 +153,22 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
+            Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
+            Date dateNow = new Date();
+            Calendar calendarNow = Calendar.getInstance();
+            calendarNow.setTime(dateNow);
+
+            if (calendarNow.before(nextTriggerDate)) continue;
+            Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
+                    recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, new ArrayList<>(),
+                    null, -1);
+            TaskNoReturn insertTransactionTask = DbController.INSTANCE.insertTransaction(toInsert);
+            insertTransactionTask.startTask();
             if (transactionFrequency.equals(Frequency.Daily)) {
-                Date dateNow = new Date();
-                Calendar calendarNow = Calendar.getInstance();
-                calendarNow.setTime(dateNow);
-
-                Calendar startDate = recurringTransaction.getStartDate();
-
-                if (calendarNow.before(startDate)) continue;
+                calendarNow.add(Calendar.DATE, 1);
+                recurringTransaction.setNextTriggerDate(calendarNow);
+                //TaskNoReturn editTriggerDateTask = DbController.
 
                 continue;
             } else if (transactionFrequency.equals(Frequency.Weekly)) {
