@@ -172,11 +172,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             }
 
             createAddTransPopup();
-
-//            Account acc = accountList.get(0);
-//
-//            TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
-//            task.startTask();
         });
 
         // MenuItem for Undo
