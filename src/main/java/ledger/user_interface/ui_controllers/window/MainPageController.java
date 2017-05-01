@@ -186,7 +186,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         TagEditorTableWindow window = new TagEditorTableWindow();
         Scene scene = new Scene(window);
 
-        this.createModal(null, scene, "Tag Editor", true);
+        this.createModal(this.getScene().getWindow(), scene, "Tag Editor", true);
     }
 
     private void setUpAccountCreationHelp() {
