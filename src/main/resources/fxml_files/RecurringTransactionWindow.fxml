@@ -75,22 +75,6 @@
                      <Insets right="5.0" />
                  </GridPane.margin>
              </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tag: " textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
-                 <font>
-                      <Font name="Calibri" size="24.0" />
-                 </font>
-                 <GridPane.margin>
-                     <Insets right="5.0" />
-                 </GridPane.margin>
-             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Notes: " textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.halignment="RIGHT" GridPane.rowIndex="4">
-                 <font>
-                      <Font name="Calibri" size="24.0" />
-                 </font>
-                 <GridPane.margin>
-                     <Insets right="5.0" />
-                 </GridPane.margin>
-             </Text>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="End Date: " textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
                  <font>
                       <Font name="Calibri" size="24.0" />
@@ -115,7 +99,7 @@
                      <Insets right="5.0" />
                  </GridPane.margin>
              </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Frequency: " textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Frequency: " textAlignment="RIGHT" wrappingWidth="120.6640625" GridPane.columnIndex="0" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                  <font>
                       <Font name="Calibri" size="24.0" />
                  </font>
@@ -127,15 +111,9 @@
             <DatePicker fx:id="endDatePicker" GridPane.columnIndex="3" />
             <PayeeDropdown fx:id="payeeDropdown" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <AccountDropdown fx:id="accountDropdown" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="tagField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="amountField" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <ChoiceBox fx:id="typeText" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-            <ChoiceBox fx:id="frequencyText" prefWidth="150.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <TextArea fx:id="notesField" prefHeight="50.0" prefWidth="105.0" promptText="Optional" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
-               <GridPane.margin>
-                  <Insets right="40.0" />
-               </GridPane.margin>
-            </TextArea>
+            <ChoiceBox fx:id="frequencyText" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Button fx:id="addButton" alignment="CENTER" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
          </children>
          <GridPane.margin>

@@ -46,11 +46,7 @@ public class RecurringTransactionController extends GridPane implements IUIContr
     @FXML
     ChoiceBox<Type> typeText;
     @FXML
-    TextField tagField;
-    @FXML
     ChoiceBox<String> frequencyText;
-    @FXML
-    TextArea notesField;
     @FXML
     Button addButton;
 
