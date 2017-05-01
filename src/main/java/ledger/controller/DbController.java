@@ -427,6 +427,24 @@ public class DbController {
     }
 
     /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to merge tags
+     *
+     * @param tags List of tags to merge. All tags will be merged into the first tag in the list
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn mergeTags(final List<Tag> tags) {
+        TaskNoReturn task = generateMergeTags(tags);
+        // This operation is not undoable
+        return task;
+    }
+
+    private TaskNoReturn generateMergeTags(final List<Tag> tags) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.mergeTags(tags));
+        registerSuccess(task, transactionSuccessEvent);
+        return task;
+    }
+
+    /**
      * Creates a ITask that can be used to make an asynchronous call to the database to get all stored Payees
      *
      * @return A task for the Async Call that returns a list of all the Payees
@@ -629,10 +647,4 @@ public class DbController {
     public TaskWithReturn<List<IgnoredExpression>> getAllIgnoredExpressions() {
         return new TaskWithReturn<>(db::getAllIgnoredExpressions);
     }
-
-
-    public TaskWithReturn<List<Tag>> getAllTags() {
-        return new TaskWithReturn<>(db::getAllTags);
-    }
-
 }

@@ -16,10 +16,7 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * {@link TableView} for showing and editing {@link Payee}
@@ -91,7 +88,9 @@ public class TagEditorTableView extends TableView<Tag> implements IUIController,
         menu.getItems().add(deleteTagsMenuItem);
         deleteTagsMenuItem.setOnAction(event -> handleDeleteSelectedTagsFromTableView());
 
-        // TODO: merge tags
+        MenuItem mergeTagsMenuItem = new MenuItem("Merge Selected Tags");
+        menu.getItems().add(mergeTagsMenuItem);
+        mergeTagsMenuItem.setOnAction(event -> handleMergeTags());
 
         this.setContextMenu(menu);
 
@@ -151,6 +150,44 @@ public class TagEditorTableView extends TableView<Tag> implements IUIController,
                 }
                 updateTableView();
             }
+        }
+    }
+
+    private void handleMergeTags() {
+        List<Integer> indices = new ArrayList<>();
+        // Add indices to new list so they aren't observable
+        indices.addAll(this.getSelectionModel().getSelectedIndices());
+        if (indices.size() < 2) {
+            setupErrorPopup("At least two tags must be selected in order to merge.");
+            return;
+        }
+
+        //TODO: Get around this scary mess
+        if (indices.contains(-1)) {
+            indices = this.getSelectionModel().getSelectedIndices();
+        }
+
+        List<Tag> tagsToMerge = new ArrayList<Tag>();
+        for (int i : indices) {
+            Tag currentTag = this.getItems().get(i);
+            tagsToMerge.add(currentTag);
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Merge Tag(s)");
+        alert.setHeaderText("WARNING: This operation CANNOT be undone. Are you sure you would like to merge the selected tags?");
+        alert.setContentText("All " + tagsToMerge.size() + " tags will be merged into a single tag, with name " + tagsToMerge.get(0).getName() + ".");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            TaskNoReturn task = DbController.INSTANCE.mergeTags(tagsToMerge);
+            task.RegisterFailureEvent((e) -> {
+                asyncUpdateTableView();
+                setupErrorPopup("Error merging tag(s).", e);
+            });
+            task.startTask();
+            task.waitForComplete();
+            updateTableView();
         }
     }
 }
