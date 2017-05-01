@@ -114,6 +114,7 @@ public interface IUIController {
     default void createModal(Scene s, String windowName) {
         createModal(null, s, windowName);
     }
+
     default void createModal(Scene s, String windowName, CallableMethodVoidNoArgs onClose) {
         createModal(null, s, windowName, false, Modality.WINDOW_MODAL, StageStyle.UTILITY, onClose);
     }
@@ -129,9 +130,12 @@ public interface IUIController {
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality) {
         createModal(parent, child, windowName, resizeable, modality, StageStyle.UTILITY);
     }
-    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle){
-        createModal(parent, child, windowName, resizeable, modality, stageStyle, ()-> {});
-        }
+
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle) {
+        createModal(parent, child, windowName, resizeable, modality, stageStyle, () -> {
+        });
+    }
+
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle, CallableMethodVoidNoArgs onClose) {
         Stage newStage = new Stage();
         newStage.initOwner(parent);
@@ -145,11 +149,11 @@ public interface IUIController {
             @Override
             public void handle(WindowEvent event) {
 
-                    try {
-                        onClose.call();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    onClose.call();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
         });
