@@ -37,6 +37,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     public static MainPageController INSTANCE;
 
     @FXML
+    private Button tagEditorButton;
+    @FXML
     private Button payeeEditorButton;
     @FXML
     private Button addAccountBtn;
@@ -130,6 +132,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             accountListView.getItems().get(0).setAllAccountBalance();
         });
 
+        this.tagEditorButton.setOnAction(this::openTagEditor);
         this.payeeEditorButton.setOnAction(this::openAutoTaggingEditor);
         this.addIgnoreTransactionButton.setOnAction(this::openIgnoredTransactionEditor);
 
@@ -177,6 +180,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         Scene scene = new Scene(window);
 
         this.createModal(null, scene, "Automatic Tagging", true);
+    }
+
+    private void openTagEditor(ActionEvent actionEvent) {
+        TagEditorTableWindow window = new TagEditorTableWindow();
+        Scene scene = new Scene(window);
+
+        this.createModal(this.getScene().getWindow(), scene, "Tag Editor", true);
     }
 
     private void setUpAccountCreationHelp() {

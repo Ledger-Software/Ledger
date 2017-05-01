@@ -8,6 +8,7 @@ import ledger.database.storage.table.TagToPayeeTable;
 import ledger.database.storage.table.TagToTransTable;
 import ledger.exception.StorageException;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -82,6 +83,72 @@ public interface ISQLDatabaseTag extends ISQLiteDatabase {
             stmt.executeUpdate();
         } catch (java.sql.SQLException e) {
             throw new StorageException("Error while editing Tag", e);
+        }
+    }
+
+    @Override
+    default void mergeTags(List<Tag> tags) throws StorageException {
+        if (tags.size() < 2) {
+            throw new StorageException("Error while merging tags: merging requires at least two tags");
+        }
+
+        boolean originalAutoCommit = true;
+        try {
+            originalAutoCommit = getDatabase().getAutoCommit();
+            getDatabase().setAutoCommit(false);
+
+            Tag mergeTarget = tags.get(0);
+            List<Tag> mergeSources = tags.subList(1, tags.size());
+
+            // Set up beginning of update statement for TagToTransTable
+            String updateTagToTransSQL = "UPDATE " + TagToTransTable.TABLE_NAME + " SET " + TagToTransTable.TTTS_TAG_ID + " = ? WHERE ";
+
+            // Set up beginning of update statement for TagToPayeeTable
+            String updateTagToPayeeSQL = "UPDATE " + TagToPayeeTable.TABLE_NAME + " SET " + TagToPayeeTable.TTPE_TAG_ID + " = ? WHERE ";
+
+            // Set up beginning of delete statement for Tag table
+            String deleteMergedTagsSQL = "DELETE FROM " + TagTable.TABLE_NAME +
+                    " WHERE ";
+
+            // Add n conditionals to all three statements w/ SQL OR
+            for (int i = 0; i < mergeSources.size(); i++) {
+                if (i != 0) {
+                    updateTagToTransSQL += " OR ";
+                    updateTagToPayeeSQL += " OR ";
+                    deleteMergedTagsSQL += " OR ";
+                }
+                updateTagToTransSQL += TagToTransTable.TTTS_TAG_ID + " = ?";
+                updateTagToPayeeSQL += TagToPayeeTable.TTPE_TAG_ID + " = ?";
+                deleteMergedTagsSQL += TagTable.TAG_ID + " = ?";
+            }
+
+            // Prepare statements
+            PreparedStatement stmt1 = getDatabase().prepareStatement(updateTagToTransSQL);
+            PreparedStatement stmt2 = getDatabase().prepareStatement(updateTagToPayeeSQL);
+            PreparedStatement stmt3 = getDatabase().prepareStatement(deleteMergedTagsSQL);
+
+            // Set merge target tag ID as first parameterin update statements
+            stmt1.setInt(1, mergeTarget.getId());
+            stmt2.setInt(1, mergeTarget.getId());
+
+            int paramIndex = 2;
+            // Set merge source tag IDs as remaining parameters in all statements
+            for (int i = 0; i < mergeSources.size(); i++) {
+                Tag currentMergeSource = mergeSources.get(i);
+                stmt1.setInt(paramIndex, currentMergeSource.getId());
+                stmt2.setInt(paramIndex, currentMergeSource.getId());
+                stmt3.setInt(paramIndex - 1, currentMergeSource.getId());
+                paramIndex++;
+            }
+
+            stmt1.execute();
+            stmt2.execute();
+            stmt3.execute();
+        } catch (Exception e) {
+            rollbackDatabase();
+            throw new StorageException("Error while merging tags", e);
+        } finally {
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 

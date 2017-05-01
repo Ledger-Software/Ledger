@@ -70,6 +70,8 @@ public interface IDatabase {
 
     void editTag(Tag tag) throws StorageException;
 
+    void mergeTags(List<Tag> tags) throws StorageException;
+
     List<Tag> getAllTags() throws StorageException;
 
     List<Tag> getAllTagsForPayee(Payee payee) throws StorageException;
