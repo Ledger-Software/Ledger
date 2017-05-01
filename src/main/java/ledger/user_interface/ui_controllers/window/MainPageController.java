@@ -9,16 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
+import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Account;
-import ledger.database.entity.Frequency;
-import ledger.database.entity.RecurringTransaction;
-import ledger.database.entity.Transaction;
+import ledger.database.entity.*;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -26,9 +23,7 @@ import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -159,16 +154,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
+            System.out.println(recurringTransaction.toString());
 
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
-            LocalDate localDate = LocalDate.now();
-            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            Date dateNow = Date.from(instant);
+            Date dateNow = new Date();
             Calendar calendarNow = Calendar.getInstance();
             calendarNow.setTime(dateNow);
 
             if (calendarNow.before(nextTriggerDate)) continue;
+            
             Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
                     recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, new ArrayList<>(),
                     null, -1);
