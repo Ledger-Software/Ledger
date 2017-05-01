@@ -143,7 +143,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             if (!(event.getCode() == KeyCode.Z))
                 return;
 
-            this.undo();
+            this.transactionTableView.undo();
         });
     }
 
@@ -172,23 +172,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.accountListView.setItems(FXCollections.observableArrayList(infoItems));
         if (this.accountListView.getItems().size() == 1) {
             this.accountListView.getSelectionModel().select(0);
-        }
-    }
-
-    private void undo() {
-        String topMessage = DbController.INSTANCE.undoPeekMessage();
-
-        if (topMessage == null)
-            return;
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Undo");
-        alert.setHeaderText("Do you wish to undo the follow action?");
-        alert.setContentText(topMessage);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            DbController.INSTANCE.undo();
         }
     }
 

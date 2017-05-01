@@ -171,8 +171,11 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
             TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
             task.startTask();
-
         });
+
+        MenuItem undoMenuItem = new MenuItem("Undo");
+        menu.getItems().add(undoMenuItem);
+        undoMenuItem.setOnAction(event -> undo());
 
         this.setContextMenu(menu);
     }
@@ -277,6 +280,31 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 }
                 updateTransactionTableView();
             }
+        }
+    }
+
+    /**
+     * Verifies that the user would like to undo the most recent operation. If so, undoes it
+     */
+    public void undo() {
+        String topMessage = DbController.INSTANCE.undoPeekMessage();
+
+        if (topMessage == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Undo Not Available");
+            alert.setHeaderText("There are no recent operations to undo.");
+            alert.show();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Undo");
+        alert.setHeaderText("Do you wish to undo the follow action?");
+        alert.setContentText(topMessage);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            DbController.INSTANCE.undo();
         }
     }
 

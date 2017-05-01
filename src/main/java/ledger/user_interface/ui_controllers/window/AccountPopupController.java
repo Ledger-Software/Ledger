@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.AccountBalance;
 import ledger.user_interface.ui_controllers.IUIController;
@@ -16,6 +17,7 @@ import ledger.user_interface.utils.InputSanitization;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -59,6 +61,7 @@ public class AccountPopupController extends GridPane implements Initializable, I
     }
 
     private void handleSubmit() {
+        if (isDuplicateAccountName()) return;
         Account account = getAccountSubmission();
         AccountBalance balance = getAccountBalance();
         if (balance == null) {
@@ -77,6 +80,19 @@ public class AccountPopupController extends GridPane implements Initializable, I
         balanceTask.RegisterFailureEvent(this::insertFail);
         balanceTask.startTask();
         balanceTask.waitForComplete();
+    }
+
+    private boolean isDuplicateAccountName() {
+        TaskWithReturn<List<Account>> actTask = DbController.INSTANCE.getAllAccounts();
+        actTask.startTask();
+        List<Account> actList = actTask.waitForResult();
+        for (Account a : actList) {
+            if (a.getName().equalsIgnoreCase(accountNameText.getText())) {
+                this.setupErrorPopup("You cannot have multiple accounts with the same name! Please enter a different name.");
+                return true;
+            }
+        }
+        return false;
     }
 
     private void insertDone() {
