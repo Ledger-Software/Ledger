@@ -125,13 +125,15 @@ public class RecurringTransactionController extends GridPane implements IUIContr
         double amountToSetDecimal = Double.parseDouble(amountString);
         long amount = Math.round(amountToSetDecimal * 100);
 
+        Note note = new Note("Automatically generated from a Recurring Transaction.");
+
         Type type = this.typeText.getValue();
         if (type == null) {
             this.setupErrorPopup("No type selected.", new Exception());
             return;
         }
         RecurringTransaction recurringTrans = new RecurringTransaction(startDate, endDate, type, amount, account, payee,
-                null, null, frequency);
+                null, note, frequency);
         TaskNoReturn addRecurringTransTask = DbController.INSTANCE.insertRecurringTransaction(recurringTrans);
         addRecurringTransTask.RegisterSuccessEvent(this::closeWindow);
         addRecurringTransTask.RegisterFailureEvent(Throwable::printStackTrace);

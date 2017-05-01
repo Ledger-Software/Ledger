@@ -16,6 +16,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.*;
+import ledger.io.util.Tagger;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -165,8 +166,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             if (calendarNow.before(nextTriggerDate)) continue;
             
             Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
-                    recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, new ArrayList<>(),
-                    null, -1);
+                    recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, recurringTransaction.getTags(),
+                    recurringTransaction.getNote(), -1);
+            List<Transaction> transactions = new ArrayList<>();
+            transactions.add(toInsert);
+            Tagger tagger = new Tagger(transactions);
+            tagger.tagTransactions();
+
             TaskNoReturn insertTransactionTask = DbController.INSTANCE.insertTransaction(toInsert);
             insertTransactionTask.startTask();
 
