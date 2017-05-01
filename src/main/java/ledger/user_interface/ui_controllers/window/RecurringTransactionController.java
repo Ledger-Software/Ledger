@@ -95,7 +95,11 @@ public class RecurringTransactionController extends GridPane implements IUIContr
         Calendar endDate = Calendar.getInstance();
         instant = Instant.from(localEndDate.atStartOfDay(ZoneId.systemDefault()));
         endDate.setTimeInMillis(instant.toEpochMilli());
-        System.out.println("End Date " + endDate.getTime());
+
+        if (!startDate.before(endDate)) {
+            this.setupErrorPopup("The Start Date must be before the End Date");
+            return;
+        }
 
         String frequencyName = this.frequencyText.getValue();
         if (frequencyName == null || frequencyName == "") {
@@ -144,7 +148,6 @@ public class RecurringTransactionController extends GridPane implements IUIContr
             setupErrorPopup("Transactions of the " + type.getName() + " type must have a negative amount.");
             return;
         }
-
 
         RecurringTransaction recurringTrans = new RecurringTransaction(startDate, endDate, type, amount, account, payee,
                 null, note, frequency);
