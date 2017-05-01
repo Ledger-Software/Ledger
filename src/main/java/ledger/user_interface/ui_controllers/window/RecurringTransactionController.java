@@ -93,9 +93,15 @@ public class RecurringTransactionController extends GridPane implements IUIContr
             return;
         }
         Calendar endDate = Calendar.getInstance();
+        instant = Instant.from(localEndDate.atStartOfDay(ZoneId.systemDefault()));
         endDate.setTimeInMillis(instant.toEpochMilli());
+        System.out.println("End Date " + endDate.getTime());
 
         String frequencyName = this.frequencyText.getValue();
+        if (frequencyName == null || frequencyName == "") {
+            this.setupErrorPopup("Invalid Frequency selection.");
+            return;
+        }
         Frequency frequency = Frequency.convertStringToFrequency(frequencyName);
 
         Payee payee = this.payeeDropdown.getSelectedPayee();

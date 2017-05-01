@@ -88,7 +88,7 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
                 startDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_START_DATE));
 
                 Calendar endDate = Calendar.getInstance();
-                startDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_END_DATE));
+                endDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_END_DATE));
 
                 Calendar nextTriggerDate = Calendar.getInstance();
                 nextTriggerDate.setTimeInMillis(rs.getLong(RecurringTransactionTable.RECURRING_NEXT_TRIGGER_DATE));
