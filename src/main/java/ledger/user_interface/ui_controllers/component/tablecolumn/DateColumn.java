@@ -19,7 +19,6 @@ public class DateColumn extends TableColumn implements IUIController, Initializa
 
     public DateColumn() {
         this.initController(pageLoc, this, "Unable to load DateColumn");
-
     }
 
     @Override

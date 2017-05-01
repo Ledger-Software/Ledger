@@ -79,6 +79,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn insertTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return insertRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         TaskNoReturn task = generateInsertTransaction(transaction);
 
         undoStack.push(new UndoAction(generateDeleteTransaction(transaction), "Undo Insert Transaction"));
@@ -101,6 +105,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn deleteTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return generateDeleteRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         TaskNoReturn task = generateDeleteTransaction(transaction);
 
         undoStack.push(new UndoAction(generateInsertTransaction(transaction), "Undo Delete Transaction"));
@@ -122,6 +130,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn editTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return editRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         TaskNoReturn task = generateEditTransaction(transaction);
 
         Transaction oldTrans = null;
@@ -581,17 +593,40 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn editRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        TaskNoReturn task = generateEditRecurringTansaction(recurringTransaction);
 
+//        RecurringTransaction oldTrans = null;
+//        try {
+//            db.get
+//            oldTrans = db.getTransactionById(recurringTransaction);
+//        } catch (StorageException e) {
+//            System.err.println("Error on getTransactionById");
+//        }
+//        undoStack.push(new UndoAction(generateEditRecurringTansaction(oldTrans)), "Undo Edit Recurring Transaction");
+
+        return task;
+    }
+
+    private TaskNoReturn generateEditRecurringTansaction(RecurringTransaction recurringTransaction) {
         return new TaskNoReturn(() -> db.editRecurringTransaction(recurringTransaction));
     }
 
 
     public TaskNoReturn insertRecurringTransaction(final RecurringTransaction recurringTransaction) {
         undoStack.push(new UndoAction(generateDeleteRecurringTransaction(recurringTransaction), "Undo Insert Recurring Transaction"));
-        return new TaskNoReturn(() -> db.insertRecurringTransaction(recurringTransaction));
+        return generateInsertRecurringTransaction(recurringTransaction);
     }
 
     private TaskNoReturn generateDeleteRecurringTransaction(final RecurringTransaction recurringTransaction) {
         return new TaskNoReturn(() -> db.deleteRecurringTransaction(recurringTransaction));
+    }
+
+    public TaskNoReturn deleteReucrringTransaction(final RecurringTransaction recurringTransaction) {
+        undoStack.push(new UndoAction(generateInsertRecurringTransaction(recurringTransaction), "Undo Delete Recurring Transaction"));
+        return generateDeleteRecurringTransaction(recurringTransaction);
+    }
+
+    private TaskNoReturn generateInsertRecurringTransaction(RecurringTransaction recurringTransaction) {
+        return new TaskNoReturn(() -> db.insertRecurringTransaction(recurringTransaction));
     }
 }

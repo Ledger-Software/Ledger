@@ -26,7 +26,7 @@ import java.util.*;
  * Controls all input and interaction with the Main Page of the application
  */
 
-public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
+public class TransactionTableView extends AbstractTableView<Transaction> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -56,10 +56,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     public TransactionTableView() {
         this.initController(pageLoc, this, "Error on main page startup: ");
-    }
-
-    private void asyncTableUpdate() {
-        Startup.INSTANCE.runLater(this::updateTransactionTableView);
     }
 
     private void configureTransactionTableView() {
@@ -177,6 +173,61 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         this.setContextMenu(menu);
     }
 
+    private void handleDeleteSelectedTransactionsFromTableView() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Transaction(s)");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            List<Integer> indices = new ArrayList<>();
+            // Add indices to new list so they aren't observable
+            indices.addAll(this.getSelectionModel().getSelectedIndices());
+            if (indices.size() != 0) {
+
+                //TODO: Get around this scary mess
+                if (indices.contains(-1)) {
+                    indices = this.getSelectionModel().getSelectedIndices();
+                }
+
+                for (int i : indices) {
+                    Transaction transactionToDelete = this.getItems().get(i);
+
+                    TaskNoReturn task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                    task.RegisterFailureEvent((e) -> {
+                        asyncTableUpdate();
+                        setupErrorPopup("Error deleting transaction.", e);
+                    });
+                    task.startTask();
+                    task.waitForComplete();
+                }
+                updateTransactionTableView();
+            }
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Populate listView w/ transactions from DB
+        configureTransactionTableView();
+        updateTransactionTableView();
+
+        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncTableUpdate());
+        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncTableUpdate());
+    }
+
+    public void updateAccountFilter(Account accountToFilterBy) {
+        this.accountFilter = accountToFilterBy;
+        this.asyncTableUpdate();
+    }
+
+    public void updateSearchFilterString(String searchFilterString) {
+        this.searchFilterString = searchFilterString;
+        this.asyncTableUpdate();
+    }
+
+    @Override
     public void updateTransactionTableView() {
         // Update table rows
         try {
@@ -244,59 +295,5 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         } catch (StorageException e) {
             this.setupErrorPopup(e.getMessage(), e);
         }
-    }
-
-    private void handleDeleteSelectedTransactionsFromTableView() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete Transaction(s)");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            List<Integer> indices = new ArrayList<>();
-            // Add indices to new list so they aren't observable
-            indices.addAll(this.getSelectionModel().getSelectedIndices());
-            if (indices.size() != 0) {
-
-                //TODO: Get around this scary mess
-                if (indices.contains(-1)) {
-                    indices = this.getSelectionModel().getSelectedIndices();
-                }
-
-                for (int i : indices) {
-                    Transaction transactionToDelete = this.getItems().get(i);
-
-                    TaskNoReturn task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
-                    task.RegisterFailureEvent((e) -> {
-                        asyncTableUpdate();
-                        setupErrorPopup("Error deleting transaction.", e);
-                    });
-                    task.startTask();
-                    task.waitForComplete();
-                }
-                updateTransactionTableView();
-            }
-        }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Populate listView w/ transactions from DB
-        configureTransactionTableView();
-        updateTransactionTableView();
-
-        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncTableUpdate());
-        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncTableUpdate());
-    }
-
-    public void updateAccountFilter(Account accountToFilterBy) {
-        this.accountFilter = accountToFilterBy;
-        this.asyncTableUpdate();
-    }
-
-    public void updateSearchFilterString(String searchFilterString) {
-        this.searchFilterString = searchFilterString;
-        this.asyncTableUpdate();
     }
 }

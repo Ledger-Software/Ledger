@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.EndingCalendarColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.StartCalendarColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.PayeeColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.TypeColumn?>
+<?import ledger.user_interface.ui_controllers.component.RecurringTransactionTableView?>
+<fx:root stylesheets="@../css/colorStyle.css" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <RecurringTransactionTableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0">
+        <columns>
+            <PayeeColumn prefWidth="75.0" text="Payee" />
+            <AmountColumn prefWidth="75.0" text="Amount" />
+            <TypeColumn prefWidth="75.0" text="Type" />
+            <StartCalendarColumn prefWidth="75.0" text="Start Date" />
+            <EndingCalendarColumn prefWidth="75.0" text="End Date" />
+        </columns>
+      </RecurringTransactionTableView>
+      <Button mnemonicParsing="false" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets right="10.0" />
+         </GridPane.margin>
+      </Button>
+   </children>
+</fx:root>

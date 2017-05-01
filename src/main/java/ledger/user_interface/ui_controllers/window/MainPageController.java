@@ -63,6 +63,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TransactionTableView transactionTableView;
     @FXML
     private Button addIgnoreTransactionButton;
+    @FXML
+    private Button recurringEditor;
 
     public MainPageController() {
         INSTANCE = this;
@@ -91,6 +93,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         this.trackSpendingBtn.setOnAction((event) -> createExpenditureChartsPage());
 
         this.importTransactionsBtn.setOnAction((event) -> createImportTransPopup());
+
+        this.recurringEditor.setOnAction((event) -> createRecurringEditor());
 
         this.clearButton.setOnAction(this::clearSearch);
 
@@ -285,6 +289,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         FinanceAnalysisController chartController = new FinanceAnalysisController();
         Scene scene = new Scene(chartController);
         this.createModal(this.getScene().getWindow(), scene, "Financial Analysis", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
+    }
+
+
+    private void createRecurringEditor() {
+        RecurringTransactionEditorWindow editorWindow = new RecurringTransactionEditorWindow();
+        Scene scene = new Scene(editorWindow);
+        this.createModal(this.getScene().getWindow(), scene, "Recurring Editor", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
     }
 
     /**

@@ -4,11 +4,13 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.AbstractTableView;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.util.Optional;
@@ -21,7 +23,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
     public void handle(TableColumn.CellEditEvent<Transaction, Type> t) {
         Transaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         Type typeToSet = t.getNewValue();
-        TransactionTableView transactionTableView = (TransactionTableView) t.getTableView();
+        AbstractTableView transactionTableView = (AbstractTableView) t.getTableView();
 
         if (transaction.getAmount() < 0 && (typeToSet.getName().equals("Account Credit") || typeToSet.getName().equals("Misc Credit"))) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -50,7 +52,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
         }
     }
 
-    private void executeAmountFlipTypeEdit(Optional<ButtonType> result, Transaction transaction, Type typeToSet, TransactionTableView transactionTableView) {
+    private void executeAmountFlipTypeEdit(Optional<ButtonType> result, Transaction transaction, Type typeToSet, AbstractTableView transactionTableView) {
         if (result.get() == ButtonType.OK){
             transaction.setAmount(-transaction.getAmount());
             transaction.setType(typeToSet);
