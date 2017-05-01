@@ -6,6 +6,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.AbstractTableView;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 /**
@@ -18,19 +19,19 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
         Long amountToSet = t.getNewValue();
         if (amountToSet == null) {
             setupErrorPopup("Provided amount is invalid", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            ((AbstractTableView) t.getTableView()).updateTransactionTableView();
             return;
         }
 
         if ((amountToSet < 0) && (transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
             setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a positive amount.", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            ((AbstractTableView) t.getTableView()).updateTransactionTableView();
             return;
         }
 
         if ((amountToSet > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit"))) {
             setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a negative amount.", new Exception());
-            ((TransactionTableView) t.getTableView()).updateTransactionTableView();
+            ((AbstractTableView) t.getTableView()).updateTransactionTableView();
             return;
         }
 

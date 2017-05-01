@@ -12,8 +12,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class RecurringTransactionTableView extends TableView implements IUIController, Initializable {
-    private static final String pageLoc = "/fxml_files/AutoTaggingTableView.fxml";
+public class RecurringTransactionTableView extends AbstractTableView implements IUIController, Initializable {
+    private static final String pageLoc = "/fxml_files/RecurringEditorTableView.fxml";
 
 
     public RecurringTransactionTableView() {
@@ -23,18 +23,19 @@ public class RecurringTransactionTableView extends TableView implements IUIContr
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncUpdateTableView());
-        updateTableView();
+        updateTransactionTableView();
     }
 
-    private void updateTableView() {
+    private void asyncUpdateTableView() {
+        Startup.INSTANCE.runLater(this::updateTransactionTableView);
+    }
+
+    @Override
+    public void updateTransactionTableView() {
         TaskWithReturn<List<RecurringTransaction>> task = DbController.INSTANCE.getAllRecurringTransactions();
         task.startTask();
         List<RecurringTransaction> transactions = task.waitForResult();
         this.getItems().clear();
         this.getItems().addAll(transactions);
-    }
-
-    private void asyncUpdateTableView() {
-        Startup.INSTANCE.runLater(this::updateTableView);
     }
 }
