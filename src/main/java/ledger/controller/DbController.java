@@ -391,10 +391,7 @@ public class DbController {
         TaskNoReturn task = generateEditTag(tag);
 
         Tag oldTag = null;
-//        try {
         oldTag = db.getTagForNameAndDescription(tag.getName(), tag.getDescription());
-//        } catch (StorageException ignored) {
-//        }
 
         undoStack.push(new UndoAction(generateEditTag(oldTag), "Undo Edit Payee"));
 
