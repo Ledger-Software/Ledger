@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
@@ -17,6 +18,7 @@ import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.*;
+import ledger.user_interface.ui_controllers.window.TransactionPopupController;
 import ledger.user_interface.utils.*;
 
 import java.net.URL;
@@ -157,6 +159,7 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
             updateTransactionTableView();
         });
 
+        // MenuItem for Add Transaction
         MenuItem addTransactionMenuItem = new MenuItem("Add Transaction");
         menu.getItems().add(addTransactionMenuItem);
         addTransactionMenuItem.setOnAction(event -> {
@@ -167,16 +170,21 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
                 this.setupErrorPopup("Please create an account before adding transactions.");
                 return;
             }
-            Account acc = accountList.get(0);
 
-            TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
-            task.startTask();
+            createAddTransPopup();
+
+//            Account acc = accountList.get(0);
+//
+//            TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
+//            task.startTask();
         });
 
+        // MenuItem for Undo
         MenuItem undoMenuItem = new MenuItem("Undo");
         menu.getItems().add(undoMenuItem);
         undoMenuItem.setOnAction(event -> undo());
 
+        // Set table's context menu
         this.setContextMenu(menu);
     }
 
@@ -306,6 +314,15 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         if (result.isPresent() && result.get() == ButtonType.OK) {
             DbController.INSTANCE.undo();
         }
+    }
+
+    /**
+     * Creates the Add Transaction modal
+     */
+    private void createAddTransPopup() {
+        TransactionPopupController trxnController = new TransactionPopupController();
+        Scene scene = new Scene(trxnController);
+        this.createModal(this.getScene().getWindow(), scene, "Add Transaction");
     }
 
     @Override
