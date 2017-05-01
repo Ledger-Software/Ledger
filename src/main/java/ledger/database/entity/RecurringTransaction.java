@@ -1,5 +1,8 @@
 package ledger.database.entity;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +20,9 @@ public class RecurringTransaction extends Transaction {
             tagList, Note note, Frequency frequency) {
         this(startDate, endDate, Calendar.getInstance(), type, amount, account, payee, tagList, note, frequency, -1);
 
-        Date dateNow = new Date();
+        LocalDate localDate = LocalDate.now();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        Date dateNow = Date.from(instant);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(dateNow);
         if (frequency.equals(Frequency.Daily)) {

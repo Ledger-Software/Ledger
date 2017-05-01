@@ -23,6 +23,9 @@ import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 /**
@@ -153,9 +156,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
+            System.out.println(recurringTransaction.toString());
+
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
-            Date dateNow = new Date();
+            LocalDate localDate = LocalDate.now();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date dateNow = Date.from(instant);
             Calendar calendarNow = Calendar.getInstance();
             calendarNow.setTime(dateNow);
 
@@ -170,12 +177,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 System.out.println("Adding Daily");
                 calendarNow.add(Calendar.DATE, 1);
             } else if (transactionFrequency.equals(Frequency.Weekly)) {
+                System.out.println("Adding weekly");
                 calendarNow.add(Calendar.DATE, 7);
-                continue;
             } else if (transactionFrequency.equals(Frequency.Monthly)) {
+                System.out.println("Adding Monthly");
                 calendarNow.add(Calendar.MONTH, 1);
-                continue;
             } else if (transactionFrequency.equals(Frequency.Yearly)) {
+                System.out.println("Adding Yearly");
                 calendarNow.add(Calendar.YEAR, 1);
             } else {
                 System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
