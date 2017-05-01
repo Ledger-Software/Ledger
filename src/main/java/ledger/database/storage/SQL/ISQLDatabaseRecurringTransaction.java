@@ -140,6 +140,7 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
             lookupAndSetAccountForSQLStatement(recurringTransaction, stmt, 6);
             lookupAndSetPayeeForSQLStatement(recurringTransaction, stmt, 7);
             lookupAndSetTypeForSQLStatement(recurringTransaction, stmt, 8);
+            stmt.setInt(9, recurringTransaction.getId());
 
             stmt.executeUpdate();
 
