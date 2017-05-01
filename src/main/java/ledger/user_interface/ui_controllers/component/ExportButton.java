@@ -9,6 +9,8 @@ import javafx.stage.FileChooser;
 import ledger.controller.DbController;
 import ledger.exception.StorageException;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.Startup;
+import ledger.user_interface.ui_controllers.window.LoginPageController;
 import ledger.user_interface.ui_controllers.window.PasswordPromptController;
 
 import java.io.File;
@@ -75,6 +77,11 @@ public class ExportButton extends Button implements IUIController, Initializable
     private void displayPasswordPrompt() {
         PasswordPromptController promptController = new PasswordPromptController();
         Scene scene = new Scene(promptController);
-        this.createModal(scene, "Verify Password");
+        this.createModal(scene, "Verify Password", ()-> {
+            LoginPageController loginController = new LoginPageController();
+            Scene Loginscene = new Scene(loginController);
+            Startup.INSTANCE.newStage(Loginscene, "Ledger Login", false);
+        });
+
     }
 }

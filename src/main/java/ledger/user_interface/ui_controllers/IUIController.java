@@ -1,5 +1,6 @@
 package ledger.user_interface.ui_controllers;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -8,10 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.Window;
+import javafx.stage.*;
+import ledger.controller.register.CallableMethodVoidNoArgs;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -115,6 +114,9 @@ public interface IUIController {
     default void createModal(Scene s, String windowName) {
         createModal(null, s, windowName);
     }
+    default void createModal(Scene s, String windowName, CallableMethodVoidNoArgs onClose) {
+        createModal(null, s, windowName, false, Modality.WINDOW_MODAL, StageStyle.UTILITY, onClose);
+    }
 
     default void createModal(Window parent, Scene child, String windowName) {
         createModal(parent, child, windowName, false);
@@ -127,8 +129,10 @@ public interface IUIController {
     default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality) {
         createModal(parent, child, windowName, resizeable, modality, StageStyle.UTILITY);
     }
-
-    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle) {
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle){
+        createModal(parent, child, windowName, resizeable, modality, stageStyle, ()-> {});
+        }
+    default void createModal(Window parent, Scene child, String windowName, boolean resizeable, Modality modality, StageStyle stageStyle, CallableMethodVoidNoArgs onClose) {
         Stage newStage = new Stage();
         newStage.initOwner(parent);
         newStage.setScene(child);
@@ -137,7 +141,20 @@ public interface IUIController {
         newStage.initModality(modality);
         newStage.initStyle(stageStyle);
 //        newStage.setAlwaysOnTop(true);
+        newStage.onCloseRequestProperty().setValue(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+
+                    try {
+                        onClose.call();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+            }
+        });
         newStage.getIcons().add(image);
+
         newStage.show();
 
         if (parent != null) {
