@@ -64,7 +64,7 @@ public class RecurringTransactionController extends GridPane implements IUIContr
         freqTask.startTask();
         List<Frequency> frequencies = freqTask.waitForResult();
         for (Frequency freq : frequencies) {
-            this.frequencyText.getItems().add(FrequencyConverter.convertFrequencyToString(freq));
+            this.frequencyText.getItems().add(Frequency.convertFrequencyToString(freq));
         }
         this.frequencyText.setVisible(true);
 
@@ -100,7 +100,7 @@ public class RecurringTransactionController extends GridPane implements IUIContr
         endDate.setTimeInMillis(instant.toEpochMilli());
 
         String frequencyName = this.frequencyText.getValue();
-        Frequency frequency = FrequencyConverter.convertStringToFrequency(frequencyName);
+        Frequency frequency = Frequency.convertStringToFrequency(frequencyName);
 
         Payee payee = this.payeeDropdown.getSelectedPayee();
         if (InputSanitization.isInvalidPayee(payee)) {

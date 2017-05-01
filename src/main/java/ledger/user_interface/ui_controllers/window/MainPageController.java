@@ -153,15 +153,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
-            System.out.println(recurringTransaction.toString());
-
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
             Date dateNow = new Date();
             Calendar calendarNow = Calendar.getInstance();
             calendarNow.setTime(dateNow);
 
-            //if (calendarNow.before(nextTriggerDate)) continue;
+            if (calendarNow.before(nextTriggerDate)) continue;
             Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
                     recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, new ArrayList<>(),
                     null, -1);
