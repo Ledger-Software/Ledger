@@ -143,7 +143,6 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
             stmt.setInt(9, recurringTransaction.getId());
 
             stmt.executeUpdate();
-
         } catch (java.sql.SQLException e){
             throw new StorageException("Error while editing Recurring Transaction.", e);
         }

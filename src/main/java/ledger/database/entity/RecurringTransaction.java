@@ -39,7 +39,7 @@ public class RecurringTransaction extends Transaction {
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Calendar nextTriggerDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
-        super(new Date(), type, amount, account, payee, false, tagList, note, id);
+        super(new Date(), type, amount, account, payee, false, tagList, note, -1, id);
         this.startDate = startDate;
         this.endDate = endDate;
         this.nextTriggerDate = nextTriggerDate;
