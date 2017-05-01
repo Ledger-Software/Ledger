@@ -134,6 +134,18 @@ public class RecurringTransactionController extends GridPane implements IUIContr
             this.setupErrorPopup("No type selected.", new Exception());
             return;
         }
+
+        if ((amount < 0) && (type.getName().equals("Account Credit") || type.getName().equals("Misc Credit"))) {
+            setupErrorPopup("Transactions of the " + type.getName() + " type must have a positive amount.");
+            return;
+        }
+
+        if ((amount > 0) && !(type.getName().equals("Account Credit") || type.getName().equals("Misc Credit"))) {
+            setupErrorPopup("Transactions of the " + type.getName() + " type must have a negative amount.");
+            return;
+        }
+
+
         RecurringTransaction recurringTrans = new RecurringTransaction(startDate, endDate, type, amount, account, payee,
                 null, note, frequency);
         TaskNoReturn addRecurringTransTask = DbController.INSTANCE.insertRecurringTransaction(recurringTrans);
