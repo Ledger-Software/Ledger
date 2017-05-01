@@ -9,13 +9,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
-import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.*;
+import ledger.database.entity.Account;
+import ledger.database.entity.Frequency;
+import ledger.database.entity.RecurringTransaction;
+import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -156,7 +159,6 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
-            System.out.println(recurringTransaction.toString());
 
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
@@ -174,16 +176,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             insertTransactionTask.startTask();
 
             if (transactionFrequency.equals(Frequency.Daily)) {
-                System.out.println("Adding Daily");
                 calendarNow.add(Calendar.DATE, 1);
             } else if (transactionFrequency.equals(Frequency.Weekly)) {
-                System.out.println("Adding weekly");
                 calendarNow.add(Calendar.DATE, 7);
             } else if (transactionFrequency.equals(Frequency.Monthly)) {
-                System.out.println("Adding Monthly");
                 calendarNow.add(Calendar.MONTH, 1);
             } else if (transactionFrequency.equals(Frequency.Yearly)) {
-                System.out.println("Adding Yearly");
                 calendarNow.add(Calendar.YEAR, 1);
             } else {
                 System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());

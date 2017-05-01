@@ -20,11 +20,9 @@ public class RecurringTransaction extends Transaction {
             tagList, Note note, Frequency frequency) {
         this(startDate, endDate, Calendar.getInstance(), type, amount, account, payee, tagList, note, frequency, -1);
 
-        LocalDate localDate = LocalDate.now();
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-        Date dateNow = Date.from(instant);
+        Calendar dateNow = ((Calendar) startDate.clone());
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateNow);
+        calendar.setTime(dateNow.getTime());
         if (frequency.equals(Frequency.Daily)) {
             calendar.add(Calendar.DATE, 1);
             this.nextTriggerDate = calendar;
@@ -41,12 +39,11 @@ public class RecurringTransaction extends Transaction {
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Calendar nextTriggerDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
-        super(new Date(), type, amount, account, payee, false, tagList, note);
+        super(new Date(), type, amount, account, payee, false, tagList, note, id);
         this.startDate = startDate;
         this.endDate = endDate;
         this.nextTriggerDate = nextTriggerDate;
         this.frequency = frequency;
-        this.id = id;
     }
 
     /**
