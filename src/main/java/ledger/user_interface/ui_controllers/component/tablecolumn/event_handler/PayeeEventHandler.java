@@ -21,7 +21,7 @@ public class PayeeEventHandler implements EventHandler<TableColumn.CellEditEvent
 
         TaskNoReturn task = DbController.INSTANCE.editTransaction(transaction);
         task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing transaction payee.", e));
-
+        
         task.startTask();
         task.waitForComplete();
     }

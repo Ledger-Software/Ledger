@@ -120,7 +120,10 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
 
     @Override
     default void editRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException {
+        boolean originalAutoCommit = true;
         try {
+            originalAutoCommit = getDatabase().getAutoCommit();
+            setDatabaseAutoCommit(false);
             PreparedStatement stmt = getDatabase().prepareStatement("UPDATE " + RecurringTransactionTable.TABLE_NAME + " SET " +
                     RecurringTransactionTable.RECURRING_START_DATE + "=?," +
                     RecurringTransactionTable.RECURRING_END_DATE + "=?," +
@@ -143,8 +146,11 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
             stmt.setInt(9, recurringTransaction.getId());
 
             stmt.executeUpdate();
+
         } catch (java.sql.SQLException e){
             throw new StorageException("Error while editing Recurring Transaction.", e);
+        } finally {
+            setDatabaseAutoCommit(originalAutoCommit);
         }
     }
 }

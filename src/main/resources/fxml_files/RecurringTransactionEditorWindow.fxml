@@ -14,25 +14,41 @@
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.AmountColumn?>
 <?import ledger.user_interface.ui_controllers.component.tablecolumn.TypeColumn?>
 <?import ledger.user_interface.ui_controllers.component.RecurringTransactionTableView?>
+<?import ledger.user_interface.ui_controllers.component.tablecolumn.FrequencyColumn?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <fx:root stylesheets="@../css/colorStyle.css" type="GridPane" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" />
   </columnConstraints>
   <rowConstraints>
+    <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
     <RowConstraints vgrow="SOMETIMES" />
     <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <RecurringTransactionTableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0">
+       <Pane fx:id="header" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+           <children>
+               <Text fx:id="title" layoutX="14.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                     text="Edit Recurring Transaction">
+                   <font>
+                       <Font name="Calibri" size="28.0"/>
+                   </font>
+               </Text>
+           </children>
+       </Pane>
+      <RecurringTransactionTableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" GridPane.rowIndex="1">
         <columns>
             <PayeeColumn prefWidth="75.0" text="Payee" />
             <AmountColumn prefWidth="75.0" text="Amount" />
             <TypeColumn prefWidth="75.0" text="Type" />
             <StartCalendarColumn prefWidth="75.0" text="Start Date" />
             <EndingCalendarColumn prefWidth="75.0" text="End Date" />
+            <FrequencyColumn prefWidth="75.0" text="Frequency" />
         </columns>
       </RecurringTransactionTableView>
-      <Button mnemonicParsing="false" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
+      <Button fx:id="doneButton" mnemonicParsing="false" text="Done" GridPane.halignment="RIGHT" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="10.0" />
          </GridPane.margin>
