@@ -43,76 +43,77 @@
         </Text>
         <VBox fx:id="buttonsVBox" alignment="TOP_CENTER" GridPane.rowIndex="1">
             <children>
-                <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                    <content>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                            <children>
-                                <TitledPane animated="false" expanded="false" text="Account Operations">
-                                    <content>
-                                        <AnchorPane>
-                                            <children>
-                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                    <children>
-                                                        <ListView fx:id="accountListView" minHeight="200.0" prefHeight="200.0" prefWidth="200.0" />
-                                                        <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Account" textAlignment="CENTER">
-                                                            <font>
-                                                                <Font name="Calibri" size="17.0" />
-                                                            </font>
-                                                            <opaqueInsets>
-                                                                <Insets />
-                                                            </opaqueInsets>
-                                                            <cursor>
-                                                                <Cursor fx:constant="HAND" />
-                                                            </cursor>
-                                                        </Button>
-                                                        <Button fx:id="deleteAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Account" textAlignment="CENTER">
-                                                            <font>
-                                                                <Font name="Calibri" size="17.0" />
-                                                            </font>
-                                                            <opaqueInsets>
-                                                                <Insets />
-                                                            </opaqueInsets>
-                                                            <cursor>
-                                                                <Cursor fx:constant="HAND" />
-                                                            </cursor>
-                                                        </Button>
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                    <VBox.margin>
-                                        <Insets />
-                                    </VBox.margin>
-                                </TitledPane>
-                                <TitledPane animated="false" expanded="false" text="Transaction Operations">
-                                    <content>
-                                        <AnchorPane>
-                                            <children>
-                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                    <children>
-                                                        <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER" />
-                                                        <Button fx:id="recurringTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Transaction" textAlignment="CENTER" />
-                                          <Button fx:id="recurringEditor" layoutX="10.0" layoutY="48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Editor" textAlignment="CENTER" />
-                                                        <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER" />
-                                                        <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Add Automatic Tags" />
-                                                        <Button fx:id="addIgnoreTransactionButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ignored Transactions" />
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                    <VBox.margin>
-                                        <Insets />
-                                    </VBox.margin>
-                                </TitledPane>
-                                <TitledPane animated="false" expanded="false" text="Miscellaneous">
-                                    <content>
-                                        <AnchorPane>
-                                            <children>
-                                                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                    <children>
-                                                        <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Analyze Finances" textAlignment="CENTER" />
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+               <content>
+                  <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                     <children>
+                      <TitledPane animated="false" expanded="false" text="Account Operations">
+                        <content>
+                            <AnchorPane>
+                                 <children>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                           <ListView fx:id="accountListView" minHeight="200.0" prefHeight="200.0" prefWidth="200.0" />
+                                              <Button fx:id="addAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Account" textAlignment="CENTER">
+                                                  <font>
+                                                      <Font name="Calibri" size="17.0" />
+                                                  </font>
+                                                  <opaqueInsets>
+                                                      <Insets />
+                                                  </opaqueInsets>
+                                                  <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                  </cursor>
+                                              </Button>
+                                              <Button fx:id="deleteAccountBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Delete Account" textAlignment="CENTER">
+                                                  <font>
+                                                      <Font name="Calibri" size="17.0" />
+                                                  </font>
+                                                  <opaqueInsets>
+                                                      <Insets />
+                                                  </opaqueInsets>
+                                                  <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                  </cursor>
+                                              </Button>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                      </TitledPane>
+                      <TitledPane animated="false" expanded="false" text="Transaction Operations">
+                        <content>
+                          <AnchorPane>
+                                 <children>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                              <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER"></Button>
+                                              <Button fx:id="recurringTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Transaction" textAlignment="CENTER" />
+                                              <Button fx:id="recurringEditor" layoutX="10.0" layoutY="48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Editor" textAlignment="CENTER" />
+                                              <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER" />
+                                              <Button fx:id="tagEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit Tags" textAlignment="CENTER" />
+                                              <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Add Automatic Tags" />
+                                          <Button fx:id="addIgnoreTransactionButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ignored Transactions" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                      </TitledPane>
+                      <TitledPane animated="false" expanded="false" text="Miscellaneous">
+                        <content>
+                          <AnchorPane>
+                                 <children>
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                              <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Analyze Finances" textAlignment="CENTER" />
 
 
                                                         <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
@@ -158,15 +159,15 @@
                         <Insets left="5.0" right="5.0" />
                     </GridPane.margin>
                 </Button>
-                <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnSpan="3" GridPane.rowIndex="1">
-                    <content>
-                        <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
-                            <columnResizePolicy>
-                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                            </columnResizePolicy>
-                        </TransactionTableView>
-                    </content>
-                </ScrollPane>
+            <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnSpan="3" GridPane.rowIndex="1">
+               <content>
+                   <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TransactionTableView>
+               </content>
+            </ScrollPane>
             </children>
         </GridPane>
     </children>

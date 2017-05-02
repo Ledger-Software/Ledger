@@ -374,6 +374,96 @@ public class DbController {
     }
 
     /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to insert a Tag
+     *
+     * @param tag The tag to insert
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn insertTag(final Tag tag) {
+        TaskNoReturn task = generateInsertTag(tag);
+        undoStack.push(new UndoAction(generateDeleteTag(tag), "Undo Insert Tag"));
+        return task;
+
+    }
+
+    private TaskNoReturn generateInsertTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.insertTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
+
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a Tag
+     *
+     * @param tag The tag to edit
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn editTag(final Tag tag) {
+        TaskNoReturn task = generateEditTag(tag);
+
+        Tag oldTag = null;
+        oldTag = db.getTagForNameAndDescription(tag.getName(), tag.getDescription());
+
+        undoStack.push(new UndoAction(generateEditTag(oldTag), "Undo Edit Payee"));
+
+        return task;
+    }
+
+    private TaskNoReturn generateEditTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.editTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
+
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to delete a Tag
+     *
+     * @param tag The tag to delete
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn deleteTag(final Tag tag) {
+        TaskNoReturn task = generateDeleteTag(tag);
+        undoStack.push(new UndoAction(generateInsertTag(tag), "Undo Delete Tag"));
+        return task;
+    }
+
+    private TaskNoReturn generateDeleteTag(final Tag tag) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.deleteTag(tag));
+        registerSuccess(task, transactionSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to merge tags
+     *
+     * @param tags List of tags to merge. All tags will be merged into the first tag in the list
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn mergeTags(final List<Tag> tags) {
+        TaskNoReturn task = generateMergeTags(tags);
+        // This operation is not undoable
+        return task;
+    }
+
+    private TaskNoReturn generateMergeTags(final List<Tag> tags) {
+        TaskNoReturn task = new TaskNoReturn(() -> db.mergeTags(tags));
+        registerSuccess(task, transactionSuccessEvent);
+        return task;
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to get all stored Payees
+     *
+     * @return A task for the Async Call that returns a list of all the Payees
+     */
+    public TaskWithReturn<List<Tag>> getAllTags() {
+        return new TaskWithReturn<>(db::getAllTags);
+
+    }
+
+    /**
      * Creates a ITask that can be used to make an asynchronous call to the database to get all Tags associated with a
      * Payee
      *
@@ -594,15 +684,6 @@ public class DbController {
      */
     public TaskNoReturn editRecurringTransaction(final RecurringTransaction recurringTransaction) {
         TaskNoReturn task = generateEditRecurringTansaction(recurringTransaction);
-
-//        RecurringTransaction oldTrans = null;
-//        try {
-//            db.get
-//            oldTrans = db.getTransactionById(recurringTransaction);
-//        } catch (StorageException e) {
-//            System.err.println("Error on getTransactionById");
-//        }
-//        undoStack.push(new UndoAction(generateEditRecurringTansaction(oldTrans)), "Undo Edit Recurring Transaction");
 
         return task;
     }

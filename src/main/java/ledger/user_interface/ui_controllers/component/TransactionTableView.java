@@ -6,6 +6,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import ledger.controller.DbController;
@@ -17,6 +18,7 @@ import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.tablecolumn.*;
+import ledger.user_interface.ui_controllers.window.TransactionPopupController;
 import ledger.user_interface.utils.*;
 
 import java.net.URL;
@@ -153,6 +155,7 @@ public class TransactionTableView extends AbstractTableView<Transaction> impleme
             updateTransactionTableView();
         });
 
+        // MenuItem for Add Transaction
         MenuItem addTransactionMenuItem = new MenuItem("Add Transaction");
         menu.getItems().add(addTransactionMenuItem);
         addTransactionMenuItem.setOnAction(event -> {
@@ -163,69 +166,19 @@ public class TransactionTableView extends AbstractTableView<Transaction> impleme
                 this.setupErrorPopup("Please create an account before adding transactions.");
                 return;
             }
-            Account acc = accountList.get(0);
 
-            TaskNoReturn task = DbController.INSTANCE.insertTransaction(new Transaction(new Date(), TypeConversion.convert("UNKNOWN"), 0, acc, new Payee("", ""), true, new ArrayList<>(), new Note("")));
-            task.startTask();
-
+            createAddTransPopup();
         });
 
+        // MenuItem for Undo
+        MenuItem undoMenuItem = new MenuItem("Undo");
+        menu.getItems().add(undoMenuItem);
+        undoMenuItem.setOnAction(event -> undo());
+
+        // Set table's context menu
         this.setContextMenu(menu);
     }
 
-    private void handleDeleteSelectedTransactionsFromTableView() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Delete Transaction(s)");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            List<Integer> indices = new ArrayList<>();
-            // Add indices to new list so they aren't observable
-            indices.addAll(this.getSelectionModel().getSelectedIndices());
-            if (indices.size() != 0) {
-
-                //TODO: Get around this scary mess
-                if (indices.contains(-1)) {
-                    indices = this.getSelectionModel().getSelectedIndices();
-                }
-
-                for (int i : indices) {
-                    Transaction transactionToDelete = this.getItems().get(i);
-
-                    TaskNoReturn task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
-                    task.RegisterFailureEvent((e) -> {
-                        asyncTableUpdate();
-                        setupErrorPopup("Error deleting transaction.", e);
-                    });
-                    task.startTask();
-                    task.waitForComplete();
-                }
-                updateTransactionTableView();
-            }
-        }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Populate listView w/ transactions from DB
-        configureTransactionTableView();
-        updateTransactionTableView();
-
-        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncTableUpdate());
-        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncTableUpdate());
-    }
-
-    public void updateAccountFilter(Account accountToFilterBy) {
-        this.accountFilter = accountToFilterBy;
-        this.asyncTableUpdate();
-    }
-
-    public void updateSearchFilterString(String searchFilterString) {
-        this.searchFilterString = searchFilterString;
-        this.asyncTableUpdate();
-    }
 
     @Override
     public void updateTransactionTableView() {
@@ -295,5 +248,93 @@ public class TransactionTableView extends AbstractTableView<Transaction> impleme
         } catch (StorageException e) {
             this.setupErrorPopup(e.getMessage(), e);
         }
+    }
+
+    private void handleDeleteSelectedTransactionsFromTableView() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete Transaction(s)");
+        alert.setHeaderText(null);
+        alert.setContentText("Are you sure you would like to delete the selected transaction(s)?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            List<Integer> indices = new ArrayList<>();
+            // Add indices to new list so they aren't observable
+            indices.addAll(this.getSelectionModel().getSelectedIndices());
+            if (indices.size() != 0) {
+
+                //TODO: Get around this scary mess
+                if (indices.contains(-1)) {
+                    indices = this.getSelectionModel().getSelectedIndices();
+                }
+
+                for (int i : indices) {
+                    Transaction transactionToDelete = this.getItems().get(i);
+
+                    TaskNoReturn task = DbController.INSTANCE.deleteTransaction(transactionToDelete);
+                    task.RegisterFailureEvent((e) -> {
+                        asyncTableUpdate();
+                        setupErrorPopup("Error deleting transaction.", e);
+                    });
+                    task.startTask();
+                    task.waitForComplete();
+                }
+                updateTransactionTableView();
+            }
+        }
+    }
+
+    /**
+     * Verifies that the user would like to undo the most recent operation. If so, undoes it
+     */
+    public void undo() {
+        String topMessage = DbController.INSTANCE.undoPeekMessage();
+
+        if (topMessage == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Undo Not Available");
+            alert.setHeaderText("There are no recent operations to undo.");
+            alert.show();
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Undo");
+        alert.setHeaderText("Do you wish to undo the follow action?");
+        alert.setContentText(topMessage);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            DbController.INSTANCE.undo();
+        }
+    }
+
+    /**
+     * Creates the Add Transaction modal
+     */
+    private void createAddTransPopup() {
+        TransactionPopupController trxnController = new TransactionPopupController();
+        Scene scene = new Scene(trxnController);
+        this.createModal(this.getScene().getWindow(), scene, "Add Transaction");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Populate listView w/ transactions from DB
+        configureTransactionTableView();
+        updateTransactionTableView();
+
+        DbController.INSTANCE.registerTransactionSuccessEvent((ignored) -> this.asyncTableUpdate());
+        DbController.INSTANCE.registerPayeeSuccessEvent((ignored) -> this.asyncTableUpdate());
+    }
+
+    public void updateAccountFilter(Account accountToFilterBy) {
+        this.accountFilter = accountToFilterBy;
+        this.asyncTableUpdate();
+    }
+
+    public void updateSearchFilterString(String searchFilterString) {
+        this.searchFilterString = searchFilterString;
+        this.asyncTableUpdate();
     }
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
@@ -15,9 +16,9 @@ import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.Account;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.component.AccountDropdown;
 import ledger.user_interface.ui_controllers.component.FilteringAccountDropdown;
 import ledger.user_interface.ui_controllers.component.charts.*;
+import ledger.user_interface.utils.PreferenceHandler;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -90,13 +91,13 @@ public class FinanceAnalysisController extends GridPane implements Initializable
 
             Date tempFromDate, tempToDate;
 
-            if(tempLocalFromDate == null) {
+            if (tempLocalFromDate == null) {
                 tempFromDate = new Date(Long.MIN_VALUE);
             } else {
                 tempFromDate = Date.from(tempLocalFromDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             }
 
-            if(tempLocalToDate == null) {
+            if (tempLocalToDate == null) {
                 tempToDate = new Date(Long.MAX_VALUE);
             } else {
                 tempToDate = Date.from(tempLocalToDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -114,7 +115,7 @@ public class FinanceAnalysisController extends GridPane implements Initializable
         });
 
         expenditureLineChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
                 Node chart = new ExpenditureLineChart(this.filteredTransactions);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
@@ -124,7 +125,7 @@ public class FinanceAnalysisController extends GridPane implements Initializable
         });
 
         expenditurePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
                 Node chart = new ExpenditureTagPieChart(this.filteredTransactions);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
@@ -134,7 +135,7 @@ public class FinanceAnalysisController extends GridPane implements Initializable
         });
 
         incomeCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
                 Node chart = new IncomeBarChart(this.filteredTransactions);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
@@ -144,7 +145,7 @@ public class FinanceAnalysisController extends GridPane implements Initializable
         });
 
         netBalanceCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
 
                 Node chart = new NetBalanceLineChart(this.filteredTransactions, accountFilterDropdown);
                 chartHBox.getChildren().add(chart);
@@ -155,7 +156,7 @@ public class FinanceAnalysisController extends GridPane implements Initializable
         });
 
         expenditurePayeePieChartCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue) {
+            if (newValue) {
                 Node chart = new ExpenditurePayeePieChart(this.filteredTransactions);
                 chartHBox.getChildren().add(chart);
                 HBox.setHgrow(chart, Priority.ALWAYS);
@@ -170,6 +171,11 @@ public class FinanceAnalysisController extends GridPane implements Initializable
 
         DbController.INSTANCE.registerTransactionSuccessEvent((ignore) -> this.updateTransactions());
         updateFilter();
+        if (PreferenceHandler.getStringPreference(PreferenceHandler.FINANCE_ANALYSIS_HELP_SHOWN) == null) {
+            financeIntroHelp();
+            PreferenceHandler.setStringPreference(PreferenceHandler.FINANCE_ANALYSIS_HELP_SHOWN, "given");
+        }
+
     }
 
     private void updateFilter() {
@@ -198,14 +204,14 @@ public class FinanceAnalysisController extends GridPane implements Initializable
      * @param account the account to filter the transactions by
      */
     private void filterBasedOnAccount(Account account) {
-        if(account == null)
+        if (account == null)
             return;
 
         Iterator<Transaction> iterator = filteredTransactions.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Transaction t = iterator.next();
 
-            if(!t.getAccount().equals(account)) {
+            if (!t.getAccount().equals(account)) {
                 iterator.remove();
             }
         }
@@ -219,15 +225,15 @@ public class FinanceAnalysisController extends GridPane implements Initializable
      */
     private void filterBasedOnDateRange(Date from, Date to) {
         Iterator<Transaction> iterator = filteredTransactions.iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Transaction t = iterator.next();
 
             Date date = t.getDate();
-            if(date.before(from)) {
+            if (date.before(from)) {
                 iterator.remove();
                 continue;
             }
-            if(date.after(to)) {
+            if (date.after(to)) {
                 iterator.remove();
                 continue;
             }
@@ -235,10 +241,22 @@ public class FinanceAnalysisController extends GridPane implements Initializable
     }
 
     private void updateCharts(List<Transaction> transactionList) {
-        for(Node node :chartHBox.getChildren()) {
-            if(!(node instanceof IChart)) continue;
+        for (Node node : chartHBox.getChildren()) {
+            if (!(node instanceof IChart)) continue;
 
             ((IChart) node).updateData(transactionList);
         }
+    }
+
+    /**
+     * Upon first use of the Finance Analysis, opens a help dialog to assist user.
+     */
+    private void financeIntroHelp() {
+        Alert a = new Alert(Alert.AlertType.NONE);
+        String message = "Hello, new user! We've noticed this is your first time using the Financial Analysis Feature. " +
+                "The available charts are on the left. You can select any combination of them. " +
+                "The filter is at the top of the window. You can choose the account and/or time frame you want to analyze.";
+        this.createIntroductionAlerts("Financial Analysis Introduction", message, a);
+
     }
 }
