@@ -122,6 +122,10 @@ public interface ISQLDatabaseRecurringTransaction extends ISQLDatabaseTransactio
 
     @Override
     default void editRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException {
+        if (recurringTransaction.getEndDate().before(recurringTransaction.getStartDate())) {
+            throw new StorageException("A Recurring Transaction's Start Date must be before its End Date");
+        }
+
         boolean originalAutoCommit = true;
         try {
             originalAutoCommit = getDatabase().getAutoCommit();
