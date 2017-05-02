@@ -38,7 +38,7 @@
                </Text>
            </children>
        </Pane>
-      <RecurringTransactionTableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" GridPane.rowIndex="1">
+      <RecurringTransactionTableView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="800.0" GridPane.rowIndex="1">
         <columns>
             <PayeeColumn prefWidth="75.0" text="Payee" />
             <AmountColumn prefWidth="75.0" text="Amount" />
