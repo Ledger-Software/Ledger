@@ -146,7 +146,11 @@ public class RecurringTransaction extends Transaction {
         if (!account.equals(that.account)) return false;
         if (!payee.equals(that.payee)) return false;
         if (tagList != null ? !tagList.equals(that.tagList) : that.tagList != null) return false;
-        if (!note.equals(that.note)) return false;
+        if(note == null) {
+            if (that.note != null)
+                return false;
+        }
+        else if (!note.equals(that.note)) return false;
         return frequency == that.frequency;
     }
 
