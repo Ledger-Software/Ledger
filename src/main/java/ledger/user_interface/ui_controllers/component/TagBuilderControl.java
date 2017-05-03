@@ -6,9 +6,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+
+import ledger.controller.DbController;
+import ledger.controller.register.TaskNoReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.utils.TaggableSwitch;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.util.LinkedList;
@@ -39,6 +45,11 @@ public class TagBuilderControl extends GridPane implements IUIController, Initia
             if (event.getCode() == KeyCode.ENTER)
                 addTag();
         });
+
+        TaskWithReturn<List<Tag>> tags = DbController.INSTANCE.getAllTags();
+        tags.startTask();
+
+        TextFields.bindAutoCompletion(nameText, tags.waitForResult().stream().map(Tag::getName).toArray());
     }
 
     private void addTag() {

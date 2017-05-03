@@ -9,9 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
-import javafx.scene.layout.VBox;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
@@ -36,6 +36,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private final static String pageLoc = "/fxml_files/MainPage.fxml";
     public static MainPageController INSTANCE;
 
+    @FXML
+    private Button tagEditorButton;
     @FXML
     private Button payeeEditorButton;
     @FXML
@@ -130,6 +132,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             accountListView.getItems().get(0).setAllAccountBalance();
         });
 
+        this.tagEditorButton.setOnAction(this::openTagEditor);
         this.payeeEditorButton.setOnAction(this::openAutoTaggingEditor);
         this.addIgnoreTransactionButton.setOnAction(this::openIgnoredTransactionEditor);
 
@@ -140,7 +143,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             if (!(event.getCode() == KeyCode.Z))
                 return;
 
-            this.undo();
+            this.transactionTableView.undo();
         });
     }
 
@@ -171,28 +174,18 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         }
     }
 
-    private void undo() {
-        String topMessage = DbController.INSTANCE.undoPeekMessage();
-
-        if (topMessage == null)
-            return;
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Undo");
-        alert.setHeaderText("Do you wish to undo the follow action?");
-        alert.setContentText(topMessage);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            DbController.INSTANCE.undo();
-        }
-    }
-
     private void openAutoTaggingEditor(ActionEvent actionEvent) {
         AutoTaggingTableWindow window = new AutoTaggingTableWindow();
         Scene scene = new Scene(window);
 
         this.createModal(null, scene, "Automatic Tagging", true);
+    }
+
+    private void openTagEditor(ActionEvent actionEvent) {
+        TagEditorTableWindow window = new TagEditorTableWindow();
+        Scene scene = new Scene(window);
+
+        this.createModal(this.getScene().getWindow(), scene, "Tag Editor", true);
     }
 
     private void setUpAccountCreationHelp() {
@@ -228,7 +221,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private void createExpenditureChartsPage() {
         FinanceAnalysisController chartController = new FinanceAnalysisController();
         Scene scene = new Scene(chartController);
-        this.createModal(this.getScene().getWindow(), scene, "Financial Analysis", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
+        this.createModal(this.getScene().getWindow(), scene, "Financial Analysis", true, Modality.WINDOW_MODAL, StageStyle.DECORATED);
     }
 
     /**

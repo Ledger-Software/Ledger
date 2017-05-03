@@ -15,6 +15,7 @@ import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.utils.InputSanitization;
 import ledger.user_interface.utils.TypeComparator;
 import ledger.user_interface.utils.TypeStringConverter;
+import org.controlsfx.control.textfield.TextFields;
 
 import java.net.URL;
 import java.time.Instant;
@@ -124,6 +125,12 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
         this.datePicker.setValue(LocalDate.now());
         this.typeText.valueProperty().addListener(checkListener);
         this.typeText.valueProperty().addListener(transferListener);
+
+
+        TaskWithReturn<List<Tag>> task = DbController.INSTANCE.getAllTags();
+        task.startTask();
+
+        TextFields.bindAutoCompletion(tagText, task.waitForResult().stream().map(Tag::getName).toArray());
     }
 
     /**
