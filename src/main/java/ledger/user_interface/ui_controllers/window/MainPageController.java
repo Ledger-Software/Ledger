@@ -15,7 +15,8 @@ import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.Account;
+import ledger.database.entity.*;
+import ledger.io.util.Tagger;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.AccountInfo;
@@ -23,10 +24,8 @@ import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Controls all input and interaction with the Main Page of the application
@@ -51,6 +50,8 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     @FXML
     private Button addTransactionBtn;
     @FXML
+    private Button recurringTransactionBtn;
+    @FXML
     private VBox accountsVBox;
     @FXML
     private ListView<AccountInfo> accountListView;
@@ -60,11 +61,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
     private TextField searchTextField;
     @FXML
     private LogoutButton logoutBtn;
-    // Transaction table UI objects
     @FXML
     private TransactionTableView transactionTableView;
     @FXML
     private Button addIgnoreTransactionButton;
+    @FXML
+    private Button recurringEditor;
 
     public MainPageController() {
         INSTANCE = this;
@@ -94,11 +96,15 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         this.importTransactionsBtn.setOnAction((event) -> createImportTransPopup());
 
+        this.recurringEditor.setOnAction((event) -> createRecurringEditor());
+
         this.clearButton.setOnAction(this::clearSearch);
 
         this.searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             this.updateSearchOnChange();
         });
+
+        this.recurringTransactionBtn.setOnAction(this::createRecurringTransactionPopup);
 
         TaskWithReturn<List<Account>> task = DbController.INSTANCE.getAllAccounts();
         task.RegisterFailureEvent(e -> setupErrorPopup("Error retrieving accounts.", new Exception()));
@@ -145,6 +151,57 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             this.transactionTableView.undo();
         });
+
+        this.checkForRecurringTransactions();
+    }
+
+    private void checkForRecurringTransactions() {
+        TaskWithReturn<List<RecurringTransaction>> recurringTransactionTask = DbController.INSTANCE.getAllRecurringTransactions();
+        recurringTransactionTask.startTask();
+        List<RecurringTransaction> recurringTransactions = recurringTransactionTask.waitForResult();
+
+        for (RecurringTransaction recurringTransaction : recurringTransactions) {
+
+            Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
+            Frequency transactionFrequency = recurringTransaction.getFrequency();
+            Date dateNow = new Date();
+            Calendar calendarNow = Calendar.getInstance();
+            calendarNow.setTime(dateNow);
+
+            if (calendarNow.before(nextTriggerDate)) continue;
+            
+            Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
+                    recurringTransaction.getAccount(), recurringTransaction.getPayee(), false, recurringTransaction.getTags(),
+                    recurringTransaction.getNote(), -1);
+            List<Transaction> transactions = new ArrayList<>();
+            transactions.add(toInsert);
+            Tagger tagger = new Tagger(transactions);
+            tagger.tagTransactions();
+
+            TaskNoReturn insertTransactionTask = DbController.INSTANCE.insertTransaction(toInsert);
+            insertTransactionTask.startTask();
+
+            if (transactionFrequency.equals(Frequency.Daily)) {
+                calendarNow.add(Calendar.DATE, 1);
+            } else if (transactionFrequency.equals(Frequency.Weekly)) {
+                calendarNow.add(Calendar.DATE, 7);
+            } else if (transactionFrequency.equals(Frequency.Monthly)) {
+                calendarNow.add(Calendar.MONTH, 1);
+            } else if (transactionFrequency.equals(Frequency.Yearly)) {
+                calendarNow.add(Calendar.YEAR, 1);
+            } else {
+                System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
+            }
+            recurringTransaction.setNextTriggerDate(calendarNow);
+            TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+            editTriggerDateTask.startTask();
+        }
+    }
+
+    private void createRecurringTransactionPopup(ActionEvent actionEvent) {
+        RecurringTransactionController controller = new RecurringTransactionController();
+        Scene scene = new Scene(controller);
+        this.createModal(this.getScene().getWindow(), scene, "Add Recurring Transaction");
     }
 
     private void openIgnoredTransactionEditor(ActionEvent actionEvent) {
@@ -222,6 +279,13 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         FinanceAnalysisController chartController = new FinanceAnalysisController();
         Scene scene = new Scene(chartController);
         this.createModal(this.getScene().getWindow(), scene, "Financial Analysis", true, Modality.WINDOW_MODAL, StageStyle.DECORATED);
+    }
+
+
+    private void createRecurringEditor() {
+        RecurringTransactionEditorWindow editorWindow = new RecurringTransactionEditorWindow();
+        Scene scene = new Scene(editorWindow);
+        this.createModal(this.getScene().getWindow(), scene, "Recurring Editor", true, Modality.APPLICATION_MODAL, StageStyle.DECORATED);
     }
 
     /**

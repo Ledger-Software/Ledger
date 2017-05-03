@@ -83,6 +83,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn insertTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return insertRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
             TaskNoReturn task = new TaskNoReturn(() -> {
                 TaskNoReturn firstTransTask = generateInsertTransaction(transaction);
@@ -129,6 +133,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn deleteTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return generateDeleteRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
             Transaction testForDeleted = null;
             try{
@@ -189,6 +197,10 @@ public class DbController {
      * @return a ITask for the Async Call
      */
     public TaskNoReturn editTransaction(final Transaction transaction) {
+        if(transaction instanceof RecurringTransaction) {
+            return editRecurringTransaction(((RecurringTransaction) transaction));
+        }
+
         try {
             if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
                 Transaction oldTrans = db.getTransactionById(transaction);
@@ -752,5 +764,59 @@ public class DbController {
      */
     public TaskWithReturn<List<IgnoredExpression>> getAllIgnoredExpressions() {
         return new TaskWithReturn<>(db::getAllIgnoredExpressions);
+    }
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all {@link Frequency}
+     *
+     * @return A task for the Async Call that returns a list of all the {@link Frequency} objects that exist
+     */
+    public TaskWithReturn<List<Frequency>> getAllFrequencies() {
+        return new TaskWithReturn<>(db::getAllFrequencies);
+    }
+
+
+    /**
+     * Creates a Task that can be used to make an asynchronous call to the database to get all {@link RecurringTransaction}
+     *
+     * @return A task for the Async Call that returns a list of all the {@link RecurringTransaction}
+     */
+    public TaskWithReturn<List<RecurringTransaction>> getAllRecurringTransactions() {
+        return new TaskWithReturn<>(db::getAllRecurringTransactions);
+    }
+
+    /**
+     * Creates a ITask that can be used to make an asynchronous call to the database to edit a RecurringTransaction
+     *
+     * @param recurringTransaction The transaction to edit
+     * @return a ITask for the Async Call
+     */
+    public TaskNoReturn editRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        TaskNoReturn task = generateEditRecurringTansaction(recurringTransaction);
+
+        return task;
+    }
+
+    private TaskNoReturn generateEditRecurringTansaction(RecurringTransaction recurringTransaction) {
+        return new TaskNoReturn(() -> db.editRecurringTransaction(recurringTransaction));
+    }
+
+
+    public TaskNoReturn insertRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        undoStack.push(new UndoAction(generateDeleteRecurringTransaction(recurringTransaction), "Undo Insert Recurring Transaction"));
+        return generateInsertRecurringTransaction(recurringTransaction);
+    }
+
+    private TaskNoReturn generateDeleteRecurringTransaction(final RecurringTransaction recurringTransaction) {
+        return new TaskNoReturn(() -> db.deleteRecurringTransaction(recurringTransaction));
+    }
+
+    public TaskNoReturn deleteReucrringTransaction(final RecurringTransaction recurringTransaction) {
+        undoStack.push(new UndoAction(generateInsertRecurringTransaction(recurringTransaction), "Undo Delete Recurring Transaction"));
+        return generateDeleteRecurringTransaction(recurringTransaction);
+    }
+
+    private TaskNoReturn generateInsertRecurringTransaction(RecurringTransaction recurringTransaction) {
+        return new TaskNoReturn(() -> db.insertRecurringTransaction(recurringTransaction));
     }
 }

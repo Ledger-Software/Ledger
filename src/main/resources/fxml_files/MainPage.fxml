@@ -29,7 +29,7 @@
     <rowConstraints>
         <RowConstraints maxHeight="45.0" minHeight="45.0" prefHeight="45.0" />
         <RowConstraints maxHeight="1.7976931348623157E308" vgrow="ALWAYS" />
-      <RowConstraints />
+        <RowConstraints />
     </rowConstraints>
     <children>
         <Pane fx:id="header" GridPane.columnSpan="2" />
@@ -91,11 +91,12 @@
                                  <children>
                                     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                              <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER">
-                </Button>
+                                              <Button fx:id="addTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Add Transaction" textAlignment="CENTER"></Button>
+                                              <Button fx:id="recurringTransactionBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Transaction" textAlignment="CENTER" />
+                                              <Button fx:id="recurringEditor" layoutX="10.0" layoutY="48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Recurring Editor" textAlignment="CENTER" />
                                               <Button fx:id="importTransactionsBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Import Transactions" textAlignment="CENTER" />
-                                           <Button fx:id="tagEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit Tags" textAlignment="CENTER" />
-                                           <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Add Automatic Tags" />
+                                              <Button fx:id="tagEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Edit Tags" textAlignment="CENTER" />
+                                              <Button fx:id="payeeEditorButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Add Automatic Tags" />
                                           <Button fx:id="addIgnoreTransactionButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Ignored Transactions" />
                                        </children>
                                     </VBox>
@@ -115,25 +116,25 @@
                                               <Button fx:id="trackSpendingBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Analyze Finances" textAlignment="CENTER" />
 
 
-                                              <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
-                </ExportButton>
-                                            <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" />
-                                       </children>
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
-                                    </VBox>
-                                 </children>
-                              </AnchorPane>
-                        </content>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                      </TitledPane>
-                     </children>
-                  </VBox>
-               </content>
-            </ScrollPane>
+                                                        <ExportButton fx:id="exportDataBtn" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Export Data" textAlignment="CENTER">
+                                                        </ExportButton>
+                                                        <LogoutButton fx:id="logoutBtn" alignment="CENTER" contentDisplay="CENTER" maxHeight="35.0" maxWidth="1.7976931348623157E308" minHeight="35.0" mnemonicParsing="false" prefHeight="35.0" text="Logout" textAlignment="RIGHT" />
+                                                    </children>
+                                                    <opaqueInsets>
+                                                        <Insets />
+                                                    </opaqueInsets>
+                                                </VBox>
+                                            </children>
+                                        </AnchorPane>
+                                    </content>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </TitledPane>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
             </children>
             <GridPane.margin>
                 <Insets top="30.0" />
@@ -160,7 +161,7 @@
                 </Button>
             <ScrollPane fitToHeight="true" fitToWidth="true" GridPane.columnSpan="3" GridPane.rowIndex="1">
                <content>
-                      <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
+                   <TransactionTableView fx:id="transactionTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity">
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>

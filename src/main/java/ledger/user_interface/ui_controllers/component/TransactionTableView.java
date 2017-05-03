@@ -28,7 +28,7 @@ import java.util.*;
  * Controls all input and interaction with the Main Page of the application
  */
 
-public class TransactionTableView extends TableView<Transaction> implements IUIController, Initializable {
+public class TransactionTableView extends AbstractTableView<Transaction> implements IUIController, Initializable {
 
     private final static String pageLoc = "/fxml_files/TransactionTableView.fxml";
 
@@ -58,10 +58,6 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
 
     public TransactionTableView() {
         this.initController(pageLoc, this, "Error on main page startup: ");
-    }
-
-    private void asyncTableUpdate() {
-        Startup.INSTANCE.runLater(this::updateTransactionTableView);
     }
 
     private void configureTransactionTableView() {
@@ -183,6 +179,8 @@ public class TransactionTableView extends TableView<Transaction> implements IUIC
         this.setContextMenu(menu);
     }
 
+
+    @Override
     public void updateTransactionTableView() {
         // Update table rows
         try {

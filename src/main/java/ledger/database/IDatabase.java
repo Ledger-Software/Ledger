@@ -104,6 +104,21 @@ public interface IDatabase {
 
     boolean isTransactionIgnored(Transaction transaction) throws StorageException;
 
+    void insertFrequency(Frequency frequency) throws StorageException;
+
+    List<Frequency> getAllFrequencies() throws StorageException;
+
+    int getIdForFrequency(Frequency frequency) throws StorageException;
+
+    Frequency getFrequencyById(int id) throws StorageException;
+
+    void insertRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
+
+    void deleteRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
+
+    List<RecurringTransaction> getAllRecurringTransactions() throws StorageException;
+
+    void editRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
     Transaction getTransactionWithoutId(Transaction transaction) throws StorageException;
 
 

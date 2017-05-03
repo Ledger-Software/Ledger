@@ -8,6 +8,7 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
+import ledger.user_interface.ui_controllers.component.AbstractTableView;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.util.Optional;

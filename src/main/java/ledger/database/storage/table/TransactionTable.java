@@ -19,19 +19,19 @@ public class TransactionTable {
      * @return String for creating the SQLite Table corresponding to this object
      */
     public static String CreateStatementSQLite() {
-        return String.format("CREATE TABLE IF NOT EXISTS %s " +
-                        "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "%s BIGINT NOT NULL, " +
-                        "%s LONG NOT NULL, " +
-                        "%s BOOLEAN NOT NULL, " +
-                        "%s INT NOT NULL, " +
-                        "%s INT NOT NULL, " +
-                        "%s INT NOT NULL, " +
-                        "%s INT NOT NULL, " +
-                        "%s INT NOT NULL, " +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE, " +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s), " +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s)" +
+        return String.format("CREATE TABLE IF NOT EXISTS %s " + //TABLE NAME
+                        "(%s INTEGER PRIMARY KEY AUTOINCREMENT, " + //PRIMARY KEY
+                        "%s BIGINT NOT NULL, " + //DATE
+                        "%s LONG NOT NULL, " + //AMOUNT
+                        "%s BOOLEAN NOT NULL, " + // PENDING
+                        "%s INT NOT NULL, " + //ACCOUNT ID
+                        "%s INT NOT NULL, " + // PAYEE ID
+                        "%s INT NOT NULL, " + //TRANS_TYPE_ID
+                        "%s INT NOT NULL, " + //CHECK NUMBER
+                        "%s INT NOT NULL, " + // TRANSFER ACCOUNT
+                        "FOREIGN KEY(%s) REFERENCES %s(%s) ON DELETE CASCADE, " + //ACCOUNT FOREIGN KEY CONSTRAINT
+                        "FOREIGN KEY(%s) REFERENCES %s(%s), " + //PAYEE FOREIGN KEY CONSTRAINT
+                        "FOREIGN KEY(%s) REFERENCES %s(%s)" + //TYPE FOREIGN KEY CONSTRAINT
                         ")", TABLE_NAME,
                 TRANS_ID, TRANS_DATETIME, TRANS_AMOUNT, TRANS_PENDING, TRANS_ACCOUNT_ID, TRANS_PAYEE_ID, TRANS_TYPE_ID, TRANS_CHECK_NUMBER, TRANS_TRANSFER_ACC_ID,
                 TRANS_ACCOUNT_ID, AccountTable.TABLE_NAME, AccountTable.ACCOUNT_ID,
