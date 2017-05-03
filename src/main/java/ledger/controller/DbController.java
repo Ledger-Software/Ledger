@@ -1,11 +1,15 @@
 package ledger.controller;
 
 import com.google.api.client.util.Lists;
-import ledger.controller.register.*;
+import ledger.controller.register.CallableMethod;
+import ledger.controller.register.Task;
+import ledger.controller.register.TaskNoReturn;
+import ledger.controller.register.TaskWithReturn;
 import ledger.database.IDatabase;
 import ledger.database.entity.*;
 import ledger.database.storage.SQL.H2.H2Database;
 import ledger.exception.StorageException;
+import ledger.io.input.TypeConversion;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -83,10 +87,34 @@ public class DbController {
             return insertRecurringTransaction(((RecurringTransaction) transaction));
         }
 
-        TaskNoReturn task = generateInsertTransaction(transaction);
+        if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
+            TaskNoReturn task = new TaskNoReturn(() -> {
+                TaskNoReturn firstTransTask = generateInsertTransaction(transaction);
+                Transaction otherTransaction = new Transaction(transaction.getDate(), transaction.getType(), -1 * transaction.getAmount(), transaction.getTransferAccount(),
+                        transaction.getPayee(), transaction.isPending(), transaction.getTags(), new Note(transaction.getNote().getNoteText()), transaction.getCheckNumber(), -1, transaction.getAccount());
+                TaskNoReturn secondTransTask = generateInsertTransaction(otherTransaction);
+                firstTransTask.startTask();
+                firstTransTask.waitForComplete();
+                secondTransTask.startTask();
+                secondTransTask.waitForComplete();
+            });
+            undoStack.push(new UndoAction(new TaskNoReturn(() -> {
+                TaskNoReturn firstTransTask = generateDeleteTransaction(transaction);
+                Transaction otherTransaction = new Transaction(transaction.getDate(), transaction.getType(), -1 * transaction.getAmount(), transaction.getTransferAccount(),
+                        transaction.getPayee(), transaction.isPending(), transaction.getTags(), new Note(transaction.getNote().getNoteText()), transaction.getCheckNumber(), -1, transaction.getAccount());
+                TaskNoReturn secondTransTask = generateDeleteTransaction(otherTransaction);
+                firstTransTask.startTask();
+                firstTransTask.waitForComplete();
+                secondTransTask.startTask();
+                secondTransTask.waitForComplete();
+            }), "Undo Insert Transfer"));
+            return task;
+        } else {
+            TaskNoReturn task = generateInsertTransaction(transaction);
 
-        undoStack.push(new UndoAction(generateDeleteTransaction(transaction), "Undo Insert Transaction"));
-        return task;
+            undoStack.push(new UndoAction(generateDeleteTransaction(transaction), "Undo Insert Transaction"));
+            return task;
+        }
     }
 
     private TaskNoReturn generateInsertTransaction(final Transaction transaction) {
@@ -109,10 +137,49 @@ public class DbController {
             return generateDeleteRecurringTransaction(((RecurringTransaction) transaction));
         }
 
-        TaskNoReturn task = generateDeleteTransaction(transaction);
+        if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
+            Transaction testForDeleted = null;
+            try{
+                testForDeleted = db.getTransactionById(transaction);
+            } catch (StorageException e){
+                System.err.println("Error on getTransactionById");
+            }
+            if(testForDeleted!=null){
+                TaskNoReturn task = new TaskNoReturn(() -> {
+                    TaskNoReturn firstTransTask = generateDeleteTransaction(transaction);
+                    Transaction otherTransaction = db.getTransactionWithoutId(new Transaction(transaction.getDate(), transaction.getType(), -1 * transaction.getAmount(), transaction.getTransferAccount(),
+                            transaction.getPayee(), transaction.isPending(), transaction.getTags(), null, transaction.getCheckNumber(), -1, transaction.getAccount()));
+                    TaskNoReturn secondTransTask = generateDeleteTransaction(otherTransaction);
+                    firstTransTask.startTask();
+                    firstTransTask.waitForComplete();
+                    secondTransTask.startTask();
+                    secondTransTask.waitForComplete();
+                });
+                undoStack.push(new UndoAction(new TaskNoReturn(() -> {
+                    TaskNoReturn firstTransTask = generateInsertTransaction(transaction);
+                    Note otherTransactionNote = null;
 
-        undoStack.push(new UndoAction(generateInsertTransaction(transaction), "Undo Delete Transaction"));
-        return task;
+                    if (transaction.getNote() != null) {
+                        otherTransactionNote = new Note(transaction.getNote().getNoteText());
+                    }
+                    Transaction otherTransaction = new Transaction(transaction.getDate(), transaction.getType(), -1 * transaction.getAmount(), transaction.getTransferAccount(),
+                            transaction.getPayee(), transaction.isPending(), transaction.getTags(), otherTransactionNote, transaction.getCheckNumber(), -1, transaction.getAccount());
+                    TaskNoReturn secondTransTask = generateInsertTransaction(otherTransaction);
+                    firstTransTask.startTask();
+                    firstTransTask.waitForComplete();
+                    secondTransTask.startTask();
+                    secondTransTask.waitForComplete();
+                }), "Undo Delete Transfer"));
+                return task;
+            } else {
+                return new TaskNoReturn(()->{});
+            }
+        } else {
+            TaskNoReturn task = generateDeleteTransaction(transaction);
+
+            undoStack.push(new UndoAction(generateInsertTransaction(transaction), "Undo Delete Transaction"));
+            return task;
+        }
 
     }
 
@@ -134,18 +201,60 @@ public class DbController {
             return editRecurringTransaction(((RecurringTransaction) transaction));
         }
 
-        TaskNoReturn task = generateEditTransaction(transaction);
-
-        Transaction oldTrans = null;
         try {
-            oldTrans = db.getTransactionById(transaction);
+            if (TypeConversion.ACC_TRANSFER.equals(transaction.getType())) {
+                Transaction oldTrans = db.getTransactionById(transaction);
+
+                Transaction oldTrans2 = db.getTransactionWithoutId(new Transaction(oldTrans.getDate(), oldTrans.getType(), -1 * oldTrans.getAmount(), oldTrans.getTransferAccount(),
+                        oldTrans.getPayee(), oldTrans.isPending(), oldTrans.getTags(), null, oldTrans.getCheckNumber(), -1, oldTrans.getAccount()));
+
+
+                Note otherTransactionNote = null;
+
+                if (transaction.getNote() != null) {
+                    otherTransactionNote = new Note(oldTrans2.getId(), transaction.getNote().getNoteText());
+                }
+                Transaction otherTransaction = new Transaction(transaction.getDate(), transaction.getType(), -1 * transaction.getAmount(), transaction.getTransferAccount(),
+                        transaction.getPayee(), transaction.isPending(), transaction.getTags(), otherTransactionNote, transaction.getCheckNumber(), oldTrans2.getId(), transaction.getAccount());
+
+                TaskNoReturn task = new TaskNoReturn(() -> {
+                    TaskNoReturn firstTransTask = generateEditTransaction(transaction);
+                    TaskNoReturn secondTransTask = generateEditTransaction(otherTransaction);
+                    firstTransTask.startTask();
+                    firstTransTask.waitForComplete();
+                    secondTransTask.startTask();
+                    secondTransTask.waitForComplete();
+                });
+
+
+                undoStack.push(new UndoAction(new TaskNoReturn(() -> {
+                    TaskNoReturn firstTransTask = generateEditTransaction(oldTrans);
+                    TaskNoReturn secondTransTask = generateEditTransaction(oldTrans2);
+                    firstTransTask.startTask();
+                    firstTransTask.waitForComplete();
+                    secondTransTask.startTask();
+                    secondTransTask.waitForComplete();
+                }), "Undo Edit Transfer"));
+                return task;
+            } else {
+                TaskNoReturn task = generateEditTransaction(transaction);
+
+                Transaction oldTrans = null;
+                try {
+                    oldTrans = db.getTransactionById(transaction);
+                } catch (StorageException e) {
+                    System.err.println("Error on getTransactionById");
+                }
+
+                undoStack.push(new UndoAction(generateEditTransaction(oldTrans), "Undo Edit Transaction"));
+
+                return task;
+            }
+
         } catch (StorageException e) {
             System.err.println("Error on getTransactionById");
         }
-
-        undoStack.push(new UndoAction(generateEditTransaction(oldTrans), "Undo Edit Transaction"));
-
-        return task;
+        return null;
     }
 
     private TaskNoReturn generateEditTransaction(final Transaction transaction) {

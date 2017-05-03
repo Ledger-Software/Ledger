@@ -13,7 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
- * TableColumn for amounts
+ * TableColumn for check numbers
  */
 public class CheckNumberColumn extends TableColumn implements IUIController, Initializable {
     private static final String pageLoc = "/fxml_files/TableColumn.fxml";

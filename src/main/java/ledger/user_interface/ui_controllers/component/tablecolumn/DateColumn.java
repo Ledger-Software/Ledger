@@ -5,7 +5,7 @@ import javafx.scene.control.TableColumn;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.DateEventHandler;
 import ledger.user_interface.utils.DatePropertyValueFactory;
-import ledger.user_interface.utils.LocalDateTableCell;
+import ledger.user_interface.ui_controllers.component.tablecolumn.CustomCells.LocalDateTableCell;
 
 import java.net.URL;
 import java.util.ResourceBundle;

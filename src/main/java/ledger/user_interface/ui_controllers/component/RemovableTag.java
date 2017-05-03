@@ -6,11 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.utils.TaggableSwitch;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,12 +41,7 @@ public class RemovableTag extends GridPane implements IUIController, Initializab
     private void removeTag(ActionEvent actionEvent) {
         t.getTags().remove(tag);
 
-        TaskNoReturn task = TaggableSwitch.edit(t);
-        task.RegisterFailureEvent((e) -> setupErrorPopup("Error editing tag field.", e));
 
-        task.startTask();
-        task.waitForComplete();
-
-        ((TagFlowPane) this.getParent()).updateTags();
+        ((TagFlowPane) this.getParent()).editTags(t.getTags());
     }
 }

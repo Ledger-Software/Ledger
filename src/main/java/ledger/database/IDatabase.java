@@ -119,6 +119,8 @@ public interface IDatabase {
     List<RecurringTransaction> getAllRecurringTransactions() throws StorageException;
 
     void editRecurringTransaction(RecurringTransaction recurringTransaction) throws StorageException;
+    Transaction getTransactionWithoutId(Transaction transaction) throws StorageException;
+
 
 }
 
