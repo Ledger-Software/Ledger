@@ -8,7 +8,6 @@ import javafx.util.Callback;
 import ledger.database.entity.Note;
 import ledger.database.entity.Transaction;
 import ledger.user_interface.ui_controllers.IUIController;
-import ledger.user_interface.ui_controllers.component.NoteEditInputController;
 import ledger.user_interface.ui_controllers.component.tablecolumn.CustomCells.NoteColumnTableCell;
 import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.NoteEventHandler;
 import ledger.user_interface.utils.IdentityCellValueCallback;
