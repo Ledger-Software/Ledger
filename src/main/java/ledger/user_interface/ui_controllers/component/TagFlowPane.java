@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.TableCell;
 import javafx.scene.layout.FlowPane;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
@@ -48,5 +49,9 @@ public class TagFlowPane extends FlowPane implements IUIController {
         });
 
         this.getChildren().add(addButton);
+    }
+    public void editTags(List<Tag> tags){
+        model.setTags(tags);
+        ((TableCell)localParent).commitEdit(model);
     }
 }

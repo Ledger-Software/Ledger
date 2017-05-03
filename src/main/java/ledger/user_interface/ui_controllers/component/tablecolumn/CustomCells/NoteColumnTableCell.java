@@ -31,6 +31,7 @@ public class NoteColumnTableCell extends TableCell<Transaction, Transaction> {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if(newValue){
+                    noteText.requestFocus();
                     noteText.setMaxHeight(90);
                     setMaxHeight(90);
                     setPrefHeight(90);
@@ -79,6 +80,23 @@ public class NoteColumnTableCell extends TableCell<Transaction, Transaction> {
                 }
                 setGraphic(noteText);
             }
+    }
+    @Override
+    public void commitEdit(Transaction item) {
+
+
+            final TableView table = getTableView();
+            if (table != null) {
+                TablePosition position = new TablePosition(getTableView(), getTableRow().getIndex(), getTableColumn());
+                TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(table, position, TableColumn.editCommitEvent(), item);
+                Event.fireEvent(getTableColumn(), editEvent);
+            }
+            updateItem(item, false);
+            if (table != null) {
+                table.edit(-1, null);
+            }
+
+
     }
 
 
