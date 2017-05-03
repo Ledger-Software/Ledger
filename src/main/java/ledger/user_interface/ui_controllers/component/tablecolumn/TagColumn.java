@@ -1,11 +1,16 @@
 package ledger.user_interface.ui_controllers.component.tablecolumn;
 
+import javafx.event.Event;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
+import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import ledger.database.entity.ITaggable;
 import ledger.database.entity.Tag;
+import ledger.user_interface.ui_controllers.Startup;
 import ledger.user_interface.ui_controllers.component.TagFlowPane;
+import ledger.user_interface.ui_controllers.component.tablecolumn.event_handler.TagEventHandler;
 import ledger.user_interface.utils.IdentityCellValueCallback;
 
 import java.util.List;
@@ -19,6 +24,7 @@ public class TagColumn extends TableColumn {
     public TagColumn() {
         this.setCellValueFactory(new IdentityCellValueCallback<ITaggable>());
         this.setCellFactory(new ClickAbleTagCell());
+        this.setOnEditCommit(new TagEventHandler());
         this.setSortable(false);
     }
 
@@ -47,7 +53,22 @@ public class TagColumn extends TableColumn {
                         setHeight(30);
                     }
                 }
+                @Override
+                public void commitEdit(ITaggable iTaggable){
+                    final TableView table = getTableView();
+                    if (table != null) {
+                        TablePosition position = new TablePosition(getTableView(), getTableRow().getIndex(), getTableColumn());
+                        TableColumn.CellEditEvent editEvent = new TableColumn.CellEditEvent(table, position, TableColumn.editCommitEvent(), iTaggable);
+                        Event.fireEvent(getTableColumn(), editEvent);
+                    }
+                    updateItem(iTaggable, false);
+                    if (table != null) {
+                        table.edit(-1, null);
+                    }
+
+                }
             };
+
             cell.editingProperty().addListener((observable, oldValue, newValue) -> {
                 if (newValue) {
                     TagFlowPane flow = new TagFlowPane(cell.getItem(), cell);
@@ -62,5 +83,6 @@ public class TagColumn extends TableColumn {
             });
             return cell;
         }
+
     }
 }

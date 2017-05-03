@@ -165,8 +165,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             infoItems.add(new AccountInfo(a));
         }
         // Adds the All Accounts Aggregation
-        Account allActs = new Account("All Accounts", "All accounts");
-        AccountInfo allInfo = new AccountInfo(allActs);
+        AccountInfo allInfo = new AccountInfo(null);
         allInfo.setAllAccountBalance();
         infoItems.add(0, allInfo);
         this.accountListView.setItems(FXCollections.observableArrayList(infoItems));

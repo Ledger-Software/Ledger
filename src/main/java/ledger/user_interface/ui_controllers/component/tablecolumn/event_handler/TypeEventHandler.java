@@ -8,6 +8,8 @@ import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.database.entity.Transaction;
 import ledger.database.entity.Type;
+import ledger.database.storage.table.TransactionTable;
+import ledger.io.input.TypeConversion;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
@@ -39,6 +41,9 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
 
             Optional<ButtonType> result = alert.showAndWait();
             executeAmountFlipTypeEdit(result, transaction, typeToSet, transactionTableView);
+        } else if(typeToSet.equals(TypeConversion.ACC_TRANSFER)){
+            setupErrorPopup("Transfers can not be created in the Table, Please use Add Transaction Popup");
+            t.getTableView().refresh();
         } else {
             transaction.setType(typeToSet);
 
@@ -61,7 +66,7 @@ public class TypeEventHandler implements EventHandler<TableColumn.CellEditEvent<
             task.startTask();
             task.waitForComplete();
         } else {
-            transactionTableView.updateTransactionTableView();
+            transactionTableView.refresh();
             return;
         }
     }
