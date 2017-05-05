@@ -39,7 +39,7 @@ public class RecurringTransaction extends Transaction {
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Calendar nextTriggerDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency, int id) {
-        super(new Date(), type, amount, account, payee, false, tagList, note, -1, -1, null);
+        super(new Date(), type, amount, account, payee, false, tagList, note, -1, id, null);
         this.startDate = startDate;
         this.endDate = endDate;
         this.nextTriggerDate = nextTriggerDate;
@@ -99,25 +99,6 @@ public class RecurringTransaction extends Transaction {
     public void setNextTriggerDate(Calendar nextTriggerDate) {
         this.nextTriggerDate = nextTriggerDate;
     }
-
-    /**
-     * Gets the Recurring Transaction database ID number
-     *
-     * @return id
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * Sets the Recurring Transaction database ID number
-     *
-     * @param id the new ID
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
-
 
     /**
      * Gets the RecurringTransaction frequency
