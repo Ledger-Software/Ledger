@@ -139,8 +139,6 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
      * @return a new Transaction object consisting of user input
      */
     public Transaction getTransactionSubmission() {
-
-
         LocalDate localDate = this.datePicker.getValue();
         if (localDate == null) {
             this.setupErrorPopup("No Date selected");
@@ -152,7 +150,11 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
 
         boolean pending = this.pendingCheckBox.isSelected();
 
-
+        Type type = this.typeText.getValue();
+        if (type == null) {
+            this.setupErrorPopup("No type selected.", new Exception());
+            return null;
+        }
 
         List<Tag> tags = new ArrayList<Tag>() {{
             add(new Tag(tagText.getText(), ""));
@@ -173,10 +175,15 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
             this.setupErrorPopup("No account selected.");
             return null;
         }
-        Account acc = this.destAccountText.getSelectedAccount();
+
         Payee payee;
-        if (acc != null) {
-            if(acc.equals(account)){
+        Account acc = this.destAccountText.getSelectedAccount();
+        if(type.equals(TypeConversion.ACC_TRANSFER)) {
+            if(acc == null) {
+                this.setupErrorPopup("Please Select the To Account");
+                return null;
+            }
+            if(account.equals(acc)){
                 this.setupErrorPopup("Accounts must be different for Transfers");
                 return null;
             }
@@ -199,11 +206,6 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
                 this.setupErrorPopup("Please Enter a Check Number", new Exception());
                 return null;
             }
-        }
-        Type type = this.typeText.getValue();
-        if (type == null) {
-            this.setupErrorPopup("No type selected.", new Exception());
-            return null;
         }
 
         if (checkNo.equals("")) {
