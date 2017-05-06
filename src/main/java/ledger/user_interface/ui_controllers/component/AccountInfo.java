@@ -55,4 +55,14 @@ public class AccountInfo extends GridPane implements IUIController, Initializabl
     public void setAllAccountBalance() {
         this.accountBalance.calculateBalanceForAllAccounts();
     }
+
+    /**
+     * Returns a string representation of this AccountInfo object
+     *
+     * @return String representation
+     */
+    @Override
+    public String toString() {
+        return "Account: " + currentAccount.toString() + " Name: " + accountName + " Balance: " + accountBalance;
+    }
 }

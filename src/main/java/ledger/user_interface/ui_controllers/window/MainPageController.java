@@ -310,7 +310,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
      * Deletes the Account selected in the chooseAccount dropdown
      */
     private void deleteAccount() {
-        if (this.accountListView.getSelectionModel().getSelectedItem() == null) {
+        if (this.accountListView.getSelectionModel().getSelectedItem().getAccount() == null) {
 
             setupErrorPopup("Cannot delete the All Accounts aggregation. Please select an account " +
                     "to delete.");
