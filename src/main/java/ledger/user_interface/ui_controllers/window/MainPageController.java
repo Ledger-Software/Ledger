@@ -15,7 +15,10 @@ import javafx.stage.StageStyle;
 import ledger.controller.DbController;
 import ledger.controller.register.TaskNoReturn;
 import ledger.controller.register.TaskWithReturn;
-import ledger.database.entity.*;
+import ledger.database.entity.Account;
+import ledger.database.entity.Frequency;
+import ledger.database.entity.RecurringTransaction;
+import ledger.database.entity.Transaction;
 import ledger.io.util.Tagger;
 import ledger.user_interface.ui_controllers.IUIController;
 import ledger.user_interface.ui_controllers.Startup;
@@ -24,7 +27,6 @@ import ledger.user_interface.ui_controllers.component.LogoutButton;
 import ledger.user_interface.ui_controllers.component.TransactionTableView;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -163,17 +165,16 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
 
-
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
             Date dateNow = new Date();
             Calendar calendarNow = Calendar.getInstance();
             calendarNow.setTime(dateNow);
 
-            int numberDays = daysBetween(nextTriggerDate, calendarNow) +1;
+            int numberDays = daysBetween(nextTriggerDate, calendarNow) + 1;
 
-            for (int i = 0; i < numberDays; i++ ) {
-
+            for (int i = 0; i < numberDays; i++) {
+                nextTriggerDate = recurringTransaction.getNextTriggerDate();
                 if (calendarNow.before(nextTriggerDate)) {
                     continue;
                 }
@@ -189,17 +190,17 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                 TaskNoReturn insertTransactionTask = DbController.INSTANCE.insertTransaction(toInsert);
                 insertTransactionTask.startTask();
                 if (transactionFrequency.equals(Frequency.Daily)) {
-                    calendarNow.add(Calendar.DATE, 1);
+                    nextTriggerDate.add(Calendar.DATE, 1);
                 } else if (transactionFrequency.equals(Frequency.Weekly)) {
-                    calendarNow.add(Calendar.DATE, 7);
+                    nextTriggerDate.add(Calendar.DATE, 7);
                 } else if (transactionFrequency.equals(Frequency.Monthly)) {
-                    calendarNow.add(Calendar.MONTH, 1);
+                    nextTriggerDate.add(Calendar.MONTH, 1);
                 } else if (transactionFrequency.equals(Frequency.Yearly)) {
-                    calendarNow.add(Calendar.YEAR, 1);
+                    nextTriggerDate.add(Calendar.YEAR, 1);
                 } else {
                     System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
                 }
-                recurringTransaction.setNextTriggerDate(calendarNow);
+                recurringTransaction.setNextTriggerDate(nextTriggerDate);
             }
 
             TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);

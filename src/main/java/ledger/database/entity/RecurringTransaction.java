@@ -18,23 +18,7 @@ public class RecurringTransaction extends Transaction {
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Type type, long amount, Account account, Payee payee, List<Tag>
             tagList, Note note, Frequency frequency) {
-        this(startDate, endDate, Calendar.getInstance(), type, amount, account, payee, tagList, note, frequency, -1);
-
-        Calendar dateNow = ((Calendar) startDate.clone());
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateNow.getTime());
-        if (frequency.equals(Frequency.Daily)) {
-            calendar.add(Calendar.DATE, 1);
-            this.nextTriggerDate = calendar;
-        } else if (frequency.equals(Frequency.Weekly)) {
-            calendar.add(Calendar.DATE, 7);
-            this.nextTriggerDate = calendar;
-        } else if (frequency.equals(Frequency.Monthly)) {
-            calendar.add(Calendar.MONTH, 1);
-            this.nextTriggerDate = calendar;
-        } else if (this.frequency.equals(Frequency.Yearly)) {
-            calendar.add(Calendar.YEAR, 1);
-        }
+        this(startDate, endDate, startDate, type, amount, account, payee, tagList, note, frequency, -1);
     }
 
     public RecurringTransaction(Calendar startDate, Calendar endDate, Calendar nextTriggerDate, Type type, long amount, Account account, Payee payee, List<Tag>
