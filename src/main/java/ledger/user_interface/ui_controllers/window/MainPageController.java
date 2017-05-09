@@ -176,7 +176,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             for (int i = 0; i < numberDays; i++) {
                 nextTriggerDate = recurringTransaction.getNextTriggerDate();
-                if (calendarNow.before(nextTriggerDate)) {
+                if (calendarNow.before(nextTriggerDate) || nextTriggerDate.after(recurringTransaction.getEndDate())) {
                     break;
                 }
 
