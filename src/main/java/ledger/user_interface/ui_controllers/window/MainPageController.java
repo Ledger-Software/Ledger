@@ -202,11 +202,12 @@ public class MainPageController extends GridPane implements Initializable, IUICo
                     System.err.println("Invalid Frequency for Recurring Transaction: " + recurringTransaction.toString());
                 }
                 recurringTransaction.setNextTriggerDate(nextTriggerDate);
+                TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
+                editTriggerDateTask.startTask();
+                editTriggerDateTask.waitForComplete();
             }
 
-            TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
-            editTriggerDateTask.startTask();
-            editTriggerDateTask.waitForComplete();
+
         }
     }
 
