@@ -102,7 +102,6 @@ public class UserTransactionInput extends GridPane implements IUIController, Ini
                 destLabel.setText("To:");
 
             } else {
-                sourceAccountText.getSelectionModel().clearSelection();
                 payeeText.setVisible(true);
                 payeeText.setManaged(true);
                 destAccountText.setVisible(false);
