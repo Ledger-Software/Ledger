@@ -163,20 +163,24 @@ public class MainPageController extends GridPane implements Initializable, IUICo
         recurringTransactionTask.startTask();
         List<RecurringTransaction> recurringTransactions = recurringTransactionTask.waitForResult();
 
+        Date dateNow = new Date();
+        Calendar calendarNow = Calendar.getInstance();
+        calendarNow.setTime(dateNow);
+
         for (RecurringTransaction recurringTransaction : recurringTransactions) {
 
             Calendar nextTriggerDate = recurringTransaction.getNextTriggerDate();
             Frequency transactionFrequency = recurringTransaction.getFrequency();
-            Date dateNow = new Date();
-            Calendar calendarNow = Calendar.getInstance();
-            calendarNow.setTime(dateNow);
 
             int numberDays = daysBetween(nextTriggerDate, calendarNow) + 1;
+            System.out.println(numberDays + " days calculated");
 
             for (int i = 0; i < numberDays; i++) {
+                System.out.println("Examining Day " + i);
                 nextTriggerDate = recurringTransaction.getNextTriggerDate();
+                System.out.println("Next trigger date is " + nextTriggerDate.getTime());
                 if (calendarNow.before(nextTriggerDate)) {
-                    continue;
+                    break;
                 }
 
                 Transaction toInsert = new Transaction(nextTriggerDate.getTime(), recurringTransaction.getType(), recurringTransaction.getAmount(),
@@ -205,6 +209,7 @@ public class MainPageController extends GridPane implements Initializable, IUICo
 
             TaskNoReturn editTriggerDateTask = DbController.INSTANCE.editRecurringTransaction(recurringTransaction);
             editTriggerDateTask.startTask();
+            editTriggerDateTask.waitForComplete();
         }
     }
 
