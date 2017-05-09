@@ -173,12 +173,9 @@ public class MainPageController extends GridPane implements Initializable, IUICo
             Frequency transactionFrequency = recurringTransaction.getFrequency();
 
             int numberDays = daysBetween(nextTriggerDate, calendarNow) + 1;
-            System.out.println(numberDays + " days calculated");
 
             for (int i = 0; i < numberDays; i++) {
-                System.out.println("Examining Day " + i);
                 nextTriggerDate = recurringTransaction.getNextTriggerDate();
-                System.out.println("Next trigger date is " + nextTriggerDate.getTime());
                 if (calendarNow.before(nextTriggerDate)) {
                     break;
                 }
