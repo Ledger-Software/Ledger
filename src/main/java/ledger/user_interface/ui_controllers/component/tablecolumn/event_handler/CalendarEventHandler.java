@@ -23,7 +23,6 @@ public class CalendarEventHandler implements javafx.event.EventHandler<javafx.sc
     public void handle(TableColumn.CellEditEvent<RecurringTransaction, Calendar> t) {
         RecurringTransaction transaction = t.getTableView().getItems().get(t.getTablePosition().getRow());
         Calendar calendar = t.getNewValue();
-        calendar.add(Calendar.MONTH, 1);
 
         setter.accept(transaction,calendar);
 
