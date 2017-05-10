@@ -144,7 +144,7 @@ public class RecurringTransactionController extends GridPane implements IUIContr
             return;
         }
 
-        if ((amount > 0) && !(type.getName().equals("Account Credit") || type.getName().equals("Misc Credit"))) {
+        if ((amount > 0) && !(type.getName().equals("Account Credit") || type.getName().equals("Misc Credit") || type.getName().equals("Cash") || type.getName().equals("Check"))) {
             setupErrorPopup("Transactions of the " + type.getName() + " type must have a negative amount.");
             return;
         }
