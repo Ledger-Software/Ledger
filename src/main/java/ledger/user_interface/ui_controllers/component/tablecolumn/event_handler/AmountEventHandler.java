@@ -34,7 +34,7 @@ public class AmountEventHandler implements EventHandler<TableColumn.CellEditEven
             return;
         }
 
-        if ((amountToSet > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit")) && !(transaction.getType().getName().equals("Transfer"))) {
+        if ((amountToSet > 0) && !(transaction.getType().getName().equals("Account Credit") || transaction.getType().getName().equals("Misc Credit") || transaction.getType().getName().equals("Cash") || transaction.getType().getName().equals("Check")) && !(transaction.getType().getName().equals("Transfer"))) {
             setupErrorPopup("Transactions of the " + transaction.getType().getName() + " type must have a negative amount.", new Exception());
             t.getTableView().refresh();
             return;
