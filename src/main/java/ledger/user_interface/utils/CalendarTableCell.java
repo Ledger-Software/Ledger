@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 import static java.time.format.FormatStyle.MEDIUM;
@@ -57,7 +58,6 @@ public class CalendarTableCell extends TableCell<RecurringTransaction, Calendar>
                 Instant instant = Instant.from(newValue.atStartOfDay(ZoneId.systemDefault()));
                 Calendar newDate = Calendar.getInstance();
                 newDate.setTimeInMillis(instant.toEpochMilli());
-
                 commitEdit(newDate);
             }
         });
@@ -80,7 +80,8 @@ public class CalendarTableCell extends TableCell<RecurringTransaction, Calendar>
             setText(null);
             setGraphic(null);
         } else {
-            LocalDate localdate = LocalDate.of(item.get(Calendar.YEAR), item.get(Calendar.MONTH), item.get(Calendar.DAY_OF_MONTH));
+            Date date = item.getTime();
+            LocalDate localdate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             // Date Picker can handle null values
             this.datePicker.setValue(localdate);
