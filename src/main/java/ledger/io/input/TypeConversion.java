@@ -22,10 +22,13 @@ public class TypeConversion {
 
     private static final Type UNKNOWN = new Type("UNKNOWN", "Unknown Type of transaction");
 
+    //In the case of QFX, this is where TRNTYPE value is translated
     public static Type convert(String type) {
         switch (type) {
             case "DEBIT_CARD":
                 return DEBIT_CARD;
+            case "POS":
+            	return DEBIT_CARD;
             case "CREDIT_CARD":
                 return CREDIT_CARD;
             case "CASH":
@@ -34,6 +37,8 @@ public class TypeConversion {
                 return CHECK;
             case "ACH_CREDIT":
                 return ACH_CREDIT;
+            case "DIRECTDEP":
+            	return ACH_CREDIT;
             case "ACH_DEBIT":
                 return ACH_DEBIT;
             case "MISC_DEBIT":
