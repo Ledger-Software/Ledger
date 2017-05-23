@@ -33,7 +33,7 @@ public class AmericanExpressSavingsQFXConverter extends AbstractQFXConverter {
 
                 Type type = TypeConversion.convert(transactionTypes.item(i).getTextContent());
 
-                // American Savins Bank QFX files don't include any payee information :(
+                // American Savings Bank QFX files don't include any payee information :(
                 Payee payee = new Payee("***Not Available***", "Payee information was not included in the provided data");
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
