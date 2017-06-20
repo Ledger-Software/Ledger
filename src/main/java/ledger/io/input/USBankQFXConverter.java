@@ -12,7 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Handles the converting of Quicken Qxf files of the old format into our internal transaction objects.
+ * Handles the converting of Quicken Qxf files into our internal transaction objects.
  */
 public class USBankQFXConverter extends AbstractQFXConverter {
 
@@ -51,7 +51,7 @@ public class USBankQFXConverter extends AbstractQFXConverter {
                 }
 
                 String[] memoData = memos.item(i).getTextContent().split("Download from usbank\\.com\\.");
-                if (memoData.length > 0 && memoData[1].length() > payee.getName().length()) {
+                if (memoData.length > 1 && memoData[1] != null && memoData[1].length() > payee.getName().length()) {
                     payee.setName(memoData[1].substring(1));
                 }
 

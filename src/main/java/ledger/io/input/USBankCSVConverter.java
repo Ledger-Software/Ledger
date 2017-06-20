@@ -7,6 +7,7 @@ import ledger.exception.ConverterException;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,9 +54,9 @@ public class USBankCSVConverter extends AbstractCSVConverter {
                 }
 
                 String[] memoData = memoString.split("Download from usbank\\.com\\.");
-                if (memoData.length > 0 && memoData[1].length() > payee.getName().length()) {
-                    payee.setName(memoData[1].substring(1));
-                }
+        		if (memoData.length > 1 && memoData[1] != null && memoData[1].length() > payee.getName().length()) {
+        			payee.setName(memoData[1].substring(1));
+        		}
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((amountString)) * 100) + 0.5d)));
 
