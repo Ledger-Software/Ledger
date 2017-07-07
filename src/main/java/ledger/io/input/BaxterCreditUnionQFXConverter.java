@@ -35,6 +35,13 @@ public class BaxterCreditUnionQFXConverter extends AbstractQFXConverter {
                 Type type = TypeConversion.convert(transactionTypes.item(i).getTextContent());
 
                 Payee payee = new Payee(names.item(i).getTextContent(), "");
+				
+				// special cases
+				if (names.item(i).getTextContent().startsWith("TARGET DEBIT CRD - Location - ")) {
+					payee.setName(names.item(i).getTextContent().split("TARGET DEBIT CRD - Location - ")[1]);
+				} else if (names.item(i).getTextContent().matches("#\d\d\d\d\d\d\d\d\d\d\d\d\b")) {
+					payee.setName(names.item(i).getTextContent().split("#\d\d\d\d\d\d\d\d\d\d\d\d\b[[:blank:]]-[[:blank:]]")[1]);
+				}
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
 
