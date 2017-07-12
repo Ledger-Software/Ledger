@@ -10,7 +10,7 @@ public class FrequencyStringConverter extends StringConverter<Frequency>  {
      * Converts the object provided into its string form.
      * Format of the returned string is defined by the specific converter.
      *
-     * @param object
+     * @param object to be converted
      * @return a string representation of the object passed in.
      */
     @Override
