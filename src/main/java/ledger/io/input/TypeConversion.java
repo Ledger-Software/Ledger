@@ -51,6 +51,8 @@ public class TypeConversion {
                 return MISC_CREDIT;
             case "TRANSFER":
                 return ACC_TRANSFER;
+			case "DIRECTDEBIT":
+				return ACH_DEBIT
             default:
                 return UNKNOWN;
         }
@@ -88,7 +90,7 @@ public class TypeConversion {
         types.add(CREDIT_CARD);
         types.add(CASH);
         types.add(CHECK);
-        types.add(ACH_CREDIT);
+		types.add(ACH_CREDIT);
         types.add(ACH_DEBIT);
         types.add(MISC_DEBIT);
         types.add(MISC_CREDIT);

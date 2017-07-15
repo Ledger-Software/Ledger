@@ -38,7 +38,11 @@ public class BaxterCreditUnionQFXConverter extends AbstractQFXConverter {
 				
 				// special cases
 				if (names.item(i).getTextContent().startsWith("TARGET DEBIT CRD -  Location - ")) {
-					payee.setName(names.item(i).getTextContent().split("TARGET DEBIT CRD -  Location - ")[1]);
+					if (Objects.equals(names.item(i).getTextContent().split("TARGET DEBIT CRD -  Location - ")[1], "T") {
+						payee.setName("Target");
+					} else {
+						payee.setName(names.item(i).getTextContent().split("TARGET DEBIT CRD -  Location - ")[1]);
+					}
 				} else if (names.item(i).getTextContent().matches("#[a-zA-Z0-9]{12}\\b")) {
 					payee.setName(names.item(i).getTextContent().split("#[a-zA-Z0-9]{12}\\b[[:blank:]]-[[:blank:]]")[1].trim());
 				}
