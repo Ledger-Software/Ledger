@@ -52,7 +52,7 @@ public class TypeConversion {
             case "TRANSFER":
                 return ACC_TRANSFER;
 			case "DIRECTDEBIT":
-				return ACH_DEBIT
+				return ACH_DEBIT;
             default:
                 return UNKNOWN;
         }
