@@ -43,8 +43,15 @@ public class BaxterCreditUnionQFXConverter extends AbstractQFXConverter {
 					} else {
 						payee.setName(names.item(i).getTextContent().split("TARGET DEBIT CRD -  Location - ")[1]);
 					}
+				// the following one may not be working. revisit
 				} else if (names.item(i).getTextContent().matches("#[a-zA-Z0-9]{12}\\b")) {
 					payee.setName(names.item(i).getTextContent().split("#[a-zA-Z0-9]{12}\\b[[:blank:]]-[[:blank:]]")[1].trim());
+				} else if (names.item(i).getTextContent().matches("Effective dated:[[:blank:]]\\d\\d\\/\\d\\d\/\\d\\d") {
+					if (names.item(i).getTextContent().substring(28).trim().equals("CHI") {
+						payee.setName("Chipotle");
+					} else {
+						payee.setName(names.item(i).getTextContent().substring(28).trim());
+					}
 				}
 
                 int amount = (int) ((long) (Math.floor((Double.parseDouble((transactionAmounts.item(i).getTextContent())) * 100) + 0.5d)));
