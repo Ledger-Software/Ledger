@@ -45,8 +45,8 @@ public class BaxterCreditUnionQFXConverter extends AbstractQFXConverter {
 					}
 				// the following one may not be working. revisit
 				} else if (names.item(i).getTextContent().matches("#[a-zA-Z0-9]{12}\\b")) {
-					payee.setName(names.item(i).getTextContent().split("#[a-zA-Z0-9]{12}\\b[[:blank:]]-[[:blank:]]")[1].trim());
-				} else if (names.item(i).getTextContent().matches("Effective dated:[[:blank:]]\\d\\d/\\d\\d/\\d\\d")) {
+					payee.setName(names.item(i).getTextContent().split("#[a-zA-Z0-9]{12}\\b\\s-\\s")[1].trim());
+				} else if (names.item(i).getTextContent().matches("Effective dated:\\s\\d\\d/\\d\\d/\\d\\d")) {
 					if (names.item(i).getTextContent().substring(28).trim().equals("CHI")) {
 						payee.setName("Chipotle");
 					} else {
